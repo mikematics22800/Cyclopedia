@@ -10,10 +10,6 @@
   @apply flex justify-between mb-10
 }
 
-#storm h1 {
-  @apply text-white text-lg
-}
-
 #storm a {
   @apply w-96 h-[31rem] bg-cover bg-center flex flex-col items-center justify-center rounded-md bg-gray-400
 }
@@ -27,7 +23,7 @@
 }
 
 #storm #stats {
-  @apply flex flex-col w-64 font-bold text-2xl gap-5 
+  @apply flex flex-col w-64 font-bold gap-2 text-white
 }
 
 #storm #charts {

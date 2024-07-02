@@ -15,7 +15,7 @@ const Season = () => {
   const [retiredNames, setRetiredNames] = useState([])
 
   useEffect(() => {
-    const retiredStorms = season.filter((storm) => {storm.retired == 'true'})
+    const retiredStorms = season.filter((storm) => {storm.retired == true})
     const retiredNames = retiredStorms.map((storm) => {
       return storm.id.split('_')[1]
     })

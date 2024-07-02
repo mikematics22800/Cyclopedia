@@ -57,35 +57,35 @@ const Storm = () => {
     if (statuses.includes("HU")) {
       status = "Hurricane"
       if (maxWind <= 82) {
-        textColor = "text-[yellow]"
+        textColor = "yellow"
       }
       if (maxWind > 82 && maxWind <= 95) {
-        textColor = "text-[orange]"
+        textColor = "orange"
       }
       if (maxWind > 95 && maxWind <= 110) {
-        textColor = "text-[red]"
+        textColor = "red"
       }
       if (maxWind > 110 && maxWind <= 135) {
-        textColor = "text-[hotpink]"
+        textColor = "hotpink"
       }
       if (maxWind > 135) {
-        textColor = "text-[pink]"
+        textColor = "pink"
       }
     } else {
       if (statuses.includes("TS")) {
         status = "Tropical Storm"
-        textColor = "text-[lime]"
+        textColor = "lime"
       } else {
         if (statuses.includes("SS")) {
           status = "Subtropical Storm"
-          textColor = "text-[lightgreen]"
+          textColor = "lightgreen"
         } else {
           if (statuses.includes("TD")) {
             status = "Tropical Depression"
-            textColor = "text-[blue]"
+            textColor = "blue"
           } else {
             status = "Subtropical Depression"
-            textColor = "text-[aqua]"
+            textColor = "aqua"
           }
         }
       }
@@ -134,8 +134,8 @@ const Storm = () => {
           {image == "" && <h1>Image Unavailable</h1>}
         </a>
         <div id="stats">
-          <h1 className={`${textColor}`}>{!stormName != 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
-          <h1>{duration}</h1>
+          <h1 className='text-xl' style={{color:textColor}}>{!stormName != 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
+          <h1 className='text-xl mb-2'>{duration}</h1>
           <h1>Max Wind: {maxWind} kt</h1>
           <h1>Min Pressure: {minPressure == 1050 ? (`${minPressure} mb`) : 'Unknown'}</h1>
           {year > 1982 && <h1>Landfalls: {landfalls.length}</h1>}
