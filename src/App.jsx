@@ -32,7 +32,6 @@ function App() {
     if (season) {
       const storm = season.find(storm => storm.id === stormId)
       setStorm(storm)
-      console.log(storm)
     }
   }, [stormId]);
 

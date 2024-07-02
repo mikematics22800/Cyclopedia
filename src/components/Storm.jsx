@@ -49,6 +49,39 @@ const Storm = () => {
     const duration = `${startDate}-${endDate}`
     setDuration(duration)
 
+    const winds = data.map((point) => {
+      return point.max_wind_kt
+    })
+    const maxWind = Math.max(...winds)
+    setMaxWind(maxWind)
+
+    const pressures = data.map((point) => {
+      return point.min_pressure_mb
+    })
+    const minPressure = Math.min(...pressures)
+    setMinPressure(minPressure)
+
+    const landfalls = data.filter(point => point.record === "L")
+    setLandfalls(landfalls)
+
+    const windsLandfall = landfalls.map((point) => {
+      return point.max_wind_kt
+    })
+    setMaxWindLandfall(Math.max(...windsLandfall))
+
+    const pressuresLandfall = landfalls.map((point) => {
+      return point.min_pressure_mb
+    })
+    setMinPressureLandfall(Math.min(...pressuresLandfall))
+
+    setImage(storm.image)
+
+    const costUSD = (storm.cost_usd/1000000000).toFixed(3)
+    setCostUSD(costUSD)
+
+    const fatalities = storm.fatalities
+    setFatalities(fatalities)
+
     let status
     let textColor
     const statuses = data.map((point) => {
@@ -92,38 +125,6 @@ const Storm = () => {
     }
     setStatus(status)
     setTextColor(textColor)
-
-    const winds = data.map((point) => {
-      return point.max_wind_kt
-    })
-    setMaxWind(Math.max(...winds))
-
-    const pressures = data.map((point) => {
-      return point.min_pressure_mb
-    })
-    const minPressure = Math.min(...pressures)
-    setMinPressure(minPressure)
-
-    const landfalls = data.filter(point => point.record === "L")
-    setLandfalls(landfalls)
-
-    const windsLandfall = landfalls.map((point) => {
-      return point.max_wind_kt
-    })
-    setMaxWindLandfall(Math.max(...windsLandfall))
-
-    const pressuresLandfall = landfalls.map((point) => {
-      return point.min_pressure_mb
-    })
-    setMinPressureLandfall(Math.min(...pressuresLandfall))
-
-    setImage(storm.image)
-
-    const costUSD = (storm.cost_usd/1000000000).toFixed(3)
-    setCostUSD(costUSD)
-
-    const fatalities = storm.fatalities
-    setFatalities(fatalities)
   }, [storm]);
 
   return (
