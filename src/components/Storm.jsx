@@ -28,11 +28,7 @@ const Storm = () => {
 
     setImage(storm.image)
 
-    if (storm.retired === "true") {
-      setRetired(true)
-    } else {
-      setRetired(false)
-    }
+    setRetired(storm.retired)
 
     const data = storm.data
 
@@ -138,7 +134,7 @@ const Storm = () => {
           <h1 className='text-xl' style={{color:textColor}}>{!stormName != 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
           <h1 className='text-xl mb-2'>{duration}</h1>
           <h1>Max Wind: {maxWind} kt</h1>
-          <h1>Min Pressure: {minPressure == 1050 ? (`${minPressure} mb`) : 'Unknown'}</h1>
+          <h1>Min Pressure: {minPressure != 1050 ? (`${minPressure} mb`) : 'Unknown'}</h1>
           {year > 1982 && <h1>Landfalls: {landfalls.length}</h1>}
           {landfalls.length > 0 && <>
             <h1>Max Wind at Landfall: {maxWindLandfall} kt</h1>
