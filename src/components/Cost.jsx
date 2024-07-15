@@ -46,7 +46,7 @@ const Cost = () => {
       },
       title: {
         display: true,
-        text: `Cost Estimate (Billion USD): ${sum(cost).toFixed(3)}`,
+        text: `Cost Estimate (Billion USD): $${sum(cost).toFixed(3)}`,
       },
     },
   };
