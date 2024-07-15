@@ -36,7 +36,7 @@ const Intensity = () => {
         yAxisID: "y"
       },
       {
-        label: "Minimum Pressure (mb)",
+        label: "Minimum Pressure (mb) 1050 = Unknown",
         data: pressure,
         borderColor: "blue",
         backgroundColor: "lightblue",
