@@ -153,7 +153,7 @@ function Map() {
   })  
   
   return (
-    <MapContainer className="w-[calc(100%-48rem)] h-full" maxBounds={[[90, 180], [-90, -180]]} center={[30, -60]} maxZoom={15} minZoom={4} zoom={4}>
+    <MapContainer id="map" maxBounds={[[90, 180], [-90, -180]]} center={[30, -60]} maxZoom={15} minZoom={4} zoom={4}>
       <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>  
       {storms}
     </MapContainer>

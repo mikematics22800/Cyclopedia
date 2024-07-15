@@ -70,7 +70,7 @@ function App() {
   return (
     <Context.Provider value={value}>
       {season && storm &&
-        <div className="h-screen w-screen flex overflow-hidden">
+        <div id="app">
           <Interface/>
           <Map/>
         </div>

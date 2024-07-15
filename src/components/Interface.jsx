@@ -30,16 +30,16 @@ const Interface = () => {
   }
 
   return (
-    <div className="w-[48rem] h-screen bg-blue-950 p-10 overflow-auto">
-      <div className="w-full flex justify-between items-center text-white font-bold">
+    <div id="interface">
+      <header>
         <div className="flex items-center">
-          <img src={cyclone} className="h-10 mr-1"/>
-          <h1 className="text-4xl italic">Cyclopedia</h1>
+          <img src={cyclone} className="sm:h-10 h-5 mr-1"/>
+          <h1 className="sm:text-4xl text-2xl italic">Cyclopedia</h1>
         </div>
-        <h1>Older data may be incomplete.</h1>
-      </div>
-      <div className="flex items-center justify-between my-10">
-        <Select className="bg-white !rounded-xl h-12" value={year} onChange={(e) => {setYear(e.target.value)}}>
+        <h1>Older data may be incomplete</h1>
+      </header>
+      <div id="content">
+        <Select className="select" value={year} onChange={(e) => {setYear(e.target.value)}}>
           {years.map((_, index) => {
             const selectedYear = 2022 - index;
             return (<MenuItem key={index} value={selectedYear}>{selectedYear}</MenuItem>);
@@ -48,7 +48,7 @@ const Interface = () => {
         <Button onClick={toggleStats} className="h-12" variant="contained">
           <h1 className="font-sans font-bold">{seasonStats == true ? ("Storm") : ("Season")} Stats</h1>
         </Button>
-        <Select className="bg-white !rounded-xl h-12" value={stormId} onChange={(e) => {setStormId(e.target.value)}}>
+        <Select className="select" value={stormId} onChange={(e) => {setStormId(e.target.value)}}>
           {stormIds?.map((id) => {
             const name = id.split('_')[1]
             return (<MenuItem key={id} value={id}>{name}</MenuItem>);

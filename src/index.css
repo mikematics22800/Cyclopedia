@@ -6,16 +6,36 @@
   width: 0;
 }
 
+#app {
+  @apply h-screen w-screen flex overflow-hidden xl:flex-row flex-col
+}
+
+#interface {
+  @apply xl:w-[48rem] xl:h-full w-screen h-1/2 bg-blue-950 sm:p-10 p-5 overflow-auto
+}
+
+#interface header {
+  @apply w-full flex justify-between items-center text-white font-bold
+}
+
+#interface #content {
+  @apply flex items-center justify-between my-10
+}
+
+#map {
+  @apply xl:w-[calc(100%-48rem)] xl:h-full w-screen h-1/2
+}
+
+.select {
+  @apply bg-white !rounded-xl h-12
+}
+
 #storm header {
-  @apply flex justify-between mb-10
+  @apply flex gap-10 mb-10
 }
 
 #storm a {
-  @apply w-96 h-[31rem] bg-cover bg-center flex flex-col items-center justify-center rounded-md bg-gray-400
-}
-
-#storm img {
-  @apply w-80
+  @apply sm:w-96 sm:h-[32rem] w-48 h-64 bg-cover bg-center flex flex-col items-center justify-center rounded-md bg-gray-400
 }
 
 #storm a h1 {
@@ -26,8 +46,16 @@
   @apply flex flex-col w-64 font-bold gap-2 text-white
 }
 
-#storm #charts {
-  @apply bg-white p-5 rounded-md
+#storm #stats h1 {
+  @apply text-lg sm:text-2xl
+}
+
+#storm #stats h2 {
+  @apply text-sm sm:text-[1rem]
+}
+
+.charts {
+  @apply bg-white p-5 rounded-md flex flex-col gap-5
 }
 
 

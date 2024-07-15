@@ -28,7 +28,7 @@ const Season = () => {
       <h1 className="text-white mb-y font-bold text-xl my-5">
         Retired Names: {retiredNames.length > 0 ? retiredNames.join(", ") : "None"}
       </h1>
-      <div className="bg-white p-5 rounded-md">
+      <div className="charts">
         <MaxWinds/>
         <MinPressures/>
         <SeasonACE/>

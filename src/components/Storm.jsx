@@ -127,24 +127,24 @@ const Storm = () => {
     <div id="storm">
       <header>
         <a style={{backgroundImage: `url(${image})`}} href={year > 1993 ? (`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`) : ('#')}>
-          {retired == true && <img className='animate__bounceIn' src={retiredImage}/>}
+          {retired == true && <img className='animate__bounceIn sm:w-80 w-40' src={retiredImage}/>}
           {image == "" && <h1>Image Unavailable</h1>}
         </a>
         <div id="stats">
-          <h1 className='text-xl' style={{color:textColor}}>{!stormName != 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
-          <h1 className='text-xl mb-2'>{duration}</h1>
-          <h1>Max Wind: {maxWind} kt</h1>
-          <h1>Min Pressure: {minPressure != 1050 ? (`${minPressure} mb`) : 'Unknown'}</h1>
-          {year > 1982 && <h1>Landfalls: {landfalls.length}</h1>}
+          <h1 style={{color:textColor}}>{!stormName != 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
+          <h2>{duration}</h2>
+          <h2>Max Wind: {maxWind} kt</h2>
+          <h2>Min Pressure: {minPressure != 1050 ? (`${minPressure} mb`) : 'Unknown'}</h2>
+          {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}
           {landfalls.length > 0 && <>
-            <h1>Max Wind at Landfall: {maxWindLandfall} kt</h1>
-            <h1>Min Pressure at Landfall: {minPressureLandfall} mb</h1>
+            <h2>Max Wind at Landfall: {maxWindLandfall} kt</h2>
+            <h2>Min Pressure at Landfall: {minPressureLandfall} mb</h2>
           </>}
-          <h1>Fatalities: {fatalities}</h1>
-          <h1>Cost (Billion USD): {costUSD}</h1>
+          <h2>Fatalities: {fatalities}</h2>
+          <h2>Cost (Billion USD): {costUSD}</h2>
         </div>
       </header>
-      <div id="charts">
+      <div className="charts">
         <Intensity/>
         <ACE/>
         <DaysAtStrength/>
