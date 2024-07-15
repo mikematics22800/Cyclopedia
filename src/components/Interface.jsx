@@ -31,29 +31,31 @@ const Interface = () => {
 
   return (
     <div id="interface">
-      <header>
+      <div id="hero">
         <div className="flex items-center">
           <img src={cyclone} className="sm:h-10 h-5 mr-1"/>
           <h1 className="sm:text-4xl text-2xl italic">Cyclopedia</h1>
         </div>
         <h1>Older data may be incomplete</h1>
-      </header>
+      </div>
       <div id="content">
-        <Select className="select" value={year} onChange={(e) => {setYear(e.target.value)}}>
-          {years.map((_, index) => {
-            const selectedYear = 2022 - index;
-            return (<MenuItem key={index} value={selectedYear}>{selectedYear}</MenuItem>);
-          })}
-        </Select>
-        <Button onClick={toggleStats} className="h-12" variant="contained">
-          <h1 className="font-sans font-bold">{seasonStats == true ? ("Storm") : ("Season")} Stats</h1>
+        <div className="flex gap-5">
+          <Select className="select" value={year} onChange={(e) => {setYear(e.target.value)}}>
+            {years.map((_, index) => {
+              const selectedYear = 2022 - index;
+              return (<MenuItem key={index} value={selectedYear}>{selectedYear}</MenuItem>);
+            })}
+          </Select>
+          <Select className="select" value={stormId} onChange={(e) => {setStormId(e.target.value)}}>
+            {stormIds?.map((id) => {
+              const name = id.split('_')[1]
+              return (<MenuItem key={id} value={id}>{name}</MenuItem>);
+            })}
+          </Select>
+        </div>
+        <Button onClick={toggleStats} className="h-10" variant="contained">
+          <h1 className="font-sans font-bold">{seasonStats == true ? ("Storm") : ("Season")}</h1>
         </Button>
-        <Select className="select" value={stormId} onChange={(e) => {setStormId(e.target.value)}}>
-          {stormIds?.map((id) => {
-            const name = id.split('_')[1]
-            return (<MenuItem key={id} value={id}>{name}</MenuItem>);
-          })}
-        </Select>
       </div>
       {seasonStats === false ? <Storm/> : <Season/>}
     </div>

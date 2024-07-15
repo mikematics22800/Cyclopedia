@@ -4,8 +4,8 @@ import MaxWinds from './MaxWinds'
 import MinPressures from './MinPressures'
 import SeasonACE from './SeasonACE'
 import Landfalls from './Landfalls'
-import MaxWindsLandfall from './MaxWindsLandfall'
-import MinPressuresLandfall from './MinPressuresLandfall'
+import MaxWindsLand from './MaxWindsLand'
+import MinPressuresLand from './MinPressuresLand'
 import Fatalities from './Fatalities'
 import Cost from './Cost'
 
@@ -25,16 +25,14 @@ const Season = () => {
 
   return (
     <div id="season">
-      <h1 className="text-white mb-y font-bold text-xl my-5">
-        Retired Names: {retiredNames.length > 0 ? retiredNames.join(", ") : "None"}
-      </h1>
+      <h1>Retired Names: {retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h1>
       <div className="charts">
         <MaxWinds/>
         <MinPressures/>
         <SeasonACE/>
         <Landfalls/>
-        <MaxWindsLandfall/>
-        <MinPressuresLandfall/>
+        <MaxWindsLand/>
+        <MinPressuresLand/>
         <Fatalities/>
         <Cost/>
       </div>

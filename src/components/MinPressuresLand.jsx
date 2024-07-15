@@ -2,7 +2,7 @@ import { useState, useContext } from 'react'
 import { Context } from '../App'
 import BarChart from './BarChart'
 
-const MinPressuresLandfall = () => {
+const MinPressureLand = () => {
   const {landfallingStorms} = useContext(Context)
 
   const [names, setNames] = useState([]);
@@ -49,4 +49,4 @@ const MinPressuresLandfall = () => {
   return <BarChart options={options} data={data}/>  
 }
 
-export default MinPressuresLandfall
+export default MinPressureLand

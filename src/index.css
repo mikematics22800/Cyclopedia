@@ -14,7 +14,7 @@
   @apply xl:w-[48rem] xl:h-full w-screen h-1/2 bg-blue-950 sm:p-10 p-5 overflow-auto
 }
 
-#interface header {
+#interface #hero {
   @apply w-full flex justify-between items-center text-white font-bold
 }
 
@@ -27,11 +27,15 @@
 }
 
 .select {
-  @apply bg-white !rounded-xl h-12
+  @apply bg-white !rounded-md h-10
+}
+
+#storm {
+  @apply w-full
 }
 
 #storm header {
-  @apply flex gap-10 mb-10
+  @apply flex gap-10 mb-10 w-full
 }
 
 #storm a {
@@ -58,4 +62,7 @@
   @apply bg-white p-5 rounded-md flex flex-col gap-5
 }
 
+#season h1 {
+  @apply text-white font-bold sm:text-xl my-5
+}
 

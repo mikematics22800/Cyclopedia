@@ -18,8 +18,8 @@ const Storm = () => {
   const [maxWind, setMaxWind] = useState('')
   const [minPressure, setMinPressure] = useState('')
   const [landfalls, setLandfalls] = useState([])
-  const [maxWindLandfall, setMaxWindLandfall] = useState('')
-  const [minPressureLandfall, setMinPressureLandfall] = useState('')
+  const [maxWindLand, setmaxWindLand] = useState('')
+  const [minPressureLand, setminPressureLand] = useState('')
   const [costUSD, setCostUSD] = useState('')
   const [fatalities, setFatalities] = useState('')
 
@@ -63,12 +63,12 @@ const Storm = () => {
     const windsLandfall = landfalls.map((point) => {
       return point.max_wind_kt
     })
-    setMaxWindLandfall(Math.max(...windsLandfall))
+    setmaxWindLand(Math.max(...windsLandfall))
 
     const pressuresLandfall = landfalls.map((point) => {
       return point.min_pressure_mb
     })
-    setMinPressureLandfall(Math.min(...pressuresLandfall))
+    setminPressureLand(Math.min(...pressuresLandfall))
 
     setImage(storm.image)
 
@@ -133,15 +133,13 @@ const Storm = () => {
         <div id="stats">
           <h1 style={{color:textColor}}>{!stormName != 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
           <h2>{duration}</h2>
-          <h2>Max Wind: {maxWind} kt</h2>
-          <h2>Min Pressure: {minPressure != 1050 ? (`${minPressure} mb`) : 'Unknown'}</h2>
           {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}
-          {landfalls.length > 0 && <>
-            <h2>Max Wind at Landfall: {maxWindLandfall} kt</h2>
-            <h2>Min Pressure at Landfall: {minPressureLandfall} mb</h2>
-          </>}
+          <h2>Maximum Wind: {maxWind} kt</h2>
+          {landfalls.length > 0 && <h2>Max Wind on Land: {maxWindLand} kt</h2>}
+          <h2>Mininum Pressure: {minPressure != 1050 ? (`${minPressure} mb`) : 'Unknown'}</h2>
+          {landfalls.length > 0 && <h2>Min Pressure on Land: {minPressureLand} mb</h2>}
           <h2>Fatalities: {fatalities}</h2>
-          <h2>Cost (Billion USD): {costUSD}</h2>
+          <h2>Cost (Billion USD): ${costUSD}</h2>
         </div>
       </header>
       <div className="charts">
