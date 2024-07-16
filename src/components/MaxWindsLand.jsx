@@ -41,7 +41,7 @@ const MaxWindsLand = () => {
       },
       title: {
         display: true,
-        text: "Maximum Wind at Landfall (kt)"
+        text: "Maximum Wind on Land (kt)"
       },
     },
   };
