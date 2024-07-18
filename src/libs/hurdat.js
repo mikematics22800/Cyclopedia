@@ -6,7 +6,7 @@ const options = {
 }
 
 export const getHurdat = async (year) => {
-  const response = await fetch(`https://hurdat2-api.onrender.com/${year}`, options)
+  const response = await fetch(`https://atlantic-hurricane-database.onrender.com/${year}`, options)
   const data = await response.json();
   return data;
 }
