@@ -12,7 +12,6 @@ A web application that displays data on tropical cyclone activity in the Atlanti
 [![](./public/screenshot.png)](https://mikematics22800.github.io/Cyclopedia)
 
 ## Installation
-Before you begin, you'll need an API key from [Coin Ranking](https://rapidapi.com/Coinranking/api/coinranking1/playground/apiendpoint_8e827dc1-e69a-4b92-af4a-654138659eba)
 
 ```bash
 # Navigate to your desired directory
