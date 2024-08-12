@@ -135,9 +135,9 @@ const Storm = () => {
           <h2>{duration}</h2>
           {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}
           <h2>Maximum Wind: {maxWind} kt</h2>
-          {landfalls.length > 0 && <h2>Max Wind on Land: {maxWindLand} kt</h2>}
+          {landfalls.length > 0 && <h2>Maximum Inland Wind: {maxWindLand} kt</h2>}
           <h2>Mininum Pressure: {minPressure != 1050 ? (`${minPressure} mb`) : 'Unknown'}</h2>
-          {landfalls.length > 0 && <h2>Min Pressure on Land: {minPressureLand} mb</h2>}
+          {landfalls.length > 0 && <h2>Minimum Inland Pressure: {minPressureLand} mb</h2>}
           <h2>Fatalities: {fatalities}</h2>
           <h2>Cost (Billion USD): ${costUSD}</h2>
         </div>

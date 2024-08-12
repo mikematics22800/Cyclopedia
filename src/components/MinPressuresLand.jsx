@@ -41,7 +41,7 @@ const MinPressureLand = () => {
       },
       title: {
         display: true,
-        text: "Minimum Pressures on Land (mb)",
+        text: "Minimum Inland Pressures (mb)",
       },
     },
   };
