@@ -33,8 +33,8 @@ const Interface = () => {
     <div id="interface">
       <div id="hero">
         <div className="flex items-center">
-          <img src={cyclone} className="sm:h-10 h-5 mr-1"/>
-          <h1 className="sm:text-4xl text-2xl italic">Cyclopedia</h1>
+          <img src={cyclone} className="h-10 mr-2"/>
+          <h1 className="text-4xl italic hidden sm:block">Cyclopedia</h1>
         </div>
         <h1>Older data may be incomplete</h1>
       </div>

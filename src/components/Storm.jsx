@@ -70,7 +70,7 @@ const Storm = () => {
 
     setImage(storm.image)
 
-    const costUSD = (storm.cost_usd/1000000000).toFixed(3)
+    const costUSD = (storm.cost_usd/1000000000).toFixed(1)
     setCostUSD(costUSD)
 
     const fatalities = storm.fatalities
