@@ -1,9 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { Context } from '../App'
 import Intensity from './Intensity'
-import DaysAtStrength from './DaysAtStrength'
 import ACE from './ACE'
-import Size from './Size'
 import retiredImage from "../../public/retired.png"
 
 const Storm = () => {
@@ -145,8 +143,6 @@ const Storm = () => {
       <div className="charts">
         <Intensity/>
         <ACE/>
-        <DaysAtStrength/>
-        {year >= 2004 && <Size/>}
       </div>
     </div>
   )
