@@ -2,6 +2,7 @@ import { useState, useEffect, createContext } from "react"
 import { getHurdat } from "./libs/hurdat"
 import Interface from "./components/Interface"
 import Map from "./components/Map"
+import cyclone from '../public/cyclone.png'
 import 'animate.css'
 
 export const Context = createContext()
@@ -69,12 +70,17 @@ function App() {
 
   return (
     <Context.Provider value={value}>
-      {season && storm &&
+      {season && storm ? (
         <div id="app">
           <Interface/>
           <Map/>
         </div>
-      }
+      ) : (
+        <div id="loading">
+          <img src={cyclone} alt="storm-icon"/>
+          <h1>Loading...</h1>
+        </div>
+      )}
     </Context.Provider>
   )
 }
