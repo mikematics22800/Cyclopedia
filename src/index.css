@@ -66,3 +66,6 @@
   @apply text-white font-bold sm:text-xl my-5
 }
 
+.button {
+  @apply h-10 w-fit !font-bold
+}

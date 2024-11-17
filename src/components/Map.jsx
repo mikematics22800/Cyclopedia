@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { Context } from "../App";
-import { MapContainer, Polyline, TileLayer, Popup, Marker } from "react-leaflet";
+import { MapContainer, Polyline, TileLayer, Popup, Marker, Polygon } from "react-leaflet";
 import { divIcon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 function Map() {
-  const {season, setStormId} = useContext(Context)
+  const {season, setStormId, storm, year} = useContext(Context)
 
   const dot = (color) => {
     return (
@@ -60,9 +60,7 @@ function Map() {
       const hour = timeArray.slice(0,2).join('')
       const minute = timeArray.slice(-2).join('')
       const time = `${hour}:${minute}`
-      
-      const lat = point.lat
-      const lng = point.lng
+      const {lat, lng} = point
       const coords = [lat, lng]
       positions.push(coords)
       
@@ -151,11 +149,79 @@ function Map() {
       </div>
     )
   })  
+
+
+  const nmToDeg = (nm) => nm / 60;
+
+  const calculatePoints = (lat, lng, points, radii) => {
+    const {ne, se, sw, nw} = radii;
+    let radius;
+    for (let angle = 0; angle < 360; angle += 1) {
+      if (angle >= 0 && angle < 90) radius = ne;
+      else if (angle >= 90 && angle < 180) radius = se;
+      else if (angle >= 180 && angle < 270) radius = sw;
+      else radius = nw;
+      const degs = nmToDeg(radius);
+      const pointLat = lat + degs * Math.cos((angle * Math.PI) / 180);
+      const pointLng = lng + degs * Math.sin((angle * Math.PI) / 180);
+      points.push([pointLat, pointLng]);
+    }
+  }
   
+  const windField34kt = storm.data.map((point, i) => {
+    const {lat, lng} = point;
+    const points34kt = [];  
+    calculatePoints(lat, lng, points34kt, point["34kt_wind_nm"]);
+    return (
+      <div key={i}>
+        <Polygon positions={points34kt} color="yellow">
+          <Popup className="font-bold">
+            <h1 className="text-md">34+ kt Wind</h1>
+          </Popup>
+        </Polygon>
+      </div>
+    )
+  })
+
+  const windField50kt = storm.data.map((point, i) => {
+    const {lat, lng} = point;
+    const points50kt = [];  
+    calculatePoints(lat, lng, points50kt, point["50kt_wind_nm"]);
+    return (
+      <div key={i}>
+        <Polygon positions={points50kt} color="orange">
+          <Popup className="font-bold">
+            <h1 className="text-md">50+ kt Wind</h1>
+          </Popup>
+        </Polygon>
+      </div>
+    )
+  })
+
+  const windField64kt = storm.data.map((point, i) => {
+    const {lat, lng} = point;
+    const points64kt = [];  
+    calculatePoints(lat, lng, points64kt, point["64kt_wind_nm"]);
+    return (
+      <div key={i}>
+        <Polygon positions={points64kt} color="red">
+          <Popup className="font-bold">
+            <h1 className="text-md">64+ kt Wind</h1>
+          </Popup>
+        </Polygon>
+      </div>
+    )
+  })
+
   return (
     <MapContainer id="map" maxBounds={[[90, 180], [-90, -180]]} center={[30, -60]} maxZoom={15} minZoom={4} zoom={4}>
       <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>  
       {storms}
+      {year >= 2004 && <>
+        {windField34kt}
+        {windField50kt}
+        {windField64kt}
+      </>}
     </MapContainer>
   )
 }

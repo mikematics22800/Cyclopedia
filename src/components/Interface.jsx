@@ -53,7 +53,7 @@ const Interface = () => {
             })}
           </Select>
         </div>
-        <Button onClick={toggleStats} className="h-10" variant="contained">
+        <Button onClick={toggleStats} className="button" variant="contained">
           <h1 className="font-sans font-bold">{seasonStats == true ? ("Storm") : ("Season")}</h1>
         </Button>
       </div>
