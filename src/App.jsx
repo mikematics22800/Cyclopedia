@@ -14,6 +14,7 @@ function App() {
   const [stormId, setStormId] = useState('')
   const [dates, setDates] = useState([])
   const [landfallingStorms, setLandfallingStorms] = useState([])
+  const [windField, setWindField] = useState(false)
 
   useEffect(() => {
     const cache = localStorage.getItem(`hurdat2-${year}`)
@@ -21,6 +22,8 @@ function App() {
       setSeason(JSON.parse(cache))
       setStormId(JSON.parse(cache)[0].id)
     } else {
+      setSeason(null)
+      setStorm(null)
       getHurdat(year).then(data => {
         setSeason(data)
         setStormId(data[0].id)
@@ -66,7 +69,7 @@ function App() {
     }
   }, [season]);
 
-  const value = {year, setYear, season, setSeason, storm, setStorm, stormId, setStormId, dates, landfallingStorms}
+  const value = {year, setYear, season, setSeason, storm, setStorm, stormId, setStormId, dates, landfallingStorms, windField, setWindField}
 
   return (
     <Context.Provider value={value}>

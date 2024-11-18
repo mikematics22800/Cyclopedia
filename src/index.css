@@ -31,11 +31,7 @@
 #interface {
   @apply xl:w-[48rem] xl:h-full w-screen h-1/2 bg-blue-950 sm:p-10 p-5 overflow-auto
 }
-
-#interface #hero {
-  @apply w-full flex justify-between items-center text-white font-bold
-}
-
+ 
 #interface #content {
   @apply flex items-center justify-between my-10
 }
@@ -77,11 +73,15 @@
 }
 
 .charts {
-  @apply bg-white p-5 rounded-md flex flex-col gap-5
+  @apply bg-white p-5 rounded-md flex flex-col gap-5 mt-5
+}
+
+#season {
+  @apply flex flex-col sm:gap-5 gap-3
 }
 
 #season h1 {
-  @apply text-white font-bold sm:text-xl my-5
+  @apply text-white font-bold sm:text-xl
 }
 
 .button {

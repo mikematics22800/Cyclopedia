@@ -5,7 +5,7 @@ import { divIcon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 function Map() {
-  const {season, setStormId, storm, year} = useContext(Context)
+  const {season, setStormId, storm, year, windField} = useContext(Context)
 
   const dot = (color) => {
     return (
@@ -217,7 +217,7 @@ function Map() {
     <MapContainer id="map" maxBounds={[[90, 180], [-90, -180]]} center={[30, -60]} maxZoom={15} minZoom={4} zoom={4}>
       <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>  
       {storms}
-      {year >= 2004 && <>
+      {year >= 2004 && windField && <>
         {windField34kt}
         {windField50kt}
         {windField64kt}

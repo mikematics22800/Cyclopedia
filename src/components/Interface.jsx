@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { Context } from "../App";
-import { MenuItem, Select, Button } from "@mui/material"
+import { MenuItem, Select, Button, Checkbox } from "@mui/material"
 import cyclone from "../../public/cyclone.png"
 import Storm from "./Storm";
 import Season from "./Season";
 
 
 const Interface = () => {
-  const {year, setYear, season, stormId, setStormId} = useContext(Context)
+  const {year, setYear, season, stormId, setStormId, setWindField} = useContext(Context)
 
   const [seasonStats, setSeasonStats] = useState(false)
   const [stormIds, setStormIds] = useState(null)
@@ -31,12 +31,9 @@ const Interface = () => {
 
   return (
     <div id="interface">
-      <div id="hero">
-        <div className="flex items-center">
-          <img src={cyclone} className="h-10 mr-2"/>
-          <h1 className="text-4xl italic hidden sm:block">Cyclopedia</h1>
-        </div>
-        <h1>Older data may be incomplete</h1>
+      <div className="flex items-center">
+        <img src={cyclone} className="h-10 mr-2"/>
+        <h1 className="text-4xl italic text-white font-bold">Cyclopedia</h1>
       </div>
       <div id="content">
         <div className="flex gap-5">
@@ -52,6 +49,10 @@ const Interface = () => {
               return (<MenuItem key={id} value={id}>{name}</MenuItem>);
             })}
           </Select>
+          {year >= 2004 && <div className="flex items-center gap-1">
+            <Checkbox className="!text-white !p-0" onChange={(e) => {setWindField(e.target.checked)}}/>
+            <h1 className="text-white font-bold">Wind Field</h1>
+          </div>}
         </div>
         <Button onClick={toggleStats} className="button" variant="contained">
           <h1 className="font-sans font-bold">{seasonStats == true ? ("Storm") : ("Season")}</h1>
