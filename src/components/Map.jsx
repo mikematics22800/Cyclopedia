@@ -154,7 +154,19 @@ function Map() {
   const nmToDeg = (nm) => nm / 60;
 
   const calculatePoints = (lat, lng, points, radii) => {
-    const {ne, se, sw, nw} = radii;
+    let {ne, se, sw, nw} = radii;
+    if (ne === -999) {
+      ne = 0;
+    }
+    if (se === -999) {
+      se = 0;
+    }
+    if (sw === -999) {
+      sw = 0;
+    }
+    if (nw === -999) {
+      nw = 0
+    }
     let radius;
     for (let angle = 0; angle < 360; angle += 1) {
       if (angle >= 0 && angle < 90) radius = ne;
