@@ -179,51 +179,58 @@ function Map() {
       points.push([pointLat, pointLng]);
     }
   }
+
+  let windField34kt;
+  let windField50kt;
+  let windField64kt;
+
+  if (year >= 2004) {
+    windField34kt = storm.data.map((point, i) => {
+      const {lat, lng} = point;
+      const points34kt = [];  
+      calculatePoints(lat, lng, points34kt, point["34kt_wind_nm"]);
+      return (
+        <div key={i}>
+          <Polygon positions={points34kt} color="yellow">
+            <Popup className="font-bold">
+              <h1 className="text-md">34+ kt Wind</h1>
+            </Popup>
+          </Polygon>
+        </div>
+      )
+    })
   
-  const windField34kt = storm.data.map((point, i) => {
-    const {lat, lng} = point;
-    const points34kt = [];  
-    calculatePoints(lat, lng, points34kt, point["34kt_wind_nm"]);
-    return (
-      <div key={i}>
-        <Polygon positions={points34kt} color="yellow">
-          <Popup className="font-bold">
-            <h1 className="text-md">34+ kt Wind</h1>
-          </Popup>
-        </Polygon>
-      </div>
-    )
-  })
-
-  const windField50kt = storm.data.map((point, i) => {
-    const {lat, lng} = point;
-    const points50kt = [];  
-    calculatePoints(lat, lng, points50kt, point["50kt_wind_nm"]);
-    return (
-      <div key={i}>
-        <Polygon positions={points50kt} color="orange">
-          <Popup className="font-bold">
-            <h1 className="text-md">50+ kt Wind</h1>
-          </Popup>
-        </Polygon>
-      </div>
-    )
-  })
-
-  const windField64kt = storm.data.map((point, i) => {
-    const {lat, lng} = point;
-    const points64kt = [];  
-    calculatePoints(lat, lng, points64kt, point["64kt_wind_nm"]);
-    return (
-      <div key={i}>
-        <Polygon positions={points64kt} color="red">
-          <Popup className="font-bold">
-            <h1 className="text-md">64+ kt Wind</h1>
-          </Popup>
-        </Polygon>
-      </div>
-    )
-  })
+    windField50kt = storm.data.map((point, i) => {
+      const {lat, lng} = point;
+      const points50kt = [];  
+      calculatePoints(lat, lng, points50kt, point["50kt_wind_nm"]);
+      return (
+        <div key={i}>
+          <Polygon positions={points50kt} color="orange">
+            <Popup className="font-bold">
+              <h1 className="text-md">50+ kt Wind</h1>
+            </Popup>
+          </Polygon>
+        </div>
+      )
+    })
+  
+    windField64kt = storm.data.map((point, i) => {
+      const {lat, lng} = point;
+      const points64kt = [];  
+      calculatePoints(lat, lng, points64kt, point["64kt_wind_nm"]);
+      return (
+        <div key={i}>
+          <Polygon positions={points64kt} color="red">
+            <Popup className="font-bold">
+              <h1 className="text-md">64+ kt Wind</h1>
+            </Popup>
+          </Polygon>
+        </div>
+      )
+    })
+  }
+  
 
   return (
     <MapContainer id="map" maxBounds={[[90, 180], [-90, -180]]} center={[30, -60]} maxZoom={15} minZoom={4} zoom={4}>

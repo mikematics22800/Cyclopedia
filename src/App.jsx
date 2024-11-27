@@ -18,6 +18,7 @@ function App() {
   const [windField, setWindField] = useState(false)
 
   useEffect(() => {
+    if (year < 1949 && basin === 'pac') setYear(1949)
     const cache = localStorage.getItem(`hurdat2-${basin}-${year}`)
     if (cache) {
       setSeason(JSON.parse(cache))

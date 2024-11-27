@@ -49,7 +49,7 @@ const Interface = () => {
         <div className="flex gap-5 flex-col sm:flex-row">
           <Select className="select" value={basin} onChange={(e) => {setBasin(e.target.value)}}>
             <MenuItem value="atl">Atlantic</MenuItem>
-            <MenuItem value="ep">Pacific</MenuItem>
+            <MenuItem value="pac">Pacific</MenuItem>
           </Select>
           <Select className="select" value={year} onChange={(e) => {setYear(e.target.value)}}>
             {years.map((_, index) => {
