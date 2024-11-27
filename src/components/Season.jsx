@@ -21,7 +21,7 @@ const Season = () => {
       return storm.cost_usd
     })
     const cost = sum(costs)
-    setCost((cost/1000000000).toFixed(1))
+    setCost((cost/1000000).toFixed(1))
     const retiredStorms = season.filter(storm => storm.retired == true)
     const retiredNames = retiredStorms.map((storm) => {
       return storm.id.split('_')[1]
@@ -32,7 +32,7 @@ const Season = () => {
   return (
     <div id="season">
       <h1>Fatalities: {fatalities}</h1>
-      <h1>Cost (Billion USD): ${cost}</h1>
+      <h1>Cost (Million USD): ${cost}</h1>
       <h1>Retired Names: {retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h1>
       <div className="charts">
         <MaxWinds/>

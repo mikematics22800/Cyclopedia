@@ -18,7 +18,7 @@ const Storm = () => {
   const [landfalls, setLandfalls] = useState([])
   const [maxWindLand, setmaxWindLand] = useState('')
   const [minPressureLand, setminPressureLand] = useState('')
-  const [costUSD, setCostUSD] = useState('')
+  const [cost, setCost] = useState('')
   const [fatalities, setFatalities] = useState('')
 
   useEffect(() => {
@@ -70,8 +70,8 @@ const Storm = () => {
 
     setImage(storm.image)
 
-    const costUSD = (storm.cost_usd/1000000000).toFixed(1)
-    setCostUSD(costUSD)
+    const cost = (storm.cost_usd/1000000).toFixed(1)
+    setCost(cost)
 
     const fatalities = storm.fatalities
     setFatalities(fatalities)
@@ -137,7 +137,7 @@ const Storm = () => {
           <h2>Mininum Pressure: {minPressure != 1050 ? (`${minPressure} mb`) : 'Unknown'}</h2>
           {landfalls.length > 0 && <h2>Minimum Inland Pressure: {minPressureLand} mb</h2>}
           <h2>Fatalities: {fatalities}</h2>
-          <h2>Cost (Billion USD): ${costUSD}</h2>
+          <h2>Cost (Million USD): ${cost}</h2>
         </div>
       </header>
       <div className="charts">
