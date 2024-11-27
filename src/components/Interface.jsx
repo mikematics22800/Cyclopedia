@@ -7,7 +7,16 @@ import Season from "./Season";
 
 
 const Interface = () => {
-  const {year, setYear, season, stormId, setStormId, setWindField} = useContext(Context)
+  const {
+    basin, 
+    setBasin, 
+    year, 
+    setYear, 
+    season, 
+    stormId, 
+    setStormId, 
+    setWindField
+  } = useContext(Context)
 
   const [seasonStats, setSeasonStats] = useState(false)
   const [stormIds, setStormIds] = useState(null)
@@ -19,7 +28,8 @@ const Interface = () => {
     setStormIds(stormIds) 
   }, [season])
 
-  const years = new Array(2022 - 1850).fill(0)
+  const startYear = basin === 'atl' ? 1850 : 1948
+  const years = new Array(2022 - startYear).fill(0)
 
   const toggleStats = () => {
     if (seasonStats === false) {
@@ -36,7 +46,11 @@ const Interface = () => {
         <h1 className="text-4xl italic text-white font-bold">Cyclopedia</h1>
       </div>
       <div id="content">
-        <div className="flex gap-5">
+        <div className="flex gap-5 flex-col sm:flex-row">
+          <Select className="select" value={basin} onChange={(e) => {setBasin(e.target.value)}}>
+            <MenuItem value="atl">Atlantic</MenuItem>
+            <MenuItem value="ep">Pacific</MenuItem>
+          </Select>
           <Select className="select" value={year} onChange={(e) => {setYear(e.target.value)}}>
             {years.map((_, index) => {
               const selectedYear = 2022 - index;

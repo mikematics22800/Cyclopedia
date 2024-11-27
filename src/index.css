@@ -33,7 +33,7 @@
 }
  
 #interface #content {
-  @apply flex items-center justify-between my-10
+  @apply flex sm:items-center justify-between my-10
 }
 
 #map {

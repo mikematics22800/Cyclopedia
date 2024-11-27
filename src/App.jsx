@@ -8,6 +8,7 @@ import 'animate.css'
 export const Context = createContext()
 
 function App() {
+  const [basin, setBasin] = useState('atl')
   const [year, setYear] = useState(2022)
   const [season, setSeason] = useState(null)
   const [storm, setStorm] = useState(null)
@@ -17,20 +18,20 @@ function App() {
   const [windField, setWindField] = useState(false)
 
   useEffect(() => {
-    const cache = localStorage.getItem(`hurdat2-${year}`)
+    const cache = localStorage.getItem(`hurdat2-${basin}-${year}`)
     if (cache) {
       setSeason(JSON.parse(cache))
       setStormId(JSON.parse(cache)[0].id)
     } else {
       setSeason(null)
       setStorm(null)
-      getHurdat(year).then(data => {
+      getHurdat(basin, year).then(data => {
         setSeason(data)
         setStormId(data[0].id)
-        localStorage.setItem(`hurdat2-${year}`, JSON.stringify(data))
+        localStorage.setItem(`hurdat2-${basin}-${year}`, JSON.stringify(data))
       })
     }
-  }, [year])
+  }, [basin, year])
 
   useEffect(() => {
     if (season) {
@@ -69,7 +70,22 @@ function App() {
     }
   }, [season]);
 
-  const value = {year, setYear, season, setSeason, storm, setStorm, stormId, setStormId, dates, landfallingStorms, windField, setWindField}
+  const value = {
+    basin,
+    setBasin, 
+    year, 
+    setYear, 
+    season, 
+    setSeason, 
+    storm, 
+    setStorm, 
+    stormId, 
+    setStormId, 
+    dates, 
+    landfallingStorms, 
+    windField, 
+    setWindField
+  }
 
   return (
     <Context.Provider value={value}>
