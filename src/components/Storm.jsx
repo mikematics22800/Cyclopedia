@@ -109,7 +109,7 @@ const Storm = () => {
         } else {
           if (statuses.includes("TD")) {
             status = "Tropical Depression"
-            textColor = "blue"
+            textColor = "#0096FF"
           } else {
             status = "Subtropical Depression"
             textColor = "aqua"
@@ -128,7 +128,7 @@ const Storm = () => {
           {image == "" && <h1>Image Unavailable</h1>}
         </a>
         <div id="stats">
-          <h1 style={{color:textColor}}>{!stormName != 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
+          <h1 style={{color:textColor}}>{stormName !== 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
           {retired == true && <img className='animate__bounceIn sm:w-60 w-40' src={retiredImage}/>}
           <h2>{duration}</h2>
           {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}

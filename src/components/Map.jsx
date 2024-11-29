@@ -93,7 +93,7 @@ function Map() {
       }
       if (point.status === 'TD') {
         status = "Tropical Depression"
-        color = "blue"
+        color = "#0096FF"
       }
       if (point.status === 'TS') {
         status = "Tropical Storm"
