@@ -16,8 +16,8 @@ const Storm = () => {
   const [maxWind, setMaxWind] = useState('')
   const [minPressure, setMinPressure] = useState('')
   const [landfalls, setLandfalls] = useState([])
-  const [maxWindLand, setmaxWindLand] = useState('')
-  const [minPressureLand, setminPressureLand] = useState('')
+  const [inlandMaxWind, setInlandMaxWind] = useState('')
+  const [inlandMinPressure, setInlandMinPressure] = useState('')
   const [cost, setCost] = useState('')
   const [fatalities, setFatalities] = useState('')
 
@@ -64,19 +64,19 @@ const Storm = () => {
     const landfalls = data.filter(point => point.record === "L")
     setLandfalls(landfalls)
 
-    const windsLandfall = landfalls.map((point) => {
+    const inlandWinds = landfalls.map((point) => {
       return point.max_wind_kt
     })
-    setmaxWindLand(Math.max(...windsLandfall))
+    setInlandMaxWind(Math.max(...inlandWinds))
 
-    const pressuresLandfall = landfalls.map((point) => {
+    const inlandPressures = landfalls.map((point) => {
       if (point.min_pressure_mb) {
         return point.min_pressure_mb
       } else {
         return 9999
       }
     })
-    setminPressureLand(Math.min(...pressuresLandfall))
+    setInlandMinPressure(Math.min(...inlandPressures))
 
     setImage(storm.image)
 
@@ -143,9 +143,9 @@ const Storm = () => {
           <h2>{duration}</h2>
           {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}
           <h2>Maximum Wind: {maxWind} kt</h2>
-          {landfalls.length > 0 && <h2>Maximum Inland Wind: {maxWindLand} kt</h2>}
+          {landfalls.length > 0 && <h2>Maximum Inland Wind: {inlandMaxWind} kt</h2>}
           <h2>Mininum Pressure: {minPressure ? (`${minPressure} mb`) : 'Unknown'}</h2>
-          {landfalls.length > 0 && <h2>Minimum Inland Pressure: {minPressure ? (`${minPressure} mb`) : 'Unknown'}</h2>}
+          {landfalls.length > 0 && <h2>Minimum Inland Pressure: {inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>}
           <h2>Fatalities: {fatalities}</h2>
           <h2>Cost (Million USD): ${cost}</h2>
         </div>
