@@ -50,8 +50,14 @@ const Storm = () => {
     setMaxWind(maxWind)
 
     const pressures = data.map((point) => {
-      return point.min_pressure_mb
+      if (point.min_pressure_mb) {
+        return point.min_pressure_mb
+      } else {
+        return 9999
+      }
     })
+
+    console.log(pressures)
     const minPressure = Math.min(...pressures)
     setMinPressure(minPressure)
 
@@ -64,7 +70,11 @@ const Storm = () => {
     setmaxWindLand(Math.max(...windsLandfall))
 
     const pressuresLandfall = landfalls.map((point) => {
-      return point.min_pressure_mb
+      if (point.min_pressure_mb) {
+        return point.min_pressure_mb
+      } else {
+        return 9999
+      }
     })
     setminPressureLand(Math.min(...pressuresLandfall))
 
@@ -134,8 +144,8 @@ const Storm = () => {
           {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}
           <h2>Maximum Wind: {maxWind} kt</h2>
           {landfalls.length > 0 && <h2>Maximum Inland Wind: {maxWindLand} kt</h2>}
-          <h2>Mininum Pressure: {minPressure != 1050 ? (`${minPressure} mb`) : 'Unknown'}</h2>
-          {landfalls.length > 0 && <h2>Minimum Inland Pressure: {minPressureLand} mb</h2>}
+          <h2>Mininum Pressure: {minPressure ? (`${minPressure} mb`) : 'Unknown'}</h2>
+          {landfalls.length > 0 && <h2>Minimum Inland Pressure: {minPressure ? (`${minPressure} mb`) : 'Unknown'}</h2>}
           <h2>Fatalities: {fatalities}</h2>
           <h2>Cost (Million USD): ${cost}</h2>
         </div>

@@ -137,7 +137,7 @@ function Map() {
             <h1 className="text-md">{!name.includes('Unnamed') && !name.includes('Unnumbered') ? (`${status} ${name}`) : (`${name} ${status}`)}</h1>
             <h1 className="my-1">{date} at {time} UTC</h1>
             <h1>Maximum Wind: {wind} kt</h1>
-            <h1>Minimum Pressure: {pressure != -999 ? (`${pressure} mb`) : 'Unknown'}</h1>
+            <h1>Minimum Pressure: {pressure ? (`${pressure} mb`) : 'Unknown'}</h1>
           </Popup>
         </Marker>
       )
@@ -150,21 +150,20 @@ function Map() {
     )
   })  
 
-
   const nmToDeg = (nm) => nm / 60;
 
-  const calculatePoints = (lat, lng, points, radii) => {
+  const calculatePoints = (lat, lng, points, radii={}) => {
     let {ne, se, sw, nw} = radii;
-    if (ne === -999) {
+    if (!ne) {
       ne = 0;
     }
-    if (se === -999) {
+    if (!se) {
       se = 0;
     }
-    if (sw === -999) {
+    if (!sw) {
       sw = 0;
     }
-    if (nw === -999) {
+    if (!nw) {
       nw = 0
     }
     let radius;
