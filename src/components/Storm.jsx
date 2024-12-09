@@ -138,8 +138,8 @@ const Storm = () => {
           {image == "" && <h1>Image Unavailable</h1>}
         </a>
         <div id="stats">
-          <h1 style={{color:textColor}}>{stormName !== 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
           {retired == true && <img className='animate__bounceIn sm:w-60 w-40' src={retiredImage}/>}
+          <h1 style={{color:textColor}}>{stormName !== 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
           <h2>{duration}</h2>
           {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}
           <h2>Maximum Wind: {maxWind} kt</h2>

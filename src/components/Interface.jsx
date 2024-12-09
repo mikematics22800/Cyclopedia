@@ -73,7 +73,7 @@ const Interface = () => {
         </Button>
       </div>
       {seasonStats === false ? <Storm/> : <Season/>}
-      <h1 className="text-white font-bold mt-5">Older data less likely to be complete.</h1>
+      <h1 className="text-white font-bold mt-5">Older data less likely to be complete</h1>
     </div>
   )
 }
