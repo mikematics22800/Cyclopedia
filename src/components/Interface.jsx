@@ -29,7 +29,7 @@ const Interface = () => {
   }, [season])
 
   const startYear = basin === 'atl' ? 1850 : 1948
-  const years = new Array(2022 - startYear).fill(0)
+  const years = new Array(2023 - startYear).fill(0)
 
   const toggleStats = () => {
     if (seasonStats === false) {
@@ -53,7 +53,7 @@ const Interface = () => {
           </Select>
           <Select className="select" value={year} onChange={(e) => {setYear(e.target.value)}}>
             {years.map((_, index) => {
-              const selectedYear = 2022 - index;
+              const selectedYear = 2023 - index;
               return (<MenuItem key={index} value={selectedYear}>{selectedYear}</MenuItem>);
             })}
           </Select>

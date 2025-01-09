@@ -9,7 +9,7 @@ export const Context = createContext()
 
 function App() {
   const [basin, setBasin] = useState('atl')
-  const [year, setYear] = useState(2022)
+  const [year, setYear] = useState(2023)
   const [season, setSeason] = useState(null)
   const [storm, setStorm] = useState(null)
   const [stormId, setStormId] = useState('')
@@ -97,7 +97,7 @@ function App() {
         </div>
       ) : (
         <div id="loading">
-          <img src={cyclone} alt="storm-icon"/>
+          <img src={cyclone}/>
           <h1>Loading...</h1>
         </div>
       )}
