@@ -9,7 +9,7 @@
 ## Description
 A React app that displays official data from the National Hurricane Center on all tropical cyclones recorded in the Atlantic and Pacific basin since 1851 and 1949 respectively. Data is dislayed via an interactive map with detailed track information for all storms of a selected basin and year. Charts are provided which display various statistics for each storm, as well as the cumulative activity and impacts of each season.
 
-[![](.client/public/screenshot.png)](https://mikematics22800.github.io/Cyclopedia)
+[![](./screenshot.png)](https://mikematics22800.github.io/Cyclopedia)
 
 ## Installation
 
