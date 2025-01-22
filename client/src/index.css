@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*::-webkit-scrollbar {
+  width: 0;
+}
+
+#app {
+  @apply h-screen w-screen flex overflow-hidden xl:flex-row flex-col
+}
+
+#loading {
+  @apply w-screen h-screen flex flex-col items-center justify-center bg-blue-950 text-white gap-20
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+#loading img {
+  animation: spin 2s linear infinite;
+  @apply w-60 h-60;
+}
+
+#loading h1 {
+  @apply text-4xl font-bold
+}
+
+#interface {
+  @apply xl:w-[48rem] xl:h-full w-screen h-1/2 bg-blue-950 sm:p-10 p-5 overflow-auto
+}
+ 
+#interface #content {
+  @apply flex sm:items-center justify-between my-10
+}
+
+#map {
+  @apply xl:w-[calc(100%-48rem)] xl:h-full w-screen h-1/2
+}
+
+.select {
+  @apply bg-white !rounded-md h-10
+}
+
+#storm {
+  @apply w-full
+}
+
+#storm header {
+  @apply flex gap-10 mb-10 w-full
+}
+
+#storm a {
+  @apply sm:w-96 sm:h-96 w-64 h-64 bg-cover bg-center flex flex-col items-center justify-center rounded-md bg-gray-400
+}
+
+#storm a h1 {
+  @apply text-xl font-bold text-gray-600
+}
+
+#storm #stats {
+  @apply flex flex-col w-64 font-bold gap-1 sm:gap-2 text-white
+}
+
+#storm #stats h1 {
+  @apply text-lg sm:text-2xl
+}
+
+#storm #stats h2 {
+  @apply text-[.6rem] sm:text-sm
+}
+
+.charts {
+  @apply bg-white p-5 rounded-md flex flex-col gap-5 mt-5
+}
+
+#season {
+  @apply flex flex-col sm:gap-5 gap-3
+}
+
+#season h1 {
+  @apply text-white font-bold sm:text-lg
+}
+
+.button {
+  @apply h-10 w-fit !font-bold
+}
