@@ -3,7 +3,6 @@ import { getHurdat } from "./libs/hurdat"
 import Interface from "./components/Interface"
 import Map from "./components/Map"
 import cyclone from '../public/cyclone.png'
-import 'animate.css'
 
 export const Context = createContext()
 
@@ -19,7 +18,7 @@ function App() {
 
   useEffect(() => {
     if (year < 1949 && basin === 'pac') setYear(1949)
-    const cache = localStorage.getItem(`hurdat2-${basin}-${year}`)
+    const cache = localStorage.getItem(`cyclopedia-${basin}-${year}`)
     if (cache) {
       setSeason(JSON.parse(cache))
       setStormId(JSON.parse(cache)[0].id)
@@ -29,7 +28,7 @@ function App() {
       getHurdat(basin, year).then(data => {
         setSeason(data)
         setStormId(data[0].id)
-        localStorage.setItem(`hurdat2-${basin}-${year}`, JSON.stringify(data))
+        localStorage.setItem(`cyclopedia-${basin}-${year}`, JSON.stringify(data))
       })
     }
   }, [basin, year])
