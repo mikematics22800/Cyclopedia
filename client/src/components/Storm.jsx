@@ -133,7 +133,7 @@ const Storm = () => {
   return (
     <div id="storm">
       <header>
-        <a className={retired && '!justify-end pb-2 sm:pb-4'} style={{backgroundImage: `url(${image})`}} href={year > 1993 ? (`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`) : ('#')}>
+        <a target='_blank' className={`${retired && '!justify-end pb-2 sm:pb-4'} ${year < 1995 && 'pointer-events-none'}`} style={{backgroundImage: `url(${image})`}} href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}>
           {image == "" && <h1>Image Unavailable</h1>}
           {retired && <img className='w-64' src={retiredImage}/>}
         </a>
