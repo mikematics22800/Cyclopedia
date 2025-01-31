@@ -49,7 +49,7 @@
 }
 
 #storm header {
-  @apply flex sm:flex-row flex-col gap-5 sm:gap-10 mb-10 w-full
+  @apply flex sm:flex-row flex-col gap-5 sm:gap-10 mb-10 w-full items-center
 }
 
 #storm a {
@@ -61,15 +61,15 @@
 }
 
 #storm #stats {
-  @apply flex flex-col font-bold gap-1 sm:gap-2 text-white
+  @apply flex flex-col font-bold gap-1 text-white
 }
 
 #storm #stats h1 {
-  @apply text-2xl
+  @apply text-3xl mb-2
 }
 
 #storm #stats h2 {
-  @apply sm:text-[0.8rem]
+  @apply text-lg
 }
 
 .charts {
