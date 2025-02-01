@@ -135,18 +135,18 @@ const Storm = () => {
       <header>
         <a target='_blank' className={`${retired && '!justify-end pb-2 sm:pb-4'} ${year < 1995 && 'pointer-events-none'}`} style={{backgroundImage: `url(${image})`}} href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}>
           {image == "" && <h1>Image Unavailable</h1>}
-          {retired && <img className='w-64' src={retiredImage}/>}
+          {retired && <img className='w-60' src={retiredImage}/>}
         </a>
         <div id="stats">
           <h1 style={{color:textColor}}>{stormName !== 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
           <h2>{duration}</h2>
-          {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}
           <h2>Maximum Wind: {maxWind} kt</h2>
           {landfalls.length > 0 && <h2>Maximum Inland Wind: {inlandMaxWind} kt</h2>}
           <h2>Mininum Pressure: {minPressure ? (`${minPressure} mb`) : 'Unknown'}</h2>
           {landfalls.length > 0 && <h2>Minimum Inland Pressure: {inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>}
           <h2>Fatalities: {fatalities}</h2>
           <h2>Cost (Million USD): ${cost}</h2>
+          {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}
         </div>
       </header>
       <div className="charts">
