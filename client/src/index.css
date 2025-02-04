@@ -60,15 +60,19 @@
   @apply font-bold text-gray-600
 }
 
-#storm #stats {
-  @apply flex flex-col font-bold gap-1 text-white text-center sm:text-start
+#storm ul {
+  @apply flex flex-col font-bold gap-1 text-white text-center sm:text-start w-full
 }
 
-#storm #stats h1 {
-  @apply text-2xl mb-1
+#storm ul li {
+  @apply flex justify-between bg-blue-600 p-2 rounded-lg
 }
 
-#storm #stats h2 {
+#storm ul h1 {
+  @apply text-2xl
+}
+
+#storm ul h2 {
   @apply text-sm
 }
 
@@ -85,5 +89,5 @@
 }
 
 .button {
-  @apply h-10 w-fit !font-bold
+  @apply h-10 w-fit !font-bold !bg-blue-600
 }

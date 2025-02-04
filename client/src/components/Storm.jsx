@@ -137,17 +137,42 @@ const Storm = () => {
           {image == "" && <h1>Image Unavailable</h1>}
           {retired && <img className='w-60' src={retiredImage}/>}
         </a>
-        <div id="stats">
+        <ul id="stats">
           <h1 style={{color:textColor}}>{stormName !== 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
-          <h2>{duration}</h2>
-          <h2>Maximum Wind: {maxWind} kt</h2>
-          {landfalls.length > 0 && <h2>Maximum Inland Wind: {inlandMaxWind} kt</h2>}
-          <h2>Mininum Pressure: {minPressure ? (`${minPressure} mb`) : 'Unknown'}</h2>
-          {landfalls.length > 0 && <h2>Minimum Inland Pressure: {inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>}
-          <h2>Fatalities: {fatalities}</h2>
-          <h2>Cost (Million USD): ${cost}</h2>
-          {year > 1982 && <h2>Landfalls: {landfalls.length}</h2>}
-        </div>
+          <h2 className='mb-2 !text-lg'>{duration}</h2>
+          <li>
+            <h2>Maximum Wind</h2>
+            <h2>{maxWind} kt</h2>
+          </li>
+          {landfalls.length > 0 && <li>
+            <h2>Maximum Inland Wind</h2>
+            <h2>{inlandMaxWind} kt</h2>
+          </li>}
+          <li>
+            <h2>Minimum Pressure</h2>
+            <h2>{minPressure ? (`${minPressure} mb`) : 'Unknown'}</h2>
+          </li>
+          {landfalls.length > 0 && <li>
+            <h2>Minimum Inland Pressure</h2>
+            <h2>{inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
+          </li>}
+          <li>
+            <h2>Landfalls</h2>
+            <h2>{landfalls.length}</h2>
+          </li>
+          <li>
+            <h2>Fatalities</h2>
+            <h2>{fatalities}</h2>
+          </li>
+          <li>
+            <h2>Cost (Million USD)</h2>
+            <h2>{cost}</h2>
+          </li>
+          {year > 1982 && <li>
+            <h2>Landfalls</h2>
+            <h2>{landfalls.length}</h2>
+          </li>}
+        </ul>
       </header>
       <div className="charts">
         <Intensity/>

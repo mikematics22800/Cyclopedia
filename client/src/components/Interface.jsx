@@ -46,7 +46,7 @@ const Interface = () => {
         <h1 className="text-4xl italic text-white font-bold">Cyclopedia</h1>
       </div>
       <div id="content">
-        <div className="flex gap-5 flex-col sm:flex-row">
+        <div className="flex gap-4 flex-col sm:flex-row">
           <Select className="select" value={basin} onChange={(e) => {setBasin(e.target.value)}}>
             <MenuItem value="atl">Atlantic</MenuItem>
             <MenuItem value="pac">Pacific</MenuItem>
