@@ -8,15 +8,15 @@ import { sum } from '../libs/sum'
 const Season = () => {
   const {season} = useContext(Context)
 
-  const [fatalities, setFatalities] = useState(0)
+  const [deadOrMissing, setDeadOrMissing] = useState(0)
   const [cost, setCost] = useState(0)
   const [retiredNames, setRetiredNames] = useState([])
 
   useEffect(() => {
-    const fatalities = season.map((storm) => {
-      return storm.fatalities
+    const deadOrMissing = season.map((storm) => {
+      return storm.dead_or_missing
     })
-    setFatalities(sum(fatalities))
+    setDeadOrMissing(sum(deadOrMissing))
     const costs = season.map((storm) => {
       return storm.cost_usd
     })
@@ -31,9 +31,11 @@ const Season = () => {
 
   return (
     <div id="season">
-      <h1>Fatalities: {fatalities}</h1>
-      <h1>Cost (Million USD): ${cost}</h1>
-      <h1>Retired Names: {retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h1>
+      <div className='w-full flex justify-between'>
+        <h1>Retired Names: {retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h1>
+        <h1>Cost (Million USD): ${cost}</h1>
+        <h1>Dead/Missing: {deadOrMissing}</h1>
+      </div>
       <div className="charts">
         <MaxWinds/>
         <MinPressures/>

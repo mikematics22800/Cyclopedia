@@ -19,7 +19,7 @@ const Storm = () => {
   const [inlandMaxWind, setInlandMaxWind] = useState('')
   const [inlandMinPressure, setInlandMinPressure] = useState('')
   const [cost, setCost] = useState('')
-  const [fatalities, setFatalities] = useState('')
+  const [deadOrMissing, setDeadOrMissing] = useState('')
 
   useEffect(() => {
     setStormName(storm.id.split('_')[1])
@@ -82,8 +82,8 @@ const Storm = () => {
     const cost = (storm.cost_usd/1000000).toFixed(1)
     setCost(cost)
 
-    const fatalities = storm.fatalities
-    setFatalities(fatalities)
+    const deadOrMissing = storm.dead_or_missing
+    setDeadOrMissing(deadOrMissing)
 
     let status
     let textColor
@@ -150,28 +150,24 @@ const Storm = () => {
           </li>}
           <li>
             <h2>Minimum Pressure</h2>
-            <h2>{minPressure ? (`${minPressure} mb`) : 'Unknown'}</h2>
+            <h2>{minPressure != 9999 && minPressure != -999 ? (`${minPressure} mb`) : 'Unknown'}</h2>
           </li>
           {landfalls.length > 0 && <li>
             <h2>Minimum Inland Pressure</h2>
             <h2>{inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
           </li>}
-          <li>
+          {year < 1971 || year > 1982 ? (<li>
             <h2>Landfalls</h2>
             <h2>{landfalls.length}</h2>
-          </li>
-          <li>
-            <h2>Fatalities</h2>
-            <h2>{fatalities}</h2>
-          </li>
+          </li>) : null}
           <li>
             <h2>Cost (Million USD)</h2>
             <h2>{cost}</h2>
           </li>
-          {year > 1982 && <li>
-            <h2>Landfalls</h2>
-            <h2>{landfalls.length}</h2>
-          </li>}
+          <li>
+            <h2>Dead/Missing</h2>
+            <h2>{deadOrMissing}</h2>
+          </li>
         </ul>
       </header>
       <div className="charts">
