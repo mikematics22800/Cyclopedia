@@ -53,7 +53,7 @@
 }
 
 #storm a {
-  @apply w-full max-w-80 h-80 bg-cover bg-center flex flex-col items-center justify-center rounded-xl bg-gray-400
+  @apply w-80 h-96 bg-cover bg-center flex flex-col items-center justify-center rounded-xl bg-gray-400
 }
 
 #storm a h1 {
@@ -61,7 +61,7 @@
 }
 
 #storm ul {
-  @apply flex flex-col font-bold gap-1 text-white text-center sm:text-start w-full
+  @apply flex flex-col font-bold gap-1 text-white text-center sm:text-start w-80
 }
 
 #storm ul li {
