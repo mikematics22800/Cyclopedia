@@ -1,8 +1,12 @@
 {
   "name": "Cyclopedia",
   "short_name": "Cyclopedia",
-  "icons": [],
+  "icons": [{
+    "src": "/cyclone.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
   "start_url": "/",
-  "display": "browser"
+  "display": "fullscreen"
 }
- 
+  
