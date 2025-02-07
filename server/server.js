@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 const corsOptions = {
-  origin: ['http://localhost:5173', 'https://storm-cyclopedia.com'],
+  origin: ['http://localhost:4173', 'http://localhost:5173', 'https://storm-cyclopedia.com'],
   methods: ['GET', 'POST', 'OPTIONS'], 
   allowedHeaders: ['Content-Type'],
 };
