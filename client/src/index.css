@@ -36,10 +36,6 @@
   @apply flex sm:items-center justify-between my-10
 }
 
-#map {
-  @apply xl:w-1/2 xl:h-full w-screen h-1/2
-}
-
 .select {
   @apply bg-white !rounded-md h-10
 }

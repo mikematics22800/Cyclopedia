@@ -1,11 +1,35 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../App";
 import { MapContainer, Polyline, TileLayer, Popup, Marker, Polygon } from "react-leaflet";
 import { divIcon } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { IconButton } from "@mui/material";
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import { useEffect } from "react";
 
-function Map() {
+const Map = () => {
   const {season, setStormId, storm, year, windField} = useContext(Context)
+
+  const [fullscreen, setFullscreen] = useState(false)
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        setFullscreen(false);
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  const toggleFullscreen = () => {
+    fullscreen ? document.exitFullscreen() : document.getElementById('map').requestFullscreen()
+    setFullscreen(!fullscreen)
+  }
 
   const dot = (color) => {
     return (
@@ -230,9 +254,12 @@ function Map() {
     })
   }
   
-
   return (
-    <MapContainer id="map" maxBounds={[[90, 180], [-90, -180]]} center={[30, -60]} maxZoom={15} minZoom={4} zoom={4}>
+    <MapContainer className={fullscreen ? 'w-screen h-screen' : 'xl:w-1/2 xl:h-full w-screen h-1/2'} id="map" maxBounds={[[90, 180], [-90, -180]]} center={[30, -60]} maxZoom={15} minZoom={3} zoom={4}>
+      <IconButton className="!absolute top-2 right-2" style={{ zIndex: 1000 }} onClick={toggleFullscreen}>
+        {!fullscreen && <FullscreenIcon className="!text-5xl text-gray-500"/>}
+        {fullscreen && <FullscreenExitIcon className="!text-5xl text-gray-500"/>}
+      </IconButton>
       <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>  
       {storms}
       {year >= 2004 && windField && <>
