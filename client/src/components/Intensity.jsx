@@ -17,10 +17,10 @@ const Intensity = () => {
 
     const pressure = data.map((point) => {
       let pressure = point.min_pressure_mb
-      if (!pressure) {
-        return 0
+      if (pressure > 0) {
+        return pressure
       }
-      return pressure
+      return 0
     })
     setPressure(pressure)
   }, [storm])

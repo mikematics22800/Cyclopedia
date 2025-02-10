@@ -3,6 +3,7 @@ import { Context } from '../App'
 import Intensity from './Intensity'
 import ACE from './ACE'
 import retiredImage from "../../public/retired.png"
+import CycloneIcon from '@mui/icons-material/Cyclone';
 
 const Storm = () => {
   const {year, storm, stormId} = useContext(Context)
@@ -35,7 +36,7 @@ const Storm = () => {
     const startMonth = startArray.slice(4,6).join('')
     const startDay = startArray.slice(-2).join('')
     const startDate = `${startMonth}/${startDay}/${startYear}`
-    const endArray = data.pop().date.toString().split('')
+    const endArray = data[data.length - 1].date.toString().split('')    
     const endYear = endArray.slice(0,4).join('')
     const endMonth = endArray.slice(4,6).join('')
     const endDay = endArray.slice(-2).join('')
@@ -50,7 +51,7 @@ const Storm = () => {
     setMaxWind(maxWind)
 
     const pressures = data.map((point) => {
-      if (point.min_pressure_mb) {
+      if (point.min_pressure_mb > 0) {
         return point.min_pressure_mb
       } else {
         return 9999
@@ -134,7 +135,10 @@ const Storm = () => {
     <div id="storm">
       <header>
         <a target='_blank' className={`${retired && '!justify-end pb-2 sm:pb-4'} ${year < 1995 && 'pointer-events-none'}`} style={{backgroundImage: `url(${image})`}} href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}>
-          {image == "" && <h1>Image Unavailable</h1>}
+          {image == "" && <div className='flex flex-col gap-5 items-center'>
+            <CycloneIcon className='text-gray-600 !text-8xl'/>
+            <h1 className='text-2xl'>Image Unavailable</h1>
+          </div>}
           {retired && <img className='w-60' src={retiredImage}/>}
         </a>
         <ul id="stats">
@@ -156,10 +160,10 @@ const Storm = () => {
             <h2>Minimum Inland Pressure</h2>
             <h2>{inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
           </li>}
-          {year < 1971 || year > 1982 ? (<li>
+          <li>
             <h2>Landfalls</h2>
-            <h2>{landfalls.length}</h2>
-          </li>) : null}
+            <h2>{year <= 1970 || year >= 1983 ? landfalls.length : 'Unavailable'}</h2>
+          </li>
           <li>
             <h2>Cost (Million USD)</h2>
             <h2>{cost}</h2>

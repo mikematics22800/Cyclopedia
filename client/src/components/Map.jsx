@@ -1,18 +1,18 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Context } from "../App";
-import { MapContainer, Polyline, TileLayer, Popup, Marker, Polygon } from "react-leaflet";
+import { MapContainer, Polyline, TileLayer, Popup, Marker, Polygon, useMap } from "react-leaflet";
 import { divIcon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { IconButton } from "@mui/material";
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
-import { useEffect } from "react";
+import CenterMap from "./CenterMap";
 
 const Map = () => {
-  const {season, setStormId, storm, year, windField} = useContext(Context)
+  const {season, setStormId, storm, year, windField, basin} = useContext(Context)
 
   const [fullscreen, setFullscreen] = useState(false)
-
+ 
   useEffect(() => {
     const handleFullscreenChange = () => {
       if (!document.fullscreenElement) {
@@ -70,7 +70,7 @@ const Map = () => {
     )
   }
 
-  const storms = season.map((storm, i) => {
+  const storms = season.map((storm) => {
     const id = storm.id
     const name = id.split('_')[1]
     const positions = []
@@ -103,7 +103,7 @@ const Map = () => {
         status = "Tropical Wave"
         color = "lightgray"
       }
-      if (point.status === 'EX') {
+      if (point.status === 'EX' || point.status === 'ET') {
         status = "Extratropical Cyclone"
         color = "lightgray"
       }
@@ -158,16 +158,16 @@ const Map = () => {
       return (
         <Marker key={i} position={coords} icon={icon} eventHandlers={{click:() => {setStormId(id)}}}>
           <Popup className="w-64 font-bold">
-            <h1 className="text-md">{!name.includes('Unnamed') && !name.includes('Unnumbered') ? (`${status} ${name}`) : (`${name} ${status}`)}</h1>
+            <h1 className="text-md">{!name.includes('Unnamed') && !name.includes('Unnumbered') ? `${status} ${name}` : `${name} ${status}`}</h1>
             <h1 className="my-1">{date} at {time} UTC</h1>
             <h1>Maximum Wind: {wind} kt</h1>
-            <h1>Minimum Pressure: {pressure ? (`${pressure} mb`) : 'Unknown'}</h1>
+            <h1>Minimum Pressure: {pressure ? `${pressure} mb` : 'Unknown'}</h1>
           </Popup>
         </Marker>
       )
     })
     return (
-      <div key={i}>
+      <div key={id}>
         <Polyline positions={positions} color="gray" opacity={.25}/>
         {points}
       </div>
@@ -178,18 +178,10 @@ const Map = () => {
 
   const calculatePoints = (lat, lng, points, radii={}) => {
     let {ne, se, sw, nw} = radii;
-    if (!ne) {
-      ne = 0;
-    }
-    if (!se) {
-      se = 0;
-    }
-    if (!sw) {
-      sw = 0;
-    }
-    if (!nw) {
-      nw = 0
-    }
+    if (!ne) {ne = 0}
+    if (!se) {se = 0}
+    if (!sw) {sw = 0}
+    if (!nw) {nw = 0}
     let radius;
     for (let angle = 0; angle < 360; angle += 1) {
       if (angle >= 0 && angle < 90) radius = ne;
@@ -253,9 +245,16 @@ const Map = () => {
       )
     })
   }
-  
   return (
-    <MapContainer className={fullscreen ? 'w-screen h-screen' : 'xl:w-1/2 xl:h-full w-screen h-1/2'} id="map" maxBounds={[[90, 180], [-90, -180]]} center={[30, -60]} maxZoom={15} minZoom={3} zoom={4}>
+    <MapContainer 
+      id="map" 
+      className={fullscreen ? 'w-screen h-screen' : 'xl:w-1/2 xl:h-full w-screen h-1/2'} 
+      maxBounds={[[90, 180], [-90, -180]]} 
+      center={[30, -120]} 
+      maxZoom={15} 
+      minZoom={3} 
+      zoom={4}
+    >
       <IconButton className="!absolute top-2 right-2" style={{ zIndex: 1000 }} onClick={toggleFullscreen}>
         {!fullscreen && <FullscreenIcon className="!text-5xl text-gray-500"/>}
         {fullscreen && <FullscreenExitIcon className="!text-5xl text-gray-500"/>}
@@ -267,6 +266,7 @@ const Map = () => {
         {windField50kt}
         {windField64kt}
       </>}
+      <CenterMap/>
     </MapContainer>
   )
 }

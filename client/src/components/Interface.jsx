@@ -5,7 +5,6 @@ import cyclone from "../../public/cyclone.png"
 import Storm from "./Storm";
 import Season from "./Season";
 
-
 const Interface = () => {
   const {
     basin, 
