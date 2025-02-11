@@ -31,11 +31,24 @@ const Season = () => {
 
   return (
     <div id="season">
-      <div className='w-full flex justify-between'>
-        <h1>Retired Names: {retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h1>
-        <h1>Cost (Million USD): ${cost}</h1>
-        <h1>Dead/Missing: {deadOrMissing}</h1>
-      </div>
+      <ul className='season-stats'>
+        <li>
+          <h1>Tropical Cyclones</h1>
+          <h1>{season.length}</h1>
+        </li>
+        <li>
+          <h1>Cost (Million USD)</h1>
+          <h1>${cost}</h1>
+        </li>
+        <li>
+          <h1>Dead/Missing</h1>
+          <h1>{deadOrMissing}</h1>
+        </li>
+        <li>
+          <h1>Retired Names</h1>
+          <h1>{retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h1>
+        </li>
+      </ul>
       <div className="charts">
         <MaxWinds/>
         <MinPressures/>

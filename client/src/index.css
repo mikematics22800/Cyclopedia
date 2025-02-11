@@ -87,3 +87,11 @@
 .button {
   @apply h-10 w-fit !font-bold !bg-blue-600 !rounded-lg
 }
+
+.season-stats {
+  @apply  w-full flex flex-col gap-2
+}
+
+.season-stats li {
+  @apply bg-blue-600 rounded-lg p-4 flex justify-between
+}

@@ -67,8 +67,8 @@ const Interface = () => {
             <h1 className="text-white font-bold">Wind Field</h1>
           </div>}
         </div>
-        <Button onClick={toggleStats} className="button" variant="contained">
-          <h1 className="font-sans font-bold">{seasonStats == true ? ("Storm") : ("Season")}</h1>
+        <Button onClick={toggleStats} className={`button ${seasonStats && '!bg-purple-800'}`} variant="contained">
+          <h1 className="font-sans font-bold">{seasonStats ? ("Storm") : ("Season")}</h1>
         </Button>
       </div>
       {seasonStats === false ? <Storm/> : <Season/>}
