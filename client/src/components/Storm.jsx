@@ -161,16 +161,12 @@ const Storm = () => {
             <h2>{inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
           </li>}
           <li>
-            <h2>Landfalls</h2>
-            <h2>{year <= 1970 || year >= 1983 ? landfalls.length : 'Unavailable'}</h2>
+            <h2>Dead/Missing</h2>
+            <h2>{deadOrMissing}</h2>
           </li>
           <li>
             <h2>Cost (Million USD)</h2>
             <h2>{cost}</h2>
-          </li>
-          <li>
-            <h2>Dead/Missing</h2>
-            <h2>{deadOrMissing}</h2>
           </li>
         </ul>
       </header>

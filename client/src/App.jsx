@@ -3,6 +3,7 @@ import { getHurdat } from "./libs/hurdat"
 import Interface from "./components/Interface"
 import Map from "./components/Map"
 import cyclone from '../public/cyclone.png'
+import { sum } from "./libs/sum"
 
 export const Context = createContext()
 
@@ -15,6 +16,8 @@ function App() {
   const [dates, setDates] = useState([])
   const [landfallingStorms, setLandfallingStorms] = useState([])
   const [windField, setWindField] = useState(false)
+  const [names, setNames] = useState([])
+  const [seasonACE, setSeasonACE] = useState([])
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -80,6 +83,33 @@ function App() {
       })
       setLandfallingStorms(landfallingStorms)
     }
+    const names = season?.map((storm) => {
+      return storm.id.split('_')[1]
+    })
+    setNames(names)
+
+    const seasonACE = season?.map((storm) => {
+      let ACE = 0
+      let windArray = []
+      storm.data.forEach((point) => {
+        const wind = point.max_wind_kt
+        const hour = point.time_utc
+        if (["TS", "SS", "HU"].includes(point.status)) {
+          if (hour % 600 == 0) {
+            ACE += Math.pow(wind, 2)/10000
+            if (windArray.length > 0) {
+              const average = sum(windArray)/windArray.length
+              ACE += Math.pow(average, 2)/10000
+              windArray = []
+            }
+          } else {
+            windArray.push(wind)
+          }
+        }
+      })
+      return ACE
+    })
+    setSeasonACE(seasonACE)
   }, [season]);
 
   const value = {
@@ -96,7 +126,9 @@ function App() {
     dates, 
     landfallingStorms, 
     windField, 
-    setWindField
+    setWindField,
+    names,
+    seasonACE
   }
 
   return (

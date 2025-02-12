@@ -3,17 +3,11 @@ import { Context } from '../App'
 import BarChart from './BarChart'
 
 const MinPressures = () => {
-  const {season} = useContext(Context)
+  const {season, names} = useContext(Context)
 
-  const [names, setNames] = useState([]);
   const [minPressures, setMinPressures] = useState([])
 
   useEffect(() => {
-    const names = season.map((storm) => {
-      return storm.id.split('_')[1]
-    })
-    setNames(names)
-
     const minPressures = season.map((storm) => {
       const pressures = storm.data.map((point) => {
         return point.min_pressure_mb

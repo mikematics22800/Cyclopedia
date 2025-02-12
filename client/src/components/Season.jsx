@@ -6,7 +6,7 @@ import SeasonACE from './SeasonACE'
 import { sum } from '../libs/sum'
 
 const Season = () => {
-  const {season} = useContext(Context)
+  const {season, seasonACE} = useContext(Context)
 
   const [deadOrMissing, setDeadOrMissing] = useState(0)
   const [cost, setCost] = useState(0)
@@ -37,12 +37,16 @@ const Season = () => {
           <h1>{season.length}</h1>
         </li>
         <li>
-          <h1>Cost (Million USD)</h1>
-          <h1>${cost}</h1>
+          <h1>Accumulated Cyclone Energy</h1>
+          <h1>{sum(seasonACE).toFixed(1)}</h1>
         </li>
         <li>
           <h1>Dead/Missing</h1>
           <h1>{deadOrMissing}</h1>
+        </li>
+        <li>
+          <h1>Cost (Million USD)</h1>
+          <h1>${cost}</h1>
         </li>
         <li>
           <h1>Retired Names</h1>
