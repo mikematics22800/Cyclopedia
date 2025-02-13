@@ -65,7 +65,7 @@
 }
 
 #storm ul {
-  @apply flex flex-col font-bold gap-1 text-white text-center sm:text-start w-80
+  @apply flex flex-col font-bold gap-1 text-white w-full
 }
 
 #storm ul li {

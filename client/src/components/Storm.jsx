@@ -134,6 +134,7 @@ const Storm = () => {
   return (
     <div id="storm">
       <header>
+        <div>
         <a target='_blank' className={`${retired && '!justify-end pb-2 sm:pb-4'} ${year < 1995 && 'pointer-events-none'}`} style={{backgroundImage: `url(${image})`}} href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}>
           {image == "" && <div className='flex flex-col gap-5 items-center'>
             <CycloneIcon className='text-gray-600 !text-8xl'/>
@@ -141,7 +142,8 @@ const Storm = () => {
           </div>}
           {retired && <img className='w-60' src={retiredImage}/>}
         </a>
-        <ul id="stats">
+        </div>
+        <ul>
           <h1 style={{color:textColor}}>{stormName !== 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
           <h2 className='mb-2 !text-lg'>{duration}</h2>
           <li>
