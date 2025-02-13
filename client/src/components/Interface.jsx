@@ -42,7 +42,7 @@ const Interface = () => {
     <div id="interface">
       <div className="flex items-center">
         <img src={cyclone} className="h-10 mr-2"/>
-        <h1 className="text-4xl italic text-white font-bold">Cyclopedia</h1>
+        <h1 className="title">CYCLOPEDIA</h1>
       </div>
       <div id="content">
         <div className="flex gap-4 flex-col sm:flex-row">

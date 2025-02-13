@@ -141,7 +141,7 @@ function App() {
       ) : (
         <div id="loading">
           <img src={cyclone}/>
-          <h1>Loading...</h1>
+          <h1>LOADING...</h1>
         </div>
       )}
     </Context.Provider>

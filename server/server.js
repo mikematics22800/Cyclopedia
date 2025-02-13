@@ -27,7 +27,7 @@ app.get('/:basin/:year', (req, res) => {
 
   fs.readFile(filePath, (err, data) => {
     if (err) {
-      console.error(err);
+      console.error(err); 
       return res.status(404).send('File not found'); 
     }
     try {

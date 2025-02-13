@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Storm';
+  src: url('/storm.ttf') 
+}
+
+.title {
+  font-family: Storm;
+  @apply text-4xl italic text-white font-bold 
+}
+
 *::-webkit-scrollbar {
   width: 0;
 }
@@ -11,6 +21,7 @@
 }
 
 #loading {
+  font-family: Storm;
   @apply w-screen h-screen flex flex-col items-center justify-center bg-blue-950 text-white gap-20
 }
 
@@ -40,9 +51,6 @@
   @apply bg-white !rounded-md h-10
 }
 
-#storm {
-  @apply w-full
-}
 
 #storm header {
   @apply flex md:flex-row flex-col gap-5 sm:gap-10 mb-10 w-full items-center
