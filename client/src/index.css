@@ -68,16 +68,8 @@
   @apply flex flex-col font-bold gap-1 text-white w-full
 }
 
-#storm ul li {
-  @apply flex justify-between bg-blue-600 p-2 rounded-lg
-}
-
-#storm ul h1 {
-  @apply text-2xl
-}
-
-#storm ul h2 {
-  @apply text-sm
+ul li {
+  @apply bg-blue-600 rounded-lg p-3 flex justify-between
 }
 
 .charts {
@@ -98,8 +90,4 @@
 
 .season-stats {
   @apply  w-full flex flex-col gap-2
-}
-
-.season-stats li {
-  @apply bg-blue-600 rounded-lg p-4 flex justify-between
 }

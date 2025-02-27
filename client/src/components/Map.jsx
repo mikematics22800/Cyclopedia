@@ -123,7 +123,7 @@ const Map = () => {
         status = "Tropical Storm"
         color = "lime"
       }
-      if (point.status === 'HU') {
+      if (point.status === 'HU' || point.status === 'TY') {
         if (wind <= 82) {
           status = 'Category 1 Hurricane'
           color = 'yellow'
@@ -249,7 +249,7 @@ const Map = () => {
     <MapContainer 
       id="map" 
       className={fullscreen ? 'w-screen h-screen' : 'xl:w-1/2 xl:h-full w-screen h-1/2'} 
-      maxBounds={[[90, 180], [-90, -180]]} 
+      maxBounds={[[90, 150], [-90, -270]]} 
       center={[30, -120]} 
       maxZoom={15} 
       minZoom={3} 

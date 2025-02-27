@@ -144,8 +144,8 @@ const Storm = () => {
         </a>
         </div>
         <ul>
-          <h1 style={{color:textColor}}>{stormName !== 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
-          <h2 className='mb-2 !text-lg'>{duration}</h2>
+          <h1 className='text-2xl' style={{color:textColor}}>{stormName !== 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
+          <h2 className='mb-2 text-xl'>{duration}</h2>
           <li>
             <h2>Maximum Wind</h2>
             <h2>{maxWind} kt</h2>
