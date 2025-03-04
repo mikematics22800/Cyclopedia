@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { Context } from "../App";
-import { MapContainer, Polyline, TileLayer, Popup, Marker, Polygon, useMap } from "react-leaflet";
+import { MapContainer, Polyline, TileLayer, Popup, Marker, Polygon } from "react-leaflet";
 import { divIcon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { IconButton } from "@mui/material";
@@ -9,7 +9,7 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import CenterMap from "./CenterMap";
 
 const Map = () => {
-  const {season, setStormId, storm, year, windField, basin} = useContext(Context)
+  const {season, setStormId, storm, year, windField} = useContext(Context)
 
   const [fullscreen, setFullscreen] = useState(false)
  
@@ -155,10 +155,12 @@ const Map = () => {
         icon = dot(color)
       }
 
+      const fullName = name !== 'Unnamed' ? `${status} ${name}` : `${name} ${status}`
+
       return (
         <Marker key={i} position={coords} icon={icon} eventHandlers={{click:() => {setStormId(id)}}}>
           <Popup className="w-64 font-bold">
-            <h1 className="text-md">{!name.includes('Unnamed') && !name.includes('Unnumbered') ? `${status} ${name}` : `${name} ${status}`}</h1>
+            <h1 className="text-md">{fullName}</h1>
             <h1 className="my-1">{date} at {time} UTC</h1>
             <h1>Maximum Wind: {wind} kt</h1>
             <h1>Minimum Pressure: {pressure ? `${pressure} mb` : 'Unknown'}</h1>

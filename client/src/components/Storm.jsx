@@ -3,13 +3,12 @@ import { Context } from '../App'
 import Intensity from './Intensity'
 import ACE from './ACE'
 import retiredImage from "../../public/retired.png"
-import CycloneIcon from '@mui/icons-material/Cyclone';
+import CycloneIcon from '@mui/icons-material/Cyclone'
 
 const Storm = () => {
-  const {year, storm, stormId} = useContext(Context)
+  const { year, storm, stormId } = useContext(Context)
 
   const [stormName, setStormName] = useState('')
-  const [status, setStatus] = useState('')
   const [textColor, setTextColor] = useState('')
   const [retired, setRetired] = useState(false)
   const [duration, setDuration] = useState('')
@@ -21,6 +20,7 @@ const Storm = () => {
   const [inlandMinPressure, setInlandMinPressure] = useState('')
   const [cost, setCost] = useState('')
   const [deadOrMissing, setDeadOrMissing] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setStormName(storm.id.split('_')[1])
@@ -86,13 +86,11 @@ const Storm = () => {
     const deadOrMissing = storm.dead_or_missing
     setDeadOrMissing(deadOrMissing)
 
-    let status
     let textColor
     const statuses = data.map((point) => {
       return point.status
     })
     if (statuses.includes("HU")) {
-      status = "Hurricane"
       if (maxWind <= 82) {
         textColor = "yellow"
       }
@@ -110,42 +108,42 @@ const Storm = () => {
       }
     } else {
       if (statuses.includes("TS")) {
-        status = "Tropical Storm"
         textColor = "lime"
       } else {
         if (statuses.includes("SS")) {
-          status = "Subtropical Storm"
           textColor = "lightgreen"
         } else {
           if (statuses.includes("TD")) {
-            status = "Tropical Depression"
             textColor = "#0096FF"
           } else {
-            status = "Subtropical Depression"
             textColor = "aqua"
           }
         }
       }
     }
-    setStatus(status)
     setTextColor(textColor)
   }, [storm]);
 
   return (
-    <div id="storm">
-      <header>
-        <div>
-        <a target='_blank' className={`${retired && '!justify-end pb-2 sm:pb-4'} ${year < 1995 && 'pointer-events-none'}`} style={{backgroundImage: `url(${image})`}} href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}>
-          {image == "" && <div className='flex flex-col gap-5 items-center'>
-            <CycloneIcon className='text-gray-600 !text-8xl'/>
-            <h1 className='text-2xl'>Image Unavailable</h1>
-          </div>}
-          {retired && <img className='w-60' src={retiredImage}/>}
-        </a>
+    <div className="storm">
+      <div className='flex md:flex-row flex-col w-full items-center max-w-[48rem] justify-between gap-10'>
+        <div className='flex flex-col gap-2'>
+          <a 
+            target='_blank' 
+            className={`w-80 h-96 bg-cover bg-center flex flex-col items-center justify-center rounded-xl bg-gray-400 ${retired && '!justify-end pb-2 sm:pb-4'} ${year < 1995 && 'pointer-events-none'}`}
+            style={{backgroundImage: `url(${image})`}} 
+            href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
+          >
+            {image == "" && <div className='flex flex-col gap-5 items-center'>
+              <CycloneIcon className='text-gray-600 !text-8xl'/>
+              <h1 className='text-2xl font-bold text-gray-600'>Image Unavailable</h1>
+            </div>}
+            {retired && <img className='w-60' src={retiredImage}/>}
+          </a>
         </div>
-        <ul>
-          <h1 className='text-2xl' style={{color:textColor}}>{stormName !== 'Unnamed' ? (`${status} ${stormName}`) : (`${stormName} ${status}`)}</h1>
-          <h2 className='mb-2 text-xl'>{duration}</h2>
+        <ul className='flex flex-col font-bold gap-1.5 text-white text-center w-full'>
+          <h1 className='text-3xl' style={{color:textColor}}>{stormName}</h1>
+          <h2 className='text-xl mb-1'>{duration}</h2>
           <li>
             <h2>Maximum Wind</h2>
             <h2>{maxWind} kt</h2>
@@ -171,7 +169,7 @@ const Storm = () => {
             <h2>{cost}</h2>
           </li>
         </ul>
-      </header>
+      </div>
       <div className="charts">
         <Intensity/>
         <ACE/>

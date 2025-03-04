@@ -134,14 +134,14 @@ function App() {
   return (
     <Context.Provider value={value}>
       {season && storm ? (
-        <div id="app">
+        <div className="h-screen w-screen flex overflow-hidden xl:flex-row flex-col">
           <Interface/>
           <Map/>
         </div>
       ) : (
-        <div id="loading">
-          <img src={cyclone}/>
-          <h1>LOADING...</h1>
+        <div className="w-screen h-screen flex flex-col items-center justify-center bg-blue-950 text-white gap-20">
+          <img className="w-60 h-60 spin" src={cyclone}/>
+          <h1 className="text-4xl font-bold storm-font">LOADING...</h1>
         </div>
       )}
     </Context.Provider>

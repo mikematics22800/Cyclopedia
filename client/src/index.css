@@ -7,22 +7,12 @@
   src: url('/storm.ttf') 
 }
 
-.title {
+.storm-font {
   font-family: Storm;
-  @apply text-4xl italic text-white font-bold 
 }
 
 *::-webkit-scrollbar {
   width: 0;
-}
-
-#app {
-  @apply h-screen w-screen flex overflow-hidden xl:flex-row flex-col
-}
-
-#loading {
-  font-family: Storm;
-  @apply w-screen h-screen flex flex-col items-center justify-center bg-blue-950 text-white gap-20
 }
 
 @keyframes spin {
@@ -30,64 +20,36 @@
   to { transform: rotate(360deg); }
 }
 
-#loading img {
+.spin {
   animation: spin 2s linear infinite;
-  @apply w-60 h-60;
 }
 
-#loading h1 {
-  @apply text-4xl font-bold
-}
-
-#interface {
-  @apply xl:w-1/2 xl:h-full w-screen h-1/2 bg-blue-950 p-10 overflow-auto
-}
- 
-#interface #content {
-  @apply flex sm:items-center justify-between my-10
+.button {
+  @apply h-10 font-bold rounded-lg text-white p-4 flex items-center justify-center gap-1
 }
 
 .select {
   @apply bg-white !rounded-md h-10
 }
 
-
-#storm header {
-  @apply flex md:flex-row flex-col gap-5 sm:gap-10 mb-10 w-full items-center
-}
-
-#storm a {
-  @apply w-80 h-96 bg-cover bg-center flex flex-col items-center justify-center rounded-xl bg-gray-400
-}
-
-#storm a h1 {
-  @apply font-bold text-gray-600
-}
-
-#storm ul {
-  @apply flex flex-col font-bold gap-1 text-white w-full
-}
-
 ul li {
-  @apply bg-blue-600 rounded-lg p-3 flex justify-between
+  @apply rounded-lg p-3 flex justify-between text-sm
+}
+
+.storm, .season {
+  @apply flex flex-col items-center gap-10
+}
+
+.storm li {
+  @apply bg-blue-600
+}
+
+.season li {
+  @apply bg-purple-600
 }
 
 .charts {
-  @apply bg-white p-5 rounded-md flex flex-col gap-5
+  @apply bg-white p-5 rounded-md flex flex-col gap-5 w-full max-w-[48rem]
 }
 
-#season {
-  @apply flex flex-col gap-5
-}
 
-#season h1 {
-  @apply text-white font-bold
-}
-
-.button {
-  @apply h-10 w-fit !font-bold !bg-blue-600 !rounded-lg
-}
-
-.season-stats {
-  @apply  w-full flex flex-col gap-2
-}

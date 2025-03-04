@@ -30,8 +30,8 @@ const Season = () => {
   }, [season])
 
   return (
-    <div id="season">
-      <ul className='season-stats'>
+    <div className='season'>
+      <ul className='flex flex-col gap-1.5 w-full max-w-[48rem] text-white font-bold'>
         <li>
           <h1>Tropical Cyclones</h1>
           <h1>{season.length}</h1>
