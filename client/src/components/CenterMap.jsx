@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { Context } from "../App";
 import { useMap } from 'react-leaflet';
 
@@ -10,7 +10,7 @@ const CenterMap = () => {
   useEffect(() => {
     if (basin === 'atl') { 
       map.setView([30, -60]); 
-    } else {
+    } else {ull
       map.setView([30, -120]);
     }
   }, [basin, map])

@@ -15,25 +15,20 @@
   width: 0;
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.spin {
-  animation: spin 2s linear infinite;
-}
-
 .button {
-  @apply h-10 font-bold rounded-lg text-white p-4 flex items-center justify-center gap-1
+  @apply h-10 font-bold rounded-lg text-white p-4 flex items-center justify-center gap-1 border-2
 }
 
 .select {
-  @apply bg-white !rounded-md h-10
+  @apply bg-white !rounded-md h-10 !text-black
+}
+
+ul {
+  @apply flex flex-col font-bold text-white text-center w-full max-w-96
 }
 
 ul li {
-  @apply rounded-lg p-3 flex justify-between text-sm
+  @apply p-3 flex justify-between text-sm border-white border-x-2 border-b-2
 }
 
 .storm, .season {
@@ -50,6 +45,10 @@ ul li {
 
 .charts {
   @apply bg-white p-5 rounded-md flex flex-col gap-5 w-full max-w-[48rem]
+}
+
+.selectors {
+  @apply flex gap-5 w-full justify-center 
 }
 
 

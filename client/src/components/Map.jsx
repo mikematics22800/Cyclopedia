@@ -250,7 +250,7 @@ const Map = () => {
   return (
     <MapContainer 
       id="map" 
-      className={fullscreen ? 'w-screen h-screen' : 'xl:w-1/2 xl:h-full w-screen h-1/2'} 
+      className={fullscreen ? 'w-screen h-screen' : '2xl:w-1/2 2xl:h-full w-screen h-1/2'} 
       maxBounds={[[90, 150], [-90, -270]]} 
       center={[30, -120]} 
       maxZoom={15} 

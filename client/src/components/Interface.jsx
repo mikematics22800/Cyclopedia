@@ -4,6 +4,7 @@ import cyclone from "../../public/cyclone.png"
 import Storm from "./Storm";
 import Season from "./Season";
 import { MenuItem, Select, Checkbox } from "@mui/material"
+import trees from "../../public/trees.png"
 
 const Interface = () => {
   const [seasonStats, setSeasonStats] = useState(false)
@@ -31,7 +32,7 @@ const Interface = () => {
   }, [season])
 
   return (
-    <div className="xl:w-1/2 xl:h-full w-screen h-1/2 bg-blue-950 p-10 overflow-auto flex flex-col gap-10">
+    <div className="2xl:w-1/2 2xl:h-full w-screen h-1/2 p-10 overflow-auto flex flex-col gap-10" style={{backgroundImage: `url(${trees})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
       <header className="flex justify-between w-full">
         <div className="flex items-center">
           <img src={cyclone} className="h-10 mr-2"/>
@@ -41,21 +42,21 @@ const Interface = () => {
           <h1 className="font-sans font-bold">{seasonStats ? ("Storms") : ("Season")}</h1>
         </button>
       </header>
-      <div className="flex gap-5 w-full justify-center">
+      <div className="selectors">
         <Select className="select" value={basin} onChange={(e) => {setBasin(e.target.value)}}>
-          <MenuItem value="atl">Atlantic</MenuItem>
-          <MenuItem value="pac">Pacific</MenuItem>
+          <MenuItem value="atl"><p className="text-black font-bold">Atlantic</p></MenuItem>
+          <MenuItem value="pac"><p className="text-black font-bold">Pacific</p></MenuItem>
         </Select>
         <Select className="select" value={year} onChange={(e) => {setYear(e.target.value)}}>
           {years.map((_, index) => {
             const selectedYear = 2023 - index;
-            return (<MenuItem key={index} value={selectedYear}>{selectedYear}</MenuItem>);
+            return (<MenuItem key={index} value={selectedYear}><p className="text-black font-bold">{selectedYear}</p></MenuItem>);
           })}
         </Select>
         <Select className="select" value={stormId} onChange={(e) => {setStormId(e.target.value)}}>
           {stormIds?.map((id) => {
             const name = id.split('_')[1]
-            return (<MenuItem key={id} value={id}>{name}</MenuItem>);
+            return (<MenuItem key={id} value={id}><p className="text-black font-bold">{name}</p></MenuItem>);
           })}
         </Select>
         {year >= 2004 && <div className="flex items-center gap-1">

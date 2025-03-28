@@ -130,7 +130,7 @@ const Storm = () => {
         <div className='flex flex-col gap-2'>
           <a 
             target='_blank' 
-            className={`w-80 h-96 bg-cover bg-center flex flex-col items-center justify-center rounded-xl bg-gray-400 ${retired && '!justify-end pb-2 sm:pb-4'} ${year < 1995 && 'pointer-events-none'}`}
+            className={`w-96 h-96 bg-cover bg-center flex flex-col items-center justify-center rounded-lg bg-gray-400 ${retired && '!justify-end pb-2 sm:pb-4'} ${year < 1995 && 'pointer-events-none'}`}
             style={{backgroundImage: `url(${image})`}} 
             href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
           >
@@ -141,10 +141,10 @@ const Storm = () => {
             {retired && <img className='w-60' src={retiredImage}/>}
           </a>
         </div>
-        <ul className='flex flex-col font-bold gap-1.5 text-white text-center w-full'>
+        <ul>
           <h1 className='text-3xl' style={{color:textColor}}>{stormName}</h1>
-          <h2 className='text-xl mb-1'>{duration}</h2>
-          <li>
+          <h2 className='text-xl mb-2'>{duration}</h2>
+          <li className='border-t-2'>
             <h2>Maximum Wind</h2>
             <h2>{maxWind} kt</h2>
           </li>

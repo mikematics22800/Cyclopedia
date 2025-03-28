@@ -3,6 +3,7 @@ import { getHurdat } from "./libs/hurdat"
 import Interface from "./components/Interface"
 import Map from "./components/Map"
 import cyclone from '../public/cyclone.png'
+import trees from "../public/trees.png"
 import { sum } from "./libs/sum"
 
 export const Context = createContext()
@@ -134,13 +135,13 @@ function App() {
   return (
     <Context.Provider value={value}>
       {season && storm ? (
-        <div className="h-screen w-screen flex overflow-hidden xl:flex-row flex-col">
+        <div className="h-screen w-screen flex overflow-hidden 2xl:flex-row flex-col">
           <Interface/>
           <Map/>
         </div>
       ) : (
-        <div className="w-screen h-screen flex flex-col items-center justify-center bg-blue-950 text-white gap-20">
-          <img className="w-60 h-60 spin" src={cyclone}/>
+        <div className="w-screen h-screen flex flex-col items-center justify-center text-white gap-20" style={{backgroundImage: `url(${trees})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+          <img className="w-60 h-60 animate-spin" src={cyclone}/>
           <h1 className="text-4xl font-bold storm-font">LOADING...</h1>
         </div>
       )}

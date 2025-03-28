@@ -20,7 +20,7 @@ const Intensity = () => {
       if (pressure > 0) {
         return pressure
       }
-      return 0
+      return null
     })
     setPressure(pressure)
   }, [storm])
@@ -33,14 +33,15 @@ const Intensity = () => {
         data: wind,
         borderColor: "red",
         backgroundColor: "pink",
-        yAxisID: "y"
+        yAxisID: "y",
       },
       {
-        label: "Minimum Pressure (mb) 0 = Unknown",
+        label: "Minimum Pressure (mb)",
         data: pressure,
         borderColor: "blue",
         backgroundColor: "lightblue",
-        yAxisID: "y1"
+        yAxisID: "y1",
+        spanGaps: true
       },
     ]
   }
