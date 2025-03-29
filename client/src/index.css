@@ -15,40 +15,51 @@
   width: 0;
 }
 
+header {
+  @apply flex justify-between w-full h-24 items-center px-12 bg-blue-950 z-10 font-bold
+}
+
+.interface {
+  @apply p-8 flex flex-col overflow-y-auto overflow-x-hidden gap-8 w-1/4 min-w-96 h-full bg-blue-900 bg-opacity-60
+}
+
 .button {
-  @apply h-10 font-bold rounded-lg text-white p-4 flex items-center justify-center gap-1 border-2
+  @apply h-10 font-bold rounded-lg text-white p-4 flex items-center justify-center gap-1 border-2 bg-red-600
 }
 
 .select {
-  @apply bg-white !rounded-md h-10 !text-black
+  @apply bg-white !rounded-md h-10 w-full max-w-80
 }
 
 ul {
-  @apply flex flex-col font-bold text-white text-center w-full max-w-96
+  @apply flex flex-col font-bold text-white text-center w-full 
 }
 
 ul li {
-  @apply p-3 flex justify-between text-sm border-white border-x-2 border-b-2
+  @apply p-3 flex justify-between text-sm border-white border-x-2 border-b-2 bg-black bg-opacity-50
 }
 
 .storm, .season {
-  @apply flex flex-col items-center gap-10
+  @apply flex flex-col gap-8 w-full max-w-80 
 }
 
-.storm li {
-  @apply bg-blue-600
-}
-
-.season li {
-  @apply bg-purple-600
+.charts-container {
+  @apply w-full h-fit p-8 bg-blue-900 bg-opacity-60 flex flex-col items-center justify-center overflow-auto
 }
 
 .charts {
-  @apply bg-white p-5 rounded-md flex flex-col gap-5 w-full max-w-[48rem]
+  @apply bg-black bg-opacity-50 flex flex-col border-t-2 border-white w-full h-full cursor-pointer overflow-auto
 }
 
 .selectors {
-  @apply flex gap-5 w-full justify-center 
+  @apply flex flex-col gap-5 w-full justify-center 
 }
 
+ul li h2 {
+  @apply text-xs
+}
+
+.chart {
+  @apply border-x-2 border-b-2 border-white w-full h-80 p-4
+}
 

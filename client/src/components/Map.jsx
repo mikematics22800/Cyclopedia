@@ -3,13 +3,10 @@ import { Context } from "../App";
 import { MapContainer, Polyline, TileLayer, Popup, Marker, Polygon } from "react-leaflet";
 import { divIcon } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { IconButton } from "@mui/material";
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
-import CenterMap from "./CenterMap";
+
 
 const Map = () => {
-  const {season, setStormId, storm, year, windField} = useContext(Context)
+  const {season, setStormId, storm, year, windField, charts} = useContext(Context)
 
   const [fullscreen, setFullscreen] = useState(false)
  
@@ -249,18 +246,13 @@ const Map = () => {
   }
   return (
     <MapContainer 
-      id="map" 
-      className={fullscreen ? 'w-screen h-screen' : '2xl:w-1/2 2xl:h-full w-screen h-1/2'} 
+      className='h-full w-full'
       maxBounds={[[90, 150], [-90, -270]]} 
-      center={[30, -120]} 
+      center={[30, -60]} 
       maxZoom={15} 
       minZoom={3} 
       zoom={4}
     >
-      <IconButton className="!absolute top-2 right-2" style={{ zIndex: 1000 }} onClick={toggleFullscreen}>
-        {!fullscreen && <FullscreenIcon className="!text-5xl text-gray-500"/>}
-        {fullscreen && <FullscreenExitIcon className="!text-5xl text-gray-500"/>}
-      </IconButton>
       <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>  
       {storms}
       {year >= 2004 && windField && <>
@@ -268,7 +260,6 @@ const Map = () => {
         {windField50kt}
         {windField64kt}
       </>}
-      <CenterMap/>
     </MapContainer>
   )
 }

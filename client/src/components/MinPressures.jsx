@@ -30,6 +30,7 @@ const MinPressures = () => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false
@@ -37,16 +38,32 @@ const MinPressures = () => {
       title: {
         display: true,
         text: 'Minimum Pressure (mb)',
+        color: "white"
+      },
+      tooltip: {
+        bodyColor: "white", 
+        titleColor: "white",
       },
     },
     scales: {
       y: {
+        ticks: {
+          color: "white"
+        },
         min: 860
-      }
+      },
+      x: {
+        ticks: {
+          color: "white"
+        },
+      },
     }
   };
 
-  return <BarChart options={options} data={data}/>
-}
+  return (
+    <div className='chart'>
+      <BarChart options={options} data={data}/>
+    </div>
+  )}
 
 export default MinPressures

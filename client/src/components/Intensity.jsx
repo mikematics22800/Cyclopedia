@@ -48,6 +48,7 @@ const Intensity = () => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     interaction: {
       mode: "index",
       intersect: false,
@@ -57,26 +58,50 @@ const Intensity = () => {
       title: {
         display: false,
       },
+      legend: {
+        labels: {
+          color: "white",
+        },
+      },
+      tooltip: {
+        bodyColor: "white", 
+        titleColor: "white",
+      },
     },
     scales: {
       y: {
         type: "linear",
         display: true,
         position: "left",
+        ticks: {
+          color: "white"
+        },
       },
       y1: {
         type: "linear",
         display: true,
         position: "right",
+        ticks: {
+          color: "white"
+        },
         grid: {
           drawOnChartArea: false,
+        },
+      },
+      x: {
+        ticks: {
+          color: "white"
         },
       },
     },
   };
 
 
-  return <LineChart options={options} data={data}/>
+  return (
+    <div className='chart'>
+      <LineChart options={options} data={data}/>
+    </div>
+  )
 }
 
 export default Intensity

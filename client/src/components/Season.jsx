@@ -1,8 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { Context } from '../App'
-import MaxWinds from './MaxWinds'
-import MinPressures from './MinPressures'
-import SeasonACE from './SeasonACE'
 import { sum } from '../libs/sum'
 
 const Season = () => {
@@ -33,31 +30,26 @@ const Season = () => {
     <div className='season'>
       <ul>
         <li className='border-t-2'>
-          <h1>Tropical Cyclones</h1>
-          <h1>{season.length}</h1>
+          <h2>Tropical Cyclones</h2>
+          <h2>{season.length}</h2>
         </li>
         <li>
-          <h1>Accumulated Cyclone Energy</h1>
-          <h1>{sum(seasonACE).toFixed(1)}</h1>
+          <h2>Accumulated Cyclone Energy</h2>
+          <h2>{sum(seasonACE).toFixed(1)}</h2>
         </li>
         <li>
-          <h1>Dead/Missing</h1>
-          <h1>{deadOrMissing}</h1>
+          <h2>Dead/Missing</h2>
+          <h2>{deadOrMissing}</h2>
         </li>
         <li>
-          <h1>Cost (Million USD)</h1>
-          <h1>${cost}</h1>
+          <h2>Cost (Million USD)</h2>
+          <h2>${cost}</h2>
         </li>
         <li>
-          <h1>Retired Names</h1>
-          <h1>{retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h1>
+          <h2>Retired Names</h2>
+          <h2>{retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h2>
         </li>
       </ul>
-      <div className="charts">
-        <MaxWinds/>
-        <MinPressures/>
-        <SeasonACE/>
-      </div>
     </div>
   )
 }

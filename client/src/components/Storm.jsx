@@ -1,12 +1,10 @@
 import { useContext, useState, useEffect } from 'react'
 import { Context } from '../App'
-import Intensity from './Intensity'
-import ACE from './ACE'
 import retiredImage from "../../public/retired.png"
 import CycloneIcon from '@mui/icons-material/Cyclone'
 
 const Storm = () => {
-  const { year, storm, stormId } = useContext(Context)
+  const { year, storm, stormId, setWidth } = useContext(Context)
 
   const [stormName, setStormName] = useState('')
   const [textColor, setTextColor] = useState('')
@@ -20,7 +18,6 @@ const Storm = () => {
   const [inlandMinPressure, setInlandMinPressure] = useState('')
   const [cost, setCost] = useState('')
   const [deadOrMissing, setDeadOrMissing] = useState('')
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setStormName(storm.id.split('_')[1])
@@ -125,25 +122,23 @@ const Storm = () => {
   }, [storm]);
 
   return (
-    <div className="storm">
-      <div className='flex md:flex-row flex-col w-full items-center max-w-[48rem] justify-between gap-10'>
-        <div className='flex flex-col gap-2'>
-          <a 
-            target='_blank' 
-            className={`w-96 h-96 bg-cover bg-center flex flex-col items-center justify-center rounded-lg bg-gray-400 ${retired && '!justify-end pb-2 sm:pb-4'} ${year < 1995 && 'pointer-events-none'}`}
-            style={{backgroundImage: `url(${image})`}} 
-            href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
-          >
-            {image == "" && <div className='flex flex-col gap-5 items-center'>
-              <CycloneIcon className='text-gray-600 !text-8xl'/>
-              <h1 className='text-2xl font-bold text-gray-600'>Image Unavailable</h1>
-            </div>}
-            {retired && <img className='w-60' src={retiredImage}/>}
-          </a>
-        </div>
+    <div className='storm overflow-visible'>
+      <div className='flex flex-col gap-2 w-full'>
+        <a 
+          target='_blank' 
+          className={`w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center rounded-3xl bg-gray-400 ${retired && '!justify-end pb-2 sm:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'}`}
+          style={{backgroundImage: `url(${image})`}} 
+          href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
+        >
+          {image == "" && <div className='flex flex-col gap-4 items-center'>
+            <CycloneIcon className='text-gray-600 !text-8xl'/>
+            <h1 className='text-2xl font-bold text-gray-600'>Image Unavailable</h1>
+          </div>}
+          {retired && <img className='w-full' src={retiredImage}/>}
+        </a>
         <ul>
-          <h1 className='text-3xl' style={{color:textColor}}>{stormName}</h1>
-          <h2 className='text-xl mb-2'>{duration}</h2>
+          <h1 className='text-2xl' style={{color:textColor}}>{stormName}</h1>
+          <h2 className='mb-2'>{duration}</h2>
           <li className='border-t-2'>
             <h2>Maximum Wind</h2>
             <h2>{maxWind} kt</h2>
@@ -169,10 +164,6 @@ const Storm = () => {
             <h2>{cost}</h2>
           </li>
         </ul>
-      </div>
-      <div className="charts">
-        <Intensity/>
-        <ACE/>
       </div>
     </div>
   )

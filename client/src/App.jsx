@@ -2,9 +2,14 @@ import { useState, useEffect, createContext } from "react"
 import { getHurdat } from "./libs/hurdat"
 import Interface from "./components/Interface"
 import Map from "./components/Map"
-import cyclone from '../public/cyclone.png'
-import trees from "../public/trees.png"
+import trees from "../public/trees.jpg"
+import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
+import Intensity from "./components/Intensity"
+import ACE from "./components/ACE"
+import MaxWinds from "./components/MaxWinds"
+import MinPressures from "./components/MinPressures"
+import SeasonACE from "./components/SeasonACE"
 
 export const Context = createContext()
 
@@ -19,6 +24,8 @@ function App() {
   const [windField, setWindField] = useState(false)
   const [names, setNames] = useState([])
   const [seasonACE, setSeasonACE] = useState([])
+  const [seasonStats, setSeasonStats] = useState(false)
+  const [map, setMap] = useState(true)
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -129,22 +136,72 @@ function App() {
     windField, 
     setWindField,
     names,
-    seasonACE
+    seasonACE,
+    seasonStats
+  }
+
+  const toggleStats = () => {
+    if (seasonStats === false) {
+      setSeasonStats(true)
+    } else {
+      setSeasonStats(false)
+    }
+  }
+
+  const toggleMap = () => {
+    if (map === false) {
+      setMap(true)
+    } else {
+      setMap(false)
+    }
   }
 
   return (
     <Context.Provider value={value}>
-      {season && storm ? (
-        <div className="h-screen w-screen flex overflow-hidden 2xl:flex-row flex-col">
-          <Interface/>
-          <Map/>
-        </div>
-      ) : (
-        <div className="w-screen h-screen flex flex-col items-center justify-center text-white gap-20" style={{backgroundImage: `url(${trees})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
-          <img className="w-60 h-60 animate-spin" src={cyclone}/>
-          <h1 className="text-4xl font-bold storm-font">LOADING...</h1>
-        </div>
-      )}
+      <div className="w-screen h-screen bg-cover bg-center" style={{backgroundImage: `url(${trees})`}}>
+        {season && storm ? (
+          <div className="w-full h-full flex flex-col"> 
+            <header>
+              <div className="flex items-center">
+                <img src={cyclone} className="h-10 mr-2"/>
+                <h1 className="storm-font text-4xl text-white font-bold">CYCLOPEDIA</h1>
+              </div>
+              <div className="flex gap-8">
+                <button onClick={toggleStats} className="button" variant="contained">
+                  <h1>{seasonStats ? (storm.id.split('_')[1]) : ("Season")}</h1>
+                </button>
+                <button onClick={toggleMap} className="button" variant="contained">
+                  <h1>{map ? ("Charts") : ("Map")}</h1>
+                </button>
+              </div>
+            </header>
+            <div className="h-[calc(100vh-6rem)] w-full flex overflow-hidden flex-row">
+              <Interface/>
+              {map ? <Map/> : 
+                <div className="charts-container">
+                  {seasonStats ? (
+                     <div className="charts">
+                      <Intensity/>
+                      <ACE/>
+                    </div>
+                  ) : ( 
+                    <div className="charts">
+                      <MaxWinds/>
+                      <MinPressures/>
+                      <SeasonACE/>
+                    </div>
+                  )}
+                </div>
+              }
+            </div>
+          </div>
+        ) : (
+          <div className="w-screen h-screen flex flex-col items-center justify-center text-white gap-20">
+            <img className="w-60 h-60 animate-spin" src={cyclone}/>
+            <h1 className="text-4xl font-bold storm-font">LOADING...</h1>
+          </div>
+        )}
+      </div>
     </Context.Provider>
   )
 }

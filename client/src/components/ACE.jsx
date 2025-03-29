@@ -35,18 +35,39 @@ const ACE = () => {
     setTotalACE(totalACE)
   }, [storm])
 
-  
+
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
+    },
+    stacked: false,
     plugins: {
+      title: {
+        display: false,
+      },
       legend: {
         display: false
       },
-      title: {
-        display: true,
-        text: `Accumulated Cyclone Energy: ${totalACE?.toFixed(1)}`
+      tooltip: {
+        bodyColor: "white", 
+        titleColor: "white",
       },
     },
+    scales: {
+      y: {
+        ticks: {
+          color: "white"
+        },
+      },
+      x: {
+        ticks: {
+          color: "white"
+        },
+      },
+    }
   };
 
   const data = {
@@ -60,7 +81,11 @@ const ACE = () => {
     ]
   }
 
-  return <LineChart options={options} data={data}/>
+  return (
+    <div className='chart'>
+      <LineChart options={options} data={data}/>
+    </div>
+  )
 }
 
 export default ACE
