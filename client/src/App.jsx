@@ -24,7 +24,6 @@ function App() {
   const [windField, setWindField] = useState(false)
   const [names, setNames] = useState([])
   const [seasonACE, setSeasonACE] = useState([])
-  const [seasonStats, setSeasonStats] = useState(false)
   const [map, setMap] = useState(true)
 
   useEffect(() => {
@@ -44,13 +43,14 @@ function App() {
     const cache = localStorage.getItem(`cyclopedia-${basin}-${year}`)
     if (cache) {
       setSeason(JSON.parse(cache))
-      setStormId(JSON.parse(cache)[0].id)
+      const data = JSON.parse(cache)
+      setStormId(data[data.length - 1].id)
     } else {
       setSeason(null)
       setStorm(null)
       getHurdat(basin, year).then(data => {
         setSeason(data)
-        setStormId(data[0].id)
+        setStormId(data[data.length - 1].id)
         localStorage.setItem(`cyclopedia-${basin}-${year}`, JSON.stringify(data))
       })
     }
@@ -136,16 +136,7 @@ function App() {
     windField, 
     setWindField,
     names,
-    seasonACE,
-    seasonStats
-  }
-
-  const toggleStats = () => {
-    if (seasonStats === false) {
-      setSeasonStats(true)
-    } else {
-      setSeasonStats(false)
-    }
+    seasonACE
   }
 
   const toggleMap = () => {
@@ -166,31 +157,21 @@ function App() {
                 <img src={cyclone} className="h-10 mr-2"/>
                 <h1 className="storm-font text-4xl text-white font-bold">CYCLOPEDIA</h1>
               </div>
-              <div className="flex gap-8">
-                <button onClick={toggleStats} className="button" variant="contained">
-                  <h1>{seasonStats ? (storm.id.split('_')[1]) : ("Season")}</h1>
-                </button>
-                <button onClick={toggleMap} className="button" variant="contained">
-                  <h1>{map ? ("Charts") : ("Map")}</h1>
-                </button>
-              </div>
+              <button onClick={toggleMap} className="button" variant="contained">
+                <h1>{map ? ("Charts") : ("Map")}</h1>
+              </button>
             </header>
             <div className="h-[calc(100vh-6rem)] w-full flex overflow-hidden flex-row">
               <Interface/>
               {map ? <Map/> : 
                 <div className="charts-container">
-                  {seasonStats ? (
-                     <div className="charts">
-                      <Intensity/>
-                      <ACE/>
-                    </div>
-                  ) : ( 
-                    <div className="charts">
-                      <MaxWinds/>
-                      <MinPressures/>
-                      <SeasonACE/>
-                    </div>
-                  )}
+                  <div className="charts">
+                    <Intensity/>
+                    <ACE/>
+                    <MaxWinds/>
+                    <MinPressures/>
+                    <SeasonACE/>
+                  </div>
                 </div>
               }
             </div>

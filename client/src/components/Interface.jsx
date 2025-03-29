@@ -6,7 +6,7 @@ import { MenuItem, Select, Checkbox } from "@mui/material"
 
 const Interface = () => {
 
-  const { basin, setBasin, year, setYear, stormId, setStormId, setWindField, season, seasonStats } = useContext(Context)
+  const { basin, setBasin, year, setYear, stormId, setStormId, setWindField, season } = useContext(Context)
 
   const startYear = basin === 'atl' ? 1850 : 1948
   const years = new Array(2023 - startYear).fill(0)
@@ -44,7 +44,8 @@ const Interface = () => {
           <h1 className="text-white font-bold">Wind Field</h1>
         </div>}
       </div>
-      {seasonStats === false ? <Storm/> : <Season/>}
+      <Storm/>
+      <Season/>
     </div>
   )
 }

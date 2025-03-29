@@ -28,6 +28,7 @@ const Season = () => {
 
   return (
     <div className='season'>
+      <h1 className='text-xl font-bold text-white mb-2'>Season Totals</h1>
       <ul>
         <li className='border-t-2'>
           <h2>Tropical Cyclones</h2>
