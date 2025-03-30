@@ -6,7 +6,7 @@ import trees from "../public/trees.jpg"
 import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
 import Intensity from "./components/Intensity"
-import ACE from "./components/ACE"
+import ACEChart from "./components/ACE"
 import MaxWinds from "./components/MaxWinds"
 import MinPressures from "./components/MinPressures"
 import SeasonACE from "./components/SeasonACE"
@@ -23,8 +23,11 @@ function App() {
   const [landfallingStorms, setLandfallingStorms] = useState([])
   const [windField, setWindField] = useState(false)
   const [names, setNames] = useState([])
+  const [ACE, setACE] = useState(0)
+  const [ACEArray, setACEArray] = useState([])
   const [seasonACE, setSeasonACE] = useState([])
   const [map, setMap] = useState(true)
+  const [maxWinds, setMaxWinds] = useState([])
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -72,7 +75,31 @@ function App() {
         return `${month}/${day}`
       })
       setDates(dates)
-    }
+
+      const data = storm.data
+      let ACEPoint = 0
+      let windArray = []
+      const ACEArray = data.map((point) => {
+        const wind = point.max_wind_kt
+        const hour = parseInt(point.time_utc)
+        if (["TS", "SS", "HU"].includes(point.status)) {
+          if (hour % 600 == 0) {
+            ACEPoint += Math.pow(wind, 2)/10000
+            if (windArray.length > 0) {
+              const average = sum(windArray)/windArray.length
+              ACEPoint += Math.pow(average, 2)/10000
+              windArray = []
+            }
+          } else {
+            windArray.push(wind)
+          }
+        }
+        return ACEPoint
+      })
+      setACEArray(ACEArray)
+      const ACE = Math.max(...ACEArray)
+      setACE(ACE)
+      }
   }, [storm])
 
   useEffect(() => {
@@ -90,34 +117,42 @@ function App() {
         }
       })
       setLandfallingStorms(landfallingStorms)
-    }
-    const names = season?.map((storm) => {
-      return storm.id.split('_')[1]
-    })
-    setNames(names)
-
-    const seasonACE = season?.map((storm) => {
-      let ACE = 0
-      let windArray = []
-      storm.data.forEach((point) => {
-        const wind = point.max_wind_kt
-        const hour = point.time_utc
-        if (["TS", "SS", "HU"].includes(point.status)) {
-          if (hour % 600 == 0) {
-            ACE += Math.pow(wind, 2)/10000
-            if (windArray.length > 0) {
-              const average = sum(windArray)/windArray.length
-              ACE += Math.pow(average, 2)/10000
-              windArray = []
-            }
-          } else {
-            windArray.push(wind)
-          }
-        }
+      const names = season.map((storm) => {
+        return storm.id.split('_')[1]
       })
-      return ACE
-    })
-    setSeasonACE(seasonACE)
+      setNames(names)
+  
+      const maxWinds = season.map((storm) => {
+        const winds = storm.data.map((point) => {
+          return point.max_wind_kt
+        })
+        return Math.max(...winds)
+      })
+      setMaxWinds(maxWinds)
+  
+      const seasonACE = season.map((storm) => {
+        let ACE = 0
+        let windArray = []
+        storm.data.forEach((point) => {
+          const wind = point.max_wind_kt
+          const hour = point.time_utc
+          if (["TS", "SS", "HU"].includes(point.status)) {
+            if (hour % 600 == 0) {
+              ACE += Math.pow(wind, 2)/10000
+              if (windArray.length > 0) {
+                const average = sum(windArray)/windArray.length
+                ACE += Math.pow(average, 2)/10000
+                windArray = []
+              }
+            } else {
+              windArray.push(wind)
+            }
+          }
+        })
+        return ACE
+      })
+      setSeasonACE(seasonACE)
+    }
   }, [season]);
 
   const value = {
@@ -136,6 +171,9 @@ function App() {
     windField, 
     setWindField,
     names,
+    ACE,
+    ACEArray,
+    maxWinds,
     seasonACE
   }
 
@@ -167,7 +205,7 @@ function App() {
                 <div className="charts-container">
                   <div className="charts">
                     <Intensity/>
-                    <ACE/>
+                    <ACEChart/>
                     <MaxWinds/>
                     <MinPressures/>
                     <SeasonACE/>

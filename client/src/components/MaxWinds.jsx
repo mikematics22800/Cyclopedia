@@ -3,19 +3,7 @@ import { Context } from '../App'
 import BarChart from './BarChart'
 
 const MaxWinds = () => {
-  const {season, names} = useContext(Context)
-
-  const [maxWinds, setMaxWinds] = useState([])
-
-  useEffect(() => {
-    const maxWinds = season.map((storm) => {
-      const winds = storm.data.map((point) => {
-        return point.max_wind_kt
-      })
-      return Math.max(...winds)
-    })
-    setMaxWinds(maxWinds)
-  }, [season])
+  const {names, maxWinds} = useContext(Context)
 
   const data = {
     labels: names,

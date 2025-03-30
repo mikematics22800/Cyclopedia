@@ -3,8 +3,10 @@ import { Context } from '../App'
 import { sum } from '../libs/sum'
 
 const Season = () => {
-  const {season, seasonACE} = useContext(Context)
+  const {season, seasonACE, maxWinds} = useContext(Context)
 
+  const [hurricanes, setHurricanes] = useState(0)
+  const [majorHurricanes, setMajorHurricanes] = useState(0)
   const [deadOrMissing, setDeadOrMissing] = useState(0)
   const [cost, setCost] = useState(0)
   const [retiredNames, setRetiredNames] = useState([])
@@ -24,15 +26,29 @@ const Season = () => {
       return storm.id.split('_')[1]
     })
     setRetiredNames(retiredNames)
+    const hurricanes = maxWinds.filter(wind => wind >= 64).length
+    setHurricanes(hurricanes)
+    const majorHurricanes = maxWinds.filter(wind => wind >= 96).length
+    setMajorHurricanes(majorHurricanes)
   }, [season])
 
   return (
     <div className='season'>
-      <h1 className='text-xl font-bold text-white mb-2'>Season Totals</h1>
       <ul>
-        <li className='border-t-2'>
+        <li className='border-t-2 flex justify-center'>
+          <h1 className='text-lg'>Season Overview</h1>
+        </li>
+        <li>
           <h2>Tropical Cyclones</h2>
           <h2>{season.length}</h2>
+        </li>
+        <li>
+          <h2>Hurricanes</h2>
+          <h2>{hurricanes}</h2>
+        </li>
+        <li>
+          <h2>Major Hurricanes</h2>
+          <h2>{majorHurricanes}</h2>
         </li>
         <li>
           <h2>Accumulated Cyclone Energy</h2>

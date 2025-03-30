@@ -4,7 +4,7 @@ import retiredImage from "../../public/retired.png"
 import CycloneIcon from '@mui/icons-material/Cyclone'
 
 const Storm = () => {
-  const { year, storm, stormId, setWidth } = useContext(Context)
+  const { year, storm, stormId, ACE} = useContext(Context)
 
   const [stormName, setStormName] = useState('')
   const [textColor, setTextColor] = useState('')
@@ -123,7 +123,7 @@ const Storm = () => {
 
   return (
     <div className='storm overflow-visible'>
-      <div className='flex flex-col gap-2 w-full'>
+      <div className='flex flex-col gap-4 w-full'>
         <a 
           target='_blank' 
           className={`w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center rounded-3xl bg-gray-400 ${retired && '!justify-end pb-2 sm:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'}`}
@@ -137,9 +137,11 @@ const Storm = () => {
           {retired && <img className='w-full' src={retiredImage}/>}
         </a>
         <ul>
-          <h1 className='text-2xl' style={{color:textColor}}>{stormName}</h1>
-          <h2 className='mb-2'>{duration}</h2>
           <li className='border-t-2'>
+            <h1 className='text-lg' style={{color:textColor}}>{stormName}</h1>     
+            <h1 >{duration}</h1>     
+          </li>
+          <li>
             <h2>Maximum Wind</h2>
             <h2>{maxWind} kt</h2>
           </li>
@@ -155,6 +157,10 @@ const Storm = () => {
             <h2>Minimum Inland Pressure</h2>
             <h2>{inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
           </li>}
+          <li>
+            <h2>Accumulated Cyclone Energy</h2>
+            <h2>{ACE.toFixed(1)}</h2>
+          </li>
           <li>
             <h2>Dead/Missing</h2>
             <h2>{deadOrMissing}</h2>
