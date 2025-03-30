@@ -19,6 +19,10 @@ header {
   @apply flex justify-between w-full h-24 items-center px-12 bg-blue-950 z-10 font-bold
 }
 
+.loading-screen {
+  @apply w-screen h-screen flex flex-col items-center justify-center text-white gap-20 bg-blue-900 bg-opacity-60
+}
+
 .interface {
   @apply p-8 flex flex-col overflow-y-auto overflow-x-hidden gap-8 w-1/4 min-w-96 h-full bg-blue-900 bg-opacity-60
 }

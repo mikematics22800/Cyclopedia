@@ -193,7 +193,7 @@ function App() {
             <header>
               <div className="flex items-center">
                 <img src={cyclone} className="h-10 mr-2"/>
-                <h1 className="storm-font text-4xl text-white font-bold">CYCLOPEDIA</h1>
+                <h1 className="storm-font text-4xl text-white font-bold italic">CYCLOPEDIA</h1>
               </div>
               <button onClick={toggleMap} className="button" variant="contained">
                 <h1>{map ? ("Charts") : ("Map")}</h1>
@@ -215,9 +215,9 @@ function App() {
             </div>
           </div>
         ) : (
-          <div className="w-screen h-screen flex flex-col items-center justify-center text-white gap-20">
+          <div className="loading-screen">
             <img className="w-60 h-60 animate-spin" src={cyclone}/>
-            <h1 className="text-4xl font-bold storm-font">LOADING...</h1>
+            <h1 className="text-4xl font-bold storm-font italic">LOADING...</h1>
           </div>
         )}
       </div>
