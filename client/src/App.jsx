@@ -47,13 +47,13 @@ function App() {
     if (cache) {
       setSeason(JSON.parse(cache))
       const data = JSON.parse(cache)
-      setStormId(data[data.length - 1].id)
+      setStormId(data[0].id)
     } else {
       setSeason(null)
       setStorm(null)
       getHurdat(basin, year).then(data => {
         setSeason(data)
-        setStormId(data[data.length - 1].id)
+        setStormId(data[0].id)
         localStorage.setItem(`cyclopedia-${basin}-${year}`, JSON.stringify(data))
       })
     }
