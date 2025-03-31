@@ -6,9 +6,7 @@ import "leaflet/dist/leaflet.css";
 
 
 const Map = () => {
-  const {season, setStormId, storm, year, windField, charts} = useContext(Context)
-
-  const [fullscreen, setFullscreen] = useState(false)
+  const {season, setStormId, storm, year, windField} = useContext(Context)
  
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -22,11 +20,6 @@ const Map = () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
   }, []);
-
-  const toggleFullscreen = () => {
-    fullscreen ? document.exitFullscreen() : document.getElementById('map').requestFullscreen()
-    setFullscreen(!fullscreen)
-  }
 
   const dot = (color) => {
     return (

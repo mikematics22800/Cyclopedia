@@ -10,10 +10,18 @@ const MinPressures = () => {
   useEffect(() => {
     const minPressures = season.map((storm) => {
       const pressures = storm.data.map((point) => {
-        return point.min_pressure_mb
+        if (!point.min_pressure_mb) {
+          return 9999
+        } else {
+          return point.min_pressure_mb
+        }
       })
+      if (Math.min(...pressures) === 9999) {
+        return null 
+      } 
       return Math.min(...pressures)
     })
+    console.log(minPressures)
     setMinPressures(minPressures)
   }, [season])
 
@@ -23,7 +31,7 @@ const MinPressures = () => {
       {
         data: minPressures,
         borderColor: "blue",
-        backgroundColor: "blue",
+        backgroundColor: "blue"
       },
     ]
   }

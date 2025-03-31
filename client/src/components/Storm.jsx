@@ -151,11 +151,11 @@ const Storm = () => {
           </li>}
           <li>
             <h2>Minimum Pressure</h2>
-            <h2>{minPressure != 9999 && minPressure != -999 ? (`${minPressure} mb`) : 'Unknown'}</h2>
+            <h2>{minPressure != 9999 ? (`${minPressure} mb`) : 'Unknown'}</h2>
           </li>
           {landfalls.length > 0 && <li>
             <h2>Minimum Inland Pressure</h2>
-            <h2>{inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
+            <h2>{inlandMinPressure != 9999 ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
           </li>}
           <li>
             <h2>Accumulated Cyclone Energy</h2>
