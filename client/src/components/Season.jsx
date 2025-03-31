@@ -36,7 +36,7 @@ const Season = () => {
     <div className='season'>
       <ul>
         <li className='border-t-2 flex justify-center'>
-          <h1 className='text-lg'>Season Overview</h1>
+          <h1 className='text-lg text-[violet]'>Season Overview</h1>
         </li>
         <li>
           <h2>Tropical Cyclones</h2>

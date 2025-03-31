@@ -137,9 +137,9 @@ const Storm = () => {
           {retired && <img className='w-full' src={retiredImage}/>}
         </a>
         <ul>
-          <li className='border-t-2'>
-            <h1 className='text-lg' style={{color:textColor}}>{stormName}</h1>     
-            <h1 >{duration}</h1>     
+          <li className='border-t-2' style={{color:textColor}}>
+            <h1 className='text-lg'>{stormName}</h1>     
+            <h1>{duration}</h1>     
           </li>
           <li>
             <h2>Maximum Wind</h2>
