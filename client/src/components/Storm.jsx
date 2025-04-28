@@ -108,10 +108,10 @@ const Storm = () => {
         textColor = "lime"
       } else {
         if (statuses.includes("SS")) {
-          textColor = "lightgreen"
+          textColor = "palegreen"
         } else {
           if (statuses.includes("TD")) {
-            textColor = "#0096FF"
+            textColor = "dodgerblue"
           } else {
             textColor = "aqua"
           }
@@ -126,7 +126,7 @@ const Storm = () => {
       <div className='flex flex-col gap-4 w-full'>
         <a 
           target='_blank' 
-          className={`w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center rounded-3xl bg-gray-400 ${retired && '!justify-end pb-2 sm:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'}`}
+          className={`w-full border-2 border-white aspect-square bg-cover bg-center flex flex-col items-center justify-center rounded-lg bg-gray-400 ${retired && '!justify-end pb-2 sm:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'}`}
           style={{backgroundImage: `url(${image})`}} 
           href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
         >
@@ -137,9 +137,9 @@ const Storm = () => {
           {retired && <img className='w-full' src={retiredImage}/>}
         </a>
         <ul>
-          <li className='border-t-2' style={{color:textColor}}>
+          <li className='border-t-2 rounded-t-lg' style={{color:textColor}}>
             <h1 className='text-lg'>{stormName}</h1>     
-            <h1>{duration}</h1>     
+            <h1 >{duration}</h1>     
           </li>
           <li>
             <h2>Maximum Wind</h2>
@@ -151,11 +151,11 @@ const Storm = () => {
           </li>}
           <li>
             <h2>Minimum Pressure</h2>
-            <h2>{minPressure != 9999 ? (`${minPressure} mb`) : 'Unknown'}</h2>
+            <h2>{minPressure != 9999 && minPressure != -999 ? (`${minPressure} mb`) : 'Unknown'}</h2>
           </li>
           {landfalls.length > 0 && <li>
             <h2>Minimum Inland Pressure</h2>
-            <h2>{inlandMinPressure != 9999 ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
+            <h2>{inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
           </li>}
           <li>
             <h2>Accumulated Cyclone Energy</h2>
@@ -165,7 +165,7 @@ const Storm = () => {
             <h2>Dead/Missing</h2>
             <h2>{deadOrMissing}</h2>
           </li>
-          <li>
+          <li className='rounded-b-lg'>
             <h2>Cost (Million USD)</h2>
             <h2>{cost}</h2>
           </li>

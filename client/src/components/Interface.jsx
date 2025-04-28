@@ -3,6 +3,7 @@ import { Context } from "../App";
 import Storm from "./Storm";
 import Season from "./Season";
 import { MenuItem, Select, Checkbox } from "@mui/material"
+import Charts from "./Charts";
 
 const Interface = () => {
 
@@ -46,6 +47,9 @@ const Interface = () => {
       </div>
       <Storm/>
       <Season/>
+      <div className="sm:hidden">
+        <Charts/>
+      </div>
     </div>
   )
 }

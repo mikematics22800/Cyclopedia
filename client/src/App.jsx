@@ -2,14 +2,10 @@ import { useState, useEffect, createContext } from "react"
 import { getHurdat } from "./libs/hurdat"
 import Interface from "./components/Interface"
 import Map from "./components/Map"
-import trees from "../public/trees.jpg"
+import stormsWallpaper from "../public/storms.jpg"
 import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
-import Intensity from "./components/Intensity"
-import ACEChart from "./components/ACE"
-import MaxWinds from "./components/MaxWinds"
-import MinPressures from "./components/MinPressures"
-import SeasonACE from "./components/SeasonACE"
+import Charts from "./components/Charts"
 
 export const Context = createContext()
 
@@ -47,13 +43,13 @@ function App() {
     if (cache) {
       setSeason(JSON.parse(cache))
       const data = JSON.parse(cache)
-      setStormId(data[0].id)
+      setStormId(data[data.length - 1].id)
     } else {
       setSeason(null)
       setStorm(null)
       getHurdat(basin, year).then(data => {
         setSeason(data)
-        setStormId(data[0].id)
+        setStormId(data[data.length - 1].id)
         localStorage.setItem(`cyclopedia-${basin}-${year}`, JSON.stringify(data))
       })
     }
@@ -187,10 +183,11 @@ function App() {
 
   return (
     <Context.Provider value={value}>
-      <div className="w-screen h-screen bg-cover bg-center" style={{backgroundImage: `url(${trees})`}}>
+      <div className="h-screen w-screen absolute bg-blue-950 opacity-50"/>
+      <div className="w-screen h-screen bg-cover bg-center" style={{backgroundImage: `url(${stormsWallpaper})`}}>
         {season && storm ? (
           <div className="w-full h-full flex flex-col"> 
-            <header>
+            <nav>
               <div className="flex items-center">
                 <img src={cyclone} className="h-10 mr-2"/>
                 <h1 className="storm-font text-4xl text-white font-bold italic">CYCLOPEDIA</h1>
@@ -198,20 +195,12 @@ function App() {
               <button onClick={toggleMap} className="button" variant="contained">
                 <h1>{map ? ("Charts") : ("Map")}</h1>
               </button>
-            </header>
-            <div className="h-[calc(100vh-6rem)] w-full flex overflow-hidden flex-row">
-              <Interface/>
-              {map ? <Map/> : 
-                <div className="charts-container">
-                  <div className="charts">
-                    <Intensity/>
-                    <ACEChart/>
-                    <MaxWinds/>
-                    <MinPressures/>
-                    <SeasonACE/>
-                  </div>
-                </div>
-              }
+            </nav>
+            <div className="h-screen sm:h-[calc(100vh-6rem)] w-full flex overflow-hidden sm:flex-row flex-col-reverse z-10">
+              <div className="hidden sm:block">
+                <Interface/>
+              </div>
+              {map ? <Map/> : <Charts/>}
             </div>
           </div>
         ) : (

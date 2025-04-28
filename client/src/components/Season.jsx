@@ -35,7 +35,7 @@ const Season = () => {
   return (
     <div className='season'>
       <ul>
-        <li className='border-t-2 flex justify-center'>
+        <li className='border-t-2 flex justify-center rounded-t-lg'>
           <h1 className='text-lg text-[violet]'>Season Overview</h1>
         </li>
         <li>
@@ -62,7 +62,7 @@ const Season = () => {
           <h2>Cost (Million USD)</h2>
           <h2>${cost}</h2>
         </li>
-        <li>
+        <li className='rounded-b-lg'>
           <h2>Retired Names</h2>
           <h2>{retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h2>
         </li>
