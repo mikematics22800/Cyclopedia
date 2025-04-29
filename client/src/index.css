@@ -16,7 +16,7 @@
 }
 
 nav {
-  @apply hidden sm:flex justify-between w-full h-24 items-center px-[5%] bg-gray-700 z-10
+  @apply hidden lg:flex justify-between w-full h-24 items-center px-[5%] bg-blue-950 z-10
 }
 
 .loading-screen {
@@ -24,7 +24,7 @@ nav {
 }
 
 .interface {
-  @apply p-8 flex-col overflow-y-auto overflow-x-hidden gap-8 w-full sm:w-1/4 min-w-96 h-full bg-opacity-60 flex
+  @apply p-8 flex-col overflow-y-auto overflow-x-hidden gap-8 w-full lg:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center
 }
 
 .button {
@@ -36,11 +36,15 @@ nav {
 }
 
 ul {
-  @apply flex flex-col font-bold text-white text-center w-full
+  @apply flex flex-col font-bold text-white text-center w-full max-w-80
 }
 
 ul li {
   @apply p-3 flex justify-between items-center text-sm border-white border-x-2 border-b-2 bg-black bg-opacity-50
+}
+
+.storm a {
+  @apply w-full border-2 border-white aspect-square bg-cover bg-center flex flex-col items-center justify-center rounded-lg bg-gray-400  max-w-80
 }
 
 .storm, .season {
@@ -48,15 +52,15 @@ ul li {
 }
 
 .charts-container {
-  @apply w-full p-8 bg-opacity-60 flex flex-col overflow-auto
+  @apply w-full bg-opacity-60 flex flex-col overflow-auto p-8
 }
 
 .charts {
-  @apply  flex flex-col w-full gap-8
+  @apply flex flex-col w-full gap-8 
 }
 
 .selectors {
-  @apply flex flex-col gap-5 w-full justify-center 
+  @apply flex flex-col gap-5 w-full justify-center items-center
 }
 
 ul li h2 {
@@ -64,6 +68,9 @@ ul li h2 {
 }
 
 .chart {
-  @apply border-2 border-white h-48 sm:h-96 p-4 bg-black bg-opacity-50 cursor-pointer rounded-lg w-full
+  @apply border-2 border-white h-48 lg:h-96 p-4 bg-black bg-opacity-50 cursor-pointer rounded-lg w-full
 }
 
+.mobile-interface {
+  @apply lg:hidden flex w-full justify-center bg-opacity-50 bg-black rounded-t-3xl
+}

@@ -43,13 +43,13 @@ function App() {
     if (cache) {
       setSeason(JSON.parse(cache))
       const data = JSON.parse(cache)
-      setStormId(data[data.length - 1].id)
+      setStormId(data[0].id)
     } else {
       setSeason(null)
       setStorm(null)
       getHurdat(basin, year).then(data => {
         setSeason(data)
-        setStormId(data[data.length - 1].id)
+        setStormId(data[0].id)
         localStorage.setItem(`cyclopedia-${basin}-${year}`, JSON.stringify(data))
       })
     }
@@ -183,8 +183,7 @@ function App() {
 
   return (
     <Context.Provider value={value}>
-      <div className="h-screen w-screen absolute bg-blue-950 opacity-50"/>
-      <div className="w-screen h-screen bg-cover bg-center" style={{backgroundImage: `url(${stormsWallpaper})`}}>
+      <div className="w-screen bg-cover bg-center bg-fixed" style={{backgroundImage: `url(${stormsWallpaper})`}}>
         {season && storm ? (
           <div className="w-full h-full flex flex-col"> 
             <nav>
@@ -196,11 +195,15 @@ function App() {
                 <h1>{map ? ("Charts") : ("Map")}</h1>
               </button>
             </nav>
-            <div className="h-screen sm:h-[calc(100vh-6rem)] w-full flex overflow-hidden sm:flex-row flex-col-reverse z-10">
-              <div className="hidden sm:block">
-                <Interface/>
-              </div>
+            <div className="h-screen lg:h-[calc(100vh-6rem)] w-full overflow-hidden lg:flex-row flex-col-reverse hidden lg:flex">
+              <Interface/>
               {map ? <Map/> : <Charts/>}
+            </div>
+            <div className="lg:hidden w-full h-full fixed top-0 -z-10">
+              <Map/>
+            </div>
+            <div className="mobile-interface absolute top-[90%]">
+              <Interface/>
             </div>
           </div>
         ) : (

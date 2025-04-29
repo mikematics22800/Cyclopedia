@@ -4,6 +4,7 @@ import Storm from "./Storm";
 import Season from "./Season";
 import { MenuItem, Select, Checkbox } from "@mui/material"
 import Charts from "./Charts";
+import cyclone from "../../public/cyclone.png"
 
 const Interface = () => {
 
@@ -23,6 +24,10 @@ const Interface = () => {
 
   return (
     <div className='interface'>
+      <div className="flex items-center md:hidden">
+        <img src={cyclone} className="h-10 mr-2"/>
+        <h1 className="storm-font text-4xl text-white font-bold italic">CYCLOPEDIA</h1>
+      </div>
       <div className="selectors">
         <Select className="select" value={basin} onChange={(e) => {setBasin(e.target.value)}}>
           <MenuItem value="atl"><p className="text-black font-bold">Atlantic</p></MenuItem>

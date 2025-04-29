@@ -123,10 +123,10 @@ const Storm = () => {
 
   return (
     <div className='storm overflow-visible'>
-      <div className='flex flex-col gap-4 w-full'>
+      <div className='flex flex-col gap-4 w-full items-center'>
         <a 
           target='_blank' 
-          className={`w-full border-2 border-white aspect-square bg-cover bg-center flex flex-col items-center justify-center rounded-lg bg-gray-400 ${retired && '!justify-end pb-2 sm:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'}`}
+          className={`${retired && '!justify-end pb-2 lg:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'}`}
           style={{backgroundImage: `url(${image})`}} 
           href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
         >
