@@ -183,7 +183,7 @@ function App() {
 
   return (
     <Context.Provider value={value}>
-      <div className="w-screen bg-cover bg-center bg-fixed" style={{backgroundImage: `url(${stormsWallpaper})`}}>
+      <div className="app" style={{backgroundImage: `url(${stormsWallpaper})`}}>
         {season && storm ? (
           <div className="w-full h-full flex flex-col"> 
             <nav>
@@ -202,7 +202,7 @@ function App() {
             <div className="lg:hidden w-full h-full fixed top-0 -z-10">
               <Map/>
             </div>
-            <div className="mobile-interface absolute top-[90%]">
+            <div className="mobile-interface">
               <Interface/>
             </div>
           </div>
