@@ -11,7 +11,7 @@ const Interface = () => {
   const { basin, setBasin, year, setYear, stormId, setStormId, setWindField, season } = useContext(Context)
 
   const startYear = basin === 'atl' ? 1850 : 1948
-  const years = new Array(2023 - startYear).fill(0)
+  const years = new Array(2024 - startYear).fill(0)
 
   const [stormIds, setStormIds] = useState(null)
 
@@ -36,7 +36,7 @@ const Interface = () => {
         </Select>
         <Select className="select" value={year} onChange={(e) => {setYear(e.target.value)}}>
           {years.map((_, index) => {
-            const selectedYear = 2023 - index;
+            const selectedYear = 2024 - index;
             return (<MenuItem key={index} value={selectedYear}><p className="text-black font-bold">{selectedYear}</p></MenuItem>);
           })}
         </Select>
