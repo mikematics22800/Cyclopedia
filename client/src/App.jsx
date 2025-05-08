@@ -11,7 +11,7 @@ export const Context = createContext()
 
 function App() {
   const [basin, setBasin] = useState('atl')
-  const [year, setYear] = useState(2023)
+  const [year, setYear] = useState(2024)
   const [season, setSeason] = useState(null)
   const [storm, setStorm] = useState(null)
   const [stormId, setStormId] = useState('')
@@ -195,11 +195,11 @@ function App() {
                 <h1>{map ? ("Charts") : ("Map")}</h1>
               </button>
             </nav>
-            <div className="h-screen lg:h-[calc(100vh-6rem)] w-full overflow-hidden lg:flex-row flex-col-reverse hidden lg:flex">
+            <div className="desktop-view">
               <Interface/>
               {map ? <Map/> : <Charts/>}
             </div>
-            <div className="lg:hidden w-full h-full fixed top-0 -z-10">
+            <div className="mobile-map">
               <Map/>
             </div>
             <div className="mobile-interface">
@@ -208,8 +208,8 @@ function App() {
           </div>
         ) : (
           <div className="loading-screen">
-            <img className="w-60 h-60 animate-spin" src={cyclone}/>
-            <h1 className="text-4xl font-bold storm-font italic">LOADING...</h1>
+            <img src={cyclone}/>
+            <h1>LOADING...</h1>
           </div>
         )}
       </div>

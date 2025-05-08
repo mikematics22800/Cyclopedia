@@ -245,22 +245,68 @@ const Map = () => {
     })
   }
   return (
-    <MapContainer 
-      className='h-full w-full'
-      maxBounds={[[90, 150], [-90, -270]]} 
-      center={[30, -60]} 
-      maxZoom={15} 
-      minZoom={3} 
-      zoom={4}
-    >
-      <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>  
-      {storms}
-      {year >= 2004 && windField && <>
-        {windField34kt}
-        {windField50kt}
-        {windField64kt}
-      </>}
-    </MapContainer>
+    <div className="map">
+      <div className="legend-container">
+        <div className="legend">
+          <div className="key">
+            <span className="bg-[dodgerblue]"/>
+            <h1 className="text-sm">TD</h1>
+          </div>
+          <div className="key">
+            <span className="color bg-[lime]"/>
+            <h1 className="text-sm">TS</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[yellow]"/>
+            <h1 className="text-sm">H1</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[orange]"/>
+            <h1 className="text-sm">H2</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[red]"/>
+            <h1 className="text-sm">H3</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[hotpink]"/>
+            <h1 className="text-sm">H4</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[pink]"/>
+            <h1 className="text-sm">H5</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[aqua]"/>
+            <h1 className="text-sm">SD</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[palegreen]"/>
+            <h1 className="text-sm">SS</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[lightgray]"/>
+            <h1 className="text-sm">EX</h1>
+          </div>
+        </div>
+      </div>
+      <MapContainer 
+        className='h-full w-full'
+        maxBounds={[[90, 150], [-90, -270]]} 
+        center={[30, -60]} 
+        maxZoom={15} 
+        minZoom={3} 
+        zoom={4}
+      >
+        <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>  
+        {storms}
+        {year >= 2004 && windField && <>
+          {windField34kt}
+          {windField50kt}
+          {windField64kt}
+        </>}
+      </MapContainer>
+    </div>
   )
 }
 

@@ -167,7 +167,7 @@ const Storm = () => {
           </li>
           <li className='rounded-b-lg'>
             <h2>Cost (Million USD)</h2>
-            <h2>{cost}</h2>
+            <h2>${cost}</h2>
           </li>
         </ul>
       </div>

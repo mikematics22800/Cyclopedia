@@ -19,16 +19,28 @@
   @apply w-screen bg-cover bg-center bg-fixed
 }
 
+.desktop-view {
+  @apply h-screen sm:h-[calc(100vh-6rem)] w-full overflow-hidden sm:flex-row flex-col-reverse hidden sm:flex
+}
+
 nav {
-  @apply hidden lg:flex justify-between w-full h-24 items-center px-[5%] bg-blue-950 z-10
+  @apply hidden sm:flex justify-between w-full h-24 items-center px-[5%] bg-blue-950 z-10
 }
 
 .loading-screen {
-  @apply w-screen h-screen flex flex-col items-center justify-center text-white gap-20 bg-opacity-60
+  @apply w-screen h-screen flex flex-col items-center justify-center text-white gap-16 sm:gap-20 bg-blue-950
+}
+
+.loading-screen h1 {
+  @apply sm:text-4xl text-2xl font-bold storm-font italic
+}
+
+.loading-screen img {
+  @apply sm:w-60 w-40 animate-spin
 }
 
 .interface {
-  @apply p-8 flex-col overflow-y-auto overflow-x-hidden gap-8 w-full lg:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center
+  @apply p-8 flex-col overflow-y-auto overflow-x-hidden gap-8 w-full sm:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center
 }
 
 .button {
@@ -48,7 +60,7 @@ ul li {
 }
 
 .storm a {
-  @apply w-full border-2 border-white aspect-square bg-cover bg-center flex flex-col items-center justify-center rounded-lg bg-gray-400  max-w-80
+  @apply w-full border-2 border-white aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 max-w-80 rounded-3xl
 }
 
 .storm, .season {
@@ -56,11 +68,11 @@ ul li {
 }
 
 .charts-container {
-  @apply w-full bg-opacity-60 flex flex-col overflow-auto p-8
+  @apply w-full bg-opacity-60 flex flex-col overflow-auto sm:p-8
 }
 
 .charts {
-  @apply flex flex-col w-full gap-8 
+  @apply flex flex-col gap-8 
 }
 
 .selectors {
@@ -72,9 +84,33 @@ ul li h2 {
 }
 
 .chart {
-  @apply border-2 border-white h-64 lg:h-96 p-4 bg-black bg-opacity-50 cursor-pointer rounded-lg w-full
+  @apply border-2 border-white h-64 md:h-80 lg:h-96 p-4 bg-black bg-opacity-50 cursor-pointer rounded-lg w-full
 }
 
 .mobile-interface {
-  @apply lg:hidden flex w-full justify-center bg-black bg-opacity-50 rounded-t-3xl bg-cover bg-center bg-fixed  absolute top-[90%]
+  @apply sm:hidden flex w-full justify-center bg-black bg-opacity-50 rounded-t-3xl bg-cover bg-center bg-fixed absolute top-[92%]
+}
+
+.mobile-map {
+  @apply sm:hidden w-full h-full fixed top-0 -z-10
+}
+
+.legend-container {
+  @apply flex justify-center absolute top-4 right-4 z-[9999] 
+}
+
+.legend {
+  @apply flex flex-col gap-2 font-bold text-white bg-black bg-opacity-50 rounded-lg w-fit p-2 
+}
+
+.legend .key {
+  @apply flex gap-1 items-center
+}
+
+.legend .key span {
+  @apply w-4 h-4
+}
+
+.map {
+  @apply w-full h-full relative
 }
