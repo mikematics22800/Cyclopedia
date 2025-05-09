@@ -108,7 +108,7 @@ const Storm = () => {
         textColor = "lime"
       } else {
         if (statuses.includes("SS")) {
-          textColor = "palegreen"
+          textColor = "#D0F0C0"
         } else {
           if (statuses.includes("TD")) {
             textColor = "dodgerblue"

@@ -46,11 +46,11 @@ const Interface = () => {
             return (<MenuItem key={id} value={id}><p className="text-black font-bold">{name}</p></MenuItem>);
           })}
         </Select>
-        {year >= 2004 && <div className="flex items-center gap-1">
-          <Checkbox className="!text-white !p-0" onChange={(e) => {setWindField(e.target.checked)}}/>
-          <h1 className="text-white font-bold">Wind Field</h1>
-        </div>}
       </div>
+      {year >= 2004 && <div className="flex items-center gap-1">
+        <Checkbox className="!text-white !p-0" onChange={(e) => {setWindField(e.target.checked)}}/>
+        <h1 className="text-white font-bold">Wind Field</h1>
+      </div>}
       <Storm/>
       <Season/>
       <div className="sm:hidden w-full">

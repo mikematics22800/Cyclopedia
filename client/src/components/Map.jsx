@@ -110,7 +110,7 @@ const Map = () => {
       }
       if (point.status === 'SS') {
         status = "Subtropical Storm"
-        color = "palegreen"
+        color = "#D0F0C0"
       }
       if (point.status === 'TD') {
         status = "Tropical Depression"
@@ -281,7 +281,7 @@ const Map = () => {
             <h1 className="text-sm">SD</h1>
           </div>
           <div className="key">
-            <span className="bg-[palegreen]"/>
+            <span className="bg-[#D0F0C0]"/>
             <h1 className="text-sm">SS</h1>
           </div>
           <div className="key">
