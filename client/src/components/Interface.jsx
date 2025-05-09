@@ -56,6 +56,7 @@ const Interface = () => {
       <div className="sm:hidden w-full">
         <Charts/>
       </div>
+      <h1 className="text-white font-bold text-sm">© 2025 Mikematics. All rights reserved.</h1>
     </div>
   )
 }

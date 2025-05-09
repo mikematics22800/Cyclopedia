@@ -269,16 +269,16 @@ const Map = () => {
             <h1 className="text-sm">EX</h1>
           </div>
           <div className="key">
+            <span className="bg-white"/>
+            <h1 className="text-sm">WV</h1>
+          </div>
+          <div className="key">
             <span className="bg-[lightgray]"/>
             <h1 className="text-sm">DB</h1>
           </div>
           <div className="key">
             <span className="bg-[gray]"/>
             <h1 className="text-sm">LO</h1>
-          </div>
-          <div className="key">
-            <span className="bg-white"/>
-            <h1 className="text-sm">WV</h1>
           </div>
         </div>
       </div>
