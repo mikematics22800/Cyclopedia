@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { Context } from "../App";
 import { MapContainer, Polyline, TileLayer, Popup, Marker, Polygon } from "react-leaflet";
 import { divIcon } from "leaflet";
@@ -6,27 +6,7 @@ import "leaflet/dist/leaflet.css";
 
 
 const Map = () => {
-  const {season, setStormId, storm, year, windField, charts} = useContext(Context)
-
-  const [fullscreen, setFullscreen] = useState(false)
- 
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      if (!document.fullscreenElement) {
-        setFullscreen(false);
-      }
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-    };
-  }, []);
-
-  const toggleFullscreen = () => {
-    fullscreen ? document.exitFullscreen() : document.getElementById('map').requestFullscreen()
-    setFullscreen(!fullscreen)
-  }
+  const {season, setStormId, storm, year, windField, charts} = useContext(Context) 
 
   const dot = (color) => {
     return (
@@ -90,7 +70,7 @@ const Map = () => {
       let color
       if (point.status === 'LO') {
         status = "Tropical Low"
-        color = "lightgray"
+        color = "gray"
       }
       if (point.status === 'DB') {
         status = "Tropical Disturbance"
@@ -98,11 +78,11 @@ const Map = () => {
       }
       if (point.status === 'WV') {
         status = "Tropical Wave"
-        color = "lightgray"
+        color = "white"
       }
       if (point.status === 'EX' || point.status === 'ET') {
         status = "Extratropical Cyclone"
-        color = "lightgray"
+        color = "#7F00FF"
       }
       if (point.status === 'SD') {
         status = "Subtropical Depression"
@@ -285,8 +265,20 @@ const Map = () => {
             <h1 className="text-sm">SS</h1>
           </div>
           <div className="key">
-            <span className="bg-[lightgray]"/>
+            <span className="bg-[#7F00FF]"/>
             <h1 className="text-sm">EX</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[lightgray]"/>
+            <h1 className="text-sm">DB</h1>
+          </div>
+          <div className="key">
+            <span className="bg-[gray]"/>
+            <h1 className="text-sm">LO</h1>
+          </div>
+          <div className="key">
+            <span className="bg-white"/>
+            <h1 className="text-sm">WV</h1>
           </div>
         </div>
       </div>
