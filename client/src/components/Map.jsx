@@ -70,7 +70,7 @@ const Map = () => {
       let color
       if (point.status === 'LO') {
         status = "Tropical Low"
-        color = "gray"
+        color = "white"
       }
       if (point.status === 'DB') {
         status = "Tropical Disturbance"
@@ -78,7 +78,7 @@ const Map = () => {
       }
       if (point.status === 'WV') {
         status = "Tropical Wave"
-        color = "white"
+        color = "gray"
       }
       if (point.status === 'EX' || point.status === 'ET') {
         status = "Extratropical Cyclone"
@@ -269,7 +269,7 @@ const Map = () => {
             <h1 className="text-sm">EX</h1>
           </div>
           <div className="key">
-            <span className="bg-white"/>
+            <span className="bg-[gray]"/>
             <h1 className="text-sm">WV</h1>
           </div>
           <div className="key">
@@ -277,7 +277,7 @@ const Map = () => {
             <h1 className="text-sm">DB</h1>
           </div>
           <div className="key">
-            <span className="bg-[gray]"/>
+            <span className="bg-white"/>
             <h1 className="text-sm">LO</h1>
           </div>
         </div>

@@ -24,7 +24,7 @@ const Interface = () => {
 
   return (
     <div className='interface'>
-      <div className="bg-gray-300 rounded-full w-20 h-2 sm:hidden"/>
+      <div className="bg-gray-300 rounded-full w-20 h-1 sm:hidden"/>
       <div className="flex items-center sm:hidden">
         <img src={cyclone} className="h-10 mr-2"/>
         <h1 className="storm-font text-4xl text-white font-bold italic">CYCLOPEDIA</h1>

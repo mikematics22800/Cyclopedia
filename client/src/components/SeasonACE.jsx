@@ -26,7 +26,7 @@ const SeasonACE = () => {
       },
       title: {
         display: true,
-        text: 'Accumulated Cyclone Energy',
+        text: 'Season Accumulated Cyclone Energy',
         color: "white"
       },
       tooltip: {

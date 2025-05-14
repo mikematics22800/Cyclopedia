@@ -37,7 +37,7 @@ const MinPressures = () => {
       },
       title: {
         display: true,
-        text: 'Minimum Pressure (mb)',
+        text: 'Season Minimum Pressures (mb)',
         color: "white"
       },
       tooltip: {

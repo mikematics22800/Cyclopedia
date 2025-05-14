@@ -40,7 +40,7 @@ nav {
 }
 
 .interface {
-  @apply py-8 px-4 flex-col overflow-y-auto overflow-x-hidden gap-8 w-full sm:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center
+  @apply p-4 sm:p-8 flex-col overflow-y-auto overflow-x-hidden gap-8 w-full sm:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center
 }
 
 .button {
@@ -88,7 +88,7 @@ ul li h2 {
 }
 
 .mobile-interface {
-  @apply sm:hidden flex w-full justify-center bg-black bg-opacity-50 rounded-t-3xl bg-cover bg-center bg-fixed absolute top-[92%]
+  @apply sm:hidden flex w-full justify-center bg-black bg-opacity-50 rounded-t-3xl bg-cover bg-center bg-fixed absolute top-[96%]
 }
 
 .mobile-map {
@@ -96,7 +96,7 @@ ul li h2 {
 }
 
 .legend-container {
-  @apply flex justify-center absolute top-3 right-3 z-[9999] 
+  @apply flex justify-center absolute top-2 right-2 z-[9999] 
 }
 
 .legend {

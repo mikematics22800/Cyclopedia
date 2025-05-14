@@ -56,7 +56,9 @@ const Intensity = () => {
     stacked: false,
     plugins: {
       title: {
-        display: false,
+        display: true,
+        text: 'Intensity',
+        color: "white"
       },
       legend: {
         labels: {
