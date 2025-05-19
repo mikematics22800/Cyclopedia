@@ -53,6 +53,7 @@ function App() {
         localStorage.setItem(`cyclopedia-${basin}-${year}`, JSON.stringify(data))
       })
     }
+    setWindField(false)
   }, [basin, year])
 
   useEffect(() => {

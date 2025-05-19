@@ -29,14 +29,14 @@ const Intensity = () => {
     labels: dates,
     datasets: [
       {
-        label: "Maximum Wind (kt)",
+        label: "Max Wind (kt)",
         data: wind,
         borderColor: "red",
         backgroundColor: "pink",
         yAxisID: "y",
       },
       {
-        label: "Minimum Pressure (mb)",
+        label: "Min Pressure (mb)",
         data: pressure,
         borderColor: "blue",
         backgroundColor: "lightblue",
@@ -56,9 +56,7 @@ const Intensity = () => {
     stacked: false,
     plugins: {
       title: {
-        display: true,
-        text: 'Intensity',
-        color: "white"
+        display: false,
       },
       legend: {
         labels: {
