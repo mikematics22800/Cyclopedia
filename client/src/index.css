@@ -20,27 +20,27 @@
 }
 
 .desktop-view {
-  @apply h-screen sm:h-[calc(100vh-6rem)] w-full overflow-hidden sm:flex-row flex-col-reverse hidden sm:flex
+  @apply h-screen md:h-[calc(100vh-6rem)] w-full overflow-hidden md:flex-row flex-col-reverse hidden md:flex
 }
 
 nav {
-  @apply hidden sm:flex justify-between w-full h-24 items-center px-[5%] bg-blue-950 z-10
+  @apply hidden md:flex justify-between w-full h-24 items-center px-[5%] bg-blue-950 z-10
 }
 
 .loading-screen {
-  @apply w-screen h-screen flex flex-col items-center justify-center text-white gap-16 sm:gap-20 bg-blue-950
+  @apply w-screen h-screen flex flex-col items-center justify-center text-white gap-16 md:gap-20 bg-blue-950
 }
 
 .loading-screen h1 {
-  @apply sm:text-4xl text-2xl font-bold storm-font italic
+  @apply md:text-4xl text-2xl font-bold storm-font italic
 }
 
 .loading-screen img {
-  @apply sm:w-60 w-40 animate-spin
+  @apply md:w-60 w-40 animate-spin
 }
 
 .interface {
-  @apply p-4 sm:p-8 flex-col overflow-y-auto overflow-x-hidden gap-8 w-full sm:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center
+  @apply p-4 md:p-8 flex-col overflow-y-auto overflow-x-hidden gap-4 w-full md:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center
 }
 
 .button {
@@ -48,7 +48,7 @@ nav {
 }
 
 .select {
-  @apply bg-white !rounded-md h-10 w-full max-w-80
+  @apply bg-white !rounded-md h-10
 }
 
 ul {
@@ -68,15 +68,15 @@ ul li {
 }
 
 .charts-container {
-  @apply w-full bg-opacity-60 flex flex-col overflow-auto sm:p-8
+  @apply w-full bg-opacity-60 flex flex-col overflow-auto md:p-8
 }
 
 .charts {
-  @apply flex flex-col gap-8 
+  @apply flex flex-col gap-4
 }
 
 .selectors {
-  @apply flex flex-col gap-5 w-full justify-center items-center
+  @apply flex w-full gap-4 justify-center
 }
 
 ul li h2 {
@@ -88,11 +88,11 @@ ul li h2 {
 }
 
 .mobile-interface {
-  @apply sm:hidden flex w-full justify-center bg-black bg-opacity-50 rounded-t-3xl bg-cover bg-center bg-fixed absolute top-[96%]
+  @apply md:hidden flex w-full justify-center bg-black bg-opacity-50 rounded-t-3xl bg-cover bg-center bg-fixed absolute top-[96%]
 }
 
 .mobile-map {
-  @apply sm:hidden w-full h-full fixed top-0 -z-10
+  @apply md:hidden w-full h-full fixed top-0 -z-10
 }
 
 .legend-container {

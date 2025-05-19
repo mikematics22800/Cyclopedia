@@ -24,8 +24,8 @@ const Interface = () => {
 
   return (
     <div className='interface'>
-      <div className="bg-gray-300 rounded-full w-20 h-1 sm:hidden"/>
-      <div className="flex items-center sm:hidden">
+      <div className="bg-gray-300 rounded-full w-20 h-1 md:hidden"/>
+      <div className="flex items-center md:hidden">
         <img src={cyclone} className="h-10 mr-2"/>
         <h1 className="storm-font text-4xl text-white font-bold italic">CYCLOPEDIA</h1>
       </div>
@@ -53,7 +53,7 @@ const Interface = () => {
       </div>}
       <Storm/>
       <Season/>
-      <div className="sm:hidden w-full">
+      <div className="md:hidden w-full">
         <Charts/>
       </div>
       <h1 className="text-white font-bold text-sm">© 2025 Mikematics. All rights reserved.</h1>
