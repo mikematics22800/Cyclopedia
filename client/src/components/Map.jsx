@@ -162,7 +162,7 @@ const Map = () => {
     if (!sw) {sw = 0}
     if (!nw) {nw = 0}
     let radius;
-    for (let angle = 0; angle < 360; angle += 1) {
+    for (let angle = 0; angle < 360; angle += 10) {
       if (angle >= 0 && angle < 90) radius = ne;
       else if (angle >= 90 && angle < 180) radius = se;
       else if (angle >= 180 && angle < 270) radius = sw;
