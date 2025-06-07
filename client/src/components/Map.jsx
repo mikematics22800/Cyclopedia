@@ -187,7 +187,7 @@ const Map = () => {
         <div key={i}>
           <Polygon positions={points34kt} color="yellow">
             <Popup className="font-bold">
-              <h1 className="text-md">34+ kt</h1>
+              <h1 className="text-md">{'Wind: ≥34 kt'}</h1>
             </Popup>
           </Polygon>
         </div>
@@ -202,7 +202,7 @@ const Map = () => {
         <div key={i}>
           <Polygon positions={points50kt} color="orange">
             <Popup className="font-bold">
-              <h1 className="text-md">50+ kt</h1>
+              <h1 className="text-md">{'Wind: ≥50 kt'}</h1>
             </Popup>
           </Polygon>
         </div>
@@ -217,7 +217,7 @@ const Map = () => {
         <div key={i}>
           <Polygon positions={points64kt} color="red">
             <Popup className="font-bold">
-              <h1 className="text-md">64+ kt</h1>
+              <h1 className="text-md">{'Wind: ≥64 kt'}</h1>
             </Popup>
           </Polygon>
         </div>

@@ -20,11 +20,11 @@
 }
 
 .desktop-view {
-  @apply h-screen md:h-[calc(100vh-6rem)] w-full overflow-hidden md:flex-row flex-col-reverse hidden md:flex
+  @apply h-screen md:h-[calc(100vh-5rem)] w-full overflow-hidden md:flex-row flex-col-reverse hidden md:flex
 }
 
 nav {
-  @apply hidden md:flex justify-between w-full h-24 items-center px-[5%] bg-blue-950 z-10
+  @apply hidden md:flex justify-between w-full h-20 items-center px-10 bg-blue-950 z-10
 }
 
 .loading-screen {

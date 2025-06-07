@@ -2,7 +2,7 @@ import { useState, useEffect, createContext } from "react"
 import { getHurdat } from "./libs/hurdat"
 import Interface from "./components/Interface"
 import Map from "./components/Map"
-import stormsWallpaper from "../public/storms.jpg"
+import hurricaneWallpaper from "../public/hurricane.jpg"
 import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
 import Charts from "./components/Charts"
@@ -53,7 +53,6 @@ function App() {
         localStorage.setItem(`cyclopedia-${basin}-${year}`, JSON.stringify(data))
       })
     }
-    setWindField(false)
   }, [basin, year])
 
   useEffect(() => {
@@ -184,7 +183,7 @@ function App() {
 
   return (
     <Context.Provider value={value}>
-      <div className="app" style={{backgroundImage: `url(${stormsWallpaper})`}}>
+      <div className="app" style={{backgroundImage: `url(${hurricaneWallpaper})`}}>
         {season && storm ? (
           <div className="w-full h-full flex flex-col"> 
             <nav>
