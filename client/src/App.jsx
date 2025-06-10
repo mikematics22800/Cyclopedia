@@ -1,11 +1,13 @@
 import { useState, useEffect, createContext } from "react"
 import { getHurdat } from "./libs/hurdat"
-import Interface from "./components/Interface"
+import Archive from "./components/Archive"
 import Map from "./components/Map"
 import hurricaneWallpaper from "../public/hurricane.jpg"
 import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
-import Charts from "./components/Charts"
+import ArchiveCharts from "./components/ArchiveCharts"
+import { getLiveHurdat, getForecastCone } from "./libs/hurdat"
+import TrackerCharts from "./components/TrackerCharts"
 
 export const Context = createContext()
 
@@ -24,6 +26,9 @@ function App() {
   const [seasonACE, setSeasonACE] = useState([])
   const [map, setMap] = useState(true)
   const [maxWinds, setMaxWinds] = useState([])
+  const [liveHurdat, setLiveHurdat] = useState([])
+  const [forecastCone, setForecastCone] = useState([])
+  const [tracker, setTracker] = useState(false)
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -35,6 +40,12 @@ function App() {
         });
       });
     }
+    getLiveHurdat().then(data => {
+      setLiveHurdat(data)
+    })
+    getForecastCone().then(data => {
+      setForecastCone(data)
+    })  
   }, [])
 
   useEffect(() => {
@@ -151,6 +162,22 @@ function App() {
     }
   }, [season]);
 
+  const toggleCharts = () => {
+    if (map === false) {
+      setMap(true)
+    } else {
+      setMap(false)
+    }
+  }
+
+  const toggleTracker = () => {
+    if (tracker === false) {
+      setTracker(true)
+    } else {
+      setTracker(false)
+    }
+  }
+
   const value = {
     basin,
     setBasin, 
@@ -170,15 +197,11 @@ function App() {
     ACE,
     ACEArray,
     maxWinds,
-    seasonACE
-  }
-
-  const toggleMap = () => {
-    if (map === false) {
-      setMap(true)
-    } else {
-      setMap(false)
-    }
+    seasonACE,
+    liveHurdat,
+    forecastCone,
+    toggleTracker,
+    tracker
   }
 
   return (
@@ -191,19 +214,19 @@ function App() {
                 <img src={cyclone} className="h-10 mr-2"/>
                 <h1 className="storm-font text-4xl text-white font-bold italic">CYCLOPEDIA</h1>
               </div>
-              <button onClick={toggleMap} className="button" variant="contained">
+              <button onClick={toggleCharts} className="button" variant="contained">
                 <h1>{map ? ("Charts") : ("Map")}</h1>
               </button>
             </nav>
             <div className="desktop-view">
-              <Interface/>
-              {map ? <Map/> : <Charts/>}
+              <Archive/>
+              {map ? <Map/> : tracker ? <TrackerCharts/> : <ArchiveCharts/>}
             </div>
             <div className="mobile-map">
               <Map/>
-            </div>
+            </div>  
             <div className="mobile-interface">
-              <Interface/>
+              <Archive/>
             </div>
           </div>
         ) : (

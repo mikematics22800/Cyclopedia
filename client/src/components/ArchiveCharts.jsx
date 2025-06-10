@@ -4,7 +4,7 @@ import MaxWinds from "./MaxWinds"
 import MinPressures from "./MinPressures"
 import SeasonACE from "./SeasonACE"
 
-const Charts = () => {
+const ArchiveCharts = () => {
   return (
     <div className="charts-container">
       <div className="charts">
@@ -18,4 +18,4 @@ const Charts = () => {
   )
 }
 
-export default Charts
+export default ArchiveCharts

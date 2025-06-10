@@ -3,10 +3,10 @@ import { Context } from "../App";
 import Storm from "./Storm";
 import Season from "./Season";
 import { MenuItem, Select, Checkbox } from "@mui/material"
-import Charts from "./Charts";
+import Charts from "./ArchiveCharts";
 import cyclone from "../../public/cyclone.png"
 
-const Interface = () => {
+const Archive = () => {
 
   const { basin, setBasin, year, setYear, stormId, setStormId, setWindField, season } = useContext(Context)
 
@@ -47,10 +47,10 @@ const Interface = () => {
           })}
         </Select>
       </div>
-      {year >= 2004 && <div className="flex items-center gap-1">
-        <Checkbox className="!text-white !p-0" onChange={(e) => {setWindField(e.target.checked)}}/>
-        <h1 className="text-white font-bold">Wind Field</h1>
-      </div>}
+      <div className="flex items-center gap-1">
+        <Checkbox disabled={year < 2004} className={year < 2004 ? "!text-gray-400 !p-0" : "!text-white !p-0"} onChange={(e) => {setWindField(e.target.checked)}}/>
+        <h1 className={year < 2004 ? "text-gray-400 font-bold" : "text-white font-bold"}>Wind Field</h1>
+      </div>
       <Storm/>
       <Season/>
       <div className="md:hidden w-full">
@@ -61,4 +61,4 @@ const Interface = () => {
   )
 }
 
-export default Interface
+export default Archive
