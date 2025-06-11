@@ -6,7 +6,7 @@ import hurricaneWallpaper from "../public/hurricane.jpg"
 import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
 import ArchiveCharts from "./components/ArchiveCharts"
-import { getLiveHurdat, getForecastCone } from "./libs/hurdat"
+import { getLiveHurdat, getForecastCone, getWindFieldForecast } from "./libs/hurdat"
 import TrackerCharts from "./components/TrackerCharts"
 
 export const Context = createContext()
@@ -29,6 +29,7 @@ function App() {
   const [liveHurdat, setLiveHurdat] = useState([])
   const [forecastCone, setForecastCone] = useState([])
   const [tracker, setTracker] = useState(false)
+  const [windFieldForecast, setWindFieldForecast] = useState([])
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -46,6 +47,9 @@ function App() {
     getForecastCone().then(data => {
       setForecastCone(data)
     })  
+    getWindFieldForecast().then(data => {
+      setWindFieldForecast(data)
+    })
   }, [])
 
   useEffect(() => {
@@ -201,7 +205,8 @@ function App() {
     liveHurdat,
     forecastCone,
     toggleTracker,
-    tracker
+    tracker,
+    windFieldForecast
   }
 
   return (

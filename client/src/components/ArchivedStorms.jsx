@@ -128,7 +128,7 @@ const ArchivedStorms = () => {
 
       return (
         <Marker key={i} position={coords} icon={icon} eventHandlers={{click:() => {setStormId(id)}}}>
-          <Popup className="w-64 font-bold">
+          <Popup className="w-fit font-bold">
             <h1 className="text-md">{fullName}</h1>
             <h1 className="my-1">{formattedDate} at {formattedTime} UTC</h1>
             <h1>Maximum Wind: {point.max_wind_kt} kt</h1>

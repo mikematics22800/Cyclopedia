@@ -26,7 +26,7 @@ const Map = () => {
       >
         <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>  
         {tracker ? <LiveStorms /> : <ArchivedStorms />}
-        {year >= 2004 && windField && !tracker && <WindField />}
+        {year >= 2004 && windField && !tracker && <WindField/>}
       </MapContainer>
     </div>
   )

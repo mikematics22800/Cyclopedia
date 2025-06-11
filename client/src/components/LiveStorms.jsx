@@ -30,27 +30,65 @@ const LiveStorms = () => {
     }
   };
 
-  const stormIcon = (color) => {
+  const getLatestPointBeforeNow = (points) => {
+    const now = new Date();
+    let latestPoint = null;
+    let latestTime = new Date(0); // Start with earliest possible date
+
+    points.forEach(point => {
+      try {
+        const [time, ampm, timezone, day, month, date, year] = point.properties.ADVDATE.split(' ');
+        const [hours, minutes] = time.split(/(?=(?:..)*$)/);
+        const pointDate = new Date(`${month} ${date} ${year} ${hours}:${minutes} ${ampm} ${timezone}`);
+        
+        if (pointDate > latestTime && pointDate <= now) {
+          latestTime = pointDate;
+          latestPoint = point;
+        }
+      } catch (error) {
+        console.error('Error parsing date:', error);
+      }
+    });
+
+    return latestPoint;
+  };
+
+  const stormIcon = (color, maxWind) => {
+    // Calculate rotation speed based on wind speed
+    // Higher wind speeds = faster rotation
+    const rotationSpeed = maxWind / 10;
+    
     return (
       new divIcon({
         className: 'bg-opacity-0',
-        html: `<svg fill=${color} stroke="black" stroke-width="40" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-          viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
-          <path id="XMLID_4_" d="M770.4727173,227.425354c39.6831055-15.4902954,82.9113159-27.1513672,128.5977783-34.2336426
-          c-50.8377686-12.8282471-105.7141113-19.8361816-162.9956055-19.8361816
-          c-183.9008179,0-343.3033447,72.2774048-421.7575073,177.8726196l0.3860474,0.1188965
-          c0.3860474-0.5049438,0.8018188-0.9799805,1.2175903-1.4847412C282.5142212,390.8115845,262.4403687,443.045105,262.4403687,500
-          c0,40.2366333,10.0072021,78.1422729,27.668335,111.3560791c32.2402954,60.6321411,3.3745728,136.3082275-60.6011963,161.2643433
-          c-39.6578979,15.4700928-82.8701782,27.1080933-128.5780029,34.1878052
-          c50.8377686,12.8282471,105.7141113,19.8362427,162.9956055,19.8362427
-          c183.9008179,0,343.3033447-72.2775879,421.7575073-177.8728638l-0.3860474-0.1187134
-          C717.9905396,607.9707642,737.5596313,556.2719727,737.5596313,500c0-40.2181396-10.0053711-78.0926514-27.6586914-111.2879639
-          C677.6546021,328.0757446,706.4966431,252.3985596,770.4727173,227.425354z M500,574.2373657
-          c-41.008728,0-74.2373657-33.2286377-74.2373657-74.2373657S458.991272,425.7626343,500,425.7626343
-          S574.2373657,458.991272,574.2373657,500S541.008728,574.2373657,500,574.2373657z"/>
-        </svg>
-`,
-        iconSize: [30, 30]
+        html: `<style>
+          @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          .rotating-storm {
+            animation: rotate ${rotationSpeed}s linear infinite;
+            transform-origin: center;
+          }
+        </style>
+        <div class="rotating-storm">
+          <svg fill=${color} stroke="black" stroke-width="40" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
+            <path id="XMLID_4_" d="M770.4727173,227.425354c39.6831055-15.4902954,82.9113159-27.1513672,128.5977783-34.2336426
+            c-50.8377686-12.8282471-105.7141113-19.8361816-162.9956055-19.8361816
+            c-183.9008179,0-343.3033447,72.2774048-421.7575073,177.8726196l0.3860474,0.1188965
+            c0.3860474-0.5049438,0.8018188-0.9799805,1.2175903-1.4847412C282.5142212,390.8115845,262.4403687,443.045105,262.4403687,500
+            c0,40.2366333,10.0072021,78.1422729,27.668335,111.3560791c32.2402954,60.6321411,3.3745728,136.3082275-60.6011963,161.2643433
+            c-39.6578979,15.4700928-82.8701782,27.1080933-128.5780029,34.1878052
+            c50.8377686,12.8282471,105.7141113,19.8362427,162.9956055,19.8362427
+            c183.9008179,0,343.3033447-72.2775879,421.7575073-177.8728638l-0.3860474-0.1187134
+            C717.9905396,607.9707642,737.5596313,556.2719727,737.5596313,500c0-40.2181396-10.0053711-78.0926514-27.6586914-111.2879639
+            C677.6546021,328.0757446,706.4966431,252.3985596,770.4727173,227.425354z M500,574.2373657
+            c-41.008728,0-74.2373657-33.2286377-74.2373657-74.2373657S458.991272,425.7626343,500,425.7626343
+            S574.2373657,458.991272,574.2373657,500S541.008728,574.2373657,500,574.2373657z"/>
+          </svg>
+        </div>`,
+        iconSize: [40, 40]
       })
     )
   }
@@ -121,34 +159,61 @@ const LiveStorms = () => {
 
     const { status, color } = getStormStatus(STORMTYPE, MAXWIND);
 
-    const marker = (
-      <Marker key={`marker-${i}`} position={[lat, lng]} icon={stormIcon(color)}>
-        <Popup className="w-64 font-bold">
-          <h3>{status} {STORMNAME.split(' ').pop()}</h3>
-          <h3>{convertToUTC(ADVDATE)} UTC</h3>
-          <h3>Maximum Wind: {MAXWIND} kt</h3>
-          <h3>Maximum Wind Gusts: {GUST} kt</h3>
-        </Popup>
-      </Marker>
-    );
-
+    // Store the point data first
     if (!acc[stormkey]) {
       acc[stormkey] = {
         markers: [],
         positions: [],
-        name: STORMNAME
+        name: STORMNAME,
+        points: []
       };
     }
-    acc[stormkey].markers.push(marker);
+    acc[stormkey].points.push(feature);
     acc[stormkey].positions.push([lat, lng]);
 
     return acc;
   }, {});
 
+  // Find the latest point for each storm and create markers
+  Object.keys(liveStorms).forEach(stormkey => {
+    const latestPoint = getLatestPointBeforeNow(liveStorms[stormkey].points);
+    if (latestPoint) {
+      liveStorms[stormkey].latestPoint = latestPoint;
+      
+      // Create markers for all points
+      liveStorms[stormkey].points.forEach((point, i) => {
+        const [lng, lat] = point.geometry.coordinates[0];
+        const { STORMNAME, STORMTYPE, MAXWIND, GUST, ADVDATE } = point.properties;
+        const { status, color } = getStormStatus(STORMTYPE, MAXWIND);
+        
+        // Use storm icon for latest point, dot for others
+        const isLatestPoint = point === latestPoint;
+        const icon = isLatestPoint ? stormIcon(color, MAXWIND) : dot(color);
+        
+        const marker = (
+          <Marker key={`marker-${stormkey}-${i}`} position={[lat, lng]} icon={icon}>
+            <Popup className="w-fit font-bold">
+              <h3>{status} {STORMNAME.split(' ').pop()}</h3>
+              <h3>{convertToUTC(ADVDATE)} UTC</h3>
+              <h3>Maximum Wind: {MAXWIND} kt</h3>
+              <h3>Maximum Wind Gusts: {GUST} kt</h3>
+            </Popup>
+          </Marker>
+        );
+        
+        liveStorms[stormkey].markers.push(marker);
+      });
+    }
+  });
+
   const cones = forecastCone.map((feature) => {
     const coordinates = feature.geometry.coordinates[0][0].map(coord => [coord[1], coord[0]]);
     return (
-      <Polygon positions={coordinates} color="red" />
+      <Polygon positions={coordinates} color="red">
+        <Popup className="w-fit font-bold">
+          <h3>Cone of Uncertainty</h3>
+        </Popup>
+      </Polygon>
     )
   });
 
@@ -167,6 +232,21 @@ const LiveStorms = () => {
     <>
       {tracks}
       {cones}
+      <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg max-w-md">
+        <h2 className="text-xl font-bold mb-2">Latest Storm Positions</h2>
+        {Object.entries(liveStorms).map(([stormkey, data]) => {
+          if (!data.latestPoint) return null;
+          const { STORMNAME, STORMTYPE, MAXWIND, ADVDATE } = data.latestPoint.properties;
+          const { status } = getStormStatus(STORMTYPE, MAXWIND);
+          return (
+            <div key={stormkey} className="mb-2">
+              <h3 className="font-semibold">{status} {STORMNAME.split(' ').pop()}</h3>
+              <p>Last Update: {convertToUTC(ADVDATE)} UTC</p>
+              <p>Maximum Wind: {MAXWIND} kt</p>
+            </div>
+          );
+        })}
+      </div>
     </>
   )
 }

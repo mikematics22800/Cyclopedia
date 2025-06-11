@@ -36,3 +36,14 @@ export const getForecastCone = async () => {
     console.error('Server error', err);
   }
 }
+
+export const getWindFieldForecast = async () => {
+  try {
+    const response = await fetch('https://www.femafhz.com/webservice?q=cycloData&subqry=forecastRadiiByDate&stormdate=0&type=SH&fmt=GEOJSON', options)
+    const data = await response.json();
+    console.log(data.features)
+    return data.features;
+  } catch (err) {
+    console.error('Server error', err);
+  }
+}
