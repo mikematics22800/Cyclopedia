@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import { Context } from '../App'
 import { sum } from '../libs/sum'
 
-const Season = () => {
+const SeasonArchive = () => {
   const {season, seasonACE, maxWinds} = useContext(Context)
 
   const [hurricanes, setHurricanes] = useState(0)
@@ -35,7 +35,7 @@ const Season = () => {
   return (
     <div className='season'>
       <ul>
-        <li className='border-t-2 flex justify-center rounded-t-lg'>
+        <li className='flex justify-center'>
           <h1 className='text-lg text-[violet]'>Season Overview</h1>
         </li>
         <li>
@@ -71,4 +71,4 @@ const Season = () => {
   )
 }
 
-export default Season
+export default SeasonArchive

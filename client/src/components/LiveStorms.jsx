@@ -3,55 +3,55 @@ import { Context } from "../App";
 import { Polyline, Popup, Marker, Polygon } from "react-leaflet";
 import { divIcon } from "leaflet";
 
+export const convertToUTC = (dateStr) => {
+  try {
+    // Parse the date string components
+    const [time, ampm, timezone, day, month, date, year] = dateStr.split(' ');
+    const [hours, minutes] = time.split(/(?=(?:..)*$)/);
+    
+    // Create date string in a format that JavaScript can parse
+    const parsedDate = new Date(`${month} ${date} ${year} ${hours}:${minutes} ${ampm} ${timezone}`);
+    
+    return parsedDate.toLocaleString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'UTC',
+      hour12: false
+    }).replace(',', ' at');
+  } catch (error) {
+    console.error('Date parsing error:', error);
+    return dateStr; // Return original string if conversion fails
+  }
+};
+
+export const getLatestPoint = (points) => {
+  const now = new Date();
+  let latestPoint = null;
+  let latestTime = new Date(0); // Start with earliest possible date
+
+  points.forEach(point => {
+    try {
+      const [time, ampm, timezone, day, month, date, year] = point.properties.ADVDATE.split(' ');
+      const [hours, minutes] = time.split(/(?=(?:..)*$)/);
+      const pointDate = new Date(`${month} ${date} ${year} ${hours}:${minutes} ${ampm} ${timezone}`);
+      
+      if (pointDate > latestTime && pointDate <= now) {
+        latestTime = pointDate;
+        latestPoint = point;
+      }
+    } catch (error) {
+      console.error('Error parsing date:', error);
+    }
+  });
+
+  return latestPoint;
+};
+
 const LiveStorms = () => {
   const { liveHurdat, forecastCone } = useContext(Context);
-
-  const convertToUTC = (dateStr) => {
-    try {
-      // Parse the date string components
-      const [time, ampm, timezone, day, month, date, year] = dateStr.split(' ');
-      const [hours, minutes] = time.split(/(?=(?:..)*$)/);
-      
-      // Create date string in a format that JavaScript can parse
-      const parsedDate = new Date(`${month} ${date} ${year} ${hours}:${minutes} ${ampm} ${timezone}`);
-      
-      return parsedDate.toLocaleString('en-US', {
-        month: '2-digit',
-        day: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'UTC',
-        hour12: false
-      }).replace(',', ' at');
-    } catch (error) {
-      console.error('Date parsing error:', error);
-      return dateStr; // Return original string if conversion fails
-    }
-  };
-
-  const getLatestPointBeforeNow = (points) => {
-    const now = new Date();
-    let latestPoint = null;
-    let latestTime = new Date(0); // Start with earliest possible date
-
-    points.forEach(point => {
-      try {
-        const [time, ampm, timezone, day, month, date, year] = point.properties.ADVDATE.split(' ');
-        const [hours, minutes] = time.split(/(?=(?:..)*$)/);
-        const pointDate = new Date(`${month} ${date} ${year} ${hours}:${minutes} ${ampm} ${timezone}`);
-        
-        if (pointDate > latestTime && pointDate <= now) {
-          latestTime = pointDate;
-          latestPoint = point;
-        }
-      } catch (error) {
-        console.error('Error parsing date:', error);
-      }
-    });
-
-    return latestPoint;
-  };
 
   const stormIcon = (color, maxWind) => {
     // Calculate rotation speed based on wind speed
@@ -72,7 +72,7 @@ const LiveStorms = () => {
           }
         </style>
         <div class="rotating-storm">
-          <svg fill=${color} stroke="black" stroke-width="40" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          <svg fill=${color} stroke="black" stroke-width="20" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
             <path id="XMLID_4_" d="M770.4727173,227.425354c39.6831055-15.4902954,82.9113159-27.1513672,128.5977783-34.2336426
             c-50.8377686-12.8282471-105.7141113-19.8361816-162.9956055-19.8361816
@@ -155,9 +155,7 @@ const LiveStorms = () => {
 
   const liveStorms = liveHurdat.reduce((acc, feature, i) => {
     const [lng, lat] = feature.geometry.coordinates[0];
-    const { STORMNAME, STORMTYPE, MAXWIND, GUST, ADVDATE, stormkey } = feature.properties;
-
-    const { status, color } = getStormStatus(STORMTYPE, MAXWIND);
+    const { STORMNAME, stormkey } = feature.properties;
 
     // Store the point data first
     if (!acc[stormkey]) {
@@ -176,7 +174,7 @@ const LiveStorms = () => {
 
   // Find the latest point for each storm and create markers
   Object.keys(liveStorms).forEach(stormkey => {
-    const latestPoint = getLatestPointBeforeNow(liveStorms[stormkey].points);
+    const latestPoint = getLatestPoint(liveStorms[stormkey].points);
     if (latestPoint) {
       liveStorms[stormkey].latestPoint = latestPoint;
       
@@ -232,21 +230,6 @@ const LiveStorms = () => {
     <>
       {tracks}
       {cones}
-      <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg max-w-md">
-        <h2 className="text-xl font-bold mb-2">Latest Storm Positions</h2>
-        {Object.entries(liveStorms).map(([stormkey, data]) => {
-          if (!data.latestPoint) return null;
-          const { STORMNAME, STORMTYPE, MAXWIND, ADVDATE } = data.latestPoint.properties;
-          const { status } = getStormStatus(STORMTYPE, MAXWIND);
-          return (
-            <div key={stormkey} className="mb-2">
-              <h3 className="font-semibold">{status} {STORMNAME.split(' ').pop()}</h3>
-              <p>Last Update: {convertToUTC(ADVDATE)} UTC</p>
-              <p>Maximum Wind: {MAXWIND} kt</p>
-            </div>
-          );
-        })}
-      </div>
     </>
   )
 }

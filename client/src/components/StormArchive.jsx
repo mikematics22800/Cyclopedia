@@ -3,7 +3,7 @@ import { Context } from '../App'
 import retiredImage from "../../public/retired.png"
 import CycloneIcon from '@mui/icons-material/Cyclone'
 
-const Storm = () => {
+const StormArchive = () => {
   const { year, storm, stormId, ACE} = useContext(Context)
 
   const [stormName, setStormName] = useState('')
@@ -137,7 +137,7 @@ const Storm = () => {
           {retired && <img className='w-full' src={retiredImage}/>}
         </a>
         <ul>
-          <li className='border-t-2 rounded-t-lg' style={{color:textColor}}>
+          <li style={{color:textColor}}>
             <h1 className='text-lg'>{stormName}</h1>     
             <h1 >{duration}</h1>     
           </li>
@@ -175,4 +175,4 @@ const Storm = () => {
   )
 }
 
-export default Storm
+export default StormArchive

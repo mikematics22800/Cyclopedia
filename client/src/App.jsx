@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext } from "react"
 import { getHurdat } from "./libs/hurdat"
-import Archive from "./components/Archive"
+import Interface from "./components/Interface"
 import Map from "./components/Map"
 import hurricaneWallpaper from "../public/hurricane.jpg"
 import cyclone from "../public/cyclone.png"
@@ -206,7 +206,9 @@ function App() {
     forecastCone,
     toggleTracker,
     tracker,
-    windFieldForecast
+    windFieldForecast,
+    toggleCharts,
+    map
   }
 
   return (
@@ -219,19 +221,19 @@ function App() {
                 <img src={cyclone} className="h-10 mr-2"/>
                 <h1 className="storm-font text-4xl text-white font-bold italic">CYCLOPEDIA</h1>
               </div>
-              <button onClick={toggleCharts} className="button" variant="contained">
-                <h1>{map ? ("Charts") : ("Map")}</h1>
+              <button onClick={toggleTracker} className="button" variant="contained">
+                <h1>{tracker ? "Historical Archive" : "Live Tracker"}</h1>
               </button>
             </nav>
             <div className="desktop-view">
-              <Archive/>
+              <Interface/>
               {map ? <Map/> : tracker ? <TrackerCharts/> : <ArchiveCharts/>}
             </div>
             <div className="mobile-map">
               <Map/>
             </div>  
             <div className="mobile-interface">
-              <Archive/>
+              <Interface/>
             </div>
           </div>
         ) : (

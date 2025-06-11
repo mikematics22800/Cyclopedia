@@ -8,14 +8,11 @@ import WindField from "./WindField";
 import Legend from "./Legend";
 
 const Map = () => {
-  const { tracker, windField, year, toggleTracker } = useContext(Context);
+  const { tracker, windField, year } = useContext(Context);
 
   return (
     <div className="map">
       <Legend />
-      <button onClick={toggleTracker} className="button absolute top-4 left-1/2 transform -translate-x-1/2 z-[9999]" variant="contained">
-        <h1>{tracker ? "Archive" : "Live Tracker"}</h1>
-      </button>
       <MapContainer 
         className='h-full w-full'
         maxBounds={[[90, 150], [-90, -270]]} 
