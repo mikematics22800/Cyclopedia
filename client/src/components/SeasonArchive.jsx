@@ -34,7 +34,7 @@ const SeasonArchive = () => {
 
   return (
     <div className='season'>
-      <ul>
+      <ul className='season-data'>
         <li className='flex justify-center'>
           <h1 className='text-lg text-[violet]'>Season Overview</h1>
         </li>

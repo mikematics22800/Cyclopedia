@@ -136,7 +136,7 @@ const StormArchive = () => {
           </div>}
           {retired && <img className='w-full' src={retiredImage}/>}
         </a>
-        <ul>
+        <ul className='storm-data'>
           <li style={{color:textColor}}>
             <h1 className='text-lg'>{stormName}</h1>     
             <h1 >{duration}</h1>     

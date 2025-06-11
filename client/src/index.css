@@ -51,11 +51,11 @@ nav {
   @apply bg-white !rounded-md h-10
 }
 
-ul {
+.season-data, .storm-data {
   @apply flex flex-col font-bold text-white text-center w-full max-w-80 rounded-lg gap-2 bg-gray-800 p-4
 }
 
-ul li {
+.season-data li, .storm-data li {
   @apply flex justify-between items-center text-sm 
 }
 
