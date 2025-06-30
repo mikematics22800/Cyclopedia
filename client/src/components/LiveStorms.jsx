@@ -103,24 +103,25 @@ export const getLatestPoint = (points) => {
 const LiveStorms = () => {
   const { liveHurdat, forecastCone } = useContext(Context);
 
-  const stormIcon = (color, maxWind) => {
+  const stormIcon = (color, maxWind, stormId) => {
     // Calculate rotation speed based on wind speed
     // Higher wind speeds = faster rotation
-    
+    const duration = `${1000/maxWind}s`
+    const uniqueClass = `rotating-storm-${stormId}`
     return (
       new divIcon({
         className: "bg-opacity-0",
         html: `<style>
-          @keyframes rotate {
+          @keyframes rotate-${stormId} {
             from { transform: rotate(0deg); }
             to { transform: rotate(-360deg); }
           }
-          .rotating-storm {
-            animation: rotate ${500/maxWind}s linear infinite;
+          .${uniqueClass} {
+            animation: rotate-${stormId} ${duration} linear infinite;
             transform-origin: center;
           }
         </style>
-        <div class="rotating-storm">
+        <div class="${uniqueClass}">
           <svg fill="${color}" stroke="black" stroke-width="20" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
             <path id="XMLID_4_" d="M770.4727173,227.425354c39.6831055-15.4902954,82.9113159-27.1513672,128.5977783-34.2336426
@@ -211,7 +212,9 @@ const LiveStorms = () => {
         
         // Use storm icon for latest point, dot for others
         const isLatestPoint = point === latestPoint;
-        const icon = isLatestPoint ? stormIcon(color, MAXWIND) : dot(color);
+        if(isLatestPoint) console.log(MAXWIND)
+
+        const icon = isLatestPoint ? stormIcon(color, MAXWIND, stormId) : dot(color);
         
         const marker = (
           <Marker key={`marker-${stormId}-${i}`} position={[lat, lng]} icon={icon}>
