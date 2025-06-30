@@ -62,14 +62,14 @@ const Interface = () => {
       )}
       {tracker && <LiveTracker />}
       {!tracker && (
-        <div className="md:hidden mt-4 w-full">
-          <Charts/>
-        </div>
-      )}
-      {!tracker && (
-        <button onClick={toggleCharts} className="button hidden md:flex" variant="contained">
-          <h1>{map ? ("Charts") : ("Map")}</h1>
-        </button>
+        <>
+          <div className="md:hidden mt-4 w-full">
+            <Charts/>
+          </div>
+          <button onClick={toggleCharts} className="button !hidden md:!flex" variant="contained">
+            <h1>{map ? ("Charts") : ("Map")}</h1>
+          </button>
+        </>
       )}
     </div>
   )

@@ -7,7 +7,6 @@ import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
 import ArchiveCharts from "./components/ArchiveCharts"
 import { getLiveHurdat, getForecastCone, getWindFieldForecast } from "./libs/hurdat"
-import TrackerCharts from "./components/TrackerCharts"
 
 export const Context = createContext()
 
@@ -227,7 +226,7 @@ function App() {
             </nav>
             <div className="desktop-view">
               <Interface/>
-              {map ? <Map/> : tracker ? <TrackerCharts/> : <ArchiveCharts/>}
+              {map ? <Map/> : tracker ? <Map/> : <ArchiveCharts/>}
             </div>
             <div className="mobile-map">
               <Map/>
