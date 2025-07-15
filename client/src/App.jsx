@@ -214,11 +214,11 @@ function App() {
     <Context.Provider value={value}>
       <div className="app" style={{backgroundImage: `url(${hurricaneWallpaper})`}}>
         {season && storm ? (
-          <div className="w-full h-full flex flex-col"> 
+          <>
             <nav>
               <div className="flex items-center">
                 <img src={cyclone} className="h-10 mr-2"/>
-                <h1 className="storm-font text-4xl text-white font-bold italic">CYCLOPEDIA</h1>
+                <h1 className="storm-font text-4xl text-white italic hidden sm:block">CYCLOPEDIA</h1>
               </div>
               <button onClick={toggleTracker} className="button" variant="contained">
                 <h1>{tracker ? "Historical Archive" : "Live Tracker"}</h1>
@@ -234,11 +234,11 @@ function App() {
             <div className="mobile-interface">
               <Interface/>
             </div>
-          </div>
+          </>
         ) : (
           <div className="loading-screen">
             <img src={cyclone}/>
-            <h1>LOADING...</h1>
+            <h1 className="md:text-4xl text-2xl storm-font">LOADING...</h1>
           </div>
         )}
       </div>

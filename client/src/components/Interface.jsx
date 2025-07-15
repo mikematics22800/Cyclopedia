@@ -4,7 +4,6 @@ import StormArchive from "./StormArchive";
 import SeasonArchive from "./SeasonArchive";
 import { MenuItem, Select, Checkbox } from "@mui/material"
 import Charts from "./ArchiveCharts";
-import cyclone from "../../public/cyclone.png"
 import LiveTracker from "./LiveTracker";
 
 const Interface = () => {
@@ -25,13 +24,6 @@ const Interface = () => {
   return (
     <div className='interface'>
       <div className="bg-gray-300 rounded-full w-20 h-1 md:hidden"/>
-      <div className="flex items-center md:hidden">
-        <img src={cyclone} className="h-10 mr-2"/>
-        <h1 className="storm-font text-4xl text-white font-bold italic">CYCLOPEDIA</h1>
-      </div>
-      <button onClick={toggleTracker} className="button md:hidden" variant="contained">
-        <h1>{tracker ? "Historical Archive" : "Live Tracker"}</h1>
-      </button>
       {!tracker && (
         <>
           <div className="selectors">
