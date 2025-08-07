@@ -199,7 +199,7 @@ export const getLatestPoint = (points) => {
 };
 
 const LiveStorms = () => {
-  const { liveHurdat, forecastCone, selectedLiveStorm } = useContext(Context);
+  const { liveHurdat, forecastCone, selectedLiveStorm, selectLiveStorm } = useContext(Context);
 
   // Check if data exists
   if (!liveHurdat || liveHurdat.length === 0) {
@@ -306,7 +306,16 @@ const LiveStorms = () => {
           const icon = isCurrentPosition ? stormIcon(color, MAXWIND, stormId) : dot(color);
           
           const marker = (
-            <Marker key={`marker-${stormId}-${i}`} position={[lat, lng]} icon={icon}>
+            <Marker 
+              key={`marker-${stormId}-${i}`} 
+              position={[lat, lng]} 
+              icon={icon}
+              eventHandlers={{
+                click: () => {
+                  selectLiveStorm(stormId);
+                }
+              }}
+            >
               <Popup className="w-fit font-bold">
                 <h1 className="font-bold text-[1rem]">{status} {STORMNAME.split(" ").pop()}</h1>
                 <h1 className="my-1">{convertToUTC(ADVDATE)} </h1>
