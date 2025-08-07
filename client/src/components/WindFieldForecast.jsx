@@ -32,6 +32,7 @@ const WindFieldForecast = () => {
           positions={coordinates} 
           color="yellow"
           opacity={0.5}
+          weight={2}
         >
           <Popup className="font-bold">
             <h1 className="text-md">Wind: ≥{RADII} kt</h1>

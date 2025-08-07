@@ -19,9 +19,13 @@ const LiveTracker = () => {
     <div className="flex flex-col gap-4 w-full items-center">
       {Object.entries(stormsByKey).map(([stormId, points]) => {
         const latestPoint = getLatestPoint(points);
-        if (!latestPoint) return null;
+        
+        // If no latest point found, use the last point in the array
+        const effectiveLatestPoint = latestPoint || points[points.length - 1];
+        
+        if (!effectiveLatestPoint) return null;
 
-        const { STORMNAME, STORMTYPE, MAXWIND, GUST, MSLP } = latestPoint.properties;
+        const { STORMNAME, STORMTYPE, MAXWIND, GUST, MSLP } = effectiveLatestPoint.properties;
         const { status, color } = getStormStatus(STORMTYPE, MAXWIND);
         
         return (

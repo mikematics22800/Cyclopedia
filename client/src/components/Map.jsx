@@ -6,6 +6,7 @@ import ArchivedStorms from "./ArchivedStorms";
 import LiveStorms from "./LiveStorms";
 import WindField from "./WindField";
 import Legend from "./Legend";
+import AreasOfInterest from "./AreasOfInterest";
 
 const Map = () => {
   const { tracker, windField, year } = useContext(Context);
@@ -24,6 +25,7 @@ const Map = () => {
         <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>  
         {tracker ? <LiveStorms /> : <ArchivedStorms />}
         {year >= 2004 && windField && !tracker && <WindField/>}
+        {tracker && <AreasOfInterest />}
       </MapContainer>
     </div>
   )

@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import { Context } from '../App'
 import retiredImage from "../../public/retired.png"
 import CycloneIcon from '@mui/icons-material/Cyclone'
+import cyclone from "../../public/cyclone.png"
 
 const StormArchive = () => {
   const { year, storm, stormId, ACE} = useContext(Context)
@@ -11,6 +12,7 @@ const StormArchive = () => {
   const [retired, setRetired] = useState(false)
   const [duration, setDuration] = useState('')
   const [image, setImage] = useState('')
+  const [imageLoading, setImageLoading] = useState(true)
   const [maxWind, setMaxWind] = useState('')
   const [minPressure, setMinPressure] = useState('')
   const [landfalls, setLandfalls] = useState([])
@@ -23,6 +25,7 @@ const StormArchive = () => {
     setStormName(storm.id.split('_')[1])
 
     setImage(storm.image)
+    setImageLoading(true)
 
     setRetired(storm.retired)
 
@@ -121,6 +124,14 @@ const StormArchive = () => {
     setTextColor(textColor)
   }, [storm]);
 
+  const handleImageLoad = () => {
+    setImageLoading(false)
+  }
+
+  const handleImageError = () => {
+    setImageLoading(false)
+  }
+
   return (
     <div className='storm overflow-visible'>
       <div className='flex flex-col gap-4 w-full items-center'>
@@ -130,6 +141,21 @@ const StormArchive = () => {
           style={{backgroundImage: `url(${image})`}} 
           href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
         >
+          {/* Hidden img element to track loading */}
+          {image !== "" && (
+            <img 
+              src={image} 
+              style={{display: 'none'}}
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+              alt=""
+            />
+          )}
+          {imageLoading && image !== "" && (
+            <div className='flex flex-col gap-4 items-center justify-center min-h-[200px]'>
+              <h1 className='text-2xl font-bold text-gray-600'>Loading...</h1>
+            </div>
+          )}
           {image == "" && <div className='flex flex-col gap-4 items-center'>
             <CycloneIcon className='text-gray-600 !text-8xl'/>
             <h1 className='text-2xl font-bold text-gray-600'>Image Unavailable</h1>

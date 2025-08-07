@@ -34,7 +34,7 @@ const WindField = () => {
     calculatePoints(lat, lng, points34kt, point["34kt_wind_nm"]);
     return (
       <div key={i}>
-        <Polygon positions={points34kt} color="yellow">
+        <Polygon positions={points34kt} color="yellow" weight={2}>
           <Popup className="font-bold">
             <h1 className="text-md">{'Wind: ≥34 kt'}</h1>
           </Popup>
@@ -49,7 +49,7 @@ const WindField = () => {
     calculatePoints(lat, lng, points50kt, point["50kt_wind_nm"]);
     return (
       <div key={i}>
-        <Polygon positions={points50kt} color="orange">
+        <Polygon positions={points50kt} color="orange" weight={2}>
           <Popup className="font-bold">
             <h1 className="text-md">{'Wind: ≥50 kt'}</h1>
           </Popup>
@@ -64,7 +64,7 @@ const WindField = () => {
     calculatePoints(lat, lng, points64kt, point["64kt_wind_nm"]);
     return (
       <div key={i}>
-        <Polygon positions={points64kt} color="red">
+        <Polygon positions={points64kt} color="red" weight={2}>
           <Popup className="font-bold">
             <h1 className="text-md">{'Wind: ≥64 kt'}</h1>
           </Popup>

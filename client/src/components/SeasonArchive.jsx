@@ -9,7 +9,6 @@ const SeasonArchive = () => {
   const [majorHurricanes, setMajorHurricanes] = useState(0)
   const [deadOrMissing, setDeadOrMissing] = useState(0)
   const [cost, setCost] = useState(0)
-  const [retiredNames, setRetiredNames] = useState([])
 
   useEffect(() => {
     const deadOrMissing = season.map((storm) => {
@@ -21,11 +20,6 @@ const SeasonArchive = () => {
     })
     const cost = sum(costs)
     setCost((cost/1000000).toFixed(1))
-    const retiredStorms = season.filter(storm => storm.retired == true)
-    const retiredNames = retiredStorms.map((storm) => {
-      return storm.id.split('_')[1]
-    })
-    setRetiredNames(retiredNames)
     const hurricanes = maxWinds.filter(wind => wind >= 64).length
     setHurricanes(hurricanes)
     const majorHurricanes = maxWinds.filter(wind => wind >= 96).length
@@ -61,10 +55,6 @@ const SeasonArchive = () => {
         <li>
           <h2>Cost (Million USD)</h2>
           <h2>${cost}</h2>
-        </li>
-        <li className='rounded-b-lg'>
-          <h2>Retired Names</h2>
-          <h2>{retiredNames.length > 0 ? retiredNames.join(", ") : "None"}</h2>
         </li>
       </ul>
     </div>

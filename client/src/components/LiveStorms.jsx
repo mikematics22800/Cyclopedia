@@ -48,6 +48,10 @@ export const getStormStatus = (STORMTYPE, MAXWIND) => {
       color = "pink";
       status = "Category 5 Hurricane";
     }
+  } else {
+    // Default case for unrecognized storm types
+    color = "gray";
+    status = "Unknown Storm Type";
   }
 
   return { status, color };
@@ -78,7 +82,6 @@ export const convertToUTC = (dateStr) => {
 };
 
 export const getLatestPoint = (points) => {
-  const now = new Date();
   let latestPoint = null;
   let latestTime = new Date(0); // Start with earliest possible date
 
@@ -88,7 +91,8 @@ export const getLatestPoint = (points) => {
       const [hours, minutes] = time.split(/(?=(?:..)*$)/);
       const pointDate = new Date(`${month} ${date} ${year} ${hours}:${minutes} ${ampm} ${timezone}`);
       
-      if (pointDate > latestTime && pointDate <= now) {
+      // Remove the future date filter to allow forecast points
+      if (pointDate > latestTime) {
         latestTime = pointDate;
         latestPoint = point;
       }
@@ -102,6 +106,11 @@ export const getLatestPoint = (points) => {
 
 const LiveStorms = () => {
   const { liveHurdat, forecastCone } = useContext(Context);
+
+  // Check if data exists
+  if (!liveHurdat || liveHurdat.length === 0) {
+    return null;
+  }
 
   const stormIcon = (color, maxWind, stormId) => {
     // Calculate rotation speed based on wind speed
@@ -201,34 +210,41 @@ const LiveStorms = () => {
   // Find the latest point for each storm and create markers
   Object.keys(liveStorms).forEach(stormId => {
     const latestPoint = getLatestPoint(liveStorms[stormId].points);
-    if (latestPoint) {
-      liveStorms[stormId].latestPoint = latestPoint;
+    
+    // If no latest point found, use the last point in the sorted array
+    const effectiveLatestPoint = latestPoint || liveStorms[stormId].points[liveStorms[stormId].points.length - 1];
+    
+    if (effectiveLatestPoint) {
+      liveStorms[stormId].latestPoint = effectiveLatestPoint;
       
       // Create markers for all points
       liveStorms[stormId].points.forEach((point, i) => {
-        const [lng, lat] = point.geometry.coordinates[0];
-        const { STORMNAME, STORMTYPE, MAXWIND, GUST, ADVDATE, MSLP } = point.properties;
-        const { status, color } = getStormStatus(STORMTYPE, MAXWIND);
-        
-        // Use storm icon for latest point, dot for others
-        const isLatestPoint = point === latestPoint;
-        if(isLatestPoint) console.log(MAXWIND)
+        try {
+          const [lng, lat] = point.geometry.coordinates[0];
+          const { STORMNAME, STORMTYPE, MAXWIND, GUST, ADVDATE, MSLP } = point.properties;
+          const { status, color } = getStormStatus(STORMTYPE, MAXWIND);
+          
+          // Use storm icon for latest point, dot for others
+          const isLatestPoint = point === effectiveLatestPoint;
 
-        const icon = isLatestPoint ? stormIcon(color, MAXWIND, stormId) : dot(color);
-        
-        const marker = (
-          <Marker key={`marker-${stormId}-${i}`} position={[lat, lng]} icon={icon}>
-            <Popup className="w-fit font-bold">
-              <h1 className="font-bold text-[1rem]">{status} {STORMNAME.split(" ").pop()}</h1>
-              <h1 className="my-1">{convertToUTC(ADVDATE)} UTC</h1>
-              <h1>Maximum Wind: {MAXWIND} kt</h1>
-              <h1>Maximum Wind Gusts: {GUST} kt</h1>
-              {MSLP !== 9999 && <h1>Minimum Pressure: {MSLP} mb</h1>}
-            </Popup>
-          </Marker>
-        );
-        
-        liveStorms[stormId].markers.push(marker);
+          const icon = isLatestPoint ? stormIcon(color, MAXWIND, stormId) : dot(color);
+          
+          const marker = (
+            <Marker key={`marker-${stormId}-${i}`} position={[lat, lng]} icon={icon}>
+              <Popup className="w-fit font-bold">
+                <h1 className="font-bold text-[1rem]">{status} {STORMNAME.split(" ").pop()}</h1>
+                <h1 className="my-1">{convertToUTC(ADVDATE)} UTC</h1>
+                <h1>Maximum Wind: {MAXWIND} kt</h1>
+                <h1>Maximum Wind Gusts: {GUST} kt</h1>
+                {MSLP !== 9999 && <h1>Minimum Pressure: {MSLP} mb</h1>}
+              </Popup>
+            </Marker>
+          );
+          
+          liveStorms[stormId].markers.push(marker);
+        } catch (error) {
+          console.error(`Error creating marker for storm ${stormId}, point ${i}:`, error);
+        }
       });
     }
   });
@@ -236,7 +252,7 @@ const LiveStorms = () => {
   const cones = forecastCone.map((feature) => {
     const coordinates = feature.geometry.coordinates[0][0].map(coord => [coord[1], coord[0]]);
     return (
-      <Polygon positions={coordinates} color="red">
+      <Polygon positions={coordinates} color="red" weight={2}>
         <Popup className="w-fit font-bold">
           <h3>Cone of Uncertainty</h3>
         </Popup>
@@ -244,16 +260,18 @@ const LiveStorms = () => {
     )
   });
 
-  const tracks = Object.entries(liveStorms).map(([stormId, data]) => (
-    <div key={stormId}>
-      <Polyline 
-        positions={data.positions} 
-        color="gray" 
-        opacity={0.25}
-      />
-      {data.markers}
-    </div>
-  ));
+  const tracks = Object.entries(liveStorms).map(([stormId, data]) => {
+    return (
+      <div key={stormId}>
+        <Polyline 
+          positions={data.positions} 
+          color="gray" 
+          opacity={0.25}
+        />
+        {data.markers}
+      </div>
+    );
+  });
 
   return (
     <>

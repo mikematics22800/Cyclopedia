@@ -6,7 +6,7 @@ import hurricaneWallpaper from "../public/hurricane.jpg"
 import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
 import ArchiveCharts from "./components/ArchiveCharts"
-import { getLiveHurdat, getForecastCone, getWindFieldForecast } from "./libs/hurdat"
+import { getLiveHurdat, getForecastCone, getWindFieldForecast, getAreasOfInterest } from "./libs/hurdat"
 
 export const Context = createContext()
 
@@ -29,6 +29,7 @@ function App() {
   const [forecastCone, setForecastCone] = useState([])
   const [tracker, setTracker] = useState(false)
   const [windFieldForecast, setWindFieldForecast] = useState([])
+  const [areasOfInterest, setAreasOfInterest] = useState([])
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -48,6 +49,9 @@ function App() {
     })  
     getWindFieldForecast().then(data => {
       setWindFieldForecast(data)
+    })
+    getAreasOfInterest().then(data => {
+      setAreasOfInterest(data)
     })
   }, [])
 
@@ -207,7 +211,9 @@ function App() {
     tracker,
     windFieldForecast,
     toggleCharts,
-    map
+    map,
+    areasOfInterest,
+    setAreasOfInterest
   }
 
   return (
@@ -238,7 +244,6 @@ function App() {
         ) : (
           <div className="loading-screen">
             <img src={cyclone}/>
-            <h1 className="md:text-4xl text-2xl storm-font">LOADING...</h1>
           </div>
         )}
       </div>
