@@ -84,8 +84,9 @@ const AreasOfInterest = () => {
             weight={style.weight}
           >
             <Popup className="w-fit font-bold">
-              <p className="my-1">2-Day Probability: {prob2day}</p>
-              <p className="my-1">7-Day Probability: {prob7day}</p>
+              <h1 className="text-[1rem] font-bold">Potential Development</h1>
+              <p className="!my-1">2-Day Probability: {prob2day}</p>
+              <p className="!my-1">7-Day Probability: {prob7day}</p>
             </Popup>
           </Polygon>
         );

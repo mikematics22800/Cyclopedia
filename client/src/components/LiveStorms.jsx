@@ -57,51 +57,145 @@ export const getStormStatus = (STORMTYPE, MAXWIND) => {
   return { status, color };
 };
 
+// Convert ADVDATE format to required format "MM/DD/YYYY at HH:MM AM/PM EST"
 export const convertToUTC = (dateStr) => {
   try {
-    // Parse the date string components
-    const [time, ampm, timezone, day, month, date, year] = dateStr.split(" ");
-    const [hours, minutes] = time.split(/(?=(?:..)*$)/);
+    // Parse the date string components: "1100 PM AST Sun Aug 03 2025"
+    const parts = dateStr.split(" ");
+    if (parts.length !== 7) {
+      throw new Error("Invalid date format");
+    }
     
-    // Create date string in a format that JavaScript can parse
-    const parsedDate = new Date(`${month} ${date} ${year} ${hours}:${minutes} ${ampm} ${timezone}`);
+    const [time, ampm, timezone, dayOfWeek, month, date, year] = parts;
     
-    return parsedDate.toLocaleString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: "UTC",
-      hour12: false
-    }).replace(",", " at");
+    // Parse time: "1100" -> "11:00"
+    const hours = time.slice(0, -2);
+    const minutes = time.slice(-2);
+    
+    // Convert to 24-hour format
+    let hour24 = parseInt(hours);
+    if (ampm === "PM" && hour24 !== 12) {
+      hour24 += 12;
+    } else if (ampm === "AM" && hour24 === 12) {
+      hour24 = 0;
+    }
+    
+    // Create a date object in the local timezone first
+    const localDate = new Date(`${month} ${date} ${year} ${hour24}:${minutes}:00`);
+    
+    // Convert to EST by applying timezone offset
+    let estOffset = 0;
+    
+    // Convert various timezones to EST
+    switch (timezone) {
+      case "AST": // Atlantic Standard Time (UTC-4)
+        estOffset = 1; // AST is 1 hour ahead of EST
+        break;
+      case "HST": // Hawaii Standard Time (UTC-10)
+        estOffset = -5; // HST is 5 hours behind EST
+        break;
+      case "CST": // Central Standard Time (UTC-6)
+        estOffset = -1; // CST is 1 hour behind EST
+        break;
+      case "PST": // Pacific Standard Time (UTC-8)
+        estOffset = -3; // PST is 3 hours behind EST
+        break;
+      case "MST": // Mountain Standard Time (UTC-7)
+        estOffset = -2; // MST is 2 hours behind EST
+        break;
+      case "EST": // Eastern Standard Time (UTC-5)
+        estOffset = 0; // No offset needed
+        break;
+      default:
+        // Default to EST if unknown timezone
+        estOffset = 0;
+    }
+    
+    // Apply the offset to get EST time
+    const estDate = new Date(localDate.getTime() + (estOffset * 60 * 60 * 1000));
+    
+    // Format to required format: "MM/DD/YYYY at HH:MM AM/PM EST"
+    const monthStr = (estDate.getMonth() + 1).toString().padStart(2, '0');
+    const dayStr = estDate.getDate().toString().padStart(2, '0');
+    const yearStr = estDate.getFullYear();
+    
+    // Convert to 12-hour format
+    let hour12 = estDate.getHours();
+    const ampm12 = hour12 >= 12 ? 'PM' : 'AM';
+    if (hour12 === 0) hour12 = 12;
+    if (hour12 > 12) hour12 -= 12;
+    const hourStr = hour12.toString(); // Remove padStart to eliminate leading zeros
+    const minuteStr = estDate.getMinutes().toString().padStart(2, '0');
+    
+    return `${monthStr}/${dayStr}/${yearStr} at ${hourStr}:${minuteStr} ${ampm12} EST`;
   } catch (error) {
     console.error("Date parsing error:", error);
     return dateStr; // Return original string if conversion fails
   }
 };
 
-export const getLatestPoint = (points) => {
-  let latestPoint = null;
-  let latestTime = new Date(0); // Start with earliest possible date
-
-  points.forEach(point => {
-    try {
-      const [time, ampm, timezone, day, month, date, year] = point.properties.ADVDATE.split(" ");
-      const [hours, minutes] = time.split(/(?=(?:..)*$)/);
-      const pointDate = new Date(`${month} ${date} ${year} ${hours}:${minutes} ${ampm} ${timezone}`);
-      
-      // Remove the future date filter to allow forecast points
-      if (pointDate > latestTime) {
-        latestTime = pointDate;
-        latestPoint = point;
-      }
-    } catch (error) {
-      console.error("Error parsing date:", error);
+// Parse date string to Date object
+const parseDate = (dateStr) => {
+  try {
+    // Parse the date string components: "1100 PM AST Sun Aug 03 2025"
+    const parts = dateStr.split(" ");
+    if (parts.length !== 7) {
+      throw new Error("Invalid date format");
     }
-  });
+    
+    const [time, ampm, timezone, dayOfWeek, month, date, year] = parts;
+    
+    // Parse time: "1100" -> "11:00"
+    const hours = time.slice(0, -2);
+    const minutes = time.slice(-2);
+    
+    return new Date(`${month} ${date} ${year} ${hours}:${minutes} ${ampm} ${timezone}`);
+  } catch (error) {
+    console.error("Error parsing date:", error);
+    return new Date(0);
+  }
+};
 
-  return latestPoint;
+// Find the current position for a storm (latest advisory, current observation)
+const findCurrentPosition = (stormPoints) => {
+  if (!stormPoints || stormPoints.length === 0) return null;
+  
+  // Group by advisory number
+  const advisories = {};
+  stormPoints.forEach(point => {
+    const advisoryNum = parseInt(point.properties.ADVISNUM);
+    if (!advisories[advisoryNum]) {
+      advisories[advisoryNum] = [];
+    }
+    advisories[advisoryNum].push(point);
+  });
+  
+  // Find the latest advisory
+  const latestAdvisoryNum = Math.max(...Object.keys(advisories).map(Number));
+  const latestAdvisoryPoints = advisories[latestAdvisoryNum];
+  
+  if (!latestAdvisoryPoints) return null;
+  
+  // Sort points in the latest advisory by date
+  latestAdvisoryPoints.sort((a, b) => {
+    const dateA = parseDate(a.properties.ADVDATE);
+    const dateB = parseDate(b.properties.ADVDATE);
+    return dateA - dateB;
+  });
+  
+  // First try to find a current observation (TAU === 0.0)
+  const currentObservation = latestAdvisoryPoints.find(point => point.properties.TAU === 0.0);
+  
+  if (currentObservation) {
+    return currentObservation;
+  }
+  
+  // If no current observation, return the first point in the latest advisory
+  return latestAdvisoryPoints[0];
+};
+
+export const getLatestPoint = (points) => {
+  return findCurrentPosition(points);
 };
 
 const LiveStorms = () => {
@@ -162,78 +256,60 @@ const LiveStorms = () => {
     )
   }
 
-  const liveStorms = liveHurdat.reduce((acc, feature, i) => {
-    const [lng, lat] = feature.geometry.coordinates[0];
-    const { STORMNAME, STORM_ID } = feature.properties;
-
-    // Store the point data first
-    if (!acc[STORM_ID]) {
-      acc[STORM_ID] = {
-        markers: [],
-        positions: [],
-        name: STORMNAME,
-        points: []
-      };
+  // Group storms by STORM_ID
+  const stormGroups = {};
+  liveHurdat.forEach(feature => {
+    const { STORM_ID } = feature.properties;
+    if (!stormGroups[STORM_ID]) {
+      stormGroups[STORM_ID] = [];
     }
-    acc[STORM_ID].points.push(feature);
-
-    return acc;
-  }, {});
-
-  // Sort points chronologically and create positions array
-  Object.keys(liveStorms).forEach(stormId => {
-    // Sort points by date
-    liveStorms[stormId].points.sort((a, b) => {
-      try {
-        const [timeA, ampmA, timezoneA, dayA, monthA, dateA, yearA] = a.properties.ADVDATE.split(" ");
-        const [hoursA, minutesA] = timeA.split(/(?=(?:..)*$)/);
-        const dateA_obj = new Date(`${monthA} ${dateA} ${yearA} ${hoursA}:${minutesA} ${ampmA} ${timezoneA}`);
-        
-        const [timeB, ampmB, timezoneB, dayB, monthB, dateB, yearB] = b.properties.ADVDATE.split(" ");
-        const [hoursB, minutesB] = timeB.split(/(?=(?:..)*$)/);
-        const dateB_obj = new Date(`${monthB} ${dateB} ${yearB} ${hoursB}:${minutesB} ${ampmB} ${timezoneB}`);
-        
-        return dateA_obj - dateB_obj;
-      } catch (error) {
-        console.error("Error sorting dates:", error);
-        return 0;
-      }
-    });
-    
-    // Create positions array from sorted points
-    liveStorms[stormId].positions = liveStorms[stormId].points.map(point => {
-      const [lng, lat] = point.geometry.coordinates[0];
-      return [lat, lng];
-    });
+    stormGroups[STORM_ID].push(feature);
   });
 
-  // Find the latest point for each storm and create markers
-  Object.keys(liveStorms).forEach(stormId => {
-    const latestPoint = getLatestPoint(liveStorms[stormId].points);
+  // Process each storm
+  const liveStorms = {};
+  Object.keys(stormGroups).forEach(stormId => {
+    const points = stormGroups[stormId];
+    const currentPosition = findCurrentPosition(points);
     
-    // If no latest point found, use the last point in the sorted array
-    const effectiveLatestPoint = latestPoint || liveStorms[stormId].points[liveStorms[stormId].points.length - 1];
-    
-    if (effectiveLatestPoint) {
-      liveStorms[stormId].latestPoint = effectiveLatestPoint;
+    if (currentPosition) {
+      // Sort all points by date for the track
+      const sortedPoints = [...points].sort((a, b) => {
+        const dateA = parseDate(a.properties.ADVDATE);
+        const dateB = parseDate(b.properties.ADVDATE);
+        return dateA - dateB;
+      });
+      
+      liveStorms[stormId] = {
+        markers: [],
+        positions: [],
+        name: currentPosition.properties.STORMNAME,
+        points: sortedPoints,
+        currentPosition: currentPosition
+      };
+      
+      // Create positions array
+      liveStorms[stormId].positions = sortedPoints.map(point => {
+        const [lng, lat] = point.geometry.coordinates[0];
+        return [lat, lng];
+      });
       
       // Create markers for all points
-      liveStorms[stormId].points.forEach((point, i) => {
+      sortedPoints.forEach((point, i) => {
         try {
           const [lng, lat] = point.geometry.coordinates[0];
           const { STORMNAME, STORMTYPE, MAXWIND, GUST, ADVDATE, MSLP } = point.properties;
           const { status, color } = getStormStatus(STORMTYPE, MAXWIND);
           
-          // Use storm icon for latest point, dot for others
-          const isLatestPoint = point === effectiveLatestPoint;
-
-          const icon = isLatestPoint ? stormIcon(color, MAXWIND, stormId) : dot(color);
+          // Use storm icon for current position, dot for others
+          const isCurrentPosition = point === currentPosition;
+          const icon = isCurrentPosition ? stormIcon(color, MAXWIND, stormId) : dot(color);
           
           const marker = (
             <Marker key={`marker-${stormId}-${i}`} position={[lat, lng]} icon={icon}>
               <Popup className="w-fit font-bold">
                 <h1 className="font-bold text-[1rem]">{status} {STORMNAME.split(" ").pop()}</h1>
-                <h1 className="my-1">{convertToUTC(ADVDATE)} UTC</h1>
+                <h1 className="my-1">{convertToUTC(ADVDATE)} </h1>
                 <h1>Maximum Wind: {MAXWIND} kt</h1>
                 <h1>Maximum Wind Gusts: {GUST} kt</h1>
                 {MSLP !== 9999 && <h1>Minimum Pressure: {MSLP} mb</h1>}

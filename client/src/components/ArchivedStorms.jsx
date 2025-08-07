@@ -106,9 +106,34 @@ const ArchivedStorms = () => {
     const timeArray = time.toString().split('');
     const hour = timeArray.slice(0,2).join('');
     const minute = timeArray.slice(-2).join('');
-    const formattedTime = `${hour}:${minute}`;
+    
+    // Convert UTC to EST (UTC-5)
+    let estHour = parseInt(hour) - 5;
+    let estDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:00Z`);
+    
+    // Handle day change when converting from UTC to EST
+    if (estHour < 0) {
+      estHour += 24;
+      estDate.setDate(estDate.getDate() - 1);
+    }
+    
+    // Convert to 12-hour format
+    let hour12 = estHour;
+    const ampm = hour12 >= 12 ? 'PM' : 'AM';
+    if (hour12 === 0) hour12 = 12;
+    if (hour12 > 12) hour12 -= 12;
+    
+    // Format the EST time in 12-hour format
+    const estHourStr = hour12.toString(); // Remove padStart to eliminate leading zeros
+    const formattedTime = `${estHourStr}:${minute} ${ampm}`;
+    
+    // Format the EST date
+    const estMonth = (estDate.getMonth() + 1).toString().padStart(2, '0');
+    const estDay = estDate.getDate().toString().padStart(2, '0');
+    const estYear = estDate.getFullYear();
+    const formattedDateEST = `${estMonth}/${estDay}/${estYear}`;
 
-    return { formattedDate, formattedTime };
+    return { formattedDate: formattedDateEST, formattedTime };
   };
 
   return season.map((storm) => {
@@ -130,7 +155,7 @@ const ArchivedStorms = () => {
         <Marker key={i} position={coords} icon={icon} eventHandlers={{click:() => {setStormId(id)}}}>
           <Popup className="w-fit font-bold">
             <h1 className="text-[1rem]">{fullName}</h1>
-            <h1 className="my-1">{formattedDate} at {formattedTime} UTC</h1>
+            <h1 className="my-1">{formattedDate} at {formattedTime} EST</h1>
             <h1>Maximum Wind: {point.max_wind_kt} kt</h1>
             <h1>Minimum Pressure: {point.min_pressure_mb ? `${point.min_pressure_mb} mb` : 'Unknown'}</h1>
           </Popup>
