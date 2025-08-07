@@ -140,7 +140,7 @@ const findCurrentPosition = (stormPoints) => {
 };
 
 const LiveTracker = () => {
-  const { liveHurdat } = useContext(Context);
+  const { liveHurdat, selectLiveStorm, selectedLiveStorm } = useContext(Context);
 
   // Group storms by STORM_ID
   const stormGroups = {};
@@ -159,14 +159,20 @@ const LiveTracker = () => {
         
         if (!currentPosition) return null;
 
-        const { STORMNAME, STORMTYPE, MAXWIND, GUST, MSLP, ADVDATE } = currentPosition.properties;
+        const { STORMNAME, STORMTYPE, MAXWIND, GUST, MSLP } = currentPosition.properties;
         const { status, color } = getStormStatus(STORMTYPE, MAXWIND);
-        const convertedTime = convertToUTC(ADVDATE);
         
+        const isSelected = stormId === selectedLiveStorm;
         return (
-          <div key={stormId} className="p-4 flex flex-col gap-2 bg-gray-800 rounded-lg text-white font-bold w-full max-w-80 " style={{ borderLeft: `4px solid ${color}` }}>
+          <div 
+            key={stormId} 
+            className={`p-4 flex flex-col gap-2 rounded-lg text-white font-bold w-full max-w-80 cursor-pointer transition-colors ${
+              isSelected ? 'bg-gray-600 ring-2 ring-white' : 'bg-gray-800 hover:bg-gray-700'
+            }`}
+            style={{ borderLeft: `4px solid ${color}` }}
+            onClick={() => selectLiveStorm(stormId)}
+          >
             <h2 className="text-lg">{status} {STORMNAME.split(' ').pop()}</h2>
-            <p className="text-sm">{convertedTime}</p>
             <p className="text-sm" >Maximum Wind: {MAXWIND} kt</p>
             <p className="text-sm">Maximum Wind Gusts: {GUST} kt</p>
             <p className="text-sm">Minimum Pressure: {MSLP} mb</p>

@@ -30,6 +30,7 @@ function App() {
   const [tracker, setTracker] = useState(false)
   const [windFieldForecast, setWindFieldForecast] = useState([])
   const [areasOfInterest, setAreasOfInterest] = useState([])
+  const [selectedLiveStorm, setSelectedLiveStorm] = useState(null)
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -185,6 +186,10 @@ function App() {
     }
   }
 
+  const selectLiveStorm = (stormId) => {
+    setSelectedLiveStorm(stormId)
+  }
+
   const value = {
     basin,
     setBasin, 
@@ -213,7 +218,9 @@ function App() {
     toggleCharts,
     map,
     areasOfInterest,
-    setAreasOfInterest
+    setAreasOfInterest,
+    selectedLiveStorm,
+    selectLiveStorm
   }
 
   return (

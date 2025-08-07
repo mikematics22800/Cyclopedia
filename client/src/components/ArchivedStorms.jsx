@@ -4,7 +4,7 @@ import { Polyline, Popup, Marker } from "react-leaflet";
 import { divIcon } from "leaflet";
 
 const ArchivedStorms = () => {
-  const { season, setStormId } = useContext(Context);
+  const { season, setStormId, stormId } = useContext(Context);
 
   const dot = (color) => {
     return (
@@ -163,9 +163,16 @@ const ArchivedStorms = () => {
       );
     });
 
+    const isSelected = id === stormId;
     return (
       <div key={id}>
-        <Polyline positions={positions} color="gray" opacity={.25}/>
+        <Polyline 
+          key={`polyline-${id}-${isSelected}`}
+          positions={positions} 
+          color={isSelected ? "white" : "gray"} 
+          opacity={isSelected ? 0.8 : 0.25}
+          weight={isSelected ? 3 : 1}
+        />
         {points}
       </div>
     );

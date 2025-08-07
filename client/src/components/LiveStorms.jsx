@@ -199,7 +199,7 @@ export const getLatestPoint = (points) => {
 };
 
 const LiveStorms = () => {
-  const { liveHurdat, forecastCone } = useContext(Context);
+  const { liveHurdat, forecastCone, selectedLiveStorm } = useContext(Context);
 
   // Check if data exists
   if (!liveHurdat || liveHurdat.length === 0) {
@@ -337,12 +337,15 @@ const LiveStorms = () => {
   });
 
   const tracks = Object.entries(liveStorms).map(([stormId, data]) => {
+    const isSelected = stormId === selectedLiveStorm;
     return (
       <div key={stormId}>
         <Polyline 
+          key={`polyline-${stormId}-${isSelected}`}
           positions={data.positions} 
-          color="gray" 
-          opacity={0.25}
+          color={isSelected ? "white" : "gray"} 
+          opacity={isSelected ? 0.8 : 0.25}
+          weight={isSelected ? 3 : 1}
         />
         {data.markers}
       </div>
