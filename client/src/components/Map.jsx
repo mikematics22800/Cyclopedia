@@ -7,6 +7,7 @@ import LiveStorms from "./LiveStorms";
 import WindField from "./WindField";
 import Legend from "./Legend";
 import AreasOfInterest from "./AreasOfInterest";
+import PointsOfInterest from "./PointsOfInterest";
 import MapController from "./MapController";
 
 const Map = () => {
@@ -27,6 +28,7 @@ const Map = () => {
         {tracker ? <LiveStorms /> : <ArchivedStorms />}
         {year >= 2004 && windField && !tracker && <WindField/>}
         {tracker && <AreasOfInterest />}
+        {tracker && <PointsOfInterest />}
         <MapController />
       </MapContainer>
     </div>

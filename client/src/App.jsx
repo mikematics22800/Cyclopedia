@@ -6,7 +6,7 @@ import hurricaneWallpaper from "../public/hurricane.jpg"
 import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
 import ArchiveCharts from "./components/ArchiveCharts"
-import { getLiveHurdat, getForecastCone, getWindFieldForecast, getAreasOfInterest } from "./libs/hurdat"
+import { getLiveHurdat, getForecastCone, getWindFieldForecast, getAreasOfInterest, getPointsOfInterest } from "./libs/hurdat"
 
 export const Context = createContext()
 
@@ -31,7 +31,7 @@ function App() {
   const [windFieldForecast, setWindFieldForecast] = useState([])
   const [areasOfInterest, setAreasOfInterest] = useState([])
   const [selectedLiveStorm, setSelectedLiveStorm] = useState(null)
-
+  const [pointsOfInterest, setPointsOfInterest] = useState([])
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -54,7 +54,10 @@ function App() {
     getAreasOfInterest().then(data => {
       setAreasOfInterest(data)
     })
-  }, [])
+    getPointsOfInterest().then(data => {
+      setPointsOfInterest(data)
+    })
+    }, [])
 
   useEffect(() => {
     if (year < 1949 && basin === 'pac') setYear(1949)
@@ -220,7 +223,8 @@ function App() {
     areasOfInterest,
     setAreasOfInterest,
     selectedLiveStorm,
-    selectLiveStorm
+    selectLiveStorm,
+    pointsOfInterest
   }
 
   return (
