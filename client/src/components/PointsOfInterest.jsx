@@ -171,11 +171,9 @@ const PointsOfInterest = () => {
             icon={xIcon}
           >
             <Popup className="w-fit font-bold">
-              <h1 className="text-[1rem] font-bold">Point of Interest</h1>
+              <h1 className="text-[1rem] font-bold">Potential Development</h1>
               <p className="!my-1">2-Day Probability: {pointData.prob2day}</p>
               <p className="!my-1">7-Day Probability: {pointData.prob7day}</p>
-              <p className="!my-1">Basin: {pointData.basin}</p>
-              <p className="!my-1">Status: {pointData.isInside ? 'Inside Area' : 'Outside Area'}</p>
             </Popup>
           </Marker>
         );
