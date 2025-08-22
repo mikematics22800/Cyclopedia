@@ -67,7 +67,15 @@ const PointsOfInterest = () => {
     const points = [];
     const connections = [];
 
-    pointsOfInterest.forEach((feature, index) => {
+    // Filter out points with 0% probabilities
+    const filteredPoints = pointsOfInterest.filter(feature => {
+      const { prob2day, prob7day } = feature.properties;
+      const prob2dayNum = parseInt(prob2day.replace('%', '') || 0);
+      const prob7dayNum = parseInt(prob7day.replace('%', '') || 0);
+      return prob2dayNum > 0 || prob7dayNum > 0;
+    });
+
+    filteredPoints.forEach((feature, index) => {
       const { prob2day, prob7day, basin } = feature.properties;
       const coordinates = feature.geometry.coordinates; // [lng, lat]
       const point = [coordinates[1], coordinates[0]]; // Convert to [lat, lng] for Leaflet

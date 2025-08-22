@@ -5,7 +5,7 @@ import CycloneIcon from '@mui/icons-material/Cyclone'
 import cyclone from "../../public/cyclone.png"
 
 const StormArchive = () => {
-  const { year, storm, stormId, ACE} = useContext(Context)
+  const { year, storm, stormId, ACE, TIKE} = useContext(Context)
 
   const [stormName, setStormName] = useState('')
   const [textColor, setTextColor] = useState('')
@@ -134,68 +134,120 @@ const StormArchive = () => {
 
   return (
     <div className='storm overflow-visible'>
-      <div className='flex flex-col gap-4 w-full items-center'>
-        <a 
-          target='_blank' 
-          className={`${retired && '!justify-end pb-2 lg:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'}`}
-          style={{backgroundImage: `url(${image})`}} 
-          href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
-        >
-          {/* Hidden img element to track loading */}
-          {image !== "" && (
-            <img 
-              src={image} 
-              style={{display: 'none'}}
-              onLoad={handleImageLoad}
-              onError={handleImageError}
-              alt=""
-            />
-          )}
-          {imageLoading && image !== "" && (
-            <div className='flex flex-col gap-4 items-center justify-center min-h-[200px]'>
-              <h1 className='text-2xl font-bold text-gray-600'>Loading...</h1>
-            </div>
-          )}
-          {image == "" && <div className='flex flex-col gap-4 items-center'>
-            <CycloneIcon className='text-gray-600 !text-8xl'/>
-            <h1 className='text-2xl font-bold text-gray-600'>Image Unavailable</h1>
-          </div>}
-          {retired && <img className='w-full' src={retiredImage}/>}
-        </a>
-        <ul className='storm-data'>
-          <li style={{color:textColor}}>
-            <h1 className='text-lg'>{stormName}</h1>     
-            <h1 >{duration}</h1>     
-          </li>
-          <li>
-            <h2>Maximum Wind</h2>
-            <h2>{maxWind} kt</h2>
-          </li>
-          {landfalls.length > 0 && <li>
-            <h2>Maximum Inland Wind</h2>
-            <h2>{inlandMaxWind} kt</h2>
-          </li>}
-          <li>
-            <h2>Minimum Pressure</h2>
-            <h2>{minPressure != 9999 && minPressure != -999 ? (`${minPressure} mb`) : 'Unknown'}</h2>
-          </li>
-          {landfalls.length > 0 && <li>
-            <h2>Minimum Inland Pressure</h2>
-            <h2>{inlandMinPressure ? (`${inlandMinPressure} mb`) : 'Unknown'}</h2>
-          </li>}
-          <li>
-            <h2>Accumulated Cyclone Energy</h2>
-            <h2>{ACE.toFixed(1)}</h2>
-          </li>
-          <li>
-            <h2>Dead/Missing</h2>
-            <h2>{deadOrMissing}</h2>
-          </li>
-          <li className='rounded-b-lg'>
-            <h2>Cost (Million USD)</h2>
-            <h2>${cost}</h2>
-          </li>
-        </ul>
+      <div className='flex flex-col gap-6 w-full items-center'>
+        {/* Storm Image Section */}
+        <div className='w-full max-w-96'>
+          <a 
+            target='_blank' 
+            className={`${retired && '!justify-end pb-2 lg:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'} block w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300`}
+            style={{backgroundImage: `url(${image})`}} 
+            href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
+          >
+            {/* Hidden img element to track loading */}
+            {image !== "" && (
+              <img 
+                src={image} 
+                style={{display: 'none'}}
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+                alt=""
+              />
+            )}
+            
+            {/* Loading State */}
+            {imageLoading && image !== "" && (
+              <div className='flex flex-col gap-4 items-center justify-center min-h-[200px] bg-black bg-opacity-20 rounded-3xl w-full h-full'>
+                <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-white'></div>
+                <h1 className='text-xl font-semibold '>Loading...</h1>
+              </div>
+            )}
+            
+            {/* No Image State */}
+            {image == "" && (
+              <div className='flex flex-col gap-4 items-center bg-black bg-opacity-20 rounded-3xl w-full h-full justify-center'>
+                <CycloneIcon className=' !text-8xl'/>
+                <h1 className='text-xl font-semibold '>Image Unavailable</h1>
+              </div>
+            )}
+            
+            {/* Retired Badge */}
+            {retired && (
+              <div className='absolute bottom-0 left-0 right-0'>
+                <img className='w-full' src={retiredImage} alt="Retired Storm"/>
+              </div>
+            )}
+          </a>
+        </div>
+
+        {/* Storm Data Section */}
+        <div className='w-full max-w-96'>
+          <ul className='storm-data bg-gray-800 bg-opacity-90 backdrop-blur-sm border border-gray-700'>
+            {/* Storm Header */}
+            <li className='flex flex-col gap-2 p-2 border-b border-gray-600'>
+              <h1 className='text-lg font-bold' style={{color:textColor}}>
+                {stormName}
+              </h1>     
+              <h1 className='text-sm font-bold'>
+                {duration}
+              </h1>     
+            </li>
+            
+            {/* Wind Data */}
+            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+              <h2 className='text-sm font-semibold '>Maximum Wind</h2>
+              <h2 className='text-lg font-bold '>{maxWind} kt</h2>
+            </li>
+            
+            {landfalls.length > 0 && (
+              <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+                <h2 className='text-sm font-semibold '>Maximum Inland Wind</h2>
+                <h2 className='text-lg font-bold '>{inlandMaxWind} kt</h2>
+              </li>
+            )}
+            
+            {/* Pressure Data */}
+            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+              <h2 className='text-sm font-semibold '>Minimum Pressure</h2>
+              <h2 className='text-lg font-bold '>
+                {minPressure != 9999 && minPressure != -999 ? `${minPressure} mb` : 'Unknown'}
+              </h2>
+            </li>
+            
+            {landfalls.length > 0 && (
+              <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+                <h2 className='text-sm font-semibold '>Minimum Inland Pressure</h2>
+                <h2 className='text-lg font-bold '>
+                  {inlandMinPressure != 9999 && inlandMinPressure != -999 ? `${inlandMinPressure} mb` : 'Unknown'}
+                </h2>
+              </li>
+            )}
+            
+            {/* Energy Data */}
+            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+              <h2 className='text-sm font-semibold '>Accumulated Cyclone Energy</h2>
+              <h2 className='text-lg font-bold '>{ACE.toFixed(1)}</h2>
+            </li>
+            
+            {year >= 2004 && (
+              <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+                <h2 className='text-sm font-semibold '>Track Integrated Kinetic Energy</h2>
+                <h2 className='text-lg font-bold '>{TIKE.toFixed(1)} TJ</h2>
+              </li>
+            )}
+            
+            {/* Impact Data */}
+            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+              <h2 className='text-sm font-semibold '>Dead/Missing</h2>
+              <h2 className='text-lg font-bold '>{deadOrMissing}</h2>
+            </li>
+            
+            {/* Cost Data */}
+            <li className='flex justify-between items-center p-2 rounded-b-lg hover:bg-gray-700 transition-colors duration-200'>
+              <h2 className='text-sm font-semibold '>Cost (Million USD)</h2>
+              <h2 className='text-lg font-bold text-green-400'>${cost}</h2>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   )

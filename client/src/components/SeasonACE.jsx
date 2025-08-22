@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { Context } from '../App'
 import BarChart from './BarChart'
-import { sum } from '../libs/sum'
 
 const SeasonACE = () => {
   const {names, seasonACE} = useContext(Context)
