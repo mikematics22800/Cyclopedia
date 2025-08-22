@@ -37,7 +37,7 @@ nav {
 }
 
 .interface {
-  @apply p-4 md:p-8 flex-col overflow-y-auto overflow-x-hidden gap-4 w-full md:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center
+  @apply p-4 md:p-8 flex-col overflow-y-auto overflow-x-hidden gap-4 w-full md:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center 
 }
 
 .button {

@@ -64,8 +64,8 @@ const SeasonArchive = () => {
 
   return (
     <div className='season'>
-      <div className='w-full max-w-96'>
-        <ul className='season-data bg-gray-800 bg-opacity-90 backdrop-blur-sm border border-gray-700'>
+      <div className='w-full max-w-96 flex flex-col items-center'>
+        <ul className='season-data bg-gray-800'>
           {/* Season Header */}
           <li className='flex flex-col border-b border-gray-600 p-2'>
             <h1 className='text-lg font-bold'>Season Totals</h1>     

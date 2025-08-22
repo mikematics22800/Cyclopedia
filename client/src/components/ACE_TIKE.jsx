@@ -78,11 +78,6 @@ const ACE_TIKE = () => {
         ticks: {
           color: "white"
         },
-        title: {
-          display: true,
-          text: 'Date',
-          color: "white"
-        }
       },
     }
   };

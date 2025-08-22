@@ -133,13 +133,13 @@ const StormArchive = () => {
   }
 
   return (
-    <div className='storm overflow-visible'>
+    <div className='storm'>
       <div className='flex flex-col gap-6 w-full items-center'>
         {/* Storm Image Section */}
-        <div className='w-full max-w-96'>
+        <div className='w-full max-w-96 flex flex-col items-center'>
           <a 
             target='_blank' 
-            className={`${retired && '!justify-end pb-2 lg:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'} block w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300`}
+            className={`${retired && '!justify-end pb-2 lg:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'} w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300`}
             style={{backgroundImage: `url(${image})`}} 
             href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
           >
@@ -180,10 +180,9 @@ const StormArchive = () => {
         </div>
 
         {/* Storm Data Section */}
-        <div className='w-full max-w-96'>
-          <ul className='storm-data bg-gray-800 bg-opacity-90 backdrop-blur-sm border border-gray-700'>
+          <ul className='storm-data bg-gray-800 w-full'>
             {/* Storm Header */}
-            <li className='flex flex-col gap-2 p-2 border-b border-gray-600'>
+            <li className='flex flex-col pb-2 border-b border-gray-600'>
               <h1 className='text-lg font-bold' style={{color:textColor}}>
                 {stormName}
               </h1>     
@@ -248,7 +247,6 @@ const StormArchive = () => {
             </li>
           </ul>
         </div>
-      </div>
     </div>
   )
 }

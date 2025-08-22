@@ -51,8 +51,8 @@ const SeasonTIKE = () => {
     datasets: [
       {
         data: seasonTIKE?.map((TIKE) => TIKE.toFixed(2)),
-        borderColor: "pink",
-        backgroundColor: "pink"
+        borderColor: "orange",
+        backgroundColor: "orange"
       },
     ]
   }
