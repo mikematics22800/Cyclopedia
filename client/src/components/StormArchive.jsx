@@ -171,11 +171,7 @@ const StormArchive = () => {
             )}
             
             {/* Retired Badge */}
-            {retired && (
-              <div className='absolute bottom-0 left-0 right-0'>
-                <img className='w-full' src={retiredImage} alt="Retired Storm"/>
-              </div>
-            )}
+            {retired && <img className='w-full' src={retiredImage}/>}
           </a>
         </div>
 
@@ -221,19 +217,6 @@ const StormArchive = () => {
               </li>
             )}
             
-            {/* Energy Data */}
-            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
-              <h2 className='text-sm font-semibold '>Accumulated Cyclone Energy</h2>
-              <h2 className='text-lg font-bold '>{ACE.toFixed(1)}</h2>
-            </li>
-            
-            {year >= 2004 && (
-              <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
-                <h2 className='text-sm font-semibold '>Track Integrated Kinetic Energy</h2>
-                <h2 className='text-lg font-bold '>{TIKE.toFixed(1)} TJ</h2>
-              </li>
-            )}
-            
             {/* Impact Data */}
             <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
               <h2 className='text-sm font-semibold '>Dead/Missing</h2>
@@ -241,10 +224,24 @@ const StormArchive = () => {
             </li>
             
             {/* Cost Data */}
-            <li className='flex justify-between items-center p-2 rounded-b-lg hover:bg-gray-700 transition-colors duration-200'>
+            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
               <h2 className='text-sm font-semibold '>Cost (Million USD)</h2>
               <h2 className='text-lg font-bold text-green-400'>${cost}</h2>
             </li>
+
+                     
+            {/* Energy Data */}
+            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+              <h2 className='text-sm font-semibold '>Accumulated Cyclone Energy</h2>
+              <h2 className='text-lg font-bold '>{ACE.toFixed(1)}</h2>
+            </li>
+            
+            {year >= 2004 && (
+              <li className='flex justify-between items-center p-2 hover:bg-gray-700 transition-colors duration-200'>
+                <h2 className='text-sm font-semibold '>Track Integrated Kinetic Energy</h2>
+                <h2 className='text-lg font-bold '>{TIKE.toFixed(1)} TJ</h2>
+              </li>
+            )}
           </ul>
         </div>
     </div>

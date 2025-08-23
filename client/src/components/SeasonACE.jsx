@@ -25,7 +25,7 @@ const SeasonACE = () => {
       },
       title: {
         display: true,
-        text: 'Accumulated Cyclone Energy Totals',
+        text: 'Accumulated Cyclone Energies',
         color: "white"
       },
       tooltip: {

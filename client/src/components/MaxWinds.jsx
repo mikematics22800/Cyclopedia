@@ -24,7 +24,7 @@ const MaxWinds = () => {
       },
       title: {
         display: true,
-        text: 'Wind Peaks (kt)',
+        text: 'Maximum Winds (kt)',
         color: "white"
       },
       tooltip: {

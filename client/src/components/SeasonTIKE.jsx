@@ -66,7 +66,7 @@ const SeasonTIKE = () => {
       },
       title: {
         display: true,
-        text: 'Track Integrated Kinetic Energy Totals (TJ)',
+        text: 'Track Integrated Kinetic Energies (TJ)',
         color: "white"
       },
       tooltip: {
@@ -87,11 +87,6 @@ const SeasonTIKE = () => {
             return value.toFixed(0)
           }
         },
-        title: {
-          display: true,
-          text: 'TIKE',
-          color: "white"
-        }
       },
       x: {
         ticks: {

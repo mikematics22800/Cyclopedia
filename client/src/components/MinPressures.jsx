@@ -37,7 +37,7 @@ const MinPressures = () => {
       },
       title: {
         display: true,
-        text: 'Pressure Minimums (mb)',
+        text: 'Minimum Pressures (mb)',
         color: "white"
       },
       tooltip: {

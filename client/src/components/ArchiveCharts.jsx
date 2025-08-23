@@ -1,5 +1,4 @@
 import Intensity from "./Intensity"
-import ACE from "./ACE"
 import ACE_TIKE from "./ACE_TIKE"
 import MaxWinds from "./MaxWinds"
 import MinPressures from "./MinPressures"
@@ -15,7 +14,7 @@ const ArchiveCharts = () => {
     <div className="charts-container">
       <div className="charts">
         <Intensity/>
-        {year >= 2004 ? <ACE_TIKE/> : <ACE/>}
+        <ACE_TIKE/>
         <MaxWinds/>
         <MinPressures/>
         <SeasonACE/>

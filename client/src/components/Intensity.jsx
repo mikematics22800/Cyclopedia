@@ -29,14 +29,14 @@ const Intensity = () => {
     labels: dates,
     datasets: [
       {
-        label: "Max Wind (kt)",
+        label: "Maximum Wind (kt)",
         data: wind,
         borderColor: "red",
         backgroundColor: "pink",
         yAxisID: "y",
       },
       {
-        label: "Min Pressure (mb)",
+        label: "Minimum Pressure (mb)",
         data: pressure,
         borderColor: "blue",
         backgroundColor: "lightblue",

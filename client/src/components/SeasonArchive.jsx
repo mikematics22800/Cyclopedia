@@ -87,6 +87,17 @@ const SeasonArchive = () => {
             <h2 className='text-lg font-bold'>{majorHurricanes}</h2>
           </li>
           
+          {/* Impact Metrics */}
+          <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+            <h2 className='text-sm font-semibold '>Dead/Missing</h2>
+            <h2 className='text-lg font-bold'>{deadOrMissing}</h2>
+          </li>
+          
+          <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+            <h2 className='text-sm font-semibold '>Cost (Million USD)</h2>
+            <h2 className='text-lg font-bold text-green-400'>${cost}</h2>
+          </li>
+
           {/* Energy Metrics */}
           <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
             <h2 className='text-sm font-semibold '>Accumulated Cyclone Energy</h2>
@@ -94,22 +105,11 @@ const SeasonArchive = () => {
           </li>
           
           {year >= 2004 && (
-            <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+            <li className='flex justify-between p-2 hover:bg-gray-700 transition-colors duration-200'>
               <h2 className='text-sm font-semibold '>Track Integrated Kinetic Energy</h2>
               <h2 className='text-lg font-bold'>{seasonTIKE.toFixed(1)} TJ</h2>
             </li>
           )}
-          
-          {/* Impact Metrics */}
-          <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
-            <h2 className='text-sm font-semibold '>Dead/Missing</h2>
-            <h2 className='text-lg font-bold'>{deadOrMissing}</h2>
-          </li>
-          
-          <li className='flex justify-between p-2 rounded-b-lg hover:bg-gray-700 transition-colors duration-200'>
-            <h2 className='text-sm font-semibold '>Cost (Million USD)</h2>
-            <h2 className='text-lg font-bold text-green-400'>${cost}</h2>
-          </li>
         </ul>
       </div>
     </div>

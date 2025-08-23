@@ -49,11 +49,6 @@ const ACE_TIKE = () => {
             return value.toFixed(1)
           }
         },
-        title: {
-          display: true,
-          text: 'ACE',
-          color: "white"
-        }
       },
       y1: {
         type: 'linear',
@@ -64,11 +59,6 @@ const ACE_TIKE = () => {
           callback: function(value) {
             return value.toFixed(0)
           }
-        },
-        title: {
-          display: year >= 2004,
-          text: 'TIKE',
-          color: "white"
         },
         grid: {
           drawOnChartArea: false,
