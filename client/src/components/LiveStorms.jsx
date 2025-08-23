@@ -16,7 +16,7 @@ export const getStormStatus = (STORMTYPE, MAXWIND) => {
   } else if (STORMTYPE === "WV") {
     color = "gray";
     status = "Tropical Wave";
-  } else if (STORMTYPE === "EX") {
+  } else if (STORMTYPE === "EX" || STORMTYPE === "PTC") {
     color = "#7F00FF";
     status = "Extratropical Cyclone";
   } else if (STORMTYPE === "SD") {
@@ -32,26 +32,18 @@ export const getStormStatus = (STORMTYPE, MAXWIND) => {
     color = "lime";
     status = "Tropical Storm";
   } else if (STORMTYPE === "HU" || STORMTYPE === "MH" ||STORMTYPE === "TY" ) {
+    status = "Hurricane";
     if (MAXWIND <= 82) {
       color = "yellow";
-      status = "Category 1 Hurricane";
     } else if (MAXWIND > 82 && MAXWIND <= 95) {
       color = "orange";
-      status = "Category 2 Hurricane";
     } else if (MAXWIND > 95 && MAXWIND <= 110) {
       color = "red";
-      status = "Category 3 Hurricane";
     } else if (MAXWIND > 110 && MAXWIND <= 135) {
       color = "hotpink";
-      status = "Category 4 Hurricane";
     } else if (MAXWIND > 135) {
       color = "pink";
-      status = "Category 5 Hurricane";
     }
-  } else {
-    // Default case for unrecognized storm types
-    color = "gray";
-    status = "Unknown Storm Type";
   }
 
   return { status, color };

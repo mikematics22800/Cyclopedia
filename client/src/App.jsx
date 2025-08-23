@@ -319,9 +319,16 @@ function App() {
                 <img src={cyclone} className="h-10 mr-2"/>
                 <h1 className="storm-font text-4xl text-white italic hidden sm:block">CYCLOPEDIA</h1>
               </div>
-              <button onClick={toggleTracker} className="button" variant="contained">
-                <h1>{tracker ? "Historical Archive" : "Live Tracker"}</h1>
-              </button>
+              <div className="flex items-center gap-4">
+                {!tracker && (
+                  <button className="button sm:!flex !hidden" onClick={toggleCharts} variant="contained">
+                    <h1>{map ? ("Charts") : ("Map")}</h1>
+                  </button>
+                )}
+                <button onClick={toggleTracker} className="button" variant="contained">
+                  <h1>{tracker ? "Historical Archive" : "Live Tracker"}</h1>
+                </button>
+              </div>
             </nav>
             <div className="desktop-view">
               <Interface/>

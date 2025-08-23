@@ -11,7 +11,7 @@ const convertToUTC = (dateStr) => {
       throw new Error("Invalid date format");
     }
     
-    const [time, ampm, timezone, dayOfWeek, month, date, year] = parts;
+    const [time, ampm, timezone, month, date, year] = parts;
     
     // Parse time: "1100" -> "11:00"
     const hours = time.slice(0, -2);
@@ -166,16 +166,38 @@ const LiveTracker = () => {
         return (
           <div 
             key={stormId} 
-            className={`p-4 flex flex-col gap-2 rounded-lg text-white font-bold w-full max-w-80 cursor-pointer transition-colors ${
-              isSelected ? 'bg-gray-600 ring-2 ring-white' : 'bg-gray-800 hover:bg-gray-700'
+            className={`bg-gray-700 w-full max-w-80 cursor-pointer transition-all duration-200 rounded-lg hover:ring-2 hover:ring-white ${
+              isSelected ? 'ring-2 ring-white' : ''
             }`}
             style={{ borderLeft: `4px solid ${color}` }}
             onClick={() => selectLiveStorm(stormId)}
           >
-            <h2 className="text-lg">{status} {STORMNAME.split(' ').pop()}</h2>
-            <p className="text-sm" >Maximum Wind: {MAXWIND} kt</p>
-            <p className="text-sm">Maximum Wind Gusts: {GUST} kt</p>
-            <p className="text-sm">Minimum Pressure: {MSLP} mb</p>
+            <ul className='storm-data'>
+              {/* Storm Header */}
+              <li className='flex flex-col pb-2 border-b border-gray-600'>
+                <h1 className='text-lg font-bold' style={{color: color}}>
+                  {status} {STORMNAME.split(' ').pop()}
+                </h1>     
+              </li>
+              
+              {/* Wind Data */}
+              <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+                <h2 className='text-sm font-semibold'>Maximum Wind</h2>
+                <h2 className='text-lg font-bold'>{MAXWIND} kt</h2>
+              </li>
+              
+              {/* Gust Data */}
+              <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+                <h2 className='text-sm font-semibold'>Maximum Wind Gusts</h2>
+                <h2 className='text-lg font-bold'>{GUST} kt</h2>
+              </li>
+              
+              {/* Pressure Data */}
+              <li className='flex justify-between items-center p-2 hover:bg-gray-700 transition-colors duration-200'>
+                <h2 className='text-sm font-semibold'>Minimum Pressure</h2>
+                <h2 className='text-lg font-bold'>{MSLP} mb</h2>
+              </li>
+            </ul>
           </div>
         );
       })}

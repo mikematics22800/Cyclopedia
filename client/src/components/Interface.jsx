@@ -7,7 +7,7 @@ import Charts from "./ArchiveCharts";
 import LiveTracker from "./LiveTracker";
 
 const Interface = () => {
-  const { basin, setBasin, year, setYear, stormId, setStormId, setWindField, season, tracker, toggleCharts, map, toggleTracker} = useContext(Context)
+  const { basin, setBasin, year, setYear, stormId, setStormId, setWindField, season, tracker } = useContext(Context)
 
   const startYear = basin === 'atl' ? 1850 : 1948
   const years = new Array(2024 - startYear).fill(0)
@@ -58,9 +58,6 @@ const Interface = () => {
           <div className="md:hidden mt-4 w-full">
             <Charts/>
           </div>
-          <button onClick={toggleCharts} className="button !hidden md:!flex" variant="contained">
-            <h1>{map ? ("Charts") : ("Map")}</h1>
-          </button>
         </>
       )}
     </div>

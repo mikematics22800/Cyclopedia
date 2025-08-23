@@ -75,20 +75,16 @@ const ArchivedStorms = () => {
       status = "Tropical Storm";
       color = "lime";
     } else if (point.status === 'HU' || point.status === 'TY') {
+      status = "Hurricane";
       if (wind <= 82) {
-        status = 'Category 1 Hurricane';
         color = 'yellow';
       } else if (wind > 82 && wind <= 95) {
-        status = 'Category 2 Hurricane';
         color = 'orange';
       } else if (wind > 95 && wind <= 110) {
-        status = 'Category 3 Hurricane';
         color = 'red';
       } else if (wind > 110 && wind <= 135) {
-        status = 'Category 4 Hurricane';
         color = 'hotpink';
       } else if (wind > 135) {
-        status = 'Category 5 Hurricane';
         color = 'pink';
       }
     }
