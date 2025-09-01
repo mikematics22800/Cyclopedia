@@ -34,6 +34,7 @@ function App() {
   const [areasOfInterest, setAreasOfInterest] = useState([])
   const [selectedLiveStorm, setSelectedLiveStorm] = useState(null)
   const [pointsOfInterest, setPointsOfInterest] = useState([])
+  const [clickedPoint, setClickedPoint] = useState(null)
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -273,6 +274,16 @@ function App() {
     setSelectedLiveStorm(stormId)
   }
 
+  const selectArchivedStormPoint = (stormId, lat, lng) => {
+    setStormId(stormId)
+    setClickedPoint({ lat, lng })
+  }
+
+  const selectLiveStormPoint = (stormId, lat, lng) => {
+    setSelectedLiveStorm(stormId)
+    setClickedPoint({ lat, lng })
+  }
+
   const value = {
     basin,
     setBasin, 
@@ -306,7 +317,10 @@ function App() {
     setAreasOfInterest,
     selectedLiveStorm,
     selectLiveStorm,
-    pointsOfInterest
+    pointsOfInterest,
+    clickedPoint,
+    selectArchivedStormPoint,
+    selectLiveStormPoint
   }
 
   return (
@@ -319,7 +333,7 @@ function App() {
                 <img src={cyclone} className="h-10 mr-2"/>
                 <h1 className="storm-font text-4xl text-white italic hidden sm:block">CYCLOPEDIA</h1>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-5">
                 {!tracker && (
                   <button className="button sm:!flex !hidden" onClick={toggleCharts} variant="contained">
                     <h1>{map ? ("Charts") : ("Map")}</h1>

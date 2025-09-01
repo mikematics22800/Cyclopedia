@@ -4,7 +4,7 @@ import { Polyline, Popup, Marker } from "react-leaflet";
 import { divIcon } from "leaflet";
 
 const ArchivedStorms = () => {
-  const { season, setStormId, stormId } = useContext(Context);
+  const { season, selectArchivedStormPoint, stormId } = useContext(Context);
 
   const dot = (color) => {
     return (
@@ -148,7 +148,7 @@ const ArchivedStorms = () => {
       const fullName = name !== 'Unnamed' ? `${status} ${name}` : `${name} ${status}`;
 
       return (
-        <Marker key={i} position={coords} icon={icon} eventHandlers={{click:() => {setStormId(id)}}}>
+        <Marker key={i} position={coords} icon={icon} eventHandlers={{click:() => {selectArchivedStormPoint(id, lat, lng)}}}>
           <Popup className="w-fit font-bold">
             <h1 className="text-[1rem]">{fullName}</h1>
             <h1 className="my-1">{formattedDate} at {formattedTime} EST</h1>

@@ -5,11 +5,17 @@ import { Context } from "../App";
 
 const MapController = () => {
   const map = useMap();
-  const { selectedLiveStorm, liveHurdat, stormId, season, tracker } = useContext(Context);
+  const { selectedLiveStorm, liveHurdat, stormId, season, tracker, clickedPoint } = useContext(Context);
 
   useEffect(() => {
-    if (tracker && selectedLiveStorm && liveHurdat.length > 0) {
-      // Handle live storm selection
+    if (clickedPoint) {
+      // Center the map on the clicked point
+      map.setView([clickedPoint.lat, clickedPoint.lng], 6, {
+        animate: true,
+        duration: 1
+      });
+    } else if (tracker && selectedLiveStorm && liveHurdat.length > 0) {
+      // Handle live storm selection (fallback to current position)
       const stormPoints = liveHurdat.filter(feature => 
         feature.properties.STORM_ID === selectedLiveStorm
       );
@@ -29,7 +35,7 @@ const MapController = () => {
         }
       }
     } else if (!tracker && stormId && season) {
-      // Handle archived storm selection
+      // Handle archived storm selection (fallback to first point)
       const selectedStorm = season.find(storm => storm.id === stormId);
       
       if (selectedStorm && selectedStorm.data.length > 0) {
@@ -44,7 +50,7 @@ const MapController = () => {
         });
       }
     }
-  }, [selectedLiveStorm, liveHurdat, stormId, season, tracker, map]);
+  }, [clickedPoint, selectedLiveStorm, liveHurdat, stormId, season, tracker, map]);
 
   return null;
 };

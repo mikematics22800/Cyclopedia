@@ -74,7 +74,7 @@ const SeasonTIKE = () => {
         titleColor: "white",
         callbacks: {
           label: function(context) {
-            return `TIKE: ${context.parsed.y.toFixed(2)} TJ`
+            return context.parsed.y.toFixed(1)
           }
         }
       },
