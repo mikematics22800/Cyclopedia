@@ -77,7 +77,7 @@ const ClimateLayers = ({ onLayerChange }) => {
             />
             <FormControlLabel 
               control={<Checkbox className="!text-white" checked={temp} onChange={(e) => handleChange('temp', e.target.checked)}/>} 
-              label="Sea Level Temperature" 
+              label="Temperature" 
             />
           </FormGroup>
         </div>

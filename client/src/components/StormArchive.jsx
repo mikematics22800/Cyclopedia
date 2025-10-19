@@ -188,20 +188,20 @@ const StormArchive = () => {
             </li>
             
             {/* Wind Data */}
-            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+            <li className='flex justify-between items-center p-2 border-b border-gray-600'>
               <h2 className='text-sm font-semibold '>Maximum Wind</h2>
               <h2 className='text-lg font-bold '>{maxWind} kt</h2>
             </li>
             
             {landfalls.length > 0 && (
-              <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+              <li className='flex justify-between items-center p-2 border-b border-gray-600'>
                 <h2 className='text-sm font-semibold '>Maximum Inland Wind</h2>
                 <h2 className='text-lg font-bold '>{inlandMaxWind} kt</h2>
               </li>
             )}
             
             {/* Pressure Data */}
-            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+            <li className='flex justify-between items-center p-2 border-b border-gray-600'>
               <h2 className='text-sm font-semibold '>Minimum Pressure</h2>
               <h2 className='text-lg font-bold '>
                 {minPressure != 9999 && minPressure != -999 ? `${minPressure} mb` : 'Unknown'}
@@ -209,7 +209,7 @@ const StormArchive = () => {
             </li>
             
             {landfalls.length > 0 && (
-              <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+              <li className='flex justify-between items-center p-2 border-b border-gray-600'>
                 <h2 className='text-sm font-semibold '>Minimum Inland Pressure</h2>
                 <h2 className='text-lg font-bold '>
                   {inlandMinPressure != 9999 && inlandMinPressure != -999 ? `${inlandMinPressure} mb` : 'Unknown'}
@@ -218,26 +218,26 @@ const StormArchive = () => {
             )}
             
             {/* Impact Data */}
-            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+            <li className='flex justify-between items-center p-2 border-b border-gray-600'>
               <h2 className='text-sm font-semibold '>Dead/Missing</h2>
               <h2 className='text-lg font-bold '>{deadOrMissing}</h2>
             </li>
             
             {/* Cost Data */}
-            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+            <li className='flex justify-between items-center p-2 border-b border-gray-600'>
               <h2 className='text-sm font-semibold '>Cost (Million USD)</h2>
               <h2 className='text-lg font-bold text-green-400'>${cost}</h2>
             </li>
 
                      
             {/* Energy Data */}
-            <li className='flex justify-between items-center p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+            <li className='flex justify-between items-center p-2 border-b border-gray-600'>
               <h2 className='text-sm font-semibold '>Accumulated Cyclone Energy</h2>
               <h2 className='text-lg font-bold '>{ACE.toFixed(1)}</h2>
             </li>
             
             {year >= 2004 && (
-              <li className='flex justify-between items-center p-2 hover:bg-gray-700 transition-colors duration-200'>
+              <li className='flex justify-between items-center p-2'>
                 <h2 className='text-sm font-semibold '>Track Integrated Kinetic Energy</h2>
                 <h2 className='text-lg font-bold '>{TIKE.toFixed(1)} TJ</h2>
               </li>
