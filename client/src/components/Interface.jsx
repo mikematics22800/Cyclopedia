@@ -7,7 +7,7 @@ import Charts from "./ArchiveCharts";
 import LiveTracker from "./LiveTracker";
 
 const Interface = () => {
-  const { basin, setBasin, year, setYear, stormId, setStormId, setWindField, season, tracker } = useContext(Context)
+  const { basin, setBasin, year, setYear, stormId, setStormId, setWindField, season, tracker, toggleCharts, map } = useContext(Context)
 
   const startYear = basin === 'atl' ? 1850 : 1948
   const years = new Array(2024 - startYear).fill(0)
@@ -50,6 +50,11 @@ const Interface = () => {
           </div>
           <StormArchive/>
           <SeasonArchive/>
+          <div className="hidden sm:flex justify-center mt-4 w-full">
+            <button className="button" onClick={toggleCharts} variant="contained">
+              <h1>{map ? "Charts" : "Map"}</h1>
+            </button>
+          </div>
         </>
       )}
       {tracker && <LiveTracker />}

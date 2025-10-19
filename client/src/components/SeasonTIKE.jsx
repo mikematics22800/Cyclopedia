@@ -29,7 +29,7 @@ const SeasonTIKE = () => {
           const v34 = 34 * 0.514444
           const v50 = 50 * 0.514444
           const v64 = 64 * 0.514444
-          
+        
           const ke34 = 0.5 * rho * Math.pow(v34, 2) * area34
           const ke50 = 0.5 * rho * Math.pow(v50, 2) * area50
           const ke64 = 0.5 * rho * Math.pow(v64, 2) * area64
@@ -50,7 +50,7 @@ const SeasonTIKE = () => {
     labels: names,
     datasets: [
       {
-        data: seasonTIKE?.map((TIKE) => TIKE.toFixed(2)),
+        data: seasonTIKE?.map((TIKE) => TIKE.toFixed(1)),
         borderColor: "orange",
         backgroundColor: "orange"
       },

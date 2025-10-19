@@ -1,0 +1,43 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 3727,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-53.338047048932, 19.2067203354753]
+      },
+      "properties": {
+        "objectid": 3727,
+        "basin": "Atlantic",
+        "prob2day": "90%",
+        "risk2day": "High",
+        "prob7day": "90%",
+        "risk7day": "High",
+        "idp_source": "gtwo_points_202509241144",
+        "idp_filedate": 1758714301000,
+        "idp_ingestdate": 1758714332000
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3728,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.7345497111002, 17.9357796133386]
+      },
+      "properties": {
+        "objectid": 3728,
+        "basin": "Atlantic",
+        "prob2day": "30%",
+        "risk2day": "Low",
+        "prob7day": "80%",
+        "risk7day": "High",
+        "idp_source": "gtwo_points_202509241144",
+        "idp_filedate": 1758714301000,
+        "idp_ingestdate": 1758714332000
+      }
+    }
+  ]
+}

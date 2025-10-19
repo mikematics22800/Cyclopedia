@@ -63,7 +63,7 @@ const Legend = () => {
         </div>
     ) : (
       <div className="legend" onClick={() => setIsOpen(!isOpen)}>
-        <Tooltip title="Legend" arrow placement="left">
+        <Tooltip title="Legend" arrow placement="bottom">
           <List className="text-white" />
         </Tooltip>
       </div>

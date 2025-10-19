@@ -1,396 +1,154 @@
 import { useContext } from "react";
 import { Context } from "../App";
-import { Polyline, Popup, Marker, Polygon } from "react-leaflet";
+import { Marker, Popup, Polygon, Polyline } from "react-leaflet";
 import { divIcon } from "leaflet";
 
-// Parse date string to Date object
-const parseDate = (dateStr) => {
+// Get coordinates from storm data (now using latitude/longitude directly)
+const getCoordinates = (storm) => {
   try {
-    // Parse the date string components: "1100 PM AST Sun Aug 03 2025"
-    const parts = dateStr.split(" ");
-    if (parts.length !== 7) {
-      throw new Error("Invalid date format");
-    }
-    
-    const [time, ampm, timezone, dayOfWeek, month, date, year] = parts;
-    
-    // Parse time: "1100" -> "11:00"
-    const hours = time.slice(0, -2);
-    const minutes = time.slice(-2);
-    
-    // Convert to 24-hour format
-    let hour24 = parseInt(hours);
-    if (ampm === "PM" && hour24 !== 12) {
-      hour24 += 12;
-    } else if (ampm === "AM" && hour24 === 12) {
-      hour24 = 0;
-    }
-    
-    // Create a date object in the local timezone first
-    const localDate = new Date(`${month} ${date} ${year} ${hour24}:${minutes}:00`);
-    
-    // Convert to UTC by applying timezone offset
-    let utcOffset = 0;
-    
-    // Convert various timezones to UTC
-    switch (timezone) {
-      case "AST": // Atlantic Standard Time (UTC-4)
-        utcOffset = 4; // AST is 4 hours behind UTC
-        break;
-      case "HST": // Hawaii Standard Time (UTC-10)
-        utcOffset = 10; // HST is 10 hours behind UTC
-        break;
-      case "CST": // Central Standard Time (UTC-6)
-        utcOffset = 6; // CST is 6 hours behind UTC
-        break;
-      case "PST": // Pacific Standard Time (UTC-8)
-        utcOffset = 8; // PST is 8 hours behind UTC
-        break;
-      case "MST": // Mountain Standard Time (UTC-7)
-        utcOffset = 7; // MST is 7 hours behind UTC
-        break;
-      case "EST": // Eastern Standard Time (UTC-5)
-        utcOffset = 5; // EST is 5 hours behind UTC
-        break;
-      default:
-        // Default to EST if unknown timezone
-        utcOffset = 5;
-    }
-    
-    // Apply the offset to get UTC time
-    const utcDate = new Date(localDate.getTime() + (utcOffset * 60 * 60 * 1000));
-    
-    return utcDate;
+    if (!storm.latitude || !storm.longitude) return null;
+    return [storm.latitude, storm.longitude];
   } catch (error) {
-    console.error("Error parsing date:", error);
-    return new Date(0);
-  }
-};
-
-// Calculate distance between two coordinates using Haversine formula
-const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Earth's radius in kilometers
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  const distance = R * c; // Distance in kilometers
-  return distance;
-};
-
-// Find the previous position for a storm
-const findPreviousPosition = (stormPoints, currentPosition) => {
-  if (!stormPoints || stormPoints.length === 0 || !currentPosition) return null;
-  
-  // Group by advisory number
-  const advisories = {};
-  stormPoints.forEach(point => {
-    const advisoryNum = parseInt(point.properties.ADVISNUM);
-    if (!advisories[advisoryNum]) {
-      advisories[advisoryNum] = [];
-    }
-    advisories[advisoryNum].push(point);
-  });
-  
-  const currentAdvisoryNum = parseInt(currentPosition.properties.ADVISNUM);
-  const currentAdvisoryPoints = advisories[currentAdvisoryNum];
-  
-  if (!currentAdvisoryPoints) return null;
-  
-  // Sort points in the current advisory by date
-  currentAdvisoryPoints.sort((a, b) => {
-    const dateA = parseDate(a.properties.ADVDATE);
-    const dateB = parseDate(b.properties.ADVDATE);
-    return dateA - dateB;
-  });
-  
-  // Find the index of current position
-  const currentIndex = currentAdvisoryPoints.findIndex(point => point === currentPosition);
-  
-  // If there's a previous point in the same advisory, use it
-  if (currentIndex > 0) {
-    return currentAdvisoryPoints[currentIndex - 1];
-  }
-  
-  // If no previous point in same advisory, check previous advisory
-  const previousAdvisoryNum = currentAdvisoryNum - 1;
-  if (advisories[previousAdvisoryNum] && advisories[previousAdvisoryNum].length > 0) {
-    const previousAdvisoryPoints = advisories[previousAdvisoryNum];
-    previousAdvisoryPoints.sort((a, b) => {
-      const dateA = parseDate(a.properties.ADVDATE);
-      const dateB = parseDate(b.properties.ADVDATE);
-      return dateA - dateB;
-    });
-    return previousAdvisoryPoints[previousAdvisoryPoints.length - 1];
-  }
-  
-  return null;
-};
-
-// Calculate movement direction in compass degrees and cardinal directions
-const calculateMovementDirection = (currentPosition, previousPosition) => {
-  if (!currentPosition || !previousPosition) return null;
-  
-  try {
-    const [currentLng, currentLat] = currentPosition.geometry.coordinates[0];
-    const [previousLng, previousLat] = previousPosition.geometry.coordinates[0];
-    
-    // Calculate bearing in degrees
-    const dLng = (currentLng - previousLng) * Math.PI / 180;
-    const lat1 = previousLat * Math.PI / 180;
-    const lat2 = currentLat * Math.PI / 180;
-    
-    const y = Math.sin(dLng) * Math.cos(lat2);
-    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
-    
-    let bearing = Math.atan2(y, x) * 180 / Math.PI;
-    
-    // Convert to compass bearing (0-360 degrees)
-    bearing = (bearing + 360) % 360;
-    
-    // Convert to cardinal direction
-    const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-    const index = Math.round(bearing / 22.5) % 16;
-    const cardinalDirection = directions[index];
-    
-    return {
-      degrees: Math.round(bearing),
-      cardinal: cardinalDirection
-    };
-  } catch (error) {
-    console.error("Error calculating movement direction:", error);
+    console.error("Error getting coordinates:", error);
     return null;
   }
 };
 
-// Calculate movement speed in knots (nautical miles per hour)
-const calculateMovementSpeed = (currentPosition, previousPosition) => {
-  if (!currentPosition || !previousPosition) return null;
-  
-  try {
-    const [currentLng, currentLat] = currentPosition.geometry.coordinates[0];
-    const [previousLng, previousLat] = previousPosition.geometry.coordinates[0];
-    
-    const distance = calculateDistance(currentLat, currentLng, previousLat, previousLng);
-    
-    const currentDate = parseDate(currentPosition.properties.ADVDATE);
-    const previousDate = parseDate(previousPosition.properties.ADVDATE);
-    
-    const timeDiffHours = (currentDate - previousDate) / (1000 * 60 * 60); // Convert ms to hours
-    
-    // Debug logging
-    console.log("Movement speed calculation:", {
-      currentDate: currentDate.toISOString(),
-      previousDate: previousDate.toISOString(),
-      timeDiffHours: timeDiffHours,
-      distance: distance,
-      currentCoords: [currentLat, currentLng],
-      previousCoords: [previousLat, previousLng]
-    });
-    
-    if (timeDiffHours <= 0) {
-      console.log("Invalid time difference:", timeDiffHours);
-      return null;
-    }
-    
-    const speedKmh = distance / timeDiffHours; // km/h
-    
-    if (isNaN(speedKmh)) {
-      console.log("Speed is NaN:", { distance, timeDiffHours, speedKmh });
-      return null;
-    }
-    
-    // Convert km/h to knots (1 knot = 1.852 km/h)
-    const speedKnots = speedKmh / 1.852;
-    
-    return speedKnots;
-  } catch (error) {
-    console.error("Error calculating movement speed:", error);
-    return null;
-  }
+// Format storm name (now comes pre-formatted from API)
+const formatStormName = (storm) => {
+  return storm.stormName || storm.name;
 };
 
-export const getStormStatus = (STORMTYPE, MAXWIND) => {
+// Determine storm status and color based on storm type and wind speed
+export const getStormStatus = (stormType, maxWindsStr) => {
+  // Parse wind speed from string like "30 mph" or "30 kt"
+  const windSpeed = parseInt(maxWindsStr) || 0;
+  
   let color;
-  let status;
-
-  if (STORMTYPE === "LO") {
+  let status = stormType;
+  
+  // Convert mph to kt if needed (most categorization uses kt)
+  const windKt = maxWindsStr.includes('mph') ? Math.round(windSpeed * 0.868976) : windSpeed;
+  
+  // Determine type from stormType
+  const typeLower = stormType.toLowerCase();
+  
+  if (typeLower.includes('low')) {
     color = "white";
     status = "Tropical Low";
-  } else if (STORMTYPE === "DB") {
+  } else if (typeLower.includes('disturbance')) {
     color = "lightgray";
     status = "Tropical Disturbance";
-  } else if (STORMTYPE === "WV") {
+  } else if (typeLower.includes('wave')) {
     color = "gray";
     status = "Tropical Wave";
-  } else if (STORMTYPE === "EX" || STORMTYPE === "PTC") {
+  } else if (typeLower.includes('extratropical')) {
     color = "#7F00FF";
     status = "Extratropical Cyclone";
-  } else if (STORMTYPE === "SD") {
+  } else if (typeLower.includes('subtropical depression')) {
     color = "aqua";
     status = "Subtropical Depression";
-  } else if (STORMTYPE === "SS") {
+  } else if (typeLower.includes('subtropical storm')) {
     color = "#D0F0C0";
     status = "Subtropical Storm";
-  } else if (STORMTYPE === "TD" || STORMTYPE === "STD") {
+  } else if (typeLower.includes('depression') || typeLower.includes('tropical depression')) {
     color = "dodgerblue";
     status = "Tropical Depression";
-  } else if (STORMTYPE === "TS" || STORMTYPE === "STS") {
+  } else if (typeLower.includes('tropical storm')) {
     color = "lime";
     status = "Tropical Storm";
-  } else if (STORMTYPE === "HU" || STORMTYPE === "MH" ||STORMTYPE === "TY" ) {
-    status = "Hurricane";
-    if (MAXWIND <= 82) {
+  } else if (typeLower.includes('hurricane') || typeLower.includes('typhoon') || typeLower.includes('cyclone')) {
+    status = typeLower.includes('hurricane') ? "Hurricane" : 
+             typeLower.includes('typhoon') ? "Typhoon" : "Tropical Cyclone";
+    // Category based on wind speed in knots
+    if (windKt <= 82) {
       color = "yellow";
-    } else if (MAXWIND > 82 && MAXWIND <= 95) {
+    } else if (windKt > 82 && windKt <= 95) {
       color = "orange";
-    } else if (MAXWIND > 95 && MAXWIND <= 110) {
+    } else if (windKt > 95 && windKt <= 110) {
       color = "red";
-    } else if (MAXWIND > 110 && MAXWIND <= 135) {
+    } else if (windKt > 110 && windKt <= 135) {
       color = "hotpink";
-    } else if (MAXWIND > 135) {
+    } else if (windKt > 135) {
       color = "pink";
     }
+  } else {
+    // Default to tropical storm
+    color = "lime";
+    status = "Tropical Storm";
   }
-
+  
   return { status, color };
 };
 
-// Convert ADVDATE format to required format "MM/DD/YYYY at HH:MM AM/PM EST"
-export const convertToUTC = (dateStr) => {
+export const getLatestPoint = (storms) => {
+  // For tropical-tidbits data, just return the first storm if it exists
+  return storms && storms.length > 0 ? storms[0] : null;
+};
+
+// Format timestamp to EST with clean formatting
+const formatTimestampEST = (timestampStr) => {
+  if (!timestampStr) return '';
+  
   try {
-    // Parse the date string components: "1100 PM AST Sun Aug 03 2025"
-    const parts = dateStr.split(" ");
-    if (parts.length !== 7) {
-      throw new Error("Invalid date format");
-    }
+    // Parse the timestamp and convert to EST
+    const date = new Date(timestampStr);
     
-    const [time, ampm, timezone, dayOfWeek, month, date, year] = parts;
+    // Format in EST timezone
+    const dateOptions = {
+      month: 'numeric',
+      day: 'numeric',
+      year: 'numeric',
+      timeZone: 'America/New_York'
+    };
     
-    // Parse time: "1100" -> "11:00"
-    const hours = time.slice(0, -2);
-    const minutes = time.slice(-2);
+    const timeOptions = {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/New_York',
+      hour12: true
+    };
     
-    // Convert to 24-hour format
-    let hour24 = parseInt(hours);
-    if (ampm === "PM" && hour24 !== 12) {
-      hour24 += 12;
-    } else if (ampm === "AM" && hour24 === 12) {
-      hour24 = 0;
-    }
+    const datePart = date.toLocaleDateString('en-US', dateOptions);
+    let timePart = date.toLocaleTimeString('en-US', timeOptions);
     
-    // Create a date object in the local timezone first
-    const localDate = new Date(`${month} ${date} ${year} ${hour24}:${minutes}:00`);
+    // Remove :00 if minutes are zero (keep space before AM/PM)
+    timePart = timePart.replace(/:00\s/, ' ');
     
-    // Convert to EST by applying timezone offset
-    let estOffset = 0;
-    
-    // Convert various timezones to EST
-    switch (timezone) {
-      case "AST": // Atlantic Standard Time (UTC-4)
-        estOffset = 1; // AST is 1 hour ahead of EST
-        break;
-      case "HST": // Hawaii Standard Time (UTC-10)
-        estOffset = -5; // HST is 5 hours behind EST
-        break;
-      case "CST": // Central Standard Time (UTC-6)
-        estOffset = -1; // CST is 1 hour behind EST
-        break;
-      case "PST": // Pacific Standard Time (UTC-8)
-        estOffset = -3; // PST is 3 hours behind EST
-        break;
-      case "MST": // Mountain Standard Time (UTC-7)
-        estOffset = -2; // MST is 2 hours behind EST
-        break;
-      case "EST": // Eastern Standard Time (UTC-5)
-        estOffset = 0; // No offset needed
-        break;
-      default:
-        // Default to EST if unknown timezone
-        estOffset = 0;
-    }
-    
-    // Apply the offset to get EST time
-    const estDate = new Date(localDate.getTime() + (estOffset * 60 * 60 * 1000));
-    
-    // Format to required format: "MM/DD/YYYY at HH:MM AM/PM EST"
-    const monthStr = (estDate.getMonth() + 1).toString().padStart(2, '0');
-    const dayStr = estDate.getDate().toString().padStart(2, '0');
-    const yearStr = estDate.getFullYear();
-    
-    // Convert to 12-hour format
-    let hour12 = estDate.getHours();
-    const ampm12 = hour12 >= 12 ? 'PM' : 'AM';
-    if (hour12 === 0) hour12 = 12;
-    if (hour12 > 12) hour12 -= 12;
-    const hourStr = hour12.toString(); // Remove padStart to eliminate leading zeros
-    const minuteStr = estDate.getMinutes().toString().padStart(2, '0');
-    
-    return `${monthStr}/${dayStr}/${yearStr} at ${hourStr}:${minuteStr} ${ampm12} EST`;
+    return `${datePart} at ${timePart} EST`;
   } catch (error) {
-    console.error("Date parsing error:", error);
-    return dateStr; // Return original string if conversion fails
+    return timestampStr;
   }
-};
-
-// Find the current position for a storm (latest advisory, current observation)
-const findCurrentPosition = (stormPoints) => {
-  if (!stormPoints || stormPoints.length === 0) return null;
-  
-  // Group by advisory number
-  const advisories = {};
-  stormPoints.forEach(point => {
-    const advisoryNum = parseInt(point.properties.ADVISNUM);
-    if (!advisories[advisoryNum]) {
-      advisories[advisoryNum] = [];
-    }
-    advisories[advisoryNum].push(point);
-  });
-  
-  // Find the latest advisory
-  const latestAdvisoryNum = Math.max(...Object.keys(advisories).map(Number));
-  const latestAdvisoryPoints = advisories[latestAdvisoryNum];
-  
-  if (!latestAdvisoryPoints) return null;
-  
-  // Sort points in the latest advisory by date
-  latestAdvisoryPoints.sort((a, b) => {
-    const dateA = parseDate(a.properties.ADVDATE);
-    const dateB = parseDate(b.properties.ADVDATE);
-    return dateA - dateB;
-  });
-  
-  // First try to find a current observation (TAU === 0.0)
-  const currentObservation = latestAdvisoryPoints.find(point => point.properties.TAU === 0.0);
-  
-  if (currentObservation) {
-    return currentObservation;
-  }
-  
-  // If no current observation, return the first point in the latest advisory
-  return latestAdvisoryPoints[0];
-};
-
-export const getLatestPoint = (points) => {
-  return findCurrentPosition(points);
 };
 
 const LiveStorms = () => {
-  const { liveHurdat, forecastCone, selectedLiveStorm, selectLiveStorm, selectLiveStormPoint } = useContext(Context);
+  const { liveHurdat, forecastCone, selectedLiveStorm, selectLiveStormPoint } = useContext(Context);
 
-  // Check if data exists
-  if (!liveHurdat || liveHurdat.length === 0) {
+  // Check if data exists and has storms
+  if (!liveHurdat || !liveHurdat.storms || liveHurdat.storms.length === 0) {
     return null;
   }
 
+  const { storms } = liveHurdat;
+
+  // Small dot icon for track history points
+  const dot = (color) => {
+    return (
+      new divIcon({
+        className: 'bg-opacity-0',
+        html: `<svg fill=${color} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle stroke="black" stroke-width="10" cx="50" cy="50" r="40" /></svg>`,
+        iconSize: [10, 10]
+      })
+    )
+  };
+
+  // Large rotating storm icon for current position
   const stormIcon = (color, maxWind, stormId) => {
     // Calculate rotation speed based on wind speed
     // Higher wind speeds = faster rotation
-    const duration = `${1000/maxWind}s`
-    const uniqueClass = `rotating-storm-${stormId}`
+    const windSpeed = parseInt(maxWind) || 30;
+    const duration = `${1000/windSpeed}s`;
+    const uniqueClass = `rotating-storm-${stormId}`;
     return (
       new divIcon({
         className: "bg-opacity-0",
@@ -423,142 +181,126 @@ const LiveStorms = () => {
         </div>`,
         iconSize: [40, 40]
       })
-    )
-  }
+    );
+  };
 
-  const dot = (color) => {
-    return (
-      new divIcon({
-        className: "bg-opacity-0",
-        html: `<svg fill="${color}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle stroke="black" stroke-width="10" cx="50" cy="50" r="40" /></svg>`,
-        iconSize: [10, 10]
-      })
-    )
-  }
-
-  // Group storms by STORM_ID
-  const stormGroups = {};
-  liveHurdat.forEach(feature => {
-    const { STORM_ID } = feature.properties;
-    if (!stormGroups[STORM_ID]) {
-      stormGroups[STORM_ID] = [];
-    }
-    stormGroups[STORM_ID].push(feature);
-  });
-
-  // Process each storm
-  const liveStorms = {};
-  Object.keys(stormGroups).forEach(stormId => {
-    const points = stormGroups[stormId];
-    const currentPosition = findCurrentPosition(points);
+  const stormElements = storms.map((storm) => {
+    const { id, name, maxWinds, gusts, minPressure, lastUpdate, stormType, track } = storm;
+    const formattedName = formatStormName(storm);
     
-    if (currentPosition) {
-      // Sort all points by date for the track
-      const sortedPoints = [...points].sort((a, b) => {
-        const dateA = parseDate(a.properties.ADVDATE);
-        const dateB = parseDate(b.properties.ADVDATE);
-        return dateA - dateB;
-      });
-      
-      liveStorms[stormId] = {
-        markers: [],
-        positions: [],
-        name: currentPosition.properties.STORMNAME,
-        points: sortedPoints,
-        currentPosition: currentPosition
-      };
-      
-      // Create positions array
-      liveStorms[stormId].positions = sortedPoints.map(point => {
-        const [lng, lat] = point.geometry.coordinates[0];
-        return [lat, lng];
-      });
-      
-      // Create markers for all points
-      sortedPoints.forEach((point, i) => {
-        try {
-          const [lng, lat] = point.geometry.coordinates[0];
-          const { STORMNAME, STORMTYPE, MAXWIND, GUST, ADVDATE, MSLP } = point.properties;
-          const { status, color } = getStormStatus(STORMTYPE, MAXWIND);
-          
-          // Use storm icon for current position, dot for others
-          const isCurrentPosition = point === currentPosition;
-          const icon = isCurrentPosition ? stormIcon(color, MAXWIND, stormId) : dot(color);
-          
-          // Calculate movement speed and direction for current position
-          let movementSpeed = null;
-          let movementDirection = null;
-          if (isCurrentPosition) {
-            const previousPosition = findPreviousPosition(points, currentPosition);
-            movementSpeed = calculateMovementSpeed(currentPosition, previousPosition);
-            movementDirection = calculateMovementDirection(currentPosition, previousPosition);
-          }
-          
-          const marker = (
-            <Marker 
-              key={`marker-${stormId}-${i}`} 
-              position={[lat, lng]} 
-              icon={icon}
-              eventHandlers={{
-                click: () => {
-                  selectLiveStormPoint(stormId, lat, lng);
-                }
-              }}
-            >
-              <Popup className="w-fit font-bold">
-                <h1 className="font-bold text-[1rem]">{status} {STORMNAME.split(" ").pop()}</h1>
-                <h1 className="my-1">{convertToUTC(ADVDATE)} </h1>
-                <h1>Maximum Wind: {MAXWIND} kt</h1>
-                <h1>Maximum Wind Gusts: {GUST} kt</h1>
-                {MSLP !== 9999 && <h1>Minimum Pressure: {MSLP} mb</h1>}
-                {movementSpeed !== null && movementDirection !== null && (
-                  <h1>Movement: {movementDirection.cardinal} at {Math.round(movementSpeed)} kt</h1>
-                )}
-              </Popup>
-            </Marker>
-          );
-          
-          liveStorms[stormId].markers.push(marker);
-        } catch (error) {
-          console.error(`Error creating marker for storm ${stormId}, point ${i}:`, error);
-        }
-      });
+    const coords = getCoordinates(storm);
+    
+    if (!coords) {
+      console.log(`Skipping storm ${id} - no valid coordinates`);
+      return null;
     }
-  });
+    
+    const [lat, lng] = coords;
+    const windSpeed = parseInt(maxWinds) || 30;
+    
+    // Get status and color for current position
+    const { status, color } = getStormStatus(stormType, maxWinds);
 
-  const cones = forecastCone.map((feature) => {
+    // Track history positions for polyline
+    const trackPositions = [];
+    
+    // Track history markers (if track data exists)
+    const trackMarkers = track && track.length > 0 ? track.map((point, i) => {
+      const pointCoords = [point.latitude, point.longitude];
+      trackPositions.push(pointCoords);
+      
+      // Determine color for this historical point
+      const { color: pointColor } = getStormStatus(point.stormType, point.maxWinds);
+      
+      // Only show the last position with the rotating icon (skip it here)
+      if (i === track.length - 1) {
+        return null;
+      }
+      
+      return (
+        <Marker 
+          key={`${id}-track-${i}`} 
+          position={pointCoords} 
+          icon={dot(pointColor)}
+          eventHandlers={{
+            click: () => {
+              selectLiveStormPoint(id, point.latitude, point.longitude);
+            }
+          }}
+        >
+          <Popup className="w-fit font-bold">
+            <h1 className="text-[1rem]">{stormType} {formattedName}</h1>
+            <h1 className="my-1 text-sm">{formatTimestampEST(point.timestamp)}</h1>
+            {point.maxWinds && point.maxWinds !== 'N/A' && <h1>Maximum Wind: {point.maxWinds}</h1>}
+            {point.gusts && point.gusts !== 'N/A' && <h1>Maximum Wind Gusts: {point.gusts}</h1>}
+            {point.minPressure && point.minPressure !== 'N/A' && <h1>Minimum Pressure: {point.minPressure}</h1>}
+            {point.movement && point.movement !== 'N/A' && <h1>Movement: {point.movement}</h1>}
+          </Popup>
+        </Marker>
+      );
+    }).filter(marker => marker !== null) : [];
+    
+    // Current position marker (large rotating icon)
+    const currentMarker = (
+      <Marker 
+        key={`${id}-current`}
+        position={[lat, lng]} 
+        icon={stormIcon(color, windSpeed, id)}
+        eventHandlers={{
+          click: () => {
+            selectLiveStormPoint(id, lat, lng);
+          }
+        }}
+      >
+        <Popup className="w-fit font-bold">
+          <h1 className="font-bold text-[1rem]">{stormType || status} {formattedName}</h1>
+          {lastUpdate && <h1 className="my-1 text-sm">{formatTimestampEST(lastUpdate)}</h1>}
+          {maxWinds && maxWinds !== 'N/A' && <h1>Maximum Wind: {maxWinds}</h1>}
+          {gusts && gusts !== 'N/A' && <h1>Maximum Wind Gusts: {gusts}</h1>}
+          {minPressure && minPressure !== 'N/A' && <h1>Minimum Pressure: {minPressure}</h1>}
+          {storm.movement && storm.movement !== 'N/A' && <h1>Movement: {storm.movement}</h1>}
+        </Popup>
+      </Marker>
+    );
+
+    // Track polyline (if we have track data)
+    const isSelected = selectedLiveStorm === id;
+    const trackLine = trackPositions.length > 1 ? (
+      <Polyline 
+        key={`${id}-polyline`}
+        positions={trackPositions} 
+        color={isSelected ? "white" : "gray"} 
+        opacity={isSelected ? 0.8 : 0.5}
+        weight={isSelected ? 3 : 2}
+      />
+    ) : null;
+    
+    return (
+      <div key={id}>
+        {trackLine}
+        {trackMarkers}
+        {currentMarker}
+      </div>
+    );
+  }).filter(element => element !== null);
+
+  const cones = forecastCone.map((feature, index) => {
     const coordinates = feature.geometry.coordinates[0][0].map(coord => [coord[1], coord[0]]);
     return (
-      <Polygon positions={coordinates} color="red" weight={2}>
+      <Polygon key={index} positions={coordinates} color="red" weight={2}>
         <Popup className="w-fit font-bold">
           <h3>Cone of Uncertainty</h3>
         </Popup>
       </Polygon>
-    )
-  });
-
-  const tracks = Object.entries(liveStorms).map(([stormId, data]) => {
-    const isSelected = stormId === selectedLiveStorm;
-    return (
-      <div key={stormId}>
-        <Polyline 
-          key={`polyline-${stormId}-${isSelected}`}
-          positions={data.positions} 
-          color={isSelected ? "white" : "gray"} 
-          opacity={isSelected ? 0.8 : 0.25}
-          weight={isSelected ? 3 : 1}
-        />
-        {data.markers}
-      </div>
     );
   });
 
   return (
     <>
-      {tracks}
+      {stormElements}
       {cones}
     </>
-  )
-}
+  );
+};
 
-export default LiveStorms; 
+export default LiveStorms;

@@ -139,7 +139,7 @@ const StormArchive = () => {
         <div className='w-full max-w-96 flex flex-col items-center'>
           <a 
             target='_blank' 
-            className={`${retired && '!justify-end pb-2 lg:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'} w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300`}
+            className={`${retired && '!justify-end pb-2 lg:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'} w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-black bg-opacity-20 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300`}
             style={{backgroundImage: `url(${image})`}} 
             href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
           >

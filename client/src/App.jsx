@@ -6,7 +6,7 @@ import hurricaneWallpaper from "../public/hurricane.jpg"
 import cyclone from "../public/cyclone.png"
 import { sum } from "./libs/sum"
 import ArchiveCharts from "./components/ArchiveCharts"
-import { getLiveHurdat, getForecastCone, getWindFieldForecast, getAreasOfInterest, getPointsOfInterest } from "./libs/hurdat"
+import { getLiveHurdat, getForecastCone, getAreasOfInterest, getPointsOfInterest } from "./libs/hurdat"
 
 export const Context = createContext()
 
@@ -46,14 +46,12 @@ function App() {
       });
     }
     getLiveHurdat().then(data => {
+      // Data structure from tropical-tidbits: { storms: [], stormCount: 0, lastUpdated: '' }
       setLiveHurdat(data)
     })
     getForecastCone().then(data => {
       setForecastCone(data)
     })  
-    getWindFieldForecast().then(data => {
-      setWindFieldForecast(data)
-    })
     getAreasOfInterest().then(data => {
       setAreasOfInterest(data)
     })
@@ -272,6 +270,7 @@ function App() {
 
   const selectLiveStorm = (stormId) => {
     setSelectedLiveStorm(stormId)
+    setClickedPoint(null) // Clear clicked point so map focuses on selected storm
   }
 
   const selectArchivedStormPoint = (stormId, lat, lng) => {
@@ -334,11 +333,6 @@ function App() {
                 <h1 className="storm-font text-4xl text-white italic hidden sm:block">CYCLOPEDIA</h1>
               </div>
               <div className="flex items-center gap-5">
-                {!tracker && (
-                  <button className="button sm:!flex !hidden" onClick={toggleCharts} variant="contained">
-                    <h1>{map ? ("Charts") : ("Map")}</h1>
-                  </button>
-                )}
                 <button onClick={toggleTracker} className="button" variant="contained">
                   <h1>{tracker ? "Historical Archive" : "Live Tracker"}</h1>
                 </button>

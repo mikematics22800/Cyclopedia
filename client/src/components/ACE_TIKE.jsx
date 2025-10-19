@@ -24,14 +24,23 @@ const ACE_TIKE = () => {
         }
       },
       tooltip: {
+        enabled: true,
+        mode: 'index',
+        intersect: false,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
         bodyColor: "white", 
         titleColor: "white",
+        borderColor: 'white',
+        borderWidth: 1,
         callbacks: {
+          title: function(context) {
+            return context[0].label
+          },
           label: function(context) {
-            if (context.dataset.label === 'ACE') {
-              return `ACE: ${context.parsed.y.toFixed(1)}`
-            } else if (context.dataset.label === 'TIKE') {
-              return `TIKE: ${context.parsed.y.toFixed(2)} TJ`
+            if (context.dataset.label === 'Accumulated Cyclone Energy') {
+              return `Accumulated Cyclone Energy: ${context.parsed.y.toFixed(1)}`
+            } else if (context.dataset.label === 'Track Integrated Kinetic Energy (TJ)') {
+              return `Track Integrated Kinetic Energy (TJ): ${context.parsed.y.toFixed(1)} TJ`
             }
             return context.dataset.label
           }
@@ -86,7 +95,7 @@ const ACE_TIKE = () => {
   if (year >= 2004) {
     datasets.push({
       label: 'Track Integrated Kinetic Energy (TJ)',
-      data: TIKEArray?.map((tike) => parseFloat(tike.toFixed(2))),
+      data: TIKEArray?.map((tike) => parseFloat(tike.toFixed(1))),
       borderColor: "orange",
       backgroundColor: "lightyellow",
       fill: true,

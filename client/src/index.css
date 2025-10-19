@@ -93,7 +93,7 @@ nav {
 }
 
 .legend-container {
-  @apply flex justify-center absolute top-2 right-2 z-[9999] cursor-pointer
+  @apply flex justify-center cursor-pointer
 }
 
 .legend {
