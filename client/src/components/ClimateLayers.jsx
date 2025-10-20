@@ -53,16 +53,16 @@ const ClimateLayers = ({ onLayerChange }) => {
         </div>
       ) : (
         <div className="bg-black/50 rounded-lg p-4">
-          <div className="flex justify-end">
-            <IconButton onClick={() => {setLayers(false); setLayersButton(true)}}>
-              <Close className="text-white"/>
-            </IconButton>
-          </div>
           <FormGroup className="text-white">
-            <FormControlLabel 
-              control={<Checkbox className="!text-white" checked={clouds} onChange={(e) => handleChange('clouds', e.target.checked)}/>} 
-              label="Clouds" 
-            />
+            <div className="flex justify-between items-center">
+              <FormControlLabel 
+                control={<Checkbox className="!text-white" checked={clouds} onChange={(e) => handleChange('clouds', e.target.checked)}/>} 
+                label="Clouds" 
+              />
+              <IconButton onClick={() => {setLayers(false); setLayersButton(true)}}>
+                <Close className="text-white"/>
+              </IconButton>
+            </div>
             <FormControlLabel 
               control={<Checkbox className="!text-white" checked={precipitation} onChange={(e) => handleChange('precipitation', e.target.checked)}/>} 
               label="Precipitation" 

@@ -58,21 +58,20 @@ scrapeAllStorms().catch(err => {
   console.error('Initial scrape failed:', err);
 });
 
-// Schedule regular scraping from Weather Underground
+// Schedule regular scraping from Tropical Tidbits
 function scheduleAdvisoryScrapers() {
-  // Weather.com/Weather Underground updates frequently
-  // Scrape every hour to catch updates
-  const intervalHours = 1;
+  // Tropical Tidbits updates every 15 minutes
+  const intervalMinutes = 15;
   
   setInterval(() => {
     const now = new Date();
-    console.log(`Running scheduled Weather Underground scrape at ${now.toISOString()}...`);
+    console.log(`Running scheduled Tropical Tidbits scrape at ${now.toISOString()}...`);
     scrapeAllStorms().catch(err => {
       console.error('Scheduled scrape failed:', err);
     });
-  }, intervalHours * 60 * 60 * 1000); // Every hour
+  }, intervalMinutes * 60 * 1000); // Every 15 minutes
   
-  console.log(`Scheduled scraping every ${intervalHours} hour(s) from Weather Underground`);
+  console.log(`Scheduled scraping every ${intervalMinutes} minute(s) from Tropical Tidbits`);
 }
 
 scheduleAdvisoryScrapers();

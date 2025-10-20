@@ -2,106 +2,203 @@ import * as cheerio from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import puppeteer from 'puppeteer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Weather Underground uses Weather.com API
-const WEATHER_API_KEY = 'e1f10a1e78da46f5b10a1e78da96f525';
-const WEATHER_API_BASE = 'https://api.weather.com';
+const TROPICAL_TIDBITS_URL = 'https://www.tropicaltidbits.com/storminfo/';
 
 /**
- * Fetches JSON data from Weather.com API
+ * Scrapes storm data using Puppeteer to interact with the dropdown
  */
-async function fetchWeatherAPI(endpoint) {
+async function scrapeStormWithPuppeteer(stormId) {
+  let browser;
   try {
-    const url = `${WEATHER_API_BASE}${endpoint}`;
-    console.log(`Fetching: ${url}`);
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
+    browser = await puppeteer.launch({ 
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    const page = await browser.newPage();
+    
+    console.log(`  Loading page for storm: ${stormId}`);
+    await page.goto(`${TROPICAL_TIDBITS_URL}#${stormId}`, { 
+      waitUntil: 'networkidle2',
+      timeout: 30000 
+    });
+    
+    // Wait a bit for any JavaScript to execute
+    await page.waitForTimeout(1000);
+    
+    // Get the HTML content
+    const html = await page.content();
+    
+    await browser.close();
+    return html;
   } catch (error) {
-    console.error(`Error fetching ${endpoint}:`, error.message);
+    console.error(`  Error scraping storm ${stormId}:`, error.message);
+    if (browser) await browser.close();
     return null;
   }
 }
 
 /**
- * Fetches active storms from Weather.com API
+ * Parses coordinates from location string like "17.9°N 112.9°E"
  */
-async function getActiveStorms() {
-  console.log('Fetching active storms from Weather Underground...');
+function parseCoordinates(locationStr) {
+  const match = locationStr.match(/([\d.]+)°([NS])\s+([\d.]+)°([EW])/);
+  if (!match) return null;
   
-  const data = await fetchWeatherAPI(
-    `/v2/tropical/currentposition?apiKey=${WEATHER_API_KEY}&source=default&basin=all&language=en-US&units=e&nautical=true&format=json`
-  );
+  const lat = parseFloat(match[1]) * (match[2] === 'S' ? -1 : 1);
+  const lon = parseFloat(match[3]) * (match[4] === 'W' ? -1 : 1);
   
-  if (!data || !data.advisoryinfo) {
-    console.log('No storm data available');
-    return [];
-  }
-
-  console.log(`Found ${data.advisoryinfo.length} active storms`);
-  return data.advisoryinfo;
+  return { lat, lon };
 }
 
 /**
- * Formats a single position data point from advisory
+ * Parses storm type and name from text like "Tropical Storm FENGSHEN"
  */
-function formatPositionPoint(advisory) {
-  const pos = advisory.currentposition;
+function parseStormName(nameStr) {
+  const parts = nameStr.trim().split(/\s+/);
+  if (parts.length < 2) return { type: 'Unknown', name: parts[0] };
   
-  // API already returns signed coordinates
+  // Last word is the name, everything before is the type
+  const name = parts[parts.length - 1];
+  const type = parts.slice(0, -1).join(' ');
+  
+  return { type, name };
+}
+
+/**
+ * Parses timestamp from string like "As of 18:00 UTC Oct 20, 2025:"
+ */
+function parseTimestamp(timestampStr) {
+  const match = timestampStr.match(/As of ([\d:]+) UTC ([A-Za-z]+) ([\d]+), ([\d]+)/);
+  if (!match) return null;
+  
+  const [_, time, month, day, year] = match;
+  const monthMap = {
+    'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+    'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+    'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+  };
+  
+  const monthNum = monthMap[month] || '01';
+  const isoDate = `${year}-${monthNum}-${day.padStart(2, '0')}T${time}:00Z`;
+  
+  return isoDate;
+}
+
+function formatPositionPoint(stormData) {
   return {
-    latitude: pos.lat,
-    longitude: pos.lon,
-    maxWinds: pos.max_sustained_wind ? `${pos.max_sustained_wind} mph` : 'N/A',
-    gusts: pos.wind_gust ? `${pos.wind_gust} mph` : 'N/A',
-    minPressure: pos.min_pressure ? `${pos.min_pressure} inHg` : 'N/A',
-    movement: pos.heading ? `${pos.heading.storm_dir_cardinal} at ${pos.heading.storm_spd} mph` : 'N/A',
-    timestamp: advisory.issue_dt_tm,
-    stormType: pos.storm_type || 'Unknown',
-    windRadii: pos.wind_radii || []
+    latitude: stormData.latitude,
+    longitude: stormData.longitude,
+    maxWinds: stormData.maxWinds,
+    gusts: stormData.gusts,
+    minPressure: stormData.minPressure,
+    movement: 'N/A',
+    timestamp: stormData.timestamp,
+    stormType: stormData.stormType,
+    windRadii: []
   };
 }
 
 /**
- * Formats storm data from Weather.com API to simplified structure with track history
+ * Parses storm data from HTML using cheerio
  */
-function formatStormData(advisory, previousTrack = []) {
-  const pos = advisory.currentposition;
+function parseStormFromHTML($, stormId) {
+  const stormWrapper = $(`#${stormId}`);
+  if (!stormWrapper.length) {
+    console.log(`    [DEBUG] No wrapper found for storm ID: ${stormId}`);
+    return null;
+  }
+  
+  // Extract storm name and type
+  const stormNameText = stormWrapper.find('.storm-name').text().trim();
+  if (!stormNameText) {
+    console.log(`    [DEBUG] No storm name found for ${stormId}`);
+    return null;
+  }
+  const { type: stormType, name: stormName } = parseStormName(stormNameText);
+  
+  // Extract timestamp
+  const timestampText = stormWrapper.find('.timestamp').text().trim();
+  const timestamp = parseTimestamp(timestampText);
+  
+  // Extract storm info spans
+  const stormInfo = stormWrapper.find('.storm-info');
+  
+  // Parse location
+  const locationText = stormInfo.find('span').filter((i, el) => $(el).text().includes('Location:')).text();
+  const locationMatch = locationText.match(/Location:\s*(.+)/);
+  const locationStr = locationMatch ? locationMatch[1].trim() : '';
+  const coords = parseCoordinates(locationStr);
+  
+  if (!coords) return null;
+  
+  // Parse winds
+  const windsText = stormInfo.find('span').filter((i, el) => $(el).text().includes('Maximum Winds:')).text();
+  const windsMatch = windsText.match(/Maximum Winds:\s*([\d.]+)\s*kt/);
+  const gustsMatch = windsText.match(/Gusts:\s*([\d.]+|N\/A)/);
+  const maxWinds = windsMatch ? `${windsMatch[1]} kt` : 'N/A';
+  const gusts = gustsMatch && gustsMatch[1] !== 'N/A' ? `${gustsMatch[1]} kt` : 'N/A';
+  
+  // Parse pressure
+  const pressureText = stormInfo.find('span').filter((i, el) => $(el).text().includes('Minimum Central Pressure:')).text();
+  const pressureMatch = pressureText.match(/Minimum Central Pressure:\s*([\d.]+)\s*mb/);
+  const minPressure = pressureMatch ? `${pressureMatch[1]} mb` : 'N/A';
+  
+  // Determine basin from storm ID
+  let basin = 'Unknown';
+  if (stormId.endsWith('L')) basin = 'AL';
+  else if (stormId.endsWith('E')) basin = 'EP';
+  else if (stormId.endsWith('W')) basin = 'WP';
+  else if (stormId.endsWith('S')) basin = 'SH';
+  else if (stormId.endsWith('A')) basin = 'IO';
+  else if (stormId.endsWith('B')) basin = 'IO';
   
   // Format location string
-  const lat = `${Math.abs(pos.lat).toFixed(1)}°${pos.lat_hemisphere}`;
-  const lon = `${Math.abs(pos.lon).toFixed(1)}°${pos.lon_hemisphere}`;
-  const location = `${lat} ${lon}`;
+  const latStr = `${Math.abs(coords.lat).toFixed(1)}°${coords.lat >= 0 ? 'N' : 'S'}`;
+  const lonStr = `${Math.abs(coords.lon).toFixed(1)}°${coords.lon >= 0 ? 'E' : 'W'}`;
+  const location = `${latStr} ${lonStr}`;
   
-  // Format timestamp
-  const timestamp = new Date(advisory.issue_dt_tm).toLocaleString('en-US', {
+  // Format timestamp for display
+  const displayTimestamp = timestamp ? new Date(timestamp).toLocaleString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-    timeZone: advisory.issue_dt_tm_tz_cd || 'UTC'
-  });
+    timeZone: 'UTC'
+  }) + ' UTC' : 'Unknown';
   
-  // Determine storm type and name
-  let stormType = pos.storm_type || 'Unknown';
-  let stormName = advisory.storm_name || `${advisory.basin}${advisory.storm_number}`;
-  
-  // Combine type and name
-  let displayName = `${stormType} ${stormName}`;
-  
-  // Handle special cases like "Invest 98L"
-  if (advisory.storm_id.includes('AL98') || advisory.storm_id.includes('EP98')) {
-    displayName = `Invest ${advisory.storm_id.replace(/[A-Z]+/, '')}${advisory.basin}`;
-  }
-  
+  return {
+    id: stormId,
+    name: `${stormType} ${stormName}`,
+    stormName: stormName,
+    stormType: stormType,
+    basin: basin,
+    location: location,
+    latitude: coords.lat,
+    longitude: coords.lon,
+    maxWinds: maxWinds,
+    gusts: gusts,
+    minPressure: minPressure,
+    movement: 'N/A',
+    timestamp: displayTimestamp,
+    windRadii: [],
+    isFinal: false,
+    lastUpdate: timestamp,
+    rawTimestamp: timestamp
+  };
+}
+
+/**
+ * Formats storm data with track history
+ */
+function formatStormData(stormData, previousTrack = []) {
   // Create current position point
-  const currentPoint = formatPositionPoint(advisory);
+  const currentPoint = formatPositionPoint(stormData);
   
   // Merge previous track with current point, avoiding duplicates
   const track = [...previousTrack];
@@ -115,25 +212,9 @@ function formatStormData(advisory, previousTrack = []) {
     track.push(currentPoint);
   }
   
-  // API already returns signed coordinates
   return {
-    id: advisory.storm_id,
-    name: displayName,
-    stormName: stormName,
-    stormType: stormType,
-    basin: advisory.basin,
-    location: location,
-    latitude: pos.lat,
-    longitude: pos.lon,
-    maxWinds: pos.max_sustained_wind ? `${pos.max_sustained_wind} mph` : 'N/A',
-    gusts: pos.wind_gust ? `${pos.wind_gust} mph` : 'N/A',
-    minPressure: pos.min_pressure ? `${pos.min_pressure} inHg` : 'N/A',
-    movement: pos.heading ? `${pos.heading.storm_dir_cardinal} at ${pos.heading.storm_spd} mph` : 'N/A',
-    timestamp: timestamp,
-    windRadii: pos.wind_radii || [],
-    isFinal: advisory.final_advisory || false,
-    lastUpdate: advisory.issue_dt_tm,
-    track: track // Full track history
+    ...stormData,
+    track: track
   };
 }
 
@@ -151,19 +232,45 @@ async function loadPreviousData() {
 }
 
 /**
- * Main scraper function that fetches all active storms and appends track history
+ * Main scraper function that fetches all active storms from Tropical Tidbits and appends track history
  * Automatically removes storms that are no longer active
+ * Uses Puppeteer to load each storm individually via hash anchors
  */
 export async function scrapeAllStorms() {
+  let browser;
   try {
-    const advisories = await getActiveStorms();
+    // Launch browser once and reuse it
+    console.log('Launching browser...');
+    browser = await puppeteer.launch({ 
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    
+    // Load main page to get storm IDs
+    const page = await browser.newPage();
+    console.log(`Fetching: ${TROPICAL_TIDBITS_URL}`);
+    await page.goto(TROPICAL_TIDBITS_URL, { 
+      waitUntil: 'networkidle2',
+      timeout: 30000 
+    });
+    
+    // Get storm IDs from dropdown
+    const stormIds = await page.evaluate(() => {
+      const options = Array.from(document.querySelectorAll('#storm-select option'));
+      return options
+        .map(opt => opt.value)
+        .filter(val => val && val !== '');
+    });
+    
+    console.log(`Found ${stormIds.length} active storms on Tropical Tidbits`);
     
     // Load previous data to preserve track history
     const previousData = await loadPreviousData();
     const previousStorms = previousData?.storms || [];
     
-    if (!advisories || advisories.length === 0) {
+    if (stormIds.length === 0) {
       console.log('No active storms found');
+      await browser.close();
       
       // If there were previously active storms, log their removal
       if (previousStorms.length > 0) {
@@ -177,47 +284,72 @@ export async function scrapeAllStorms() {
         lastUpdated: new Date().toISOString(),
         stormCount: 0,
         storms: [],
-        source: 'Weather Underground / Weather.com API'
+        source: 'Tropical Tidbits ATCF'
       };
     }
 
+    // Visit each storm by selecting from dropdown
+    const currentStorms = [];
+    for (const stormId of stormIds) {
+      try {
+        console.log(`  Selecting storm: ${stormId}`);
+        
+        // Select the storm from the dropdown
+        await page.select('#storm-select', stormId);
+        
+        // Wait for the page to update after selection
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Get the updated HTML
+        const html = await page.content();
+        const $ = cheerio.load(html);
+        
+        // Parse the storm data
+        const stormData = parseStormFromHTML($, stormId);
+        if (stormData) {
+          currentStorms.push(stormData);
+          console.log(`  ✓ Parsed: ${stormData.name} (${stormId})`);
+        } else {
+          console.log(`  ! Failed to parse data for ${stormId}`);
+        }
+      } catch (error) {
+        console.error(`  ! Error loading ${stormId}:`, error.message);
+      }
+    }
+    
+    await browser.close();
+
     // Get IDs of currently active storms
-    const activeStormIds = new Set(
-      advisories
-        .filter(advisory => !advisory.final_advisory)
-        .map(advisory => advisory.storm_id)
-    );
+    const activeStormIds = new Set(currentStorms.map(s => s.id));
 
     // Check for storms that are no longer active
     const inactiveStorms = previousStorms.filter(storm => !activeStormIds.has(storm.id));
     if (inactiveStorms.length > 0) {
       console.log(`Removing ${inactiveStorms.length} inactive storm(s):`);
       inactiveStorms.forEach(storm => {
-        console.log(`  - ${storm.name} (${storm.id}) - No longer detected by API`);
+        console.log(`  - ${storm.name} (${storm.id}) - No longer detected`);
       });
     }
 
     // Format storm data with track history (only for currently active storms)
-    const stormDetails = advisories
-      .filter(advisory => !advisory.final_advisory) // Filter out dissipated storms
-      .map(advisory => {
-        // Find previous track for this storm ID
-        const previousStorm = previousStorms.find(s => s.id === advisory.storm_id);
-        const previousTrack = previousStorm?.track || [];
-        
-        const isNewStorm = !previousStorm;
-        if (isNewStorm) {
-          console.log(`  + New storm detected: ${advisory.storm_name || advisory.storm_id}`);
-        }
-        
-        return formatStormData(advisory, previousTrack);
-      });
+    const stormDetails = currentStorms.map(stormData => {
+      // Find previous track for this storm ID
+      const previousStorm = previousStorms.find(s => s.id === stormData.id);
+      const previousTrack = previousStorm?.track || [];
+      
+      const isNewStorm = !previousStorm;
+      if (isNewStorm) {
+        console.log(`  + New storm detected: ${stormData.stormName} (${stormData.id})`);
+      }
+      
+      return formatStormData(stormData, previousTrack);
+    });
 
     const result = {
       lastUpdated: new Date().toISOString(),
       stormCount: stormDetails.length,
       storms: stormDetails,
-      source: 'Weather Underground / Weather.com API'
+      source: 'Tropical Tidbits ATCF'
     };
 
     // Save to hurdat.json (main file) and weather-underground.json (backup)
@@ -226,13 +358,16 @@ export async function scrapeAllStorms() {
     
     const jsonData = JSON.stringify(result, null, 2);
     await fs.writeFile(path.join(livePath, 'hurdat.json'), jsonData);
-    await fs.writeFile(path.join(livePath, 'weather-underground.json'), jsonData);
+    await fs.writeFile(path.join(livePath, 'tropical-tidbits.json'), jsonData);
 
     console.log(`Successfully scraped ${stormDetails.length} active storms with track history`);
     return result;
 
   } catch (error) {
     console.error('Error scraping storms:', error);
+    if (browser) {
+      await browser.close();
+    }
     throw error;
   }
 }
@@ -248,13 +383,13 @@ export async function getStormData(forceRefresh = false) {
       const data = await fs.readFile(filePath, 'utf8');
       const parsed = JSON.parse(data);
       
-      // Check if data is less than 1 hour old (Weather.com updates frequently)
+      // Check if data is less than 15 minutes old (Tropical Tidbits updates every 15 minutes)
       const lastUpdated = new Date(parsed.lastUpdated);
       const now = new Date();
-      const diffHours = (now - lastUpdated) / (1000 * 60 * 60);
+      const diffMinutes = (now - lastUpdated) / (1000 * 60);
       
-      if (diffHours < 1) {
-        console.log(`Using cached storm data (${diffHours.toFixed(2)} hours old)`);
+      if (diffMinutes < 15) {
+        console.log(`Using cached storm data (${diffMinutes.toFixed(1)} minutes old)`);
         return parsed;
       }
     } catch (error) {

@@ -33,7 +33,10 @@ export const getStormStatus = (stormType, maxWindsStr) => {
   // Determine type from stormType
   const typeLower = stormType.toLowerCase();
   
-  if (typeLower.includes('low')) {
+  if (typeLower.includes('invest')) {
+    color = "lightgray";
+    status = "Invest";
+  } else if (typeLower.includes('low')) {
     color = "white";
     status = "Tropical Low";
   } else if (typeLower.includes('disturbance')) {
@@ -73,9 +76,9 @@ export const getStormStatus = (stormType, maxWindsStr) => {
       color = "pink";
     }
   } else {
-    // Default to tropical storm
-    color = "lime";
-    status = "Tropical Storm";
+    // Default to invest/disturbance for unknown types
+    color = "lightgray";
+    status = stormType;
   }
   
   return { status, color };
@@ -130,6 +133,16 @@ const LiveStorms = () => {
   }
 
   const { storms } = liveHurdat;
+  
+  // Filter out invests - only show named storms and tropical cyclones
+  const activeStorms = storms.filter(storm => 
+    !storm.stormType.toLowerCase().includes('invest')
+  );
+  
+  // Return null if no active storms after filtering
+  if (activeStorms.length === 0) {
+    return null;
+  }
 
   // Small dot icon for track history points
   const dot = (color) => {
@@ -184,7 +197,7 @@ const LiveStorms = () => {
     );
   };
 
-  const stormElements = storms.map((storm) => {
+  const stormElements = activeStorms.map((storm) => {
     const { id, name, maxWinds, gusts, minPressure, lastUpdate, stormType, track } = storm;
     const formattedName = formatStormName(storm);
     

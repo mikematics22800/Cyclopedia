@@ -6,32 +6,48 @@ const formatStormName = (storm) => {
   return storm.stormName || storm.name;
 };
 
-// Determine storm status and color based on name and wind speed
-const getStormStatus = (stormName, maxWindsStr) => {
-  // Parse wind speed from string like "30 kt"
+// Determine storm status and color based on storm type and wind speed
+const getStormStatus = (stormType, maxWindsStr) => {
+  // Parse wind speed from string like "30 kt" or "45 kt"
   const windSpeed = parseInt(maxWindsStr) || 0;
   
   let color;
-  let status;
+  let status = stormType;
   
-  // Determine type from name
-  const nameLower = stormName.toLowerCase();
+  // Determine type from stormType
+  const typeLower = stormType.toLowerCase();
   
-  if (nameLower.includes('depression')) {
-    color = "dodgerblue";
-    status = "Tropical Depression";
-  } else if (nameLower.includes('subtropical storm')) {
-    color = "#D0F0C0";
-    status = "Subtropical Storm";
-  } else if (nameLower.includes('subtropical depression')) {
+  if (typeLower.includes('invest')) {
+    color = "lightgray";
+    status = "Invest";
+  } else if (typeLower.includes('low')) {
+    color = "white";
+    status = "Tropical Low";
+  } else if (typeLower.includes('disturbance')) {
+    color = "lightgray";
+    status = "Tropical Disturbance";
+  } else if (typeLower.includes('wave')) {
+    color = "gray";
+    status = "Tropical Wave";
+  } else if (typeLower.includes('extratropical')) {
+    color = "#7F00FF";
+    status = "Extratropical Cyclone";
+  } else if (typeLower.includes('subtropical depression')) {
     color = "aqua";
     status = "Subtropical Depression";
-  } else if (nameLower.includes('storm') || nameLower.includes('tropical storm')) {
+  } else if (typeLower.includes('subtropical storm')) {
+    color = "#D0F0C0";
+    status = "Subtropical Storm";
+  } else if (typeLower.includes('depression') || typeLower.includes('tropical depression')) {
+    color = "dodgerblue";
+    status = "Tropical Depression";
+  } else if (typeLower.includes('tropical storm')) {
     color = "lime";
     status = "Tropical Storm";
-  } else if (nameLower.includes('hurricane') || nameLower.includes('typhoon') || nameLower.includes('cyclone')) {
-    status = "Hurricane";
-    // Category based on wind speed
+  } else if (typeLower.includes('hurricane') || typeLower.includes('typhoon') || typeLower.includes('cyclone')) {
+    status = typeLower.includes('hurricane') ? "Hurricane" : 
+             typeLower.includes('typhoon') ? "Typhoon" : "Tropical Cyclone";
+    // Category based on wind speed in knots
     if (windSpeed <= 82) {
       color = "yellow";
     } else if (windSpeed > 82 && windSpeed <= 95) {
@@ -43,38 +59,21 @@ const getStormStatus = (stormName, maxWindsStr) => {
     } else if (windSpeed > 135) {
       color = "pink";
     }
-  } else if (nameLower.includes('extratropical')) {
-    color = "#7F00FF";
-    status = "Extratropical Cyclone";
-  } else if (nameLower.includes('disturbance')) {
-    color = "lightgray";
-    status = "Tropical Disturbance";
-  } else if (nameLower.includes('wave')) {
-    color = "gray";
-    status = "Tropical Wave";
-  } else if (nameLower.includes('low')) {
-    color = "white";
-    status = "Tropical Low";
   } else {
-    // Default to tropical storm
-    color = "lime";
-    status = "Tropical Storm";
+    // Default to invest/disturbance for unknown types
+    color = "lightgray";
+    status = stormType;
   }
   
   return { status, color };
 };
 
-// Convert pressure from inHg to mb
-const convertPressureToMb = (pressureStr) => {
+// Format pressure (already in mb format)
+const formatPressure = (pressureStr) => {
   if (!pressureStr || pressureStr === 'N/A') return 'Unavailable';
   
-  // Extract numeric value from string like "29.71 inHg"
-  const match = pressureStr.match(/[\d.]+/);
-  if (!match) return 'Unavailable';
-  
-  const inHg = parseFloat(match[0]);
-  const mb = (inHg * 33.8639).toFixed(1);
-  return `${mb} mb`;
+  // Pressure is already in mb format like "994 mb"
+  return pressureStr;
 };
 
 // Format timestamp to EST with clean formatting
@@ -125,12 +124,26 @@ const LiveTracker = () => {
   }
 
   const { storms } = liveHurdat;
+  
+  // Filter out invests - only show named storms and tropical cyclones
+  const activeStorms = storms.filter(storm => 
+    !storm.stormType.toLowerCase().includes('invest')
+  );
+
+  // Check if we have any active storms after filtering
+  if (activeStorms.length === 0) {
+    return (
+      <div className="flex flex-col gap-4 w-full items-center p-4">
+        <h2 className="text-white text-lg">No active storms</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 w-full items-center">
-      {storms.map((storm) => {
+      {activeStorms.map((storm) => {
         const { id, name, maxWinds, gusts, minPressure, stormType, movement } = storm;
-        const { status, color } = getStormStatus(name, maxWinds);
+        const { status, color } = getStormStatus(stormType, maxWinds);
         const formattedName = formatStormName(storm);
         
         const isSelected = id === selectedLiveStorm;
@@ -152,34 +165,28 @@ const LiveTracker = () => {
               </li>
               
               {/* Wind Data */}
-              {maxWinds && maxWinds !== 'N/A' && (
               <li className='flex justify-between items-center p-2 border-b border-gray-600'>
                 <h2 className='text-sm font-semibold'>Maximum Wind</h2>
-                  <h2 className='text-lg font-bold'>{maxWinds}</h2>
+                <h2 className='text-lg font-bold'>{maxWinds && maxWinds !== 'N/A' ? maxWinds : 'Unavailable'}</h2>
               </li>
-              )}
               
               {/* Gust Data */}
-              {gusts && gusts !== 'N/A' && (
               <li className='flex justify-between items-center p-2 border-b border-gray-600'>
                 <h2 className='text-sm font-semibold'>Maximum Wind Gusts</h2>
-                  <h2 className='text-lg font-bold'>{gusts}</h2>
+                <h2 className='text-lg font-bold'>{gusts && gusts !== 'N/A' ? gusts : 'Unavailable'}</h2>
               </li>
-              )}
               
               {/* Pressure Data */}
               <li className='flex justify-between items-center p-2 border-b border-gray-600'>
                 <h2 className='text-sm font-semibold'>Minimum Pressure</h2>
-                <h2 className='text-lg font-bold'>{convertPressureToMb(minPressure)}</h2>
+                <h2 className='text-lg font-bold'>{formatPressure(minPressure)}</h2>
               </li>
               
               {/* Movement Data */}
-              {movement && movement !== 'N/A' && (
-                <li className='flex justify-between items-center p-2'>
-                  <h2 className='text-sm font-semibold'>Movement</h2>
-                  <h2 className='text-lg font-bold'>{movement}</h2>
-                </li>
-              )}
+              <li className='flex justify-between items-center p-2'>
+                <h2 className='text-sm font-semibold'>Movement</h2>
+                <h2 className='text-lg font-bold'>{movement && movement !== 'N/A' ? movement : 'Unavailable'}</h2>
+              </li>
             </ul>
           </div>
         );
