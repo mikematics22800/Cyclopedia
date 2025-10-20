@@ -7,40 +7,7 @@ import puppeteer from 'puppeteer';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const TROPICAL_TIDBITS_URL = 'https://www.tropicaltidbits.com/storminfo/';
-
-/**
- * Scrapes storm data using Puppeteer to interact with the dropdown
- */
-async function scrapeStormWithPuppeteer(stormId) {
-  let browser;
-  try {
-    browser = await puppeteer.launch({ 
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    const page = await browser.newPage();
-    
-    console.log(`  Loading page for storm: ${stormId}`);
-    await page.goto(`${TROPICAL_TIDBITS_URL}#${stormId}`, { 
-      waitUntil: 'networkidle2',
-      timeout: 30000 
-    });
-    
-    // Wait a bit for any JavaScript to execute
-    await page.waitForTimeout(1000);
-    
-    // Get the HTML content
-    const html = await page.content();
-    
-    await browser.close();
-    return html;
-  } catch (error) {
-    console.error(`  Error scraping storm ${stormId}:`, error.message);
-    if (browser) await browser.close();
-    return null;
-  }
-}
+const baseURL = 'https://www.tropicaltidbits.com/storminfo/';
 
 /**
  * Parses coordinates from location string like "17.9°N 112.9°E"
@@ -248,8 +215,8 @@ export async function scrapeAllStorms() {
     
     // Load main page to get storm IDs
     const page = await browser.newPage();
-    console.log(`Fetching: ${TROPICAL_TIDBITS_URL}`);
-    await page.goto(TROPICAL_TIDBITS_URL, { 
+    console.log(`Fetching: ${baseURL}`);
+    await page.goto(baseURL, { 
       waitUntil: 'networkidle2',
       timeout: 30000 
     });
