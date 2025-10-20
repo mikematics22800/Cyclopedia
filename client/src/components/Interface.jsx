@@ -44,10 +44,12 @@ const Interface = () => {
               })}
             </Select>
           </div>
-          <div className="flex items-center gap-1">
-            <Checkbox disabled={year < 2004} className={year < 2004 ? "!text-gray-400 !p-0" : "!text-white !p-0"} onChange={(e) => {setWindField(e.target.checked)}}/>
-            <h1 className={year < 2004 ? "text-gray-400 font-bold" : "text-white font-bold"}>Wind Field</h1>
-          </div>
+          {year >= 2004 && (
+            <div className="flex items-center gap-1">
+              <Checkbox className="!text-white !p-0" onChange={(e) => {setWindField(e.target.checked)}}/>
+              <h1 className="text-white font-bold">Wind Field</h1>
+            </div>
+          )}
           <StormArchive/>
           <SeasonArchive/>
           <div className="hidden sm:flex justify-center mt-4 w-full">
