@@ -14,9 +14,15 @@ const getCoordinates = (storm) => {
   }
 };
 
-// Format storm name (now comes pre-formatted from API)
+// Format storm name - convert from ALL CAPS to Title Case
 const formatStormName = (storm) => {
-  return storm.stormName || storm.name;
+  const name = storm.stormName || storm.name;
+  if (!name) return '';
+  
+  // Convert ALL CAPS to Title Case
+  return name.toLowerCase().split(' ').map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1)
+  ).join(' ');
 };
 
 // Determine storm status and color based on storm type and wind speed
