@@ -9,6 +9,57 @@ const __dirname = path.dirname(__filename);
 
 const baseURL = 'https://www.tropicaltidbits.com/storminfo/';
 
+// Global browser instance for reuse
+let browserInstance = null;
+
+/**
+ * Gets or creates a browser instance for reuse across scrapes
+ */
+async function getBrowser() {
+  // Check if browser exists and is still connected
+  if (browserInstance && browserInstance.isConnected()) {
+    return browserInstance;
+  }
+  
+  // Create new browser instance
+  console.log('Creating new browser instance...');
+  browserInstance = await puppeteer.launch({ 
+    headless: true,
+    args: [
+      '--no-sandbox', 
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--disable-gpu'
+    ],
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath()
+  });
+  
+  return browserInstance;
+}
+
+/**
+ * Closes the browser instance (call on shutdown)
+ */
+export async function closeBrowser() {
+  if (browserInstance) {
+    console.log('Closing browser instance...');
+    await browserInstance.close();
+    browserInstance = null;
+  }
+}
+
+// Cleanup on process exit
+process.on('SIGINT', async () => {
+  await closeBrowser();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  await closeBrowser();
+  process.exit(0);
+});
+
 /**
  * Parses coordinates from location string like "17.9°N 112.9°E"
  */
@@ -202,26 +253,16 @@ async function loadPreviousData() {
  * Main scraper function that fetches all active storms from Tropical Tidbits and appends track history
  * Automatically removes storms that are no longer active
  * Uses Puppeteer to load each storm individually via hash anchors
+ * Reuses a single browser instance to prevent memory leaks
  */
 export async function scrapeAllStorms() {
-  let browser;
+  let page;
   try {
-    // Launch browser once and reuse it
-    console.log('Launching browser...');
-    browser = await puppeteer.launch({ 
-      headless: true,
-      args: [
-        '--no-sandbox', 
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--disable-gpu'
-      ],
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath()
-    });
+    // Get or create browser instance (reused across calls)
+    const browser = await getBrowser();
     
     // Load main page to get storm IDs
-    const page = await browser.newPage();
+    page = await browser.newPage();
     console.log(`Fetching: ${baseURL}`);
     await page.goto(baseURL, { 
       waitUntil: 'networkidle2',
@@ -244,7 +285,7 @@ export async function scrapeAllStorms() {
     
     if (stormIds.length === 0) {
       console.log('No active storms found');
-      await browser.close();
+      await page.close();
       
       // If there were previously active storms, log their removal
       if (previousStorms.length > 0) {
@@ -291,7 +332,8 @@ export async function scrapeAllStorms() {
       }
     }
     
-    await browser.close();
+    // Close the page but keep browser alive for reuse
+    await page.close();
 
     // Get IDs of currently active storms
     const activeStormIds = new Set(currentStorms.map(s => s.id));
@@ -339,8 +381,13 @@ export async function scrapeAllStorms() {
 
   } catch (error) {
     console.error('Error scraping storms:', error);
-    if (browser) {
-      await browser.close();
+    // Close page if it exists, but keep browser alive for next attempt
+    if (page) {
+      try {
+        await page.close();
+      } catch (closeError) {
+        console.error('Error closing page:', closeError.message);
+      }
     }
     throw error;
   }
