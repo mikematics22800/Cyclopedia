@@ -5,10 +5,9 @@ const options = {
   }
 }
 
+const baseUrl = 'https://cyclopedia.onrender.com'
+
 export const getHurdat = async (basin, year) => {
-  const baseUrl = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000' 
-    : 'https://cyclopedia.onrender.com';
   try {
     const response = await fetch(`${baseUrl}/archive/${basin}/${year}`, options)
     if (!response.ok) {
@@ -23,11 +22,6 @@ export const getHurdat = async (basin, year) => {
 
 export const getLiveHurdat = async () => {
   try {
-    // Use server endpoint - automatically use correct URL for dev/production
-    const baseUrl = window.location.hostname === 'localhost' 
-      ? 'http://localhost:3000' 
-      : 'https://cyclopedia.onrender.com';
-    
     const response = await fetch(`${baseUrl}/live`, options)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
