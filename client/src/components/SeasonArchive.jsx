@@ -72,40 +72,40 @@ const SeasonArchive = () => {
           </li>
           
           {/* Storm Counts */}
-          <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+          <li className='flex justify-between p-2 border-b border-gray-600'>
             <h2 className='text-sm font-semibold '>Tropical Cyclones</h2>
             <h2 className='text-lg font-bold'>{season.length}</h2>
           </li>
           
-          <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+          <li className='flex justify-between p-2 border-b border-gray-600'>
             <h2 className='text-sm font-semibold '>Hurricanes</h2>
             <h2 className='text-lg font-bold'>{hurricanes}</h2>
           </li>
           
-          <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+          <li className='flex justify-between p-2 border-b border-gray-600'>
             <h2 className='text-sm font-semibold '>Major Hurricanes</h2>
             <h2 className='text-lg font-bold'>{majorHurricanes}</h2>
           </li>
           
           {/* Impact Metrics */}
-          <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+          <li className='flex justify-between p-2 border-b border-gray-600'>
             <h2 className='text-sm font-semibold '>Dead/Missing</h2>
             <h2 className='text-lg font-bold'>{deadOrMissing}</h2>
           </li>
           
-          <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+          <li className='flex justify-between p-2 border-b border-gray-600'>
             <h2 className='text-sm font-semibold '>Cost (Million USD)</h2>
             <h2 className='text-lg font-bold text-green-400'>${cost}</h2>
           </li>
 
           {/* Energy Metrics */}
-          <li className='flex justify-between p-2 border-b border-gray-600 hover:bg-gray-700 transition-colors duration-200'>
+          <li className='flex justify-between p-2 border-b border-gray-600'>
             <h2 className='text-sm font-semibold '>Accumulated Cyclone Energy</h2>
             <h2 className='text-lg font-bold'>{sum(seasonACE).toFixed(1)}</h2>
           </li>
           
           {year >= 2004 && (
-            <li className='flex justify-between p-2 hover:bg-gray-700 transition-colors duration-200'>
+            <li className='flex justify-between p-2'>
               <h2 className='text-sm font-semibold '>Track Integrated Kinetic Energy</h2>
               <h2 className='text-lg font-bold'>{seasonTIKE.toFixed(1)} TJ</h2>
             </li>
