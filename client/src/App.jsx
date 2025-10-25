@@ -46,7 +46,7 @@ function App() {
       });
     }
     getLiveHurdat().then(data => {
-      // Data structure from tropical-tidbits: { storms: [], stormCount: 0, lastUpdated: '' }
+      // Data structure from tropical-TJ: { storms: [], stormCount: 0, lastUpdated: '' }
       setLiveHurdat(data)
     })
     getForecastCone().then(data => {

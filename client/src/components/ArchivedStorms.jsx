@@ -165,9 +165,9 @@ const ArchivedStorms = () => {
         <Polyline 
           key={`polyline-${id}-${isSelected}`}
           positions={positions} 
-          color={isSelected ? "white" : "gray"} 
-          opacity={isSelected ? 0.8 : 0.25}
-          weight={isSelected ? 3 : 1}
+          color="white"
+          opacity={1.0}
+          weight={3}
         />
         {points}
       </div>
