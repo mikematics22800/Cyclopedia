@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: cyclopedia-server
-    env: docker
-    region: oregon
-    rootDir: server
-    dockerfilePath: ./Dockerfile
-

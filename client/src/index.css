@@ -98,7 +98,7 @@ nav {
 }
 
 /* Only apply mobile styles on xs screens */
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .chart-wrapper.expanded {
     background-image: url('/hurricane-v.jpg');
   }
