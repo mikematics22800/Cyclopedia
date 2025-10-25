@@ -97,8 +97,7 @@ const ArchivedStorms = () => {
     const year = dateArray.slice(0,4).join('');
     const month = dateArray.slice(4,6).join('');
     const day = dateArray.slice(-2).join('');
-    const formattedDate = `${month}/${day}/${year}`;
-
+    
     const timeArray = time.toString().split('');
     const hour = timeArray.slice(0,2).join('');
     const minute = timeArray.slice(-2).join('');

@@ -69,7 +69,6 @@ const AreasOfInterest = () => {
       {areasOfInterest.map((feature, index) => {
         const { prob2day, prob7day, basin } = feature.properties;
         const style = getColorByProbability(prob2day, prob7day);
-        const riskLevel = getRiskLevel(prob2day, prob7day);
 
         // Convert coordinates from [lng, lat] to [lat, lng] for Leaflet
         const coordinates = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);

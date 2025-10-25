@@ -1,20 +1,44 @@
+import { useState } from 'react'
 import Intensity from "./Intensity"
 import AceTike from "./AceTike"
 import WindsAndPressures from "./SeasonIntensity"
 import SeasonAceTike from "./SeasonAceTike"
-import { useContext } from "react"
-import { Context } from "../App"
 
 const ArchiveCharts = () => {
-  const { year } = useContext(Context)
-  
+  const [expandedChart, setExpandedChart] = useState(null)
+
+  const handleChartTap = (chartName) => {
+    if (expandedChart === chartName) {
+      setExpandedChart(null)
+    } else {
+      setExpandedChart(chartName)
+    }
+  }
+
+  const ChartWrapper = ({ children, chartName }) => (
+    <div 
+      className={`chart-wrapper ${expandedChart === chartName ? 'expanded' : ''}`}
+      onClick={() => handleChartTap(chartName)}
+    >
+      {children}
+    </div>
+  )
+
   return (
     <div className="charts-container">
       <div className="charts">
-        <Intensity/>
-        <AceTike/>
-        <WindsAndPressures/>
-        <SeasonAceTike/>
+        <ChartWrapper chartName="intensity">
+          <Intensity/>
+        </ChartWrapper>
+        <ChartWrapper chartName="acetike">
+          <AceTike/>
+        </ChartWrapper>
+        <ChartWrapper chartName="windsandpressures">
+          <WindsAndPressures/>
+        </ChartWrapper>
+        <ChartWrapper chartName="seasonacetike">
+          <SeasonAceTike/>
+        </ChartWrapper>
       </div>
     </div>
   )

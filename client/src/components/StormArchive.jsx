@@ -136,10 +136,10 @@ const StormArchive = () => {
     <div className='storm'>
       <div className='flex flex-col gap-6 w-full items-center'>
         {/* Storm Image Section */}
-        <div className='w-full max-w-96 flex flex-col items-center'>
+        <div className='w-full flex flex-col items-center'>
           <a 
             target='_blank' 
-            className={`${retired && '!justify-end pb-2 lg:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'} w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-black bg-opacity-20 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300`}
+            className={`${retired && '!justify-end pb-2 lg:pb-4 px-8'} ${year < 1995 && 'pointer-events-none'} w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center  bg-gray-800 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300`}
             style={{backgroundImage: `url(${image})`}} 
             href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
           >
@@ -156,7 +156,7 @@ const StormArchive = () => {
             
             {/* Loading State */}
             {imageLoading && image !== "" && (
-              <div className='flex flex-col gap-4 items-center justify-center min-h-[200px] bg-black bg-opacity-20 rounded-3xl w-full h-full'>
+              <div className='flex flex-col gap-4 items-center justify-center min-h-[200px] rounded-3xl w-full h-full'>
                 <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-white'></div>
                 <h1 className='text-xl font-semibold '>Loading...</h1>
               </div>
@@ -164,7 +164,7 @@ const StormArchive = () => {
             
             {/* No Image State */}
             {image == "" && (
-              <div className='flex flex-col gap-4 items-center bg-black bg-opacity-20 rounded-3xl w-full h-full justify-center'>
+              <div className='flex flex-col gap-4 items-center rounded-3xl w-full h-full justify-center'>
                 <CycloneIcon className=' !text-8xl'/>
                 <h1 className='text-xl font-semibold '>Image Unavailable</h1>
               </div>

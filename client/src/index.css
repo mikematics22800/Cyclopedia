@@ -84,6 +84,39 @@ nav {
   @apply border-2 border-white h-60 md:h-80 p-4 bg-black bg-opacity-50 cursor-pointer rounded-lg w-full
 }
 
+/* Mobile chart toggle styles */
+.chart-wrapper {
+  @apply transition-all duration-300 ease-in-out
+}
+
+.chart-wrapper.expanded {
+  @apply fixed inset-0 z-50 w-screen h-screen bg-cover bg-center bg-no-repeat
+}
+
+.chart-wrapper.expanded .chart {
+  @apply w-full h-full border-0 rounded-none bg-black bg-opacity-30
+}
+
+/* Only apply mobile styles on xs screens */
+@media (max-width: 640px) {
+  .chart-wrapper.expanded {
+    background-image: url('/hurricane-v.jpg');
+  }
+  
+  /* Swap axes on mobile - width becomes height and vice versa */
+  .chart-wrapper.expanded .chart {
+    width: 100vh !important;
+    height: 100vw !important;
+    transform: rotate(90deg);
+    transform-origin: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50vw;
+    margin-left: -50vh;
+  }
+}
+
 .mobile-interface {
   @apply md:hidden flex w-full justify-center bg-black bg-opacity-50 rounded-t-3xl bg-cover bg-center bg-fixed absolute top-[96%]
 }

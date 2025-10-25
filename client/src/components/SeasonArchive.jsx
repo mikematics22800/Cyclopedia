@@ -64,7 +64,7 @@ const SeasonArchive = () => {
 
   return (
     <div className='season'>
-      <div className='w-full max-w-96 flex flex-col items-center'>
+      <div className='w-full flex flex-col items-center'>
         <ul className='season-data bg-gray-800'>
           {/* Season Header */}
           <li className='flex flex-col border-b border-gray-600 p-2'>

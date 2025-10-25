@@ -7,7 +7,7 @@ const options = {
 
 export const getHurdat = async (basin, year) => {
   try {
-    const response = await fetch(`https://cyclopedia.onrender.com/${basin}/${year}`, options)
+    const response = await fetch(`https://cyclopedia.onrender.com/archive/${basin}/${year}`, options)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
