@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { getArchive, getLive, getCone } from "../libs/hurdat";
@@ -10,10 +10,13 @@ import Interface from "../components/Interface";
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
 import ArchiveCharts from "../components/ArchiveCharts";
 import LoadingScreen from "../components/LoadingScreen";
+import { useGsapReveal } from "../components/hooks/useGsapReveal";
 
 export default function App() {
+  const navRef = useRef<HTMLElement>(null);
+
   const [basin, setBasin] = useState<string>('atl');
-  const [year, setYear] = useState<number>(2024);
+  const [year, setYear] = useState<number>(2025);
   const [season, setSeason] = useState<any[] | null>(null);
   const [storm, setStorm] = useState<any | null>(null);
   const [stormId, setStormId] = useState<string>('season');
@@ -138,6 +141,14 @@ export default function App() {
     setTracker(prev => !prev);
   }, []);
 
+  const mainReady = Boolean(season && (stormId === "season" || storm));
+  useGsapReveal(navRef, [mainReady], {
+    selector: "[data-nav-reveal]",
+    y: -12,
+    stagger: 0.08,
+    delay: 0.06,
+  });
+
   const value = useMemo(() => ({
     basin,
     setBasin, 
@@ -185,17 +196,33 @@ export default function App() {
       <div className="app app-background">
         {season && (stormId === 'season' || storm) ? (
           <>
-            <nav>
-              <div className="flex items-center">
-                <Image src="/cyclone.png" alt="Cyclopedia" width={40} height={40} className="mr-2" priority unoptimized />
-                <h1 className="storm-font text-4xl text-white italic hidden sm:block">CYCLOPEDIA</h1>
+            <nav ref={navRef}>
+              <div data-nav-reveal className="flex items-center gap-2">
+                <Image
+                  src="/cyclone.png"
+                  alt="Cyclopedia"
+                  width={40}
+                  height={40}
+                  className="drop-shadow-[0_0_12px_rgba(56,189,248,0.35)]"
+                  priority
+                  unoptimized
+                />
+                <h1 className="storm-font text-3xl sm:text-4xl text-white italic hidden sm:block tracking-tight">
+                  CYCLOPEDIA
+                </h1>
               </div>
-              <div className="flex items-center gap-5">
-                {!tracker && <button className="button !hidden sm:!flex" onClick={toggleCharts}>
-                  <h1>{map ? "Charts" : "Map"}</h1>
-                </button>}
-                <button className="button" onClick={toggleTracker}>
-                  <h1>{tracker ? "Historical Archive" : "Live Tracker"}</h1>
+              <div data-nav-reveal className="flex items-center gap-3 sm:gap-4">
+                {!tracker && (
+                  <button
+                    type="button"
+                    className="button !hidden sm:!flex"
+                    onClick={toggleCharts}
+                  >
+                    <span>{map ? "Charts" : "Map"}</span>
+                  </button>
+                )}
+                <button type="button" className="button" onClick={toggleTracker}>
+                  <span>{tracker ? "Historical Archive" : "Live Tracker"}</span>
                 </button>
               </div>
             </nav>

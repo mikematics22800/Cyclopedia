@@ -1,15 +1,38 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
+import gsap from "gsap";
 import List from '@mui/icons-material/List';
 import Tooltip from '@mui/material/Tooltip';
 
 const Legend = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const openPanelRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const panel = openPanelRef.current;
+    if (!isOpen || !panel) return;
+    const keys = panel.querySelectorAll('.key');
+    const ctx = gsap.context(() => {
+      gsap.from(keys, {
+        opacity: 0,
+        x: -10,
+        stagger: 0.032,
+        duration: 0.34,
+        ease: 'power2.out',
+      });
+    }, panel);
+    return () => ctx.revert();
+  }, [isOpen]);
+
   return (
       <div className="legend-container">
       {isOpen ? (
-        <div className="legend" onClick={() => setIsOpen(!isOpen)}>
+        <div
+          ref={openPanelRef}
+          className="legend"
+          onClick={() => setIsOpen(!isOpen)}
+        >
           <div className="key">
             <span className="bg-[dodgerblue]"/>
             <h1 className="text-sm">TD</h1>

@@ -12,75 +12,91 @@
 }
 
 .app {
-  @apply w-screen bg-cover bg-center bg-fixed
+  @apply w-screen bg-cover bg-center bg-fixed;
 }
 
 .desktop-view {
-  @apply h-[calc(100vh-5rem)] w-full hidden sm:flex 
+  @apply h-[calc(100vh-5rem)] w-full hidden sm:flex;
 }
 
 nav {
-  @apply flex justify-between w-full h-20 items-center sm:px-10 px-5 bg-blue-950 z-10 fixed top-0 sm:relative
-} 
+  @apply flex justify-between w-full h-20 items-center sm:px-10 px-5 bg-blue-950 z-10 fixed top-0 sm:relative;
+}
 
 .loading-screen {
-  @apply w-screen h-screen flex items-center justify-center bg-blue-950
+  @apply w-screen h-screen flex flex-col items-center justify-center gap-6;
+  @apply bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950;
 }
 
 .loading-screen img {
-  @apply sm:w-60 w-40 spin
+  @apply sm:w-60 w-40 drop-shadow-[0_0_40px_rgba(59,130,246,0.35)];
 }
 
 .interface {
-  @apply p-4 sm:p-8 flex-col overflow-y-auto overflow-x-hidden gap-4 w-full sm:w-1/4 min-w-96 h-full bg-opacity-60 flex items-center 
+  @apply p-4 sm:p-8 flex-col overflow-y-auto overflow-x-hidden gap-5 w-full sm:w-1/4 min-w-96 h-full flex items-center;
+  @apply bg-slate-950/55 backdrop-blur-xl border-r border-white/10 shadow-panel-sm;
 }
 
 .button {
-  @apply h-10 font-bold rounded-lg text-white p-4 flex items-center justify-center gap-1 border-2 bg-red-600 transition-all duration-300 ease-in-out hover:bg-red-500 hover:shadow-lg
+  @apply h-10 font-bold rounded-xl text-white px-5 flex items-center justify-center gap-2;
+  @apply border border-white/15 bg-gradient-to-br from-red-600 to-red-700;
+  @apply shadow-lg shadow-red-900/30 transition-all duration-300 ease-smooth;
+  @apply hover:from-red-500 hover:to-red-600 hover:border-white/25 hover:shadow-xl hover:shadow-red-900/40 hover:-translate-y-0.5;
+  @apply active:translate-y-0 active:scale-[0.98];
+}
+
+.button h1,
+.button span {
+  @apply text-sm sm:text-base tracking-wide;
 }
 
 .select {
-  @apply bg-white !rounded-md h-10 text-black font-bold 
+  @apply bg-white/95 !rounded-xl h-10 text-black font-bold shadow-md shadow-black/20;
+  @apply ring-1 ring-white/30 transition-shadow duration-300 hover:shadow-lg;
 }
 
 .data-table {
-  @apply flex flex-col font-bold text-white text-center w-full max-w-80 rounded-xl bg-gray-800 p-2
+  @apply flex flex-col font-bold text-white text-center w-full max-w-80 rounded-2xl p-3 gap-0.5;
+  @apply bg-slate-900/80 backdrop-blur-md border border-white/10 shadow-panel;
 }
 
 .data-table h2 {
-  @apply text-xs 
+  @apply text-xs;
 }
 
 .data-table li {
-  @apply flex justify-between items-center text-sm 
+  @apply flex justify-between items-center text-sm;
 }
 
 .storm a {
-  @apply w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 max-w-80 rounded-3xl
+  @apply w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 max-w-80 rounded-3xl;
 }
 
-.storm, .season {
-  @apply flex flex-col w-full items-center
+.storm,
+.season {
+  @apply flex flex-col w-full items-center;
 }
 
 .charts-container {
-  @apply w-full flex flex-col overflow-auto sm:p-8 p-0
+  @apply w-full flex flex-col overflow-auto sm:p-8 p-0;
 }
 
 .charts {
-  @apply flex flex-col gap-4
+  @apply flex flex-col gap-4;
 }
 
 .selectors {
-  @apply flex w-full gap-4 justify-center
+  @apply flex w-full gap-4 justify-center;
 }
 
 .chart {
-  @apply border-2 border-white p-4 cursor-pointer rounded-lg w-full h-full bg-black bg-opacity-50
+  @apply border border-white/20 p-4 cursor-pointer rounded-xl w-full h-full;
+  @apply bg-slate-950/60 backdrop-blur-sm shadow-panel-sm;
+  @apply transition-all duration-300 ease-smooth hover:border-white/35 hover:shadow-panel;
 }
 
 .chart-wrapper {
-  @apply h-64 sm:h-96 w-full
+  @apply h-64 sm:h-96 w-full;
 }
 
 @keyframes spin {
@@ -96,108 +112,113 @@ nav {
 /* Mobile chart toggle styles - only on mobile devices */
 @media (max-width: 480px) {
   .chart-expand {
-    @apply chart !rounded-none
+    @apply chart !rounded-none;
   }
   .chart-expand-wrapper {
     @apply w-[100vh] h-[100vw] rotate-90 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-cover bg-center bg-no-repeat;
     background-image: url('/hurricane.jpg');
   }
   .charts-container {
-    @apply p-0
+    @apply p-0;
   }
 }
 
 .mobile-interface {
-  @apply sm:hidden flex w-full justify-center bg-black bg-opacity-50 rounded-t-3xl bg-cover bg-center bg-fixed absolute top-[96%]
+  @apply sm:hidden flex w-full justify-center rounded-t-3xl absolute top-[96%];
+  @apply bg-slate-950/80 backdrop-blur-xl border-t border-white/10 shadow-[0_-12px_40px_-8px_rgba(0,0,0,0.5)];
+  @apply bg-cover bg-center bg-fixed;
 }
 
 .mobile-map {
-  @apply sm:hidden w-full h-[calc(100vh-5rem)] fixed top-20 -z-10
+  @apply sm:hidden w-full h-[calc(100vh-5rem)] fixed top-20 -z-10;
 }
 
 .legend-container {
-  @apply flex justify-center cursor-pointer
+  @apply flex justify-center cursor-pointer;
 }
 
 .legend {
-  @apply flex flex-col gap-2 font-bold text-white bg-black bg-opacity-50 rounded-lg w-fit p-2 
+  @apply flex flex-col gap-2 font-bold text-white rounded-xl w-fit p-3;
+  @apply bg-slate-950/75 backdrop-blur-md border border-white/15 shadow-panel-sm;
 }
 
 .legend .key {
-  @apply flex gap-1 items-center
+  @apply flex gap-1 items-center;
 }
 
 .legend .key span {
-  @apply w-3 h-3 rounded-full border-[1px] border-black
+  @apply w-3 h-3 rounded-full border-[1px] border-black;
 }
 
 .map {
-  @apply w-full h-full relative
+  @apply w-full h-full relative;
 }
 
 ul li h2 {
-  @apply text-sm
+  @apply text-sm;
 }
 
 /* Interface */
 .drag-handle {
-  @apply bg-gray-300 rounded-full w-20 h-1 sm:hidden
+  @apply bg-gray-300 rounded-full w-20 h-1 sm:hidden;
 }
 
 .storm-image {
-  @apply relative !w-64 aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl
+  @apply relative !w-64 aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl;
 }
 
 .retired {
-  @apply !justify-end pb-2 lg:pb-4 px-8
+  @apply !justify-end pb-2 lg:pb-4 px-8;
 }
 
 .unavailable {
-  @apply flex flex-col gap-4 items-center rounded-3xl w-full h-full justify-center
+  @apply flex flex-col gap-4 items-center rounded-3xl w-full h-full justify-center;
 }
 
 .header {
-  @apply flex flex-col pb-2 border-b border-gray-600 
+  @apply flex flex-col pb-2 border-b border-gray-600;
 }
 
 .data-row {
-  @apply flex justify-between items-center p-2 border-gray-600
+  @apply flex justify-between items-center p-2 border-gray-600;
 }
 
 .title {
-  @apply text-lg font-bold
+  @apply text-lg font-bold;
 }
 
 .value {
-  @apply text-lg font-bold
+  @apply text-lg font-bold;
 }
 
 .label {
-  @apply text-sm font-semibold
+  @apply text-sm font-semibold;
 }
 
 .map-controls-container {
-  @apply absolute top-4 right-4 z-[9999] flex flex-row gap-4 items-start
+  @apply absolute top-4 right-4 z-[9999] flex flex-row gap-4 items-start;
 }
 
 .live-storm-card {
-  @apply bg-gray-700 w-full max-w-80 cursor-pointer transition-all duration-200 rounded-lg hover:ring-2 hover:ring-white
+  @apply bg-slate-800/90 backdrop-blur-sm w-full max-w-80 cursor-pointer rounded-xl;
+  @apply border border-white/10 shadow-panel-sm overflow-hidden;
+  @apply transition-all duration-300 ease-smooth hover:border-white/25 hover:shadow-panel hover:-translate-y-0.5;
 }
 
 .live-storm-card.selected {
-  @apply ring-2 ring-white
+  @apply ring-2 ring-cyan-400/80 border-cyan-400/40 shadow-[0_0_28px_-4px_rgba(34,211,238,0.35)];
 }
 
 .retired-badge {
-  @apply w-auto h-auto max-w-full object-contain
+  @apply w-auto h-auto max-w-full object-contain;
 }
 
 .cyclone-icon {
-  @apply !text-8xl
+  @apply !text-8xl;
 }
 
 .cost-value {
-  @apply text-green-400
+  @apply text-green-400;
 }
 
 .app-background {

@@ -1,6 +1,8 @@
 'use client';
 
+import { useMemo, useRef } from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { useGsapReveal } from './hooks/useGsapReveal';
 
 // Calculate distance between two coordinates using Haversine formula
 const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -287,6 +289,7 @@ const getStormStatus = (STORMTYPE: string, MAXWIND: number) => {
 
 const LiveTracker = () => {
   const { liveHurdat, liveStormId, setLiveStormId } = useAppContext();
+  const listRef = useRef<HTMLDivElement>(null);
 
   // Group storms by STORM_ID
   const stormGroups: { [key: string]: any[] } = {};
@@ -298,9 +301,29 @@ const LiveTracker = () => {
     stormGroups[STORM_ID].push(feature);
   });
 
+  const stormGroupKey = useMemo(() => {
+    const ids = liveHurdat.map((f) => f.properties.STORM_ID as string);
+    return [...new Set(ids)].sort().join('|');
+  }, [liveHurdat]);
+
+  useGsapReveal(listRef, [stormGroupKey], {
+    y: 22,
+    stagger: 0.09,
+  });
+
   return (
-    <div className="flex flex-col gap-4 w-full data-rows-center">
-      {(Object.entries(stormGroups).length === 0) && <h1 className='text-white text-center font-bold'>No tropical cyclones in the Atlantic and Pacific basin at this time.</h1>}
+    <div
+      ref={listRef}
+      className="flex flex-col gap-4 w-full data-rows-center"
+    >
+      {Object.entries(stormGroups).length === 0 && (
+        <h1
+          data-gsap-reveal
+          className="text-white/90 text-center font-bold text-sm sm:text-base px-4 py-6 rounded-xl border border-white/10 bg-white/5"
+        >
+          No tropical cyclones in the Atlantic and Pacific basin at this time.
+        </h1>
+      )}
       {Object.entries(stormGroups).map(([stormId, points]) => {
         const currentPosition = findCurrentPosition(points);
         
@@ -316,8 +339,9 @@ const LiveTracker = () => {
         
         const isSelected = stormId === liveStormId;
         return (
-          <div 
-            key={stormId} 
+          <div
+            key={stormId}
+            data-gsap-reveal
             className={`live-storm-card ${isSelected ? 'selected' : ''}`}
             style={{ borderLeft: `4px solid ${color}` }}
             onClick={() => setLiveStormId(stormId)}

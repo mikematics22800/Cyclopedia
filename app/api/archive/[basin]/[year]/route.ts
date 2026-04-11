@@ -19,9 +19,9 @@ export async function GET(
     
     // Validate year parameter
     const yearNum = parseInt(year);
-    if (isNaN(yearNum) || yearNum < 1850 || yearNum > 2024) {
+    if (isNaN(yearNum) || yearNum < 1850 || yearNum > 2025) {
       return NextResponse.json(
-        { error: 'Invalid year. Must be between 1850 and 2024' },
+        { error: 'Invalid year. Must be between 1850 and 2025' },
         { status: 400 }
       );
     }
