@@ -1,12 +1,24 @@
 'use client';
 
+import {useState, useEffect} from 'react';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Bar } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-const SeasonAceTike = () => {
+const SeasonAceTike = ({
+  onClick = () => {},
+  expand = false,
+}: {
+  onClick?: () => void;
+  expand?: boolean;
+} = {}) => {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    setMobile(window.innerWidth < 480);
+  }, []);
+
   const { names, seasonACE, year, season } = useAppContext();
   const calculateSeasonTIKE = () => {
     if (year < 2004) return [];
@@ -57,19 +69,28 @@ const SeasonAceTike = () => {
         data: seasonACE?.map((ACE) => parseFloat(ACE.toFixed(1))),
         borderColor: "purple",
         backgroundColor: "purple",
-        yAxisID: 'y'
+        ...(mobile
+          ? { xAxisID: 'x' as const, yAxisID: 'y' as const }
+          : { yAxisID: 'y' as const }),
       },
-      ...(hasTIKEData ? [{
-        label: 'Track Integrated Kinetic Energy (TJ)',
-        data: seasonTIKE?.map((TIKE) => parseFloat(TIKE.toFixed(1))),
-        borderColor: "orange",
-        backgroundColor: "orange",
-        yAxisID: 'y1'
-      }] : [])
-    ]
+      ...(hasTIKEData
+        ? [
+            {
+              label: 'Track Integrated Kinetic Energy (TJ)',
+              data: seasonTIKE?.map((TIKE) => parseFloat(TIKE.toFixed(1))),
+              borderColor: "orange",
+              backgroundColor: "orange",
+              ...(mobile
+                ? { xAxisID: 'x1' as const, yAxisID: 'y' as const }
+                : { yAxisID: 'y1' as const }),
+            },
+          ]
+        : []),
+    ],
   };
 
   const options = {
+    indexAxis: (mobile ? 'y' : 'x') as 'x' | 'y',
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -85,7 +106,7 @@ const SeasonAceTike = () => {
         callbacks: {
           label: function(context: any) {
             const label = context.dataset.label || '';
-            const value = context.parsed.y;
+            const value = mobile ? context.parsed.x : context.parsed.y;
             if (label.includes('TIKE')) {
               return `${label}: ${value.toFixed(1)} TJ`;
             } else {
@@ -95,7 +116,7 @@ const SeasonAceTike = () => {
         }
       },
     },
-    scales: {
+    scales: !mobile ? {
       y: {
         type: 'linear' as const,
         display: true,
@@ -111,12 +132,6 @@ const SeasonAceTike = () => {
           position: 'right' as const,
           ticks: {
             color: "white",
-            callback: function(value: any) {
-              return value.toFixed(0);
-            }
-          },
-          grid: {
-            drawOnChartArea: false,
           },
         }
       } : {}),
@@ -125,13 +140,51 @@ const SeasonAceTike = () => {
           color: "white"
         },
       },
+    } : {
+      // indexAxis 'y': storm names on y (category), ACE/TIKE values on x / x1
+      x: {
+        type: 'linear' as const,
+        display: true,
+        position: 'bottom' as const,
+        beginAtZero: true,
+        ticks: {
+          color: "white",
+        },
+      },
+      y: {
+        type: 'category' as const,
+        display: true,
+        position: 'left' as const,
+        ticks: {
+          color: "white",
+        },
+      },
+      ...(hasTIKEData
+        ? {
+            x1: {
+              type: 'linear' as const,
+              display: true,
+              position: 'top' as const,
+              beginAtZero: true,
+              ticks: {
+                color: "white",
+                callback: function (value: string | number) {
+                  return Number(value).toFixed(0);
+                },
+              },
+              grid: {
+                drawOnChartArea: false,
+              },
+            },
+          }
+        : {}),
     }
   };
 
   return (
-    <div className="chart-wrapper">
-      <div className="chart">
-        <Bar options={options} data={data} />
+    <div className={expand ? "chart-expand-wrapper" : "chart-wrapper"}>
+      <div className={expand ? "chart-expand" : "chart"}>
+        <Bar options={options} data={data} onClick={onClick}/>
       </div>
     </div>
   );

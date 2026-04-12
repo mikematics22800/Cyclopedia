@@ -101,7 +101,7 @@ const Interface = () => {
           {year >= 2004 && stormId !== "season" && (
             <div
               data-gsap-reveal
-              className="flex items-center gap-2"
+              className="w-fit flex items-center gap-2 p-3 archive-panel-shell"
             >
               <Checkbox
                 className="!text-sky-400 !p-0"

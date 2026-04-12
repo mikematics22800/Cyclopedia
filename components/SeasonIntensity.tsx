@@ -10,6 +10,11 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement
 const SeasonIntensity = () => {
   const { names, maxWinds, season } = useAppContext();
   const [minPressures, setMinPressures] = useState<number[]>([]);
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    setMobile(window.innerWidth < 480);
+  }, []);
 
   useEffect(() => {
     if (!season) return;
@@ -33,19 +38,24 @@ const SeasonIntensity = () => {
         data: maxWinds,
         borderColor: "red",
         backgroundColor: "red",
-        yAxisID: 'y'
+        ...(mobile
+          ? { xAxisID: 'x' as const, yAxisID: 'y' as const }
+          : { yAxisID: 'y' as const }),
       },
       {
         label: 'Minimum Pressure (mb)',
         data: minPressures,
         borderColor: "blue",
         backgroundColor: "blue",
-        yAxisID: 'y1'
-      }
-    ]
+        ...(mobile
+          ? { xAxisID: 'x1' as const, yAxisID: 'y' as const }
+          : { yAxisID: 'y1' as const }),
+      },
+    ],
   };
 
   const options = {
+    indexAxis: (mobile ? 'y' : 'x') as 'x' | 'y',
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -61,7 +71,7 @@ const SeasonIntensity = () => {
         callbacks: {
           label: function(context: any) {
             const label = context.dataset.label || '';
-            const value = context.parsed.y;
+            const value = mobile ? context.parsed.x : context.parsed.y;
             if (label.includes('Pressure')) {
               return `${label}: ${value} mb`;
             } else {
@@ -71,33 +81,65 @@ const SeasonIntensity = () => {
         }
       },
     },
-    scales: {
-      y: {
-        type: 'linear' as const,
-        display: true,
-        position: 'left' as const,
-        ticks: {
-          color: "white"
+    scales: !mobile
+      ? {
+          y: {
+            type: 'linear' as const,
+            display: true,
+            position: 'left' as const,
+            ticks: {
+              color: "white"
+            },
+          },
+          y1: {
+            type: 'linear' as const,
+            display: true,
+            position: 'right' as const,
+            ticks: {
+              color: "white"
+            },
+            min: 860,
+            grid: {
+              drawOnChartArea: false,
+            },
+          },
+          x: {
+            ticks: {
+              color: "white"
+            },
+          },
+        }
+      : {
+          x: {
+            type: 'linear' as const,
+            display: true,
+            position: 'bottom' as const,
+            beginAtZero: true,
+            ticks: {
+              color: "white",
+            },
+          },
+          y: {
+            type: 'category' as const,
+            display: true,
+            position: 'left' as const,
+            ticks: {
+              color: "white",
+            },
+          },
+          x1: {
+            type: 'linear' as const,
+            display: true,
+            position: 'top' as const,
+            min: 860,
+            ticks: {
+              color: "white",
+            },
+            grid: {
+              drawOnChartArea: false,
+            },
+          },
         },
-      },
-      y1: {
-        type: 'linear' as const,
-        display: true,
-        position: 'right' as const,
-        ticks: {
-          color: "white"
-        },
-        min: 860,
-        grid: {
-          drawOnChartArea: false,
-        },
-      },
-      x: {
-        ticks: {
-          color: "white"
-        },
-      },
-    }
   };
 
   return (

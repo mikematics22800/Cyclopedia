@@ -203,7 +203,6 @@ export default function App() {
                   alt="Cyclopedia"
                   width={40}
                   height={40}
-                  className="drop-shadow-[0_0_12px_rgba(56,189,248,0.35)]"
                   priority
                   unoptimized
                 />

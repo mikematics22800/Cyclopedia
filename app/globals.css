@@ -28,7 +28,7 @@ nav {
 }
 
 .loading-screen img {
-  @apply sm:w-60 w-40 drop-shadow-[0_0_40px_rgba(59,130,246,0.35)];
+  @apply sm:w-60 w-40;
 }
 
 .interface {
@@ -36,7 +36,7 @@ nav {
 }
 
 .button {
-  @apply h-10 font-bold rounded-xl text-white px-5 flex items-center justify-center gap-2 border border-white/15 bg-gradient-to-br from-red-600 to-red-700 shadow-lg shadow-red-900/30 transition-all duration-300 ease-smooth hover:from-red-500 hover:to-red-600 hover:border-white/25 hover:shadow-xl hover:shadow-red-900/40;
+  @apply h-10 font-bold rounded-xl text-white px-5 flex items-center justify-center gap-2 border border-white/15 bg-red-600;
 }
 
 .button h1,
@@ -92,7 +92,7 @@ nav {
 }
 
 .chart-wrapper {
-  @apply h-64 sm:h-96 w-full min-h-0;
+  @apply h-96 w-full min-h-0;
 }
 
 @keyframes spin {
