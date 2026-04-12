@@ -319,7 +319,7 @@ const LiveTracker = () => {
       {Object.entries(stormGroups).length === 0 && (
         <h1
           data-gsap-reveal
-          className="text-white/90 text-center font-bold text-sm sm:text-base px-4 py-6 rounded-xl border border-white/10 bg-white/5"
+          className="text-white/90 text-center font-bold text-sm sm:text-base px-4 py-6 archive-panel-shell"
         >
           No tropical cyclones in the Atlantic and Pacific basin at this time.
         </h1>

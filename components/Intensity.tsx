@@ -7,7 +7,7 @@ import { Line } from 'react-chartjs-2';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-const Intensity = ({onClick, expand}: {onClick: () => void, expand: boolean}) => {
+const Intensity = () => {
   const { storm, dates } = useAppContext();
   const [wind, setWind] = useState<number[]>([]);
   const [pressure, setPressure] = useState<(number | null)[]>([]);
@@ -105,9 +105,9 @@ const Intensity = ({onClick, expand}: {onClick: () => void, expand: boolean}) =>
   };
 
   return (
-    <div className={expand ? "chart-expand-wrapper" : "chart-wrapper"}>
-      <div className={expand ? "chart-expand" : "chart"}>
-        <Line options={options} data={data} onClick={onClick}/>
+    <div className="chart-wrapper">
+      <div className="chart">
+        <Line options={options} data={data} />
       </div>
     </div>
   );

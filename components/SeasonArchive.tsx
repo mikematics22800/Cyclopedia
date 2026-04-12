@@ -85,7 +85,7 @@ const SeasonArchive = () => {
   return (
     <div className='season'>
       <div className='w-full flex flex-col items-center'>
-        <ul className='data-table bg-gray-800'>
+        <ul className='data-table'>
           <li className='header'>
             <h1 className='title'>{basin === 'atl' ? 'Atlantic' : 'Pacific'} Basin</h1>     
             <h1>{duration}</h1>

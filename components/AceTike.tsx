@@ -8,7 +8,7 @@ import { Line } from 'react-chartjs-2';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-const AceTike = ({onClick, expand}: {onClick: () => void, expand: boolean}) => {
+const AceTike = () => {
   const { dates, storm, year } = useAppContext();
   const [ACEArray, setACEArray] = useState<number[]>([]);
   const [TIKEArray, setTIKEArray] = useState<number[]>([]);
@@ -188,9 +188,9 @@ const AceTike = ({onClick, expand}: {onClick: () => void, expand: boolean}) => {
   };
 
   return (
-    <div className={expand ? "chart-expand-wrapper" : "chart-wrapper"}>
-      <div className={expand ? "chart-expand" : "chart"}>
-        <Line options={options} data={data} onClick={onClick} />
+    <div className="chart-wrapper">
+      <div className="chart">
+        <Line options={options} data={data} />
       </div>
     </div>
   );

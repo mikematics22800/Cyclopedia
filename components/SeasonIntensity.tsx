@@ -7,7 +7,7 @@ import { useAppContext } from '../contexts/AppContext';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-const SeasonIntensity = ({onClick, expand}: {onClick: () => void, expand: boolean}) => {
+const SeasonIntensity = () => {
   const { names, maxWinds, season } = useAppContext();
   const [minPressures, setMinPressures] = useState<number[]>([]);
 
@@ -101,9 +101,9 @@ const SeasonIntensity = ({onClick, expand}: {onClick: () => void, expand: boolea
   };
 
   return (
-    <div className={expand ? "chart-expand-wrapper" : "chart-wrapper"}>
-      <div className={expand ? "chart-expand" : "chart"}>
-        <Bar options={options} data={data} onClick={onClick}/>
+    <div className="chart-wrapper">
+      <div className="chart">
+        <Bar options={options} data={data} />
       </div>
     </div>
   );

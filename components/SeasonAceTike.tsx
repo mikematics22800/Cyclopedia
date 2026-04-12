@@ -6,7 +6,7 @@ import { useAppContext } from '../contexts/AppContext';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-const SeasonAceTike = ({onClick, expand}: {onClick: () => void, expand: boolean}) => {
+const SeasonAceTike = () => {
   const { names, seasonACE, year, season } = useAppContext();
   const calculateSeasonTIKE = () => {
     if (year < 2004) return [];
@@ -129,9 +129,9 @@ const SeasonAceTike = ({onClick, expand}: {onClick: () => void, expand: boolean}
   };
 
   return (
-    <div className={expand ? "chart-expand-wrapper" : "chart-wrapper"}>
-      <div className={expand ? "chart-expand" : "chart"}>
-        <Bar options={options} data={data} onClick={onClick}/>
+    <div className="chart-wrapper">
+      <div className="chart">
+        <Bar options={options} data={data} />
       </div>
     </div>
   );

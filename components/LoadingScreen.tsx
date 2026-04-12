@@ -63,9 +63,6 @@ const LoadingScreen = () => {
         priority
         unoptimized
       />
-      <p className="loading-label text-sky-200/90 text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase">
-        Loading archive
-      </p>
     </div>
   );
 };

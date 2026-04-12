@@ -117,7 +117,7 @@ const Interface = () => {
           <div
             key={stormId}
             data-gsap-reveal
-            className="w-full flex flex-col items-center"
+            className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell"
           >
             {stormId === "season" ? <SeasonArchive /> : <StormArchive />}
           </div>

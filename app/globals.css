@@ -24,8 +24,7 @@ nav {
 }
 
 .loading-screen {
-  @apply w-screen h-screen flex flex-col items-center justify-center gap-6;
-  @apply bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950;
+  @apply w-screen h-screen flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950;
 }
 
 .loading-screen img {
@@ -34,15 +33,10 @@ nav {
 
 .interface {
   @apply p-4 sm:p-8 flex-col overflow-y-auto overflow-x-hidden gap-5 w-full sm:w-1/4 min-w-96 h-full flex items-center;
-  @apply bg-slate-950/55 backdrop-blur-xl border-r border-white/10 shadow-panel-sm;
 }
 
 .button {
-  @apply h-10 font-bold rounded-xl text-white px-5 flex items-center justify-center gap-2;
-  @apply border border-white/15 bg-gradient-to-br from-red-600 to-red-700;
-  @apply shadow-lg shadow-red-900/30 transition-all duration-300 ease-smooth;
-  @apply hover:from-red-500 hover:to-red-600 hover:border-white/25 hover:shadow-xl hover:shadow-red-900/40 hover:-translate-y-0.5;
-  @apply active:translate-y-0 active:scale-[0.98];
+  @apply h-10 font-bold rounded-xl text-white px-5 flex items-center justify-center gap-2 border border-white/15 bg-gradient-to-br from-red-600 to-red-700 shadow-lg shadow-red-900/30 transition-all duration-300 ease-smooth hover:from-red-500 hover:to-red-600 hover:border-white/25 hover:shadow-xl hover:shadow-red-900/40;
 }
 
 .button h1,
@@ -51,13 +45,11 @@ nav {
 }
 
 .select {
-  @apply bg-white/95 !rounded-xl h-10 text-black font-bold shadow-md shadow-black/20;
-  @apply ring-1 ring-white/30 transition-shadow duration-300 hover:shadow-lg;
+  @apply bg-white/95 !rounded-xl h-10 text-black font-bold shadow-md shadow-black/20 ring-1 ring-white/30 transition-shadow duration-300 hover:shadow-lg;
 }
 
 .data-table {
-  @apply flex flex-col font-bold text-white text-center w-full max-w-80 rounded-2xl p-3 gap-0.5;
-  @apply bg-slate-900/80 backdrop-blur-md border border-white/10 shadow-panel;
+  @apply flex flex-col font-bold text-white text-center w-full max-w-80 gap-0.5;
 }
 
 .data-table h2 {
@@ -89,14 +81,18 @@ nav {
   @apply flex w-full gap-4 justify-center;
 }
 
+/* Data shell (Interface) and each .chart use the same bg + opacity: bg-slate-800/80 */
+.archive-panel-shell {
+  @apply rounded-2xl bg-slate-800/80 backdrop-blur-md border border-white/10;
+}
+
+/* Height lives on .chart-wrapper; .chart fills it */
 .chart {
-  @apply border border-white/20 p-4 cursor-pointer rounded-xl w-full h-full;
-  @apply bg-slate-950/60 backdrop-blur-sm shadow-panel-sm;
-  @apply transition-all duration-300 ease-smooth hover:border-white/35 hover:shadow-panel;
+  @apply border border-white/10 p-4 rounded-2xl w-full h-full min-h-0 bg-slate-800/80 backdrop-blur-md;
 }
 
 .chart-wrapper {
-  @apply h-64 sm:h-96 w-full;
+  @apply h-64 sm:h-96 w-full min-h-0;
 }
 
 @keyframes spin {
@@ -109,24 +105,9 @@ nav {
   animation: spin 2s linear infinite;
 }
 
-/* Mobile chart toggle styles - only on mobile devices */
-@media (max-width: 480px) {
-  .chart-expand {
-    @apply chart !rounded-none;
-  }
-  .chart-expand-wrapper {
-    @apply w-[100vh] h-[100vw] rotate-90 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-cover bg-center bg-no-repeat;
-    background-image: url('/hurricane.jpg');
-  }
-  .charts-container {
-    @apply p-0;
-  }
-}
-
 .mobile-interface {
-  @apply sm:hidden flex w-full justify-center rounded-t-3xl absolute top-[96%];
-  @apply bg-slate-950/80 backdrop-blur-xl border-t border-white/10 shadow-[0_-12px_40px_-8px_rgba(0,0,0,0.5)];
-  @apply bg-cover bg-center bg-fixed;
+  @apply sm:hidden flex w-full justify-center rounded-t-3xl absolute top-[96%] bg-fixed bg-center bg-cover;
+  background-image: url('/hurricane.jpg'); 
 }
 
 .mobile-map {
@@ -138,8 +119,7 @@ nav {
 }
 
 .legend {
-  @apply flex flex-col gap-2 font-bold text-white rounded-xl w-fit p-3;
-  @apply bg-slate-950/75 backdrop-blur-md border border-white/15 shadow-panel-sm;
+  @apply flex flex-col gap-2 font-bold text-white rounded-xl w-fit p-3 bg-slate-950/75 backdrop-blur-md border border-white/15;
 }
 
 .legend .key {
@@ -200,9 +180,7 @@ ul li h2 {
 }
 
 .live-storm-card {
-  @apply bg-slate-800/90 backdrop-blur-sm w-full max-w-80 cursor-pointer rounded-xl;
-  @apply border border-white/10 shadow-panel-sm overflow-hidden;
-  @apply transition-all duration-300 ease-smooth hover:border-white/25 hover:shadow-panel hover:-translate-y-0.5;
+  @apply bg-slate-800/90 backdrop-blur-sm w-full max-w-80 cursor-pointer rounded-xl border border-white/10 overflow-hidden transition-all duration-300 ease-smooth hover:border-white/25 hover:-translate-y-0.5;
 }
 
 .live-storm-card.selected {
