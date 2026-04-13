@@ -131,6 +131,20 @@ const ClimateLayers = ({
               <Checkbox
                 size="small"
                 className="!text-sky-400 !p-1"
+                checked={layers.pressure}
+                onChange={(e) => handleChange('pressure', e.target.checked)}
+              />
+            }
+            label="Air Pressure"
+          />
+        </div>
+        <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">
+          <FormControlLabel
+            sx={labelSx}
+            control={
+              <Checkbox
+                size="small"
+                className="!text-sky-400 !p-1"
                 checked={layers.clouds}
                 onChange={(e) => handleChange('clouds', e.target.checked)}
               />
@@ -159,39 +173,25 @@ const ClimateLayers = ({
               <Checkbox
                 size="small"
                 className="!text-sky-400 !p-1"
-                checked={layers.wind}
-                onChange={(e) => handleChange('wind', e.target.checked)}
-              />
-            }
-            label="Wind"
-          />
-        </div>
-        <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">
-          <FormControlLabel
-            sx={labelSx}
-            control={
-              <Checkbox
-                size="small"
-                className="!text-sky-400 !p-1"
-                checked={layers.pressure}
-                onChange={(e) => handleChange('pressure', e.target.checked)}
-              />
-            }
-            label="Air Pressure"
-          />
-        </div>
-        <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">
-          <FormControlLabel
-            sx={labelSx}
-            control={
-              <Checkbox
-                size="small"
-                className="!text-sky-400 !p-1"
                 checked={layers.temp}
                 onChange={(e) => handleChange('temp', e.target.checked)}
               />
             }
             label="Temperature"
+          />
+        </div>
+        <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">
+          <FormControlLabel
+            sx={labelSx}
+            control={
+              <Checkbox
+                size="small"
+                className="!text-sky-400 !p-1"
+                checked={layers.wind}
+                onChange={(e) => handleChange('wind', e.target.checked)}
+              />
+            }
+            label="Wind"
           />
         </div>
       </FormGroup>
