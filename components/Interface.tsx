@@ -36,7 +36,7 @@ const Interface = () => {
     return null;
   }, [season]);
 
-  useGsapReveal(containerRef, [tracker, stormId, basin, year], {
+  useGsapReveal(containerRef, [basin, year], {
     stagger: 0.065,
     y: 18,
   });
@@ -47,7 +47,7 @@ const Interface = () => {
         <div data-gsap-reveal className="drag-handle max-lg:order-1" />
         {!tracker && (
           <>
-            <div data-gsap-reveal className="selectors max-lg:order-2">
+            <div className="selectors max-lg:order-2">
               <Select
                 className="select min-w-[7.5rem]"
                 size="small"
@@ -105,7 +105,7 @@ const Interface = () => {
             >
               <SeasonArchive />
             </div>
-            <InterfaceSeasonCharts stormId={stormId} />
+            <InterfaceSeasonCharts />
             <div
               key={stormId}
               data-gsap-reveal
@@ -113,7 +113,7 @@ const Interface = () => {
             >
               <StormArchive />
             </div>
-            <InterfaceStormCharts stormId={stormId} />
+            <InterfaceStormCharts />
           </>
         )}
         {tracker && <LiveTracker />}

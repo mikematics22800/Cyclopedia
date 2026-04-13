@@ -13,9 +13,17 @@ const SeasonArchive = () => {
   const [cost, setCost] = useState<string>('0');
   const [seasonTIKE, setSeasonTIKE] = useState<number>(0);
   const [duration, setDuration] = useState<string>('');
+  const [landfalls, setlandfalls] = useState<number>(0);
 
   useEffect(() => {
     if (!season) return;
+
+    const landfallCount = season.reduce((acc, storm) => {
+      return (
+        acc + storm.data.filter((point) => point.record === 'L').length
+      );
+    }, 0);
+    setlandfalls(landfallCount);
 
     const deadOrMissing = season.map((storm) => {
       return storm.dead_or_missing || 0;
@@ -77,7 +85,7 @@ const SeasonArchive = () => {
     const endDate = `${endMonth}/${endDay}/${endYear}`;
     const duration = `${startDate}-${endDate}`;
     setDuration(duration);
-  }, [season, year]);
+  }, [season, year, maxWinds]);
 
   if (!season) return null;
 
@@ -89,9 +97,7 @@ const SeasonArchive = () => {
           <li className='header'>
             <h1 className='title'>{basin === 'atl' ? 'Atlantic' : 'Pacific'} Basin</h1>     
             <h1>{duration}</h1>
-          </li>
-          
-          {/* Storm Counts */}
+          </li>        
           <li className='data-row border-b'>
             <h2 className='label'>Tropical Cyclones</h2>
             <h2 className='value'>{season.length}</h2>
@@ -106,30 +112,28 @@ const SeasonArchive = () => {
             <h2 className='label'>Major Hurricanes</h2>
             <h2 className='value'>{majorHurricanes}</h2>
           </li>
-          
-          {/* Impact Metrics */}
-          <li className='data-row border-b'>
-            <h2 className='label'>Dead/Missing</h2>
-            <h2 className='value'>{deadOrMissing}</h2>
-          </li>
-          
-          <li className='data-row border-b'>
-            <h2 className='label'>Cost (Million USD)</h2>
-            <h2 className='value cost-value'>${cost}</h2>
-          </li>
-
-          {/* Energy Metrics */}
           <li className={year >= 2004 ? 'data-row border-b' : 'data-row'}>
             <h2 className='label'>Accumulated Cyclone Energy</h2>
             <h2 className='value'>{sum(seasonACE).toFixed(1)}</h2>
           </li>
-          
           {year >= 2004 && (
-            <li className='data-row'>
+            <li className='data-row border-b'>
               <h2 className='label'>Track Integrated Kinetic Energy</h2>
               <h2 className='value'>{seasonTIKE.toFixed(1)} TJ</h2>
             </li>
           )}
+          <li className='data-row border-b'>
+            <h2 className='label'>Landfalls</h2>
+            <h2 className='value'>{landfalls}</h2>
+          </li>
+          <li className='data-row border-b'>
+            <h2 className='label'>Dead or Missing</h2>
+            <h2 className='value'>{deadOrMissing}</h2>
+          </li>
+          <li className='data-row'>
+            <h2 className='label'>Cost (Million USD)</h2>
+            <h2 className='value cost-value'>${cost}</h2>
+          </li>
         </ul>
       </div>
     </div>

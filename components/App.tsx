@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from "react";
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { getArchive, getLive, getCone } from "../libs/hurdat";
@@ -10,11 +10,7 @@ import Interface from "../components/Interface";
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
 import ArchiveCharts from "../components/ArchiveCharts";
 import LoadingScreen from "../components/LoadingScreen";
-import { useGsapReveal } from "../components/hooks/useGsapReveal";
-
 export default function App() {
-  const navRef = useRef<HTMLElement>(null);
-
   const [basin, setBasin] = useState<string>('atl');
   const [year, setYear] = useState<number>(2025);
   const [season, setSeason] = useState<any[] | null>(null);
@@ -150,14 +146,6 @@ export default function App() {
     setTracker(prev => !prev);
   }, []);
 
-  const mainReady = Boolean(season && storm);
-  useGsapReveal(navRef, [mainReady], {
-    selector: "[data-nav-reveal]",
-    y: -12,
-    stagger: 0.08,
-    delay: 0.06,
-  });
-
   const value = useMemo(() => ({
     basin,
     setBasin, 
@@ -205,8 +193,8 @@ export default function App() {
       <div className="app app-background">
         {season && storm ? (
           <>
-            <nav ref={navRef}>
-              <div data-nav-reveal className="flex items-center gap-2">
+            <nav>
+              <div className="flex items-center gap-2">
                 <Image
                   src="/cyclone.png"
                   alt="Cyclopedia"
@@ -219,7 +207,7 @@ export default function App() {
                   CYCLOPEDIA
                 </h1>
               </div>
-              <div data-nav-reveal className="flex items-center gap-3 lg:gap-4">
+              <div className="flex items-center gap-3 lg:gap-4">
                 {!tracker && (
                   <button
                     type="button"
@@ -236,7 +224,7 @@ export default function App() {
             </nav>
             <div className="desktop-view">
               <Interface/>
-              {map ? <Map/> : tracker ? <Map/> : <ArchiveCharts stormId={stormId}/>}
+              {map ? <Map/> : tracker ? <Map/> : <ArchiveCharts />}
             </div>
             <div className="mobile-map">
               <Map/>

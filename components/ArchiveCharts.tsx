@@ -2,7 +2,6 @@
 
 import { useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { useAppContext } from '../contexts/AppContext';
 import { useGsapReveal } from './hooks/useGsapReveal';
 
 const SeasonIntensity = dynamic(() => import('./SeasonIntensity'), {
@@ -20,15 +19,10 @@ const archiveChartsReveal = {
 } as const;
 
 /** Season charts only; mobile Interface order (between season stats and storm stats). */
-export function InterfaceSeasonCharts({ stormId }: { stormId: string }) {
-  const chartsRef = useRef<HTMLDivElement>(null);
-  const { year, basin } = useAppContext();
-
-  useGsapReveal(chartsRef, [stormId, year, basin], archiveChartsReveal);
-
+export function InterfaceSeasonCharts() {
   return (
     <div className="charts-container max-lg:order-4 lg:hidden w-full">
-      <div ref={chartsRef} className="charts">
+      <div className="charts">
         <SeasonIntensity />
         <SeasonAceTike />
       </div>
@@ -37,15 +31,10 @@ export function InterfaceSeasonCharts({ stormId }: { stormId: string }) {
 }
 
 /** Storm charts only; mobile Interface order (below storm stats). */
-export function InterfaceStormCharts({ stormId }: { stormId: string }) {
-  const chartsRef = useRef<HTMLDivElement>(null);
-  const { year, basin } = useAppContext();
-
-  useGsapReveal(chartsRef, [stormId, year, basin], archiveChartsReveal);
-
+export function InterfaceStormCharts() {
   return (
     <div className="charts-container max-lg:order-6 lg:hidden w-full">
-      <div ref={chartsRef} className="charts">
+      <div className="charts">
         <Intensity />
         <AceTike />
       </div>
@@ -53,11 +42,11 @@ export function InterfaceStormCharts({ stormId }: { stormId: string }) {
   );
 }
 
-const ArchiveCharts = ({ stormId }: { stormId: string }) => {
+const ArchiveCharts = () => {
   const chartsRef = useRef<HTMLDivElement>(null);
-  const { year, basin } = useAppContext();
 
-  useGsapReveal(chartsRef, [stormId, year, basin], archiveChartsReveal);
+  // Desktop: this tree mounts only when the navbar switches from Map → Charts.
+  useGsapReveal(chartsRef, [], archiveChartsReveal);
 
   return (
     <div className="charts-container">

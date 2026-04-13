@@ -5,13 +5,12 @@ import Image from 'next/image';
 import { useAppContext } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
 import CycloneIcon from '@mui/icons-material/Cyclone';
+import { useGsapReveal } from './hooks/useGsapReveal';
 
 const StormArchive = () => {
   const { year, storm, stormId } = useAppContext();
   const [ACE, setACE] = useState<number>(0);
   const [TIKE, setTIKE] = useState<number>(0);
-  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
-
   const [stormName, setStormName] = useState<string>('');
   const [textColor, setTextColor] = useState<string>('');
   const [retired, setRetired] = useState<boolean>(false);
@@ -25,6 +24,14 @@ const StormArchive = () => {
   const [inlandMinPressure, setInlandMinPressure] = useState<string>('');
   const [cost, setCost] = useState<string>('');
   const [deadOrMissing, setDeadOrMissing] = useState<string>('');
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const revealRef = useRef<HTMLDivElement>(null);
+
+  useGsapReveal(revealRef, [stormId], {
+    selector: '[data-storm-reveal]',
+    stagger: 0.065,
+    y: 18,
+  });
 
   useEffect(() => {
     if (!storm) return;
@@ -215,11 +222,14 @@ const StormArchive = () => {
 
   return (
     <div className='storm'>
-      <div className='flex flex-col gap-5 w-full items-center'>
+      <div
+        ref={revealRef}
+        className='flex flex-col gap-5 w-full items-center'
+      >
         {/* Storm Data Section */}
           <ul className='data-table'>
             {/* Storm Header */}
-            <li className='header mt-5'>
+            <li data-storm-reveal className='header mt-5'>
               {/* Storm Image Section */}
               <a 
                 target='_blank' 
@@ -235,7 +245,6 @@ const StormArchive = () => {
                   </div>
                 )}
                 
-                {/* Retired Badge */}
                 {retired && (
                   <Image 
                     className='retired-badge' 
@@ -256,21 +265,19 @@ const StormArchive = () => {
                 {duration}
               </h1>     
             </li>
-            {/* Wind Data */}
-            <li className='data-row border-b'>
+            <li data-storm-reveal className='data-row border-b'>
               <h2 className='label'>Maximum Wind</h2>
               <h2 className='value'>{maxWind} kt</h2>
             </li>
             
             {landfalls.length > 0 && (
-              <li className='data-row border-b'>
+              <li data-storm-reveal className='data-row border-b'>
                 <h2 className='label'>Maximum Inland Wind</h2>
                 <h2 className='value'>{inlandMaxWind} kt</h2>
               </li>
             )}
             
-            {/* Pressure Data */}
-            <li className='data-row border-b'>
+            <li data-storm-reveal className='data-row border-b'>
               <h2 className='label'>Minimum Pressure</h2>
               <h2 className='value'>
                 {minPressure != "9999" && minPressure != "-999" ? `${minPressure} mb` : 'Unknown'}
@@ -278,36 +285,39 @@ const StormArchive = () => {
             </li>
             
             {landfalls.length > 0 && (
-            <li className='data-row border-b'>
+            <li data-storm-reveal className='data-row border-b'>
                 <h2 className='label'>Minimum Inland Pressure</h2>
                 <h2 className='value'>
                   {inlandMinPressure != "9999" && inlandMinPressure != "-999" ? `${inlandMinPressure} mb` : 'Unknown'}
                 </h2>
               </li>
             )}
-            
-            {/* Impact Data */}
-            <li className='data-row border-b'>
-              <h2 className='label'>Dead/Missing</h2>
-              <h2 className='value'>{deadOrMissing}</h2>
-            </li>
-            
-            {/* Cost Data */}
-            <li className='data-row border-b'>
-              <h2 className='label'>Cost (Million USD)</h2>
-              <h2 className='value cost-value'>${cost}</h2>
-            </li>
-            {/* Energy Data */}
-            <li className={year >= 2004 ? 'data-row border-b' : 'data-row'}>
+             <li
+              data-storm-reveal
+              className={year >= 2004 ? 'data-row border-b' : 'data-row'}
+            >
               <h2 className='label'>Accumulated Cyclone Energy</h2>
               <h2 className='value'>{ACE.toFixed(1)}</h2>
             </li>
             {year >= 2004 && (
-              <li className='data-row'>
+              <li data-storm-reveal className='data-row border-b'>
                 <h2 className='label'>Track Integrated Kinetic Energy</h2>
                 <h2 className='value'>{TIKE.toFixed(1)} TJ</h2>
               </li>
             )}
+            <li data-storm-reveal className='data-row border-b'>
+              <h2 className='label'>Landfalls</h2>
+              <h2 className='value'>{landfalls.length}</h2>
+            </li>
+            <li data-storm-reveal className='data-row border-b'>
+              <h2 className='label'>Dead or Missing</h2>
+              <h2 className='value'>{deadOrMissing}</h2>
+            </li>
+            
+            <li data-storm-reveal className='data-row'>
+              <h2 className='label'>Cost (Million USD)</h2>
+              <h2 className='value cost-value'>${cost}</h2>
+            </li>
           </ul>
         </div>
     </div>
