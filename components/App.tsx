@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from "react";
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { getArchive, getLive, getCone } from "../libs/hurdat";
@@ -19,7 +19,7 @@ export default function App() {
   const [year, setYear] = useState<number>(2025);
   const [season, setSeason] = useState<any[] | null>(null);
   const [storm, setStorm] = useState<any | null>(null);
-  const [stormId, setStormId] = useState<string>('season');
+  const [stormId, setStormId] = useState<string>('');
   const [dates, setDates] = useState<string[]>([]);
   const [windField, setWindField] = useState<boolean>(false);
   const [names, setNames] = useState<string[]>([]);
@@ -50,16 +50,15 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    setStormId('season');
     if (year < 1949 && basin === 'pac') setYear(1949);
     if (typeof window !== 'undefined') {
       const cache = localStorage.getItem(`cyclopedia-${basin}-${year}`);
       if (cache) {
         setSeason(JSON.parse(cache));
-        const data = JSON.parse(cache);
       } else {
         setSeason(null);
         setStorm(null);
+        setStormId('');
         getArchive(basin, year).then(data => {
           if (data) {
             setSeason(data);
@@ -70,17 +69,27 @@ export default function App() {
     }
   }, [basin, year]);
 
+  useLayoutEffect(() => {
+    if (!season?.length) return;
+    setStormId((prev) => {
+      if (!prev || prev === 'season' || !season.some((s) => s.id === prev)) {
+        return season[0].id;
+      }
+      return prev;
+    });
+  }, [season]);
+
   useEffect(() => {
-    if (season && stormId !== 'season') {
-      const storm = season.find(storm => storm.id === stormId);
-      setStorm(storm);
-    } else if (stormId === 'season') {
+    if (season && stormId) {
+      const found = season.find((s) => s.id === stormId);
+      setStorm(found ?? null);
+    } else {
       setStorm(null);
     }
   }, [stormId, season]);
 
   useEffect(() => {
-    if (storm && stormId !== 'season') {
+    if (storm) {
       const dates = storm.data.map((point: any) => {
         const dateArray = point?.date.toString().split("");
         const month = dateArray.slice(4,6).join("");
@@ -88,10 +97,10 @@ export default function App() {
         return `${month}/${day}`;
       });
       setDates(dates);
-    } else if (stormId === 'season') {
+    } else {
       setDates([]);
     }
-  }, [storm, year, stormId]);
+  }, [storm, year]);
 
   useEffect(() => {
     if (season) {
@@ -141,7 +150,7 @@ export default function App() {
     setTracker(prev => !prev);
   }, []);
 
-  const mainReady = Boolean(season && (stormId === "season" || storm));
+  const mainReady = Boolean(season && storm);
   useGsapReveal(navRef, [mainReady], {
     selector: "[data-nav-reveal]",
     y: -12,
@@ -194,7 +203,7 @@ export default function App() {
   return (
     <AppProvider value={value}>
       <div className="app app-background">
-        {season && (stormId === 'season' || storm) ? (
+        {season && storm ? (
           <>
             <nav ref={navRef}>
               <div data-nav-reveal className="flex items-center gap-2">

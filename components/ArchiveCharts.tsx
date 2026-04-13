@@ -6,8 +6,6 @@ import { useGsapReveal } from './hooks/useGsapReveal';
 
 const Intensity = dynamic(() => import("./Intensity"), { ssr: false });
 const AceTike = dynamic(() => import("./AceTike"), { ssr: false });
-const SeasonIntensity = dynamic(() => import("./SeasonIntensity"), { ssr: false });
-const SeasonAceTike = dynamic(() => import("./SeasonAceTike"), { ssr: false });
 
 const ArchiveCharts = ({stormId}: {stormId: string}) => {
   const chartsRef = useRef<HTMLDivElement>(null);
@@ -22,17 +20,10 @@ const ArchiveCharts = ({stormId}: {stormId: string}) => {
   return (
     <div className="charts-container">
       <div ref={chartsRef} className="charts">
-        {stormId==='season' ? 
-          <>        
-            <SeasonIntensity />
-            <SeasonAceTike />
-          </>  
-        :
-          <>
-            <Intensity />
-            <AceTike />
-          </>
-        }
+        <>
+          <Intensity />
+          <AceTike />
+        </>
         </div>
     </div>
   );

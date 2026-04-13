@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import {
+  archiveImageStemFromStormId,
+  buildArchiveImageStemMap,
+} from '@/libs/archiveImageServer';
 
 export async function GET(
   request: NextRequest,
@@ -27,7 +31,13 @@ export async function GET(
     }
     
     // Construct file path
-    const filePath = path.join(process.cwd(), 'archive', basin, `${year}.json`);
+    const filePath = path.join(
+      process.cwd(),
+      'archive',
+      basin,
+      year,
+      `${year}.json`,
+    );
     
     // Check if file exists
     if (!fs.existsSync(filePath)) {
@@ -40,7 +50,31 @@ export async function GET(
     // Read and parse the JSON file
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const jsonData = JSON.parse(fileContent);
-    
+
+    const imagesDir = path.join(
+      process.cwd(),
+      'archive',
+      basin,
+      year,
+      'images',
+    );
+    const stemMap = buildArchiveImageStemMap(imagesDir);
+
+    if (Array.isArray(jsonData)) {
+      for (const storm of jsonData) {
+        if (!storm || typeof storm !== 'object') continue;
+        delete (storm as { image?: string }).image;
+        const id = (storm as { id?: string }).id;
+        if (typeof id !== 'string') continue;
+        const stem = archiveImageStemFromStormId(id);
+        if (!stem) continue;
+        const fname = stemMap.get(stem);
+        if (fname) {
+          (storm as { image?: string }).image = `/api/archive/${basin}/${year}/images/${encodeURIComponent(fname)}`;
+        }
+      }
+    }
+
     // Set CORS headers
     const response = NextResponse.json(jsonData);
     response.headers.set('Access-Control-Allow-Origin', '*');

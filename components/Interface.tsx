@@ -84,10 +84,8 @@ const Interface = () => {
               onChange={(e) => {
                 setStormId(e.target.value);
               }}
+              disabled={!stormIds?.length}
             >
-              <MenuItem value={"season"}>
-                <p className="text-black font-bold">Season</p>
-              </MenuItem>
               {stormIds?.map((id) => {
                 const name = id.split("_")[1];
                 return (
@@ -98,7 +96,7 @@ const Interface = () => {
               })}
             </Select>
           </div>
-          {year >= 2004 && stormId !== "season" && (
+          {year >= 2004 && (
             <div
               data-gsap-reveal
               className="w-fit flex items-center gap-2 p-3 archive-panel-shell"
@@ -115,11 +113,17 @@ const Interface = () => {
             </div>
           )}
           <div
+            data-gsap-reveal
+            className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell"
+          >
+            <SeasonArchive />
+          </div>
+          <div
             key={stormId}
             data-gsap-reveal
             className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell"
           >
-            {stormId === "season" ? <SeasonArchive /> : <StormArchive />}
+            <StormArchive />
           </div>
         </>
       )}
