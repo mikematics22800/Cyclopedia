@@ -21,7 +21,7 @@ interface Layers {
 
 const panelClass =
   'flex flex-col gap-2 font-bold text-white rounded-xl w-fit p-3 ' +
-  'bg-slate-950/75 backdrop-blur-md border border-white/15 shadow-panel-sm ' +
+  'bg-slate-950/75 backdrop-blur-md border border-white/15 ' +
   'transition-all duration-300 ease-smooth hover:border-white/25';
 
 const ClimateLayers = ({
@@ -75,7 +75,7 @@ const ClimateLayers = ({
   if (!open) {
     return (
       <div
-        className={`${panelClass} cursor-pointer hover:shadow-panel`}
+        className={`${panelClass} cursor-pointer`}
         onClick={() => setOpen(true)}
         role="button"
         tabIndex={0}
@@ -86,16 +86,15 @@ const ClimateLayers = ({
           }
         }}
       >
-        <Tooltip title="Climate layers" placement="bottom" arrow>
+        <Tooltip title="Layers" placement="bottom" arrow>
           <IconButton
-            aria-label="Open climate layers"
             onClick={(e) => {
               e.stopPropagation();
               setOpen(true);
             }}
             sx={iconButtonSx}
           >
-            <Settings className="!text-2xl text-sky-300 drop-shadow-[0_0_8px_rgba(56,189,248,0.35)]" />
+            <Settings className="!text-2xl text-white" />
           </IconButton>
         </Tooltip>
       </div>
@@ -105,25 +104,23 @@ const ClimateLayers = ({
   return (
     <div
       ref={openPanelRef}
-      className={`${panelClass} min-w-[15rem] max-w-[18rem] gap-1 shadow-panel`}
+      className={`${panelClass} min-w-[15rem] max-w-[18rem] gap-1`}
     >
       <div className="climate-layer-row flex justify-between items-center gap-2 border-b border-white/10 pb-2 mb-1">
         <span className="text-sm font-bold tracking-wide text-white/95">
-          Climate layers
+          Layers
         </span>
-        <Tooltip title="Close" placement="left" arrow>
-          <IconButton
-            aria-label="Close climate layers"
-            size="small"
-            onClick={() => setOpen(false)}
-            sx={{
-              color: 'rgba(255,255,255,0.9)',
-              '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' },
-            }}
-          >
-            <Close className="!text-xl" />
-          </IconButton>
-        </Tooltip>
+        <IconButton
+          aria-label="Close climate layers"
+          size="small"
+          onClick={() => setOpen(false)}
+          sx={{
+            color: 'rgba(255,255,255,0.9)',
+            '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' },
+          }}
+        >
+          <Close className="!text-xl" />
+        </IconButton>
       </div>
 
       <FormGroup className="gap-0.5 w-full">
@@ -180,7 +177,7 @@ const ClimateLayers = ({
                 onChange={(e) => handleChange('pressure', e.target.checked)}
               />
             }
-            label="Sea level pressure"
+            label="Air Pressure"
           />
         </div>
         <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">

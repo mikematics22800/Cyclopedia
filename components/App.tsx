@@ -215,15 +215,15 @@ export default function App() {
                   priority
                   unoptimized
                 />
-                <h1 className="storm-font text-3xl sm:text-4xl text-white italic hidden sm:block tracking-tight">
+                <h1 className="storm-font text-3xl lg:text-4xl text-white italic hidden lg:block tracking-tight">
                   CYCLOPEDIA
                 </h1>
               </div>
-              <div data-nav-reveal className="flex items-center gap-3 sm:gap-4">
+              <div data-nav-reveal className="flex items-center gap-3 lg:gap-4">
                 {!tracker && (
                   <button
                     type="button"
-                    className="button !hidden sm:!flex"
+                    className="button !hidden lg:!flex"
                     onClick={toggleCharts}
                   >
                     <span>{map ? "Charts" : "Map"}</span>

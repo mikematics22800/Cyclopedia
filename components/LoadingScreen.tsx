@@ -55,7 +55,7 @@ const LoadingScreen = () => {
   return (
     <div ref={rootRef} className="loading-screen">
       <Image
-        className="loading-logo sm:w-60 w-40 h-auto spin"
+        className="loading-logo lg:w-60 w-40 h-auto spin"
         src="/cyclone.png"
         alt="Loading"
         width={240}

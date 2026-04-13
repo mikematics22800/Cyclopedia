@@ -4,9 +4,12 @@ import { useMemo, useRef } from "react";
 import { useAppContext } from "../contexts/AppContext";
 import StormArchive from "./StormArchive";
 import SeasonArchive from "./SeasonArchive";
-import ArchiveCharts from "./ArchiveCharts";
+import {
+  InterfaceSeasonCharts,
+  InterfaceStormCharts,
+} from "./ArchiveCharts";
 import LiveTracker from "./LiveTracker";
-import { MenuItem, Select, Checkbox } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
 import { useGsapReveal } from "./hooks/useGsapReveal";
 
 const Interface = () => {
@@ -19,7 +22,6 @@ const Interface = () => {
     setYear, 
     stormId, 
     setStormId, 
-    setWindField, 
     season, 
     tracker
   } = useAppContext();
@@ -40,99 +42,82 @@ const Interface = () => {
   });
 
   return (
-    <div ref={containerRef} className="interface">
-      <div data-gsap-reveal className="drag-handle" />
-      {!tracker && (
-        <>
-          <div data-gsap-reveal className="selectors">
-            <Select
-              className="select min-w-[7.5rem]"
-              size="small"
-              value={basin}
-              onChange={(e) => {
-                setBasin(e.target.value);
-              }}
-            >
-              <MenuItem value="atl">
-                <p className="text-black font-bold">Atlantic</p>
-              </MenuItem>
-              <MenuItem value="pac">
-                <p className="text-black font-bold">Pacific</p>
-              </MenuItem>
-            </Select>
-            <Select
-              className="select min-w-[5.5rem]"
-              size="small"
-              value={year}
-              onChange={(e) => {
-                setYear(Number(e.target.value));
-              }}
-            >
-              {years.map((_, index) => {
-                const selectedYear = 2025 - index;
-                return (
-                  <MenuItem key={index} value={selectedYear}>
-                    <p className="text-black font-bold">{selectedYear}</p>
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            <Select
-              className="select min-w-[6.5rem]"
-              size="small"
-              value={stormId}
-              onChange={(e) => {
-                setStormId(e.target.value);
-              }}
-              disabled={!stormIds?.length}
-            >
-              {stormIds?.map((id) => {
-                const name = id.split("_")[1];
-                return (
-                  <MenuItem key={id} value={id}>
-                    <p className="text-black font-bold">{name}</p>
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </div>
-          {year >= 2004 && (
+    <div className="interface-scroll">
+      <div ref={containerRef} className="interface">
+        <div data-gsap-reveal className="drag-handle max-lg:order-1" />
+        {!tracker && (
+          <>
+            <div data-gsap-reveal className="selectors max-lg:order-2">
+              <Select
+                className="select min-w-[7.5rem]"
+                size="small"
+                value={basin}
+                onChange={(e) => {
+                  setBasin(e.target.value);
+                }}
+              >
+                <MenuItem value="atl">
+                  <p className="text-black font-bold">Atlantic</p>
+                </MenuItem>
+                <MenuItem value="pac">
+                  <p className="text-black font-bold">Pacific</p>
+                </MenuItem>
+              </Select>
+              <Select
+                className="select min-w-[5.5rem]"
+                size="small"
+                value={year}
+                onChange={(e) => {
+                  setYear(Number(e.target.value));
+                }}
+              >
+                {years.map((_, index) => {
+                  const selectedYear = 2025 - index;
+                  return (
+                    <MenuItem key={index} value={selectedYear}>
+                      <p className="text-black font-bold">{selectedYear}</p>
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              <Select
+                className="select min-w-[6.5rem]"
+                size="small"
+                value={stormId}
+                onChange={(e) => {
+                  setStormId(e.target.value);
+                }}
+                disabled={!stormIds?.length}
+              >
+                {stormIds?.map((id) => {
+                  const name = id.split("_")[1];
+                  return (
+                    <MenuItem key={id} value={id}>
+                      <p className="text-black font-bold">{name}</p>
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </div>
             <div
               data-gsap-reveal
-              className="w-fit flex items-center gap-2 p-3 archive-panel-shell"
+              className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell max-lg:order-3"
             >
-              <Checkbox
-                className="!text-sky-400 !p-0"
-                onChange={(e) => {
-                  setWindField(e.target.checked);
-                }}
-              />
-              <span className="text-white text-sm font-bold tracking-wide">
-                Wind Field
-              </span>
+              <SeasonArchive />
             </div>
-          )}
-          <div
-            data-gsap-reveal
-            className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell"
-          >
-            <SeasonArchive />
-          </div>
-          <div
-            key={stormId}
-            data-gsap-reveal
-            className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell"
-          >
-            <StormArchive />
-          </div>
-        </>
-      )}
-      {tracker && <LiveTracker />}
-      {!tracker && (
-        <div data-gsap-reveal className="sm:hidden w-full">
-          <ArchiveCharts stormId={stormId} />
-        </div>
-      )}
+            <InterfaceSeasonCharts stormId={stormId} />
+            <div
+              key={stormId}
+              data-gsap-reveal
+              className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell max-lg:order-5"
+            >
+              <StormArchive />
+            </div>
+            <InterfaceStormCharts stormId={stormId} />
+          </>
+        )}
+        {tracker && <LiveTracker />}
+      </div>
     </div>
   );
 };

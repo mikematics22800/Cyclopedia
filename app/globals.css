@@ -11,16 +11,53 @@
   width: 0;
 }
 
+/* Modern scrollbars: desktop only (matches Tailwind `lg`). */
+@media (min-width: 1024px) {
+  .interface-scroll,
+  .charts-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(100 116 139) rgb(15 23 42 / 0.35);
+  }
+
+  .interface-scroll::-webkit-scrollbar,
+  .charts-container::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .interface-scroll::-webkit-scrollbar-track,
+  .charts-container::-webkit-scrollbar-track {
+    margin-block: 4px;
+    background: rgb(15 23 42 / 0.35);
+    border-radius: 9999px;
+  }
+
+  .interface-scroll::-webkit-scrollbar-thumb,
+  .charts-container::-webkit-scrollbar-thumb {
+    background: rgb(100 116 139 / 0.85);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .interface-scroll::-webkit-scrollbar-thumb:hover,
+  .charts-container::-webkit-scrollbar-thumb:hover {
+    background: rgb(148 163 184 / 0.9);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+}
+
 .app {
-  @apply w-screen bg-cover bg-center bg-fixed;
+  @apply w-screen bg-cover bg-center bg-fixed overflow-hidden;
 }
 
 .desktop-view {
-  @apply h-[calc(100vh-5rem)] w-full hidden sm:flex;
+  @apply h-[calc(100vh-5rem)] w-full hidden lg:flex;
 }
 
 nav {
-  @apply flex justify-between w-full h-20 items-center sm:px-10 px-5 bg-blue-950 z-10 fixed top-0 sm:relative;
+  @apply flex justify-between w-full h-20 items-center lg:px-10 px-5 bg-blue-950 z-10 fixed top-0 lg:relative;
 }
 
 .loading-screen {
@@ -28,11 +65,15 @@ nav {
 }
 
 .loading-screen img {
-  @apply sm:w-60 w-40;
+  @apply lg:w-60 w-40;
+}
+
+.interface-scroll {
+  @apply w-full lg:w-1/4 min-w-96 lg:min-h-0 lg:overflow-y-auto lg:shrink-0;
 }
 
 .interface {
-  @apply p-4 sm:p-8 flex-col overflow-y-auto overflow-x-hidden gap-5 w-full sm:w-1/4 min-w-96 flex items-center h-fit;
+  @apply p-4 lg:p-8 flex-col overflow-x-hidden gap-5 w-full flex items-center h-fit;
 }
 
 .button {
@@ -41,7 +82,7 @@ nav {
 
 .button h1,
 .button span {
-  @apply text-sm sm:text-base tracking-wide;
+  @apply text-sm lg:text-base tracking-wide;
 }
 
 .select {
@@ -70,7 +111,7 @@ nav {
 }
 
 .charts-container {
-  @apply w-full flex flex-col overflow-auto sm:p-8 p-0;
+  @apply w-full flex flex-col overflow-auto lg:p-8 p-0;
 }
 
 .charts {
@@ -81,12 +122,10 @@ nav {
   @apply flex w-full gap-4 justify-center;
 }
 
-/* Data shell (Interface) and each .chart use the same bg + opacity: bg-slate-800/80 */
 .archive-panel-shell {
   @apply rounded-2xl bg-slate-800/80 backdrop-blur-md border border-white/10;
 }
 
-/* Height lives on .chart-wrapper; .chart fills it */
 .chart {
   @apply border border-white/10 p-4 rounded-2xl w-full h-full min-h-0 bg-slate-800/80 backdrop-blur-md;
 }
@@ -106,12 +145,12 @@ nav {
 }
 
 .mobile-interface {
-  @apply sm:hidden flex w-full justify-center rounded-t-3xl absolute top-[96%] bg-fixed bg-center bg-cover;
+  @apply lg:hidden flex w-full justify-center rounded-t-3xl absolute top-[96%] bg-fixed bg-center bg-cover;
   background-image: url('/hurricane.jpg'); 
 }
 
 .mobile-map {
-  @apply sm:hidden w-full h-[calc(100vh-5rem)] fixed top-20 -z-10;
+  @apply lg:hidden w-full h-[calc(100vh-5rem)] fixed top-20 -z-10;
 }
 
 .legend-container {
@@ -138,9 +177,8 @@ ul li h2 {
   @apply text-sm;
 }
 
-/* Interface */
 .drag-handle {
-  @apply bg-gray-300 rounded-full w-20 h-1 sm:hidden;
+  @apply bg-gray-300 rounded-full w-20 h-1 lg:hidden;
 }
 
 .storm-image {

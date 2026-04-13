@@ -8,7 +8,8 @@ import ArchiveStorms from "./ArchiveStorms";
 import LiveStorms from "./LiveStorms";
 import WindField from "./WindField";
 import Legend from "./Legend";
-import ClimateLayers from "./ClimateLayers";
+import ClimateLayers from "./LiveLayers";
+import ArchiveMapSettings from "./ArchiveLayers";
 import Invests from "./Invests";
 
 interface Layers {
@@ -36,6 +37,7 @@ const Map = () => {
       {/* Legend and Weather Controls */}
       <div className="map-controls-container">
         {tracker && <ClimateLayers layers={layers} setLayers={setLayers}/>}
+        {!tracker && <ArchiveMapSettings />}
         <Legend />
       </div>
 
