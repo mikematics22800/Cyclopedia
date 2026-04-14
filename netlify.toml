@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "git lfs install && git lfs pull && npm run build"
   publish = ".next"
 
 [build.environment]
