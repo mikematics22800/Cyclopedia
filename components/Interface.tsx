@@ -1,13 +1,17 @@
 'use client';
 
 import { useMemo, useRef } from "react";
+import dynamic from 'next/dynamic';
 import { useAppContext } from "../contexts/AppContext";
-import StormArchive from "./StormArchive";
-import SeasonArchive from "./SeasonArchive";
-import { InterfaceIntensityChartsPanel } from "./ArchiveCharts";
-import LiveTracker from "./LiveTracker";
+import StormArchive from "./StormMetrics";
+import SeasonArchive from "./SeasonMetrics";
+import LiveTracker from "./Tracker";
 import { MenuItem, Select } from "@mui/material";
 import { useGsapReveal } from "./hooks/useGsapReveal";
+
+const IntensityCharts = dynamic(() => import('./ArchiveCharts').then((mod) => mod.IntensityCharts), {
+  ssr: false,
+});
 
 const Interface = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -105,7 +109,9 @@ const Interface = () => {
                 <StormArchive />
               </div>
             </div>
-            <InterfaceIntensityChartsPanel />
+            <div className="lg:hidden w-full">
+              <IntensityCharts />
+            </div>
           </>
         )}
         {tracker && <LiveTracker />}
