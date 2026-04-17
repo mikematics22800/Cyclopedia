@@ -1,182 +1,106 @@
 # Cyclopedia
 
-**Cyclopedia** is a [Next.js](https://nextjs.org/) web app for exploring historical North Atlantic and Eastern North Pacific tropical cyclones and switching to a **live tracker** with forecast cones, disturbance/invest overlays, and optional weather map layers. The UI pairs a **Leaflet** map with **Chart.js** season and storm analytics, **Material UI**, and a installable **PWA**-style experience (manifest, service worker, portrait-oriented layout).
-
----
+Cyclopedia is a **Next.js** web app for exploring **historical Atlantic and eastern Pacific tropical cyclone seasons** (HURDAT-style archive JSON) and switching to a **live tracker** view with forecast cone and storm positions. The UI combines **Leaflet** maps, **Material UI** controls, and **Chart.js** intensity charts behind a custom storm-themed interface.
 
 ## Features
 
-### Historical archive
-
-- **Basins**: North Atlantic (`atl`) and Eastern North Pacific (`pac`).
-- **Season range**: Atlantic from **1850** through **2025**; Pacific data in the app is constrained from **1949** upward (see `components/App.tsx`).
-- **Per-storm tracks** with intensity, pressure, and wind radii (34/50/64 kt) on the map.
-- **Satellite or imagery thumbnails** when available: the archive API resolves image filenames under `archive/<basin>/<year>/images/` and exposes them via `/api/archive/.../images/...`.
-- **Wind-field visualization** for archive seasons from **2004** onward when enabled (see `components/Map.tsx`).
-- **Season-level charts**: intensity distribution, ACE (Accumulated Cyclone Energy (ACE)), and per-storm intensity/ACE views (`components/ArchiveCharts.tsx` and related chart components).
-- **Client-side caching** of fetched season JSON in `localStorage` keyed by basin and year.
-
-### Live tracker
-
-- **Active storm tracks** proxied from a GeoJSON feed (see `/api/live`).
-- **Forecast cones** from a companion endpoint (see `/api/cone`).
-- **NHC tropical summary layers**: points of interest and invest-area polygons via NOAA MapServer queries (see `/api/invest` and `/api/invest-area`).
-- **Optional OpenWeatherMap overlays** (clouds, precipitation, wind, temperature, pressure) when `NEXT_PUBLIC_OWM_KEY` is set.
-
-### App shell
-
-- **Responsive layout**: desktop split view (interface + map or charts); mobile uses a dedicated map and interface stack.
-- **Toggle** between map and charts on large screens; **toggle** between historical archive and live tracker.
-- **Service worker** registration for offline-oriented behavior (`public/sw.js`, `workbox-window`, `ServiceWorkerRegister`).
-
----
+- **Archive mode** — Browse seasons by basin (`atl` / `pac`) and year; pick a storm and view its track on the map with optional wind-field visualization, legends, and archive-oriented panels.
+- **Tracker mode** — Toggle to a live view that consumes proxied GeoJSON from the app’s API routes (tracks and forecast cone).
+- **Season analytics** — Season-level charts and metrics (for example ACE-related views) driven by the same archive data.
+- **Progressive Web App** — `manifest.json` and `public/sw.js` provide installability and a small offline shell for cached static assets; registration runs from `app/components/ServiceWorkerRegister.tsx`.
+- **Responsive layout** — Separate desktop and mobile map/interface regions with Tailwind-driven styling and a local display font.
 
 ## Tech stack
 
 | Area | Choice |
 |------|--------|
-| Framework | Next.js **16** (App Router) |
-| UI | React **19**, TypeScript |
-| Styling | Tailwind CSS **3**, Emotion, MUI **5** |
-| Map | Leaflet, react-leaflet **5** |
-| Charts | Chart.js **4**, react-chartjs-2 |
-| Animation | GSAP |
-| PWA | Web app manifest, custom service worker |
-
----
+| Framework | [Next.js](https://nextjs.org/) 16 (App Router) |
+| UI | React 19, [MUI](https://mui.com/) 5, [Emotion](https://emotion.sh/) (via MUI) |
+| Maps | [Leaflet](https://leafletjs.com/) + [react-leaflet](https://react-leaflet.js.org/) |
+| Charts | [Chart.js](https://www.chartjs.org/) + [react-chartjs-2](https://react-chartjs-2.js.org/) |
+| Animation | [GSAP](https://gsap.com/) |
+| Styling | [Tailwind CSS](https://tailwindcss.com/) 3, `app/globals.css` |
+| Deploy | [Netlify](https://www.netlify.com/) (`netlify.toml`, `@netlify/plugin-nextjs`) |
 
 ## Requirements
 
-- **Node.js 20** (matches `netlify.toml` and is a safe choice for Next 16).
-- npm (or another client compatible with `package-lock.json`).
-
----
-
-## Environment variables
-
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `NEXT_PUBLIC_OWM_KEY` | No* | OpenWeatherMap API key for live weather tile layers. If unset, those layers still render with `undefined` in the tile URL and may not load. |
-
-Create a `.env.local` in the project root (Next.js loads it automatically):
-
-```bash
-NEXT_PUBLIC_OWM_KEY=your_openweathermap_api_key
-```
-
----
+- **Node.js** 20.x (matches Netlify and modern Next.js; other LTS versions may work but are not guaranteed.)
+- **npm** (lockfile is `package-lock.json`).
 
 ## Getting started
 
 ```bash
+git clone <repository-url>
+cd Cyclopedia
 npm install
+```
+
+### Environment
+
+Optional `.env` files are ignored by git (see `.gitignore`). Add one locally if you introduce environment-based configuration; nothing in the public README assumes secret values.
+
+### Development
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). The app loads archive data over the network from `/api/archive/...` and caches season JSON in `localStorage` under keys like `cyclopedia-{basin}-{year}`.
 
-### Scripts
+### Production build
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Development server with hot reload |
-| `npm run build` | Production build |
-| `npm run start` | Run the production server (after `build`) |
-| `npm run lint` | ESLint (Next.js config) |
+```bash
+npm run build
+npm start
+```
 
----
+### Lint
+
+```bash
+npm run lint
+```
+
+## Project layout
+
+| Path | Role |
+|------|------|
+| `app/` | App Router: `layout.tsx`, `page.tsx`, `globals.css`, API route handlers under `app/api/` |
+| `components/` | React UI: map, archive/live layers, charts, interface shell, loading screen |
+| `contexts/AppContext.tsx` | Shared state (basin, year, selected storm, live data handles, tracker vs archive, etc.) |
+| `libs/` | Client data helpers (`hurdat.ts`, `sum.ts`) and server helpers for archive images (`archiveImageServer.ts`) |
+| `archive/` | Static JSON per basin/year (`archive/{basin}/{year}/{year}.json`) and optional `images/` subfolders |
+| `public/` | Icons, `manifest.json`, service worker `sw.js`, static imagery |
+
+## Archive data
+
+- Season files live at `archive/<basin>/<year>/<year>.json` (for example `archive/atl/2024/2024.json`).
+- Supported basins in API validation are **`atl`** and **`pac`**. Pacific seasons before 1949 are clamped in the client when switching basin.
+- Optional per-storm images can be placed under `archive/<basin>/<year>/images/`. The archive API enriches storm objects with an `image` URL when a filename matches the storm id (see `archiveImageStemFromStormId` in `libs/archiveImageServer.ts`). Serving those URLs may require a matching Next.js route under `app/api/archive/.../images/...` if not already present in your branch.
+
+## API routes (Next.js)
+
+These handlers live under `app/api/` and are the supported way for the browser to load data without configuring remote CORS for third-party origins.
+
+| Route | Purpose |
+|-------|---------|
+| `GET /api/archive/[basin]/[year]` | Reads `archive/<basin>/<year>/<year>.json`, attaches optional local image URLs, returns JSON |
+| `GET /api/live` | Proxies live storm track GeoJSON (see implementation for upstream URL) |
+| `GET /api/cone` | Proxies forecast cone GeoJSON |
+| `GET /api/invest` | Proxies NOAA MapServer layer **2** query as GeoJSON (tropical weather summary) |
+| `GET /api/invest-area` | Proxies NOAA MapServer layer **3** query as GeoJSON (related invest-area geometry) |
+
+CORS and cache headers for `/api/*` are set in `next.config.ts` and mirrored in `netlify.toml` where relevant.
+
+## Remote image hosts
+
+`next.config.ts` allows optimized images from hosts such as `www.nhc.noaa.gov`, `tile.openstreetmap.org`, and `tile.openweathermap.org`. Add patterns there if you introduce new remote image domains.
 
 ## Deployment (Netlify)
 
-The repo includes **`netlify.toml`** with:
+- Build: `npm run build` with Node 20 (`netlify.toml`).
+- The **`@netlify/plugin-nextjs`** plugin enables the Next.js runtime on Netlify (SSR, API routes, etc.).
+- Do not use a single-page-app fallback that rewrites all paths to `/index.html`; Next.js needs its own routing and server handlers.
 
-- Build command: `npm run build`
-- **`@netlify/plugin-nextjs`** for Next.js on Netlify
-- **Node 20** in the build environment
-- Long-cache headers for static assets and CORS-friendly headers for `/api/*`
+## License and data
 
-Ensure production environment variables (e.g. `NEXT_PUBLIC_OWM_KEY`) are set in the Netlify UI if you use weather overlays.
-
----
-
-## Project structure (high level)
-
-```
-app/
-  api/                 # Route handlers (archive, live, cone, invest, images)
-  layout.tsx           # Root layout, fonts, manifest, service worker hook
-  page.tsx             # Renders main App component
-components/          # Map, archive/live storm layers, UI, charts
-contexts/              # React context for basin/year/storm/live state
-libs/                  # Client fetch helpers, archive image utilities, math helpers
-archive/
-  atl/<year>/<year>.json   # Season storm arrays + images/ thumbnails
-  pac/<year>/<year>.json
-public/                # Icons, manifest, sw.js, static assets
-```
-
----
-
-## Archive JSON shape
-
-Each season file is a **JSON array** of storm objects. A minimal illustration:
-
-```json
-{
-  "id": "AL012020_Arthur",
-  "dead_or_missing": 0,
-  "cost_usd": 0,
-  "retired": false,
-  "data": [
-    {
-      "date": "20200516",
-      "time_utc": "1800",
-      "status": "TD",
-      "lat": 28,
-      "lng": -78.7,
-      "max_wind_kt": 30,
-      "min_pressure_mb": 1008,
-      "34kt_wind_nm": { "ne": 0, "se": 0, "sw": 0, "nw": 0 },
-      "50kt_wind_nm": { "ne": 0, "se": 0, "sw": 0, "nw": 0 },
-      "64kt_wind_nm": { "ne": 0, "se": 0, "sw": 0, "nw": 0 }
-    }
-  ]
-}
-```
-
-The archive **GET** handler may add an `image` URL per storm when a matching file exists under `images/`. Types aligned with this data live in `libs/hurdat.ts`.
-
----
-
-## HTTP API (App Router)
-
-All routes respond with JSON (or image bytes for the image route) and set permissive **CORS** headers where implemented.
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/archive/{basin}/{year}` | `basin`: `atl` \| `pac`. `year`: **1850–2025** (validated). Returns season array; attaches `image` URLs when files exist. |
-| `GET` | `/api/archive/{basin}/{year}/images/{file}` | Serves a single image from the season `images/` folder (used by the archive response). |
-| `GET` | `/api/live` | Proxies live storm track GeoJSON (upstream configured in `app/api/live/route.ts`). |
-| `GET` | `/api/cone` | Proxies forecast cone GeoJSON. |
-| `GET` | `/api/invest` | NHC tropical weather summary — feature layer as GeoJSON. |
-| `GET` | `/api/invest-area` | NHC invest areas — feature layer as GeoJSON. |
-| `OPTIONS` | Same as above | CORS preflight where implemented. |
-
----
-
-## Data sources and attribution
-
-- **Historical archive** files and images in `archive/` are project-local datasets formatted for this app.
-- **Live tracks and cones** are fetched via third-party HTTP services configured in the API routes (see each `route.ts` for the current URL).
-- **NHC / NOAA** MapServer endpoints back invest-related layers (`mapservices.weather.noaa.gov`).
-- **Base map**: [OpenStreetMap](https://www.openstreetmap.org/copyright) tiles.
-- **Weather overlays**: [OpenWeatherMap](https://openweathermap.org/) (requires API key).
-- **NHC imagery** may be loaded remotely where configured in `next.config.ts` (`www.nhc.noaa.gov`).
-
-Respect upstream terms of use, rate limits, and attribution for any data you rely on in production.
-
----
-
-## Name
-
-Package name in `package.json` is **`cyclopedia-next`**; the product name shown in the UI and manifest is **Cyclopedia**.
+Hurricane track and operational products are subject to the terms and availability of their respective providers (NHC, NOAA, and any third-party services referenced in the API route source files). Verify licensing and attribution before redistributing derived datasets.

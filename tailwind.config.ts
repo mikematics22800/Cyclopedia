@@ -10,6 +10,9 @@ module.exports = {
       fontFamily: {
         storm: ['storm', 'sans-serif'],
       },
+      screens: {
+        xs: '480px',
+      },
       boxShadow: {
         panel:
           '0 25px 50px -12px rgb(0 0 0 / 0.45), 0 0 0 1px rgb(255 255 255 / 0.06)',
