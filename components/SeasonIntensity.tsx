@@ -201,7 +201,7 @@ const SeasonIntensity = ({ pairing }: SeasonIntensityProps) => {
           x: {
             type: 'linear' as const,
             display: true,
-            position: 'bottom' as const,
+            position: 'top' as const,
             beginAtZero: true,
             ticks: { color: 'white' },
           },
@@ -214,7 +214,7 @@ const SeasonIntensity = ({ pairing }: SeasonIntensityProps) => {
           x1: {
             type: 'linear' as const,
             display: true,
-            position: 'top' as const,
+            position: 'bottom' as const,
             min: 860,
             ticks: { color: 'white' },
             grid: { drawOnChartArea: false },
@@ -225,7 +225,7 @@ const SeasonIntensity = ({ pairing }: SeasonIntensityProps) => {
             x: {
               type: 'linear' as const,
               display: true,
-              position: 'bottom' as const,
+              position: 'top' as const,
               beginAtZero: true,
               ticks: { color: 'white' },
             },
@@ -238,7 +238,7 @@ const SeasonIntensity = ({ pairing }: SeasonIntensityProps) => {
             x1: {
               type: 'linear' as const,
               display: true,
-              position: 'top' as const,
+              position: 'bottom' as const,
               beginAtZero: true,
               ticks: {
                 color: 'white',
@@ -251,7 +251,7 @@ const SeasonIntensity = ({ pairing }: SeasonIntensityProps) => {
             x: {
               type: 'linear' as const,
               display: true,
-              position: 'bottom' as const,
+              position: 'top' as const,
               beginAtZero: true,
               ticks: {
                 color: 'white',
@@ -267,7 +267,7 @@ const SeasonIntensity = ({ pairing }: SeasonIntensityProps) => {
             x1: {
               type: 'linear' as const,
               display: true,
-              position: 'top' as const,
+              position: 'bottom' as const,
               min: 860,
               ticks: { color: 'white' },
               grid: { drawOnChartArea: false },
