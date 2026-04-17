@@ -12,38 +12,16 @@ const LoadingScreen = () => {
     if (!root) return;
 
     const ctx = gsap.context(() => {
-      const logo = root.querySelector<HTMLElement>('.loading-logo');
-      const label = root.querySelector<HTMLElement>('.loading-label');
-      if (logo) {
-        const tl = gsap.timeline();
-        tl.fromTo(
-          logo,
-          { scale: 0.82, opacity: 0, rotation: -6 },
+      const logoWrap = root.querySelector<HTMLElement>('.loading-logo-wrap');
+      if (logoWrap) {
+        gsap.fromTo(
+          logoWrap,
+          { scale: 0.82, opacity: 0 },
           {
             scale: 1,
             opacity: 1,
-            rotation: 0,
             duration: 0.85,
             ease: 'back.out(1.35)',
-          }
-        );
-        tl.to(logo, {
-          rotation: '+=360',
-          duration: 14,
-          ease: 'none',
-          repeat: -1,
-        });
-      }
-      if (label) {
-        gsap.fromTo(
-          label,
-          { opacity: 0, y: 8 },
-          {
-            opacity: 0.9,
-            y: 0,
-            duration: 0.5,
-            delay: 0.4,
-            ease: 'power2.out',
           }
         );
       }
@@ -54,15 +32,19 @@ const LoadingScreen = () => {
 
   return (
     <div ref={rootRef} className="loading-screen">
-      <Image
-        className="loading-logo lg:w-60 w-40 h-auto spin"
-        src="/cyclone.png"
-        alt="Loading"
-        width={240}
-        height={240}
-        priority
-        unoptimized
-      />
+      <div className="loading-logo-wrap">
+        <div className="loading-logo-spin spin">
+          <Image
+            className="loading-logo lg:w-60 w-40 h-auto"
+            src="/cyclone.png"
+            alt="Loading"
+            width={240}
+            height={240}
+            priority
+            unoptimized
+          />
+        </div>
+      </div>
     </div>
   );
 };
