@@ -124,13 +124,25 @@ const ArchiveMapSettings = () => {
             title={
               windFieldAvailable
                 ? ''
-                : 'Wind fields unavailable before 2004'
+                : 'Unavailable before 2004'
             }
             placement="left"
             arrow
             disableHoverListener={windFieldAvailable}
             disableFocusListener={windFieldAvailable}
             disableTouchListener={windFieldAvailable}
+            slotProps={{
+              popper: {
+                modifiers: [
+                  {
+                    name: 'offset',
+                    options: {
+                      offset: [0, 8],
+                    },
+                  },
+                ],
+              },
+            }}
           >
             <span className="inline-block w-fit max-w-full">
               <FormControlLabel
