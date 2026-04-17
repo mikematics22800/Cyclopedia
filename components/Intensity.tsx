@@ -183,7 +183,8 @@ const Intensity = ({ pairing }: IntensityProps) => {
               type: 'linear' as const,
               display: true,
               position: 'left' as const,
-              beginAtZero: true,
+              min: 0,
+              max: 100,
               ticks: {
                 color: 'white',
                 callback: function (value: string | number) {
@@ -196,6 +197,8 @@ const Intensity = ({ pairing }: IntensityProps) => {
               display: true,
               position: 'right' as const,
               ticks: { color: 'white' },
+              min: 850,
+              max: 1050,
               grid: { drawOnChartArea: false },
             },
             x: { ticks: { color: 'white' } },
@@ -208,6 +211,8 @@ const Intensity = ({ pairing }: IntensityProps) => {
               ticks: {
                 color: 'white',
               },
+              min: 0,
+              max: 200,
             },
             y1: {
               type: 'linear' as const,
@@ -226,7 +231,9 @@ const Intensity = ({ pairing }: IntensityProps) => {
               grid: {
                 drawOnChartArea: false,
               },
-              ...(pairing === 'wind-pressure' ? {} : { beginAtZero: true }),
+              ...(pairing === 'wind-pressure'
+                ? { min: 850, max: 1050 }
+                : { min: 0, max: 100 }),
             },
             x: {
               ticks: {
