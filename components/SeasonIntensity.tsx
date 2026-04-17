@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from "chart.js";
+import type { TooltipItem } from "chart.js";
 import { Bar } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
 import type { StormIntensityMetricPair } from './intensityMetricPair';
@@ -291,11 +292,8 @@ const SeasonIntensity = ({ pairing }: SeasonIntensityProps) => {
         bodyColor: 'white',
         titleColor: 'white',
         callbacks: {
-          label: function (context: {
-            dataset: { label?: string };
-            parsed: { x?: number; y?: number };
-          }) {
-            const label = context.dataset.label || '';
+          label: (context: TooltipItem<"bar">) => {
+            const label = context.dataset.label || "";
             const value = mobile ? context.parsed.x : context.parsed.y;
             if (value === undefined || value === null) return label;
             if (label.includes('Energy') || label.includes('ACE')) {
