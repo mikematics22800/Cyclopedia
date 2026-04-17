@@ -109,6 +109,8 @@ const Intensity = ({ pairing }: IntensityProps) => {
           data: aceRounded,
           borderColor: 'purple',
           backgroundColor: 'rgba(168, 85, 247, 0.25)',
+          pointBackgroundColor: '#e9d5ff',
+          pointBorderColor: 'rgba(168, 85, 247, 0.45)',
           yAxisID: 'y1' as const,
         },
       ];
@@ -120,6 +122,8 @@ const Intensity = ({ pairing }: IntensityProps) => {
         data: aceRounded,
         borderColor: 'purple',
         backgroundColor: 'rgba(168, 85, 247, 0.25)',
+        pointBackgroundColor: '#e9d5ff',
+        pointBorderColor: 'rgba(168, 85, 247, 0.45)',
         yAxisID: 'y' as const,
       },
       {
