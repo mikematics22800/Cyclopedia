@@ -77,7 +77,7 @@ nav {
 }
 
 .button {
-  @apply h-10 font-bold rounded-xl text-white px-5 flex items-center justify-center gap-2 border border-white/15 bg-red-600;
+  @apply h-10 font-bold rounded-xl text-white px-5 flex items-center justify-center gap-2 border border-white/15 bg-red-600 transition-[border-color] duration-200 hover:border-white/55;
 }
 
 .button h1,
@@ -150,7 +150,7 @@ nav {
 }
 
 .mobile-interface {
-  @apply lg:hidden flex w-full justify-center rounded-t-3xl absolute top-[96%] bg-fixed bg-center bg-cover;
+  @apply lg:hidden z-20 flex w-full justify-center rounded-t-3xl absolute top-[96%] bg-fixed bg-center bg-cover;
   background-image: url('/hurricane.jpg'); 
 }
 

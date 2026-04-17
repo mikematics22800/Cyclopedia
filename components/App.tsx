@@ -165,7 +165,9 @@ export default function App() {
     forecastCone,
     tracker,
     liveStormId,
-    setLiveStormId
+    setLiveStormId,
+    map,
+    toggleCharts,
   }), [
     basin,
     setBasin,
@@ -185,7 +187,9 @@ export default function App() {
     forecastCone,
     tracker,  
     liveStormId,
-    setLiveStormId
+    setLiveStormId,
+    map,
+    toggleCharts,
   ]);
 
   return (
@@ -208,17 +212,8 @@ export default function App() {
                 </h1>
               </div>
               <div className="flex items-center gap-3 lg:gap-4">
-                {!tracker && (
-                  <button
-                    type="button"
-                    className="button !hidden lg:!flex"
-                    onClick={toggleCharts}
-                  >
-                    <span>{map ? "Charts" : "Map"}</span>
-                  </button>
-                )}
                 <button type="button" className="button" onClick={toggleTracker}>
-                  <span>{tracker ? "Historical Archive" : "Live Tracker"}</span>
+                  <span>{tracker ? "Archive" : "Tracker"}</span>
                 </button>
               </div>
             </nav>

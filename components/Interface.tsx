@@ -33,7 +33,7 @@ const Interface = () => {
     return null;
   }, [season]);
 
-  useGsapReveal(containerRef, [basin, year], {
+  useGsapReveal(containerRef, [basin, year, tracker], {
     stagger: 0.065,
     y: 18,
   });

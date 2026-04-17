@@ -64,7 +64,7 @@ const StormImageLoader = () => {
 };
 
 const StormArchive = () => {
-  const { year, storm, stormId, basin } = useAppContext();
+  const { year, storm, stormId, basin, map, toggleCharts } = useAppContext();
   const [ACE, setACE] = useState<number>(0);
   const [stormName, setStormName] = useState<string>('');
   const [textColor, setTextColor] = useState<string>('');
@@ -388,6 +388,15 @@ const StormArchive = () => {
               <h2 className='value cost-value'>${cost}</h2>
             </li>
           </ul>
+          <div className='hidden w-full max-w-[min(100%,24rem)] shrink-0 lg:flex lg:justify-center'>
+            <button
+              type='button'
+              className='button w-full justify-center shrink-0'
+              onClick={toggleCharts}
+            >
+              <span>{map ? 'Charts' : 'Map'}</span>
+            </button>
+          </div>
         </div>
     </div>
   );

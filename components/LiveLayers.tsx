@@ -20,7 +20,7 @@ interface Layers {
 }
 
 const panelClass =
-  'flex flex-col gap-2 font-bold text-white rounded-xl w-fit p-3 ' +
+  'inline-flex flex-col gap-2 font-bold text-white rounded-xl w-max max-w-[min(18rem,calc(100vw-2rem))] p-3 ' +
   'bg-slate-950/75 backdrop-blur-md border border-white/15 ' +
   'transition-all duration-300 ease-smooth hover:border-white/25';
 
@@ -61,10 +61,18 @@ const ClimateLayers = ({
     },
   } as const;
 
+  const formGroupSx = {
+    margin: 0,
+    padding: 0,
+    paddingLeft: 0,
+    marginLeft: 0,
+  } as const;
+
   const labelSx = {
     marginRight: 0,
     marginLeft: 0,
-    width: '100%',
+    paddingLeft: 0,
+    width: 'fit-content',
     '& .MuiFormControlLabel-label': {
       fontSize: '0.875rem',
       fontWeight: 600,
@@ -104,7 +112,7 @@ const ClimateLayers = ({
   return (
     <div
       ref={openPanelRef}
-      className={`${panelClass} min-w-[15rem] max-w-[18rem] gap-1`}
+      className={`${panelClass} gap-1`}
     >
       <div className="climate-layer-row flex justify-between items-center gap-2 border-b border-white/10 pb-2 mb-1">
         <span className="text-sm font-bold tracking-wide text-white/95">
@@ -123,14 +131,14 @@ const ClimateLayers = ({
         </IconButton>
       </div>
 
-      <FormGroup className="gap-0.5 w-full">
-        <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">
+      <FormGroup className="gap-0.5 w-fit" sx={formGroupSx}>
+        <div className="climate-layer-row rounded-lg py-0.5 pr-1 pl-0 hover:bg-white/5 transition-colors">
           <FormControlLabel
             sx={labelSx}
             control={
               <Checkbox
                 size="small"
-                className="!text-sky-400 !p-1"
+                className="!text-sky-400 !pl-0 !pr-1 !py-1"
                 checked={layers.pressure}
                 onChange={(e) => handleChange('pressure', e.target.checked)}
               />
@@ -138,13 +146,13 @@ const ClimateLayers = ({
             label="Air Pressure"
           />
         </div>
-        <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">
+        <div className="climate-layer-row rounded-lg py-0.5 pr-1 pl-0 hover:bg-white/5 transition-colors">
           <FormControlLabel
             sx={labelSx}
             control={
               <Checkbox
                 size="small"
-                className="!text-sky-400 !p-1"
+                className="!text-sky-400 !pl-0 !pr-1 !py-1"
                 checked={layers.clouds}
                 onChange={(e) => handleChange('clouds', e.target.checked)}
               />
@@ -152,13 +160,13 @@ const ClimateLayers = ({
             label="Clouds"
           />
         </div>
-        <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">
+        <div className="climate-layer-row rounded-lg py-0.5 pr-1 pl-0 hover:bg-white/5 transition-colors">
           <FormControlLabel
             sx={labelSx}
             control={
               <Checkbox
                 size="small"
-                className="!text-sky-400 !p-1"
+                className="!text-sky-400 !pl-0 !pr-1 !py-1"
                 checked={layers.precip}
                 onChange={(e) => handleChange('precip', e.target.checked)}
               />
@@ -166,13 +174,13 @@ const ClimateLayers = ({
             label="Precipitation"
           />
         </div>
-        <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">
+        <div className="climate-layer-row rounded-lg py-0.5 pr-1 pl-0 hover:bg-white/5 transition-colors">
           <FormControlLabel
             sx={labelSx}
             control={
               <Checkbox
                 size="small"
-                className="!text-sky-400 !p-1"
+                className="!text-sky-400 !pl-0 !pr-1 !py-1"
                 checked={layers.temp}
                 onChange={(e) => handleChange('temp', e.target.checked)}
               />
@@ -180,13 +188,13 @@ const ClimateLayers = ({
             label="Temperature"
           />
         </div>
-        <div className="climate-layer-row rounded-lg px-1 py-0.5 hover:bg-white/5 transition-colors">
+        <div className="climate-layer-row rounded-lg py-0.5 pr-1 pl-0 hover:bg-white/5 transition-colors">
           <FormControlLabel
             sx={labelSx}
             control={
               <Checkbox
                 size="small"
-                className="!text-sky-400 !p-1"
+                className="!text-sky-400 !pl-0 !pr-1 !py-1"
                 checked={layers.wind}
                 onChange={(e) => handleChange('wind', e.target.checked)}
               />

@@ -23,6 +23,8 @@ interface AppContextType {
   tracker: boolean;
   liveStormId: string | null;
   setLiveStormId: (liveStormId: string | null) => void;
+  map: boolean;
+  toggleCharts: () => void;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
