@@ -4,12 +4,9 @@ import { useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useGsapReveal } from './hooks/useGsapReveal';
 
-const SeasonIntensity = dynamic(() => import('./SeasonIntensity'), {
+const IntensityChartsPanel = dynamic(() => import('./IntensityChartsPanel'), {
   ssr: false,
 });
-const SeasonAceTike = dynamic(() => import('./SeasonAceTike'), { ssr: false });
-const Intensity = dynamic(() => import('./Intensity'), { ssr: false });
-const AceTike = dynamic(() => import('./AceTike'), { ssr: false });
 
 const archiveChartsReveal = {
   selector: '.chart-wrapper',
@@ -18,25 +15,12 @@ const archiveChartsReveal = {
   duration: 0.58,
 } as const;
 
-/** Season charts only; mobile Interface order (between season stats and storm stats). */
-export function InterfaceSeasonCharts() {
+/** Mobile: season + storm intensity in one panel (shared pairing); follows document order in Interface. */
+export function InterfaceIntensityChartsPanel() {
   return (
-    <div className="charts-container max-lg:order-4 lg:hidden w-full">
+    <div className="charts-container lg:hidden w-full">
       <div className="charts">
-        <SeasonIntensity />
-        <SeasonAceTike />
-      </div>
-    </div>
-  );
-}
-
-/** Storm charts only; mobile Interface order (below storm stats). */
-export function InterfaceStormCharts() {
-  return (
-    <div className="charts-container max-lg:order-6 lg:hidden w-full">
-      <div className="charts">
-        <Intensity />
-        <AceTike />
+        <IntensityChartsPanel />
       </div>
     </div>
   );
@@ -51,10 +35,7 @@ const ArchiveCharts = () => {
   return (
     <div className="charts-container">
       <div ref={chartsRef} className="charts">
-        <SeasonIntensity />
-        <SeasonAceTike />
-        <Intensity />
-        <AceTike />
+        <IntensityChartsPanel />
       </div>
     </div>
   );

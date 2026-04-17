@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useId } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useId } from 'react';
 import Image from 'next/image';
+import gsap from 'gsap';
 import { useAppContext } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
 import CycloneIcon from '@mui/icons-material/Cyclone';
@@ -65,7 +66,6 @@ const StormImageLoader = () => {
 const StormArchive = () => {
   const { year, storm, stormId, basin } = useAppContext();
   const [ACE, setACE] = useState<number>(0);
-  const [TIKE, setTIKE] = useState<number>(0);
   const [stormName, setStormName] = useState<string>('');
   const [textColor, setTextColor] = useState<string>('');
   const [retired, setRetired] = useState<boolean>(false);
@@ -82,8 +82,26 @@ const StormArchive = () => {
   const [stormImageUnavailable, setStormImageUnavailable] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const revealRef = useRef<HTMLDivElement>(null);
+  const retiredBadgeRef = useRef<HTMLSpanElement>(null);
   const stormImageCtxRef = useRef({ basin, year, stormId });
   stormImageCtxRef.current = { basin, year, stormId };
+
+  const showRetiredBadge =
+    retired && !!resolvedStormImageUrl && !stormImageUnavailable;
+
+  useLayoutEffect(() => {
+    if (!showRetiredBadge) return;
+    const el = retiredBadgeRef.current;
+    if (!el) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 22 },
+        { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
+      );
+    }, el);
+    return () => ctx.revert();
+  }, [showRetiredBadge, stormId]);
 
   useGsapReveal(revealRef, [stormId], {
     selector: '[data-storm-reveal]',
@@ -217,48 +235,6 @@ const StormArchive = () => {
     const calculatedACE = Math.max(...ACEArray);
     setACE(calculatedACE);
 
-    // Calculate TIKE if year >= 2004 and wind radii data is available
-    if (year >= 2004) {
-      let tikeArray: number[] = [];
-      let cumulativeTIKE = 0;
-      
-      data.forEach((point: any) => {
-        if (point['34kt_wind_nm'] && point['50kt_wind_nm'] && point['64kt_wind_nm']) {
-          const wind34 = point['34kt_wind_nm'];
-          const wind50 = point['50kt_wind_nm'];
-          const wind64 = point['64kt_wind_nm'];
-          
-          // Calculate area of wind field for each wind speed threshold
-          const area34 = Math.PI * Math.pow((wind34.ne + wind34.se + wind34.sw + wind34.nw) / 4 * 1852, 2);
-          const area50 = Math.PI * Math.pow((wind50.ne + wind50.se + wind50.sw + wind50.nw) / 4 * 1852, 2);
-          const area64 = Math.PI * Math.pow((wind64.ne + wind64.se + wind64.sw + wind64.nw) / 4 * 1852, 2);
-          
-          // Calculate kinetic energy for each wind speed threshold
-          const rho = 1.15;
-          const v34 = 34 * 0.514444;
-          const v50 = 50 * 0.514444;
-          const v64 = 64 * 0.514444;
-          
-          const ke34 = 0.5 * rho * Math.pow(v34, 2) * area34;
-          const ke50 = 0.5 * rho * Math.pow(v50, 2) * area50;
-          const ke64 = 0.5 * rho * Math.pow(v64, 2) * area64;
-          
-          const totalKE = ke34 + ke50 + ke64;
-          const totalKETJ = totalKE / 1e12;
-          
-          cumulativeTIKE += totalKETJ;
-          tikeArray.push(cumulativeTIKE);
-        } else {
-          tikeArray.push(cumulativeTIKE);
-        }
-      });
-      
-      const finalTIKE = Math.max(...tikeArray);
-      setTIKE(finalTIKE);
-    } else {
-      setTIKE(0);
-    }
-
     // Cleanup function to clear timeout
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -342,17 +318,19 @@ const StormArchive = () => {
                   </div>
                 )}
                 
-                {retired && (
-                  <Image 
-                    className='retired-badge' 
-                    src="/retired.png" 
-                    alt="Retired" 
-                    width={120} 
-                    height={120}
-                    quality={100}
-                    unoptimized
-                    priority
-                  />
+                {showRetiredBadge && (
+                  <span ref={retiredBadgeRef} className='inline-flex shrink-0'>
+                    <Image
+                      className='retired-badge'
+                      src='/retired.png'
+                      alt='Retired'
+                      width={120}
+                      height={120}
+                      quality={100}
+                      unoptimized
+                      priority
+                    />
+                  </span>
                 )}
               </a>
               <h1 className='title' style={{color:textColor}}>
@@ -396,12 +374,6 @@ const StormArchive = () => {
               <h2 className='label'>Accumulated Cyclone Energy</h2>
               <h2 className='value'>{ACE.toFixed(1)}</h2>
             </li>
-            {year >= 2004 && (
-              <li data-storm-reveal className='data-row border-b'>
-                <h2 className='label'>Track Integrated Kinetic Energy</h2>
-                <h2 className='value'>{TIKE.toFixed(1)} TJ</h2>
-              </li>
-            )}
             <li data-storm-reveal className='data-row border-b'>
               <h2 className='label'>Landfalls</h2>
               <h2 className='value'>{landfalls.length}</h2>

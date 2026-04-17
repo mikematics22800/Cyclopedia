@@ -134,6 +134,11 @@ nav {
   @apply h-96 w-full min-h-0;
 }
 
+/* Wraps multiple chart blocks + shared controls (taller than single h-96). */
+.chart-wrapper.chart-wrapper--stacked {
+  @apply h-auto min-h-0;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

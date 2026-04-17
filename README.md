@@ -13,7 +13,7 @@
 - **Per-storm tracks** with intensity, pressure, and wind radii (34/50/64 kt) on the map.
 - **Satellite or imagery thumbnails** when available: the archive API resolves image filenames under `archive/<basin>/<year>/images/` and exposes them via `/api/archive/.../images/...`.
 - **Wind-field visualization** for archive seasons from **2004** onward when enabled (see `components/Map.tsx`).
-- **Season-level charts**: intensity distribution, ACE (Accumulated Cyclone Energy), and per-storm intensity/ACE views (`components/ArchiveCharts.tsx` and related chart components).
+- **Season-level charts**: intensity distribution, ACE (Accumulated Cyclone Energy (ACE)), and per-storm intensity/ACE views (`components/ArchiveCharts.tsx` and related chart components).
 - **Client-side caching** of fetched season JSON in `localStorage` keyed by basin and year.
 
 ### Live tracker

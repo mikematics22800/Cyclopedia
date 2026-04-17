@@ -4,10 +4,7 @@ import { useMemo, useRef } from "react";
 import { useAppContext } from "../contexts/AppContext";
 import StormArchive from "./StormArchive";
 import SeasonArchive from "./SeasonArchive";
-import {
-  InterfaceSeasonCharts,
-  InterfaceStormCharts,
-} from "./ArchiveCharts";
+import { InterfaceIntensityChartsPanel } from "./ArchiveCharts";
 import LiveTracker from "./LiveTracker";
 import { MenuItem, Select } from "@mui/material";
 import { useGsapReveal } from "./hooks/useGsapReveal";
@@ -44,10 +41,10 @@ const Interface = () => {
   return (
     <div className="interface-scroll">
       <div ref={containerRef} className="interface">
-        <div data-gsap-reveal className="drag-handle max-lg:order-1" />
+        <div data-gsap-reveal className="drag-handle" />
         {!tracker && (
           <>
-            <div className="selectors max-lg:order-2">
+            <div className="selectors">
               <Select
                 className="select min-w-[7.5rem]"
                 size="small"
@@ -101,19 +98,18 @@ const Interface = () => {
             </div>
             <div
               data-gsap-reveal
-              className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell max-lg:order-3"
+              className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell"
             >
               <SeasonArchive />
             </div>
-            <InterfaceSeasonCharts />
             <div
               key={stormId}
               data-gsap-reveal
-              className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell max-lg:order-5"
+              className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell"
             >
               <StormArchive />
             </div>
-            <InterfaceStormCharts />
+            <InterfaceIntensityChartsPanel />
           </>
         )}
         {tracker && <LiveTracker />}

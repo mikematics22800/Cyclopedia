@@ -1,16 +1,45 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Bar } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
+import type { StormIntensityMetricPair } from './intensityMetricPair';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-const SeasonIntensity = () => {
-  const { names, maxWinds, season } = useAppContext();
+type SeasonIntensityProps = {
+  pairing: StormIntensityMetricPair;
+};
+
+function categoryAxisTicksForSelectedLabel(selectedIndex: number) {
+  if (selectedIndex < 0) {
+    return { color: 'white' as const };
+  }
+  return {
+    color: (ctx: { index: number }) =>
+      ctx.index === selectedIndex ? 'aqua' : 'rgba(255, 255, 255, 0.82)',
+    font: (ctx: { index: number }) => ({
+      weight: ctx.index === selectedIndex ? 700 : 500,
+      size: ctx.index === selectedIndex ? 12 : 11,
+    }),
+  };
+}
+
+const SeasonIntensity = ({ pairing }: SeasonIntensityProps) => {
+  const { names, maxWinds, season, seasonACE, stormId } = useAppContext();
   const [minPressures, setMinPressures] = useState<number[]>([]);
   const [mobile, setMobile] = useState(false);
+
+  const selectedStormIndex = useMemo(() => {
+    if (!season?.length || !stormId) return -1;
+    return season.findIndex((s) => s.id === stormId);
+  }, [season, stormId]);
+
+  const categoryTickHighlight = useMemo(
+    () => categoryAxisTicksForSelectedLabel(selectedStormIndex),
+    [selectedStormIndex]
+  );
 
   useEffect(() => {
     setMobile(window.innerWidth < 480);
@@ -18,7 +47,7 @@ const SeasonIntensity = () => {
 
   useEffect(() => {
     if (!season) return;
-    
+
     const minPressures = season.map((storm) => {
       const pressures = storm.data
         .map((point) => point.min_pressure_mb)
@@ -28,31 +57,221 @@ const SeasonIntensity = () => {
     setMinPressures(minPressures);
   }, [season]);
 
+  const aceRounded = useMemo(
+    () => seasonACE?.map((ACE) => parseFloat(ACE.toFixed(1))) ?? [],
+    [seasonACE]
+  );
+
   if (!season) return null;
 
-  const data = {
-    labels: names,
-    datasets: [
+  const primaryAxes = mobile
+    ? { xAxisID: 'x' as const, yAxisID: 'y' as const }
+    : { yAxisID: 'y' as const };
+  const secondaryAxes = mobile
+    ? { xAxisID: 'x1' as const, yAxisID: 'y' as const }
+    : { yAxisID: 'y1' as const };
+
+  const datasets = (() => {
+    if (pairing === 'wind-pressure') {
+      return [
+        {
+          label: 'Maximum Wind (kt)',
+          data: maxWinds,
+          borderColor: 'red',
+          backgroundColor: 'red',
+          ...primaryAxes,
+        },
+        {
+          label: 'Minimum Pressure (mb)',
+          data: minPressures,
+          borderColor: 'blue',
+          backgroundColor: 'blue',
+          ...secondaryAxes,
+        },
+      ];
+    }
+    if (pairing === 'wind-ace') {
+      return [
+        {
+          label: 'Maximum Wind (kt)',
+          data: maxWinds,
+          borderColor: 'red',
+          backgroundColor: 'red',
+          ...primaryAxes,
+        },
+        {
+          label: 'Accumulated Cyclone Energy (ACE)',
+          data: aceRounded,
+          borderColor: 'purple',
+          backgroundColor: 'purple',
+          ...secondaryAxes,
+        },
+      ];
+    }
+    // ACE primary (left y / bottom x), pressure secondary (right y1 / top x1)
+    return [
       {
-        label: 'Maximum Wind (kt)',
-        data: maxWinds,
-        borderColor: "red",
-        backgroundColor: "red",
-        ...(mobile
-          ? { xAxisID: 'x' as const, yAxisID: 'y' as const }
-          : { yAxisID: 'y' as const }),
+        label: 'Accumulated Cyclone Energy (ACE)',
+        data: aceRounded,
+        borderColor: 'purple',
+        backgroundColor: 'purple',
+        ...primaryAxes,
       },
       {
         label: 'Minimum Pressure (mb)',
         data: minPressures,
-        borderColor: "blue",
-        backgroundColor: "blue",
-        ...(mobile
-          ? { xAxisID: 'x1' as const, yAxisID: 'y' as const }
-          : { yAxisID: 'y1' as const }),
+        borderColor: 'blue',
+        backgroundColor: 'blue',
+        ...secondaryAxes,
       },
-    ],
+    ];
+  })();
+
+  const data = {
+    labels: names,
+    datasets,
   };
+
+  const desktopScales =
+    pairing === 'wind-pressure'
+      ? {
+          y: {
+            type: 'linear' as const,
+            display: true,
+            position: 'left' as const,
+            ticks: { color: 'white' },
+          },
+          y1: {
+            type: 'linear' as const,
+            display: true,
+            position: 'right' as const,
+            ticks: { color: 'white' },
+            min: 860,
+            grid: { drawOnChartArea: false },
+          },
+          x: { ticks: { ...categoryTickHighlight } },
+        }
+      : pairing === 'wind-ace'
+        ? {
+            y: {
+              type: 'linear' as const,
+              display: true,
+              position: 'left' as const,
+              ticks: { color: 'white' },
+            },
+            y1: {
+              type: 'linear' as const,
+              display: true,
+              position: 'right' as const,
+              ticks: {
+                color: 'white',
+                callback: (value: string | number) => Number(value).toFixed(1),
+              },
+              beginAtZero: true,
+              grid: { drawOnChartArea: false },
+            },
+            x: { ticks: { ...categoryTickHighlight } },
+          }
+        : {
+            y: {
+              type: 'linear' as const,
+              display: true,
+              position: 'left' as const,
+              ticks: {
+                color: 'white',
+                callback: (value: string | number) => Number(value).toFixed(1),
+              },
+              beginAtZero: true,
+            },
+            y1: {
+              type: 'linear' as const,
+              display: true,
+              position: 'right' as const,
+              ticks: { color: 'white' },
+              min: 860,
+              grid: { drawOnChartArea: false },
+            },
+            x: { ticks: { ...categoryTickHighlight } },
+          };
+
+  const mobileScales =
+    pairing === 'wind-pressure'
+      ? {
+          x: {
+            type: 'linear' as const,
+            display: true,
+            position: 'bottom' as const,
+            beginAtZero: true,
+            ticks: { color: 'white' },
+          },
+          y: {
+            type: 'category' as const,
+            display: true,
+            position: 'left' as const,
+            ticks: { ...categoryTickHighlight },
+          },
+          x1: {
+            type: 'linear' as const,
+            display: true,
+            position: 'top' as const,
+            min: 860,
+            ticks: { color: 'white' },
+            grid: { drawOnChartArea: false },
+          },
+        }
+      : pairing === 'wind-ace'
+        ? {
+            x: {
+              type: 'linear' as const,
+              display: true,
+              position: 'bottom' as const,
+              beginAtZero: true,
+              ticks: { color: 'white' },
+            },
+            y: {
+              type: 'category' as const,
+              display: true,
+              position: 'left' as const,
+              ticks: { ...categoryTickHighlight },
+            },
+            x1: {
+              type: 'linear' as const,
+              display: true,
+              position: 'top' as const,
+              beginAtZero: true,
+              ticks: {
+                color: 'white',
+                callback: (value: string | number) => Number(value).toFixed(1),
+              },
+              grid: { drawOnChartArea: false },
+            },
+          }
+        : {
+            x: {
+              type: 'linear' as const,
+              display: true,
+              position: 'bottom' as const,
+              beginAtZero: true,
+              ticks: {
+                color: 'white',
+                callback: (value: string | number) => Number(value).toFixed(1),
+              },
+            },
+            y: {
+              type: 'category' as const,
+              display: true,
+              position: 'left' as const,
+              ticks: { ...categoryTickHighlight },
+            },
+            x1: {
+              type: 'linear' as const,
+              display: true,
+              position: 'top' as const,
+              min: 860,
+              ticks: { color: 'white' },
+              grid: { drawOnChartArea: false },
+            },
+          };
 
   const options = {
     indexAxis: (mobile ? 'y' : 'x') as 'x' | 'y',
@@ -61,92 +280,41 @@ const SeasonIntensity = () => {
     plugins: {
       legend: {
         display: true,
+        onClick: () => {
+          /* no-op: disable default click-to-hide-dataset */
+        },
         labels: {
-          color: "white"
-        }
+          color: 'white',
+        },
       },
       tooltip: {
-        bodyColor: "white", 
-        titleColor: "white",
+        bodyColor: 'white',
+        titleColor: 'white',
         callbacks: {
-          label: function(context: any) {
+          label: function (context: {
+            dataset: { label?: string };
+            parsed: { x?: number; y?: number };
+          }) {
             const label = context.dataset.label || '';
             const value = mobile ? context.parsed.x : context.parsed.y;
+            if (value === undefined || value === null) return label;
+            if (label.includes('Energy') || label.includes('ACE')) {
+              return `${label}: ${Number(value).toFixed(1)}`;
+            }
             if (label.includes('Pressure')) {
               return `${label}: ${value} mb`;
-            } else {
-              return `${label}: ${value} kt`;
             }
-          }
-        }
-      },
-    },
-    scales: !mobile
-      ? {
-          y: {
-            type: 'linear' as const,
-            display: true,
-            position: 'left' as const,
-            ticks: {
-              color: "white"
-            },
-          },
-          y1: {
-            type: 'linear' as const,
-            display: true,
-            position: 'right' as const,
-            ticks: {
-              color: "white"
-            },
-            min: 860,
-            grid: {
-              drawOnChartArea: false,
-            },
-          },
-          x: {
-            ticks: {
-              color: "white"
-            },
-          },
-        }
-      : {
-          x: {
-            type: 'linear' as const,
-            display: true,
-            position: 'bottom' as const,
-            beginAtZero: true,
-            ticks: {
-              color: "white",
-            },
-          },
-          y: {
-            type: 'category' as const,
-            display: true,
-            position: 'left' as const,
-            ticks: {
-              color: "white",
-            },
-          },
-          x1: {
-            type: 'linear' as const,
-            display: true,
-            position: 'top' as const,
-            min: 860,
-            ticks: {
-              color: "white",
-            },
-            grid: {
-              drawOnChartArea: false,
-            },
+            return `${label}: ${value} kt`;
           },
         },
+      },
+    },
+    scales: !mobile ? desktopScales : mobileScales,
   };
 
   return (
-    <div className="chart-wrapper">
-      <div className="chart">
-        <Bar options={options} data={data} />
-      </div>
+    <div className="relative h-96 w-full min-h-0">
+      <Bar options={options} data={data} />
     </div>
   );
 };

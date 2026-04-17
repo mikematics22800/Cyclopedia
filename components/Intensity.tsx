@@ -1,64 +1,145 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAppContext } from '../contexts/AppContext';
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from "chart.js";
+import { sum } from '../libs/sum';
+import type { StormDataPoint } from '../libs/hurdat';
+import type { StormIntensityMetricPair } from './intensityMetricPair';
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  type TooltipItem,
+} from "chart.js";
 import { Line } from 'react-chartjs-2';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-const Intensity = () => {
+function cumulativeAceSeries(data: StormDataPoint[]): number[] {
+  let ACEPoint = 0;
+  let windArray: number[] = [];
+  return data.map((point) => {
+    const wind = point.max_wind_kt;
+    const hour = typeof point.time_utc === 'number' ? point.time_utc : parseInt(String(point.time_utc), 10);
+    if (['TS', 'SS', 'HU'].includes(point.status)) {
+      if (hour % 600 === 0) {
+        ACEPoint += Math.pow(wind, 2) / 10000;
+        if (windArray.length > 0) {
+          const average = sum(windArray) / windArray.length;
+          ACEPoint += Math.pow(average, 2) / 10000;
+          windArray = [];
+        }
+      } else {
+        windArray.push(wind);
+      }
+    }
+    return ACEPoint;
+  });
+}
+
+type IntensityProps = {
+  pairing: StormIntensityMetricPair;
+};
+
+const Intensity = ({ pairing }: IntensityProps) => {
   const { storm, dates } = useAppContext();
   const [wind, setWind] = useState<number[]>([]);
   const [pressure, setPressure] = useState<(number | null)[]>([]);
+  const [aceSeries, setAceSeries] = useState<number[]>([]);
 
   useEffect(() => {
     if (!storm) return;
-    
-    const data = storm.data;
-    const wind = data.map((point) => {
-      return point.max_wind_kt;
-    });
-    setWind(wind);
 
-    const pressure = data.map((point) => {
-      let pressure = point.min_pressure_mb;
-      if (pressure && pressure > 0) {
-        return pressure;
-      }
-      return null;
-    });
-    setPressure(pressure);
+    const data = storm.data;
+    setWind(data.map((point) => point.max_wind_kt));
+    setPressure(
+      data.map((point) => {
+        const p = point.min_pressure_mb;
+        if (p && p > 0) return p;
+        return null;
+      })
+    );
+    setAceSeries(cumulativeAceSeries(data));
   }, [storm]);
+
+  const aceRounded = useMemo(
+    () => aceSeries.map((v) => parseFloat(v.toFixed(1))),
+    [aceSeries]
+  );
 
   if (!storm) return null;
 
-  const data = {
-    labels: dates,
-    datasets: [
+  const datasets = (() => {
+    if (pairing === 'wind-pressure') {
+      return [
+        {
+          label: 'Maximum Wind (kt)',
+          data: wind,
+          borderColor: 'red',
+          backgroundColor: 'pink',
+          yAxisID: 'y' as const,
+        },
+        {
+          label: 'Minimum Pressure (mb)',
+          data: pressure,
+          borderColor: 'blue',
+          backgroundColor: 'lightblue',
+          yAxisID: 'y1' as const,
+          spanGaps: true,
+        },
+      ];
+    }
+    if (pairing === 'wind-ace') {
+      return [
+        {
+          label: 'Maximum Wind (kt)',
+          data: wind,
+          borderColor: 'red',
+          backgroundColor: 'pink',
+          yAxisID: 'y' as const,
+        },
+        {
+          label: 'Accumulated Cyclone Energy (ACE)',
+          data: aceRounded,
+          borderColor: 'purple',
+          backgroundColor: 'rgba(168, 85, 247, 0.25)',
+          yAxisID: 'y1' as const,
+        },
+      ];
+    }
+    // ACE left (y), pressure right (y1)
+    return [
       {
-        label: "Maximum Wind (kt)",
-        data: wind,
-        borderColor: "red",
-        backgroundColor: "pink",
-        yAxisID: "y",
+        label: 'Accumulated Cyclone Energy (ACE)',
+        data: aceRounded,
+        borderColor: 'purple',
+        backgroundColor: 'rgba(168, 85, 247, 0.25)',
+        yAxisID: 'y' as const,
       },
       {
-        label: "Minimum Pressure (mb)",
+        label: 'Minimum Pressure (mb)',
         data: pressure,
-        borderColor: "blue",
-        backgroundColor: "lightblue",
-        yAxisID: "y1",
-        spanGaps: true
+        borderColor: 'blue',
+        backgroundColor: 'lightblue',
+        yAxisID: 'y1' as const,
+        spanGaps: true,
       },
-    ]
-  };
+    ];
+  })();
+
+  const data = { labels: dates, datasets };
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
-      mode: "index" as const,
+      mode: 'index' as const,
       intersect: false,
     },
     stacked: false,
@@ -67,48 +148,93 @@ const Intensity = () => {
         display: false,
       },
       legend: {
-        labels: {
-          color: "white",
-        },
+        display: false,
       },
       tooltip: {
-        bodyColor: "white", 
-        titleColor: "white",
-      },
-    },
-    scales: {
-      y: {
-        type: "linear" as const,
-        display: true,
-        position: "left" as const,
-        ticks: {
-          color: "white"
-        },
-      },
-      y1: {
-        type: "linear" as const,
-        display: true,
-        position: "right" as const,
-        ticks: {
-          color: "white"
-        },
-        grid: {
-          drawOnChartArea: false,
-        },
-      },
-      x: {
-        ticks: {
-          color: "white"
+        bodyColor: 'white',
+        titleColor: 'white',
+        callbacks: {
+          label: function (context: TooltipItem<"line">) {
+            const label = context.dataset.label || '';
+            const v = context.parsed.y;
+            if (v == null) return label;
+            if (label === 'Accumulated Cyclone Energy (ACE)') {
+              return `${label}: ${v.toFixed(1)}`;
+            }
+            if (label.includes('Pressure')) {
+              return `${label}: ${v} mb`;
+            }
+            if (label.includes('Wind')) {
+              return `${label}: ${v} kt`;
+            }
+            return `${label}: ${v}`;
+          },
         },
       },
     },
+    scales:
+      pairing === 'pressure-ace'
+        ? {
+            y: {
+              type: 'linear' as const,
+              display: true,
+              position: 'left' as const,
+              beginAtZero: true,
+              ticks: {
+                color: 'white',
+                callback: function (value: string | number) {
+                  return Number(value).toFixed(1);
+                },
+              },
+            },
+            y1: {
+              type: 'linear' as const,
+              display: true,
+              position: 'right' as const,
+              ticks: { color: 'white' },
+              grid: { drawOnChartArea: false },
+            },
+            x: { ticks: { color: 'white' } },
+          }
+        : {
+            y: {
+              type: 'linear' as const,
+              display: true,
+              position: 'left' as const,
+              ticks: {
+                color: 'white',
+              },
+            },
+            y1: {
+              type: 'linear' as const,
+              display: true,
+              position: 'right' as const,
+              ticks: {
+                color: 'white',
+                ...(pairing === 'wind-ace'
+                  ? {
+                      callback: function (value: string | number) {
+                        return Number(value).toFixed(1);
+                      },
+                    }
+                  : {}),
+              },
+              grid: {
+                drawOnChartArea: false,
+              },
+              ...(pairing === 'wind-pressure' ? {} : { beginAtZero: true }),
+            },
+            x: {
+              ticks: {
+                color: 'white',
+              },
+            },
+          },
   };
 
   return (
-    <div className="chart-wrapper">
-      <div className="chart">
-        <Line options={options} data={data} />
-      </div>
+    <div className="relative h-64 w-full min-h-0 lg:h-96">
+      <Line options={options} data={data} />
     </div>
   );
 };
