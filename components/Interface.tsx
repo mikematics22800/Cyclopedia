@@ -98,16 +98,12 @@ const Interface = () => {
             </div>
             <div
               data-gsap-reveal
-              className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell"
+              className="w-full flex flex-col items-center overflow-hidden gap-3 p-3 archive-panel-shell"
             >
               <SeasonArchive />
-            </div>
-            <div
-              key={stormId}
-              data-gsap-reveal
-              className="w-full flex flex-col items-center overflow-hidden p-3 archive-panel-shell"
-            >
-              <StormArchive />
+              <div key={stormId} className="w-full flex flex-col items-center">
+                <StormArchive />
+              </div>
             </div>
             <InterfaceIntensityChartsPanel />
           </>

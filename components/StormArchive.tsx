@@ -333,7 +333,7 @@ const StormArchive = () => {
                   </span>
                 )}
               </a>
-              <h1 className='title' style={{color:textColor}}>
+              <h1 className='title my-1' style={{color:textColor}}>
                 {stormName}
               </h1>     
               <h1 className='text-sm font-bold'>
