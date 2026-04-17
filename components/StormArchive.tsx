@@ -1,22 +1,75 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useId } from 'react';
 import Image from 'next/image';
 import { useAppContext } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
 import CycloneIcon from '@mui/icons-material/Cyclone';
 import { useGsapReveal } from './hooks/useGsapReveal';
 
+const STORM_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg'] as const;
+const stormImageUrl = (basin: string, year: number, stormId: string, ext: string) =>
+  `https://cyclopedia-images.s3.us-east-2.amazonaws.com/${basin}/${year}/${stormId}.${ext}`;
+
+/** Vector spinner: crisp at any DPI, gradient arc + soft glow */
+const StormImageLoader = () => {
+  const uid = useId().replace(/:/g, '');
+  const gradId = `storm-img-loader-grad-${uid}`;
+
+  return (
+    <div className='relative size-[52px]'>
+      <svg
+        className='size-[52px] animate-[spin_1.05s_linear_infinite]'
+        viewBox='0 0 52 52'
+        fill='none'
+        xmlns='http://www.w3.org/2000/svg'
+        aria-hidden
+      >
+        <defs>
+          <linearGradient
+            id={gradId}
+            x1='0%'
+            y1='0%'
+            x2='100%'
+            y2='100%'
+          >
+            <stop offset='0%' stopColor='#22d3ee' />
+            <stop offset='55%' stopColor='#67e8f9' />
+            <stop offset='100%' stopColor='#a5f3fc' />
+          </linearGradient>
+        </defs>
+        <circle
+          cx='26'
+          cy='26'
+          r='22'
+          fill='none'
+          stroke='rgb(55 65 81 / 0.35)'
+          strokeWidth='2.5'
+        />
+        <circle
+          cx='26'
+          cy='26'
+          r='22'
+          fill='none'
+          stroke={`url(#${gradId})`}
+          strokeWidth='2.75'
+          strokeLinecap='round'
+          strokeDasharray='34 104'
+          className='drop-shadow-[0_0_10px_rgba(34,211,238,0.45)]'
+        />
+      </svg>
+    </div>
+  );
+};
+
 const StormArchive = () => {
-  const { year, storm, stormId } = useAppContext();
+  const { year, storm, stormId, basin } = useAppContext();
   const [ACE, setACE] = useState<number>(0);
   const [TIKE, setTIKE] = useState<number>(0);
   const [stormName, setStormName] = useState<string>('');
   const [textColor, setTextColor] = useState<string>('');
   const [retired, setRetired] = useState<boolean>(false);
   const [duration, setDuration] = useState<string>('');
-  const [image, setImage] = useState<string>('');
-  const [imageLoading, setImageLoading] = useState<boolean>(true);
   const [maxWind, setMaxWind] = useState<string>('');
   const [minPressure, setMinPressure] = useState<string>('');
   const [landfalls, setLandfalls] = useState<any[]>([]);
@@ -24,8 +77,13 @@ const StormArchive = () => {
   const [inlandMinPressure, setInlandMinPressure] = useState<string>('');
   const [cost, setCost] = useState<string>('');
   const [deadOrMissing, setDeadOrMissing] = useState<string>('');
+  const [stormImageExtIndex, setStormImageExtIndex] = useState(0);
+  const [resolvedStormImageUrl, setResolvedStormImageUrl] = useState<string | null>(null);
+  const [stormImageUnavailable, setStormImageUnavailable] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const revealRef = useRef<HTMLDivElement>(null);
+  const stormImageCtxRef = useRef({ basin, year, stormId });
+  stormImageCtxRef.current = { basin, year, stormId };
 
   useGsapReveal(revealRef, [stormId], {
     selector: '[data-storm-reveal]',
@@ -36,23 +94,12 @@ const StormArchive = () => {
   useEffect(() => {
     if (!storm) return;
 
-    setStormName(storm.id.split('_')[1]);
-    const newImage = storm.image || '';
-    setImage(newImage);
-    // Only set loading to true if there's actually an image to load
-    setImageLoading(newImage !== '');
+    setStormName(storm.id.split('_')[1]); 
     setRetired(storm.retired || false);
 
     // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
-    }
-
-    // Safety timeout: hide spinner after 5 seconds if image hasn't loaded
-    if (newImage !== '') {
-      timeoutRef.current = setTimeout(() => {
-        setImageLoading(false);
-      }, 5000);
     }
 
     const data = storm.data;
@@ -218,7 +265,20 @@ const StormArchive = () => {
     };
   }, [storm, year]);
 
+  useEffect(() => {
+    setStormImageExtIndex(0);
+    setResolvedStormImageUrl(null);
+    setStormImageUnavailable(false);
+  }, [basin, year, stormId]);
+
   if (!storm) return null;
+
+  const probeStormImageSrc = stormImageUrl(
+    basin,
+    year,
+    stormId,
+    STORM_IMAGE_EXTENSIONS[stormImageExtIndex],
+  );
 
   return (
     <div className='storm'>
@@ -231,17 +291,54 @@ const StormArchive = () => {
             {/* Storm Header */}
             <li data-storm-reveal className='header mt-5'>
               {/* Storm Image Section */}
+              <img
+                key={`${basin}-${year}-${stormId}-${stormImageExtIndex}`}
+                src={probeStormImageSrc}
+                alt=''
+                decoding='async'
+                className='absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0'
+                style={{ clip: 'rect(0, 0, 0, 0)' }}
+                aria-hidden
+                onLoad={(e) => {
+                  const url = e.currentTarget.currentSrc || e.currentTarget.src;
+                  const { stormId: id } = stormImageCtxRef.current;
+                  if (!url.includes(`/${id}.`)) return;
+                  setResolvedStormImageUrl(url);
+                }}
+                onError={(e) => {
+                  const url = e.currentTarget.src;
+                  const { stormId: id } = stormImageCtxRef.current;
+                  if (!url.includes(`/${id}.`)) return;
+                  setStormImageExtIndex((i) => {
+                    if (i < STORM_IMAGE_EXTENSIONS.length - 1) return i + 1;
+                    setStormImageUnavailable(true);
+                    return i;
+                  });
+                }}
+              />
               <a 
                 target='_blank' 
                 className={`storm-image ${retired ? 'retired' : ''} ${year < 1995 ? '!pointer-events-none' : ''}`}
-                style={{backgroundImage: `url(${image})`}} 
+                style={
+                  resolvedStormImageUrl && !stormImageUnavailable
+                    ? { backgroundImage: `url(${resolvedStormImageUrl})` }
+                    : undefined
+                }
                 href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
               >
-                {/* No Image State */}
-                {image == "" && (
+                {!resolvedStormImageUrl && !stormImageUnavailable && (
+                  <div
+                    className='absolute inset-0 z-[1] flex items-center justify-center rounded-3xl bg-gradient-to-b from-gray-400/95 to-gray-500/90'
+                    role='status'
+                    aria-label='Loading storm image'
+                  >
+                    <StormImageLoader />
+                  </div>
+                )}
+                {stormImageUnavailable && (
                   <div className='unavailable'>
                     <CycloneIcon className='cyclone-icon'/>
-                    <h1 className='text-lg font-semibold text-gray-600'>Image Unavailable</h1>
+                    <h1 className='text-lg font-bold text-gray-600'>Image Unavailable</h1>
                   </div>
                 )}
                 
@@ -294,7 +391,7 @@ const StormArchive = () => {
             )}
              <li
               data-storm-reveal
-              className={year >= 2004 ? 'data-row border-b' : 'data-row'}
+              className='data-row border-b'
             >
               <h2 className='label'>Accumulated Cyclone Energy</h2>
               <h2 className='value'>{ACE.toFixed(1)}</h2>

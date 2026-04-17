@@ -112,7 +112,7 @@ const SeasonArchive = () => {
             <h2 className='label'>Major Hurricanes</h2>
             <h2 className='value'>{majorHurricanes}</h2>
           </li>
-          <li className={year >= 2004 ? 'data-row border-b' : 'data-row'}>
+          <li className='data-row border-b'>
             <h2 className='label'>Accumulated Cyclone Energy</h2>
             <h2 className='value'>{sum(seasonACE).toFixed(1)}</h2>
           </li>
