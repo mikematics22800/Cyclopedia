@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
 
-const SeasonArchive = () => {
+const StormMetrics = () => {
   const { season, seasonACE, maxWinds, basin } = useAppContext();
 
   const [hurricanes, setHurricanes] = useState<number>(0);
@@ -82,4 +82,4 @@ const SeasonArchive = () => {
   );
 };
 
-export default SeasonArchive;
+export default StormMetrics;

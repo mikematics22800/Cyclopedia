@@ -57,7 +57,7 @@
 }
 
 nav {
-  @apply flex justify-between w-full h-20 items-center lg:px-10 px-5 bg-blue-950 z-10 fixed top-0 lg:relative;
+  @apply hidden lg:flex justify-between w-full h-20 items-center lg:px-10 px-5 bg-blue-950 z-10 relative;
 }
 
 .loading-screen {
@@ -73,7 +73,7 @@ nav {
 }
 
 .interface {
-  @apply p-4 lg:p-8 flex-col overflow-x-hidden gap-5 w-full flex items-center h-fit;
+  @apply flex-col overflow-x-hidden gap-4 w-full flex items-center h-fit p-0 lg:p-8;
 }
 
 .button {
@@ -85,9 +85,7 @@ nav {
   @apply text-sm lg:text-base tracking-wide;
 }
 
-.select {
-  @apply bg-white/95 !rounded-xl h-10 text-black font-bold shadow-md shadow-black/20 ring-1 ring-white/30 transition-shadow duration-300 hover:shadow-lg;
-}
+/* MUI archive selectors: primary styling lives in `Interface.tsx` (sx). */
 
 .data-table {
   @apply flex flex-col font-bold text-white text-center w-full max-w-80 gap-0.5;
@@ -111,7 +109,7 @@ nav {
 }
 
 .charts-container {
-  @apply w-full flex flex-col overflow-auto lg:p-8 p-0;
+  @apply w-full flex flex-col overflow-auto p-0 lg:p-8;
 }
 
 .charts {
@@ -119,11 +117,15 @@ nav {
 }
 
 .selectors {
-  @apply flex w-full gap-4 justify-center;
+  @apply flex w-full gap-2 justify-center flex-wrap my-4 sm:m-0;
+}
+
+.selector-chip {
+  @apply will-change-transform origin-center;
 }
 
 .archive-panel-shell {
-  @apply rounded-2xl bg-slate-800/80 backdrop-blur-md border border-white/10;
+  @apply sm:rounded-3xl rounded-t-3xl bg-slate-800/80 backdrop-blur-md border border-white/10;
 }
 
 .chart {
@@ -155,7 +157,7 @@ nav {
 }
 
 .mobile-map {
-  @apply lg:hidden w-full h-[calc(100vh-5rem)] fixed top-20 -z-10;
+  @apply lg:hidden w-full h-screen fixed top-0 -z-10;
 }
 
 .legend-container {
@@ -187,7 +189,7 @@ ul li h2 {
 }
 
 .storm-image {
-  @apply relative !w-64 aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl;
+  @apply aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl;
 }
 
 .retired {
@@ -207,7 +209,7 @@ ul li h2 {
 }
 
 .title {
-  @apply text-lg font-bold;
+  @apply text-xl font-bold;
 }
 
 .value {

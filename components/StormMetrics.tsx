@@ -63,7 +63,7 @@ const StormImageLoader = () => {
   );
 };
 
-const StormArchive = () => {
+const StormMetrics = () => {
   const { year, storm, stormId, basin, map, toggleCharts } = useAppContext();
   const [ACE, setACE] = useState<number>(0);
   const [stormName, setStormName] = useState<string>('');
@@ -336,7 +336,7 @@ const StormArchive = () => {
               <h1 className='title my-1' style={{color:textColor}}>
                 {stormName}
               </h1>     
-              <h1 className='text-sm font-bold'>
+              <h1 className='font-bold'>
                 {duration}
               </h1>     
             </li>
@@ -402,4 +402,4 @@ const StormArchive = () => {
   );
 };
 
-export default StormArchive;
+export default StormMetrics;

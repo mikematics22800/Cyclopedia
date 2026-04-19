@@ -17,10 +17,6 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'tile.openstreetmap.org',
       },
-      {
-        protocol: 'https',
-        hostname: 'tile.openweathermap.org',
-      },
     ],
   },
   async headers() {

@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, ReactNode } from 'react';
-import { Storm, GeoJSONFeature } from '../libs/hurdat';
+import { Storm } from '../libs/hurdat';
 
 interface AppContextType {
   basin: string;
@@ -18,11 +18,6 @@ interface AppContextType {
   names: string[];
   maxWinds: number[];
   seasonACE: number[];
-  liveHurdat: GeoJSONFeature[];
-  forecastCone: GeoJSONFeature[];
-  tracker: boolean;
-  liveStormId: string | null;
-  setLiveStormId: (liveStormId: string | null) => void;
   map: boolean;
   toggleCharts: () => void;
 }

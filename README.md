@@ -1,11 +1,10 @@
 # Cyclopedia
 
-Cyclopedia is a **Next.js** web app for exploring **historical Atlantic and eastern Pacific tropical cyclone seasons** (HURDAT-style archive JSON) and switching to a **live tracker** view with forecast cone and storm positions. The UI combines **Leaflet** maps, **Material UI** controls, and **Chart.js** intensity charts behind a custom storm-themed interface.
+Cyclopedia is a **Next.js** web app for exploring **historical Atlantic and eastern Pacific tropical cyclone seasons** (HURDAT-style archive JSON). The UI combines **Leaflet** maps, **Material UI** controls, and **Chart.js** intensity charts behind a custom storm-themed interface.
 
 ## Features
 
-- **Archive mode** — Browse seasons by basin (`atl` / `pac`) and year; pick a storm and view its track on the map with optional wind-field visualization, legends, and archive-oriented panels.
-- **Tracker mode** — Toggle to a live view that consumes proxied GeoJSON from the app’s API routes (tracks and forecast cone).
+- **Season browser** — Browse seasons by basin (`atl` / `pac`) and year; pick a storm and view its track on the map with optional wind-field visualization, legends, and archive-oriented panels.
 - **Season analytics** — Season-level charts and metrics (for example ACE-related views) driven by the same archive data.
 - **Progressive Web App** — `manifest.json` and `public/sw.js` provide installability and a small offline shell for cached static assets; registration runs from `app/components/ServiceWorkerRegister.tsx`.
 - **Responsive layout** — Separate desktop and mobile map/interface regions with Tailwind-driven styling and a local display font.
@@ -65,8 +64,8 @@ npm run lint
 | Path | Role |
 |------|------|
 | `app/` | App Router: `layout.tsx`, `page.tsx`, `globals.css`, API route handlers under `app/api/` |
-| `components/` | React UI: map, archive/live layers, charts, interface shell, loading screen |
-| `contexts/AppContext.tsx` | Shared state (basin, year, selected storm, live data handles, tracker vs archive, etc.) |
+| `components/` | React UI: map, archive layers, charts, interface shell, loading screen |
+| `contexts/AppContext.tsx` | Shared state (basin, year, selected storm, map vs charts, etc.) |
 | `libs/` | Client data helpers (`hurdat.ts`, `sum.ts`) and server helpers for archive images (`archiveImageServer.ts`) |
 | `archive/` | Static JSON per basin/year (`archive/{basin}/{year}/{year}.json`) and optional `images/` subfolders |
 | `public/` | Icons, `manifest.json`, service worker `sw.js`, static imagery |
@@ -84,16 +83,12 @@ These handlers live under `app/api/` and are the supported way for the browser t
 | Route | Purpose |
 |-------|---------|
 | `GET /api/archive/[basin]/[year]` | Reads `archive/<basin>/<year>/<year>.json`, attaches optional local image URLs, returns JSON |
-| `GET /api/live` | Proxies live storm track GeoJSON (see implementation for upstream URL) |
-| `GET /api/cone` | Proxies forecast cone GeoJSON |
-| `GET /api/invest` | Proxies NOAA MapServer layer **2** query as GeoJSON (tropical weather summary) |
-| `GET /api/invest-area` | Proxies NOAA MapServer layer **3** query as GeoJSON (related invest-area geometry) |
 
 CORS and cache headers for `/api/*` are set in `next.config.ts` and mirrored in `netlify.toml` where relevant.
 
 ## Remote image hosts
 
-`next.config.ts` allows optimized images from hosts such as `www.nhc.noaa.gov`, `tile.openstreetmap.org`, and `tile.openweathermap.org`. Add patterns there if you introduce new remote image domains.
+`next.config.ts` allows optimized images from hosts such as `www.nhc.noaa.gov` and `tile.openstreetmap.org`. Add patterns there if you introduce new remote image domains.
 
 ## Deployment (Netlify)
 

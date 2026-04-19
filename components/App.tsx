@@ -3,12 +3,12 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from "react";
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { getArchive, getLive, getCone } from "../libs/hurdat";
+import { getArchive } from "../libs/hurdat";
 import { sum } from "../libs/sum";
 import { AppProvider } from "../contexts/AppContext";
 import Interface from "../components/Interface";
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
-import ArchiveCharts from "../components/ArchiveCharts";
+import ArchiveCharts from "./Charts";
 import LoadingScreen from "../components/LoadingScreen";
 export default function App() {
   const [basin, setBasin] = useState<string>('atl');
@@ -22,20 +22,6 @@ export default function App() {
   const [seasonACE, setSeasonACE] = useState<number[]>([]);
   const [map, setMap] = useState<boolean>(true);
   const [maxWinds, setMaxWinds] = useState<number[]>([]);
-  const [liveHurdat, setLiveHurdat] = useState<any[]>([]);
-  const [forecastCone, setForecastCone] = useState<any[]>([]);
-  const [tracker, setTracker] = useState<boolean>(false);
-  const [liveStormId, setLiveStormId] = useState<string | null>(null);
-
-  useEffect(() => {
-    getLive().then(data => {
-      setLiveHurdat(data || []);
-    });
-    getCone().then(data => {
-      setForecastCone(data || []);
-    });
-  }, []);
-
   useEffect(() => {
     if (year < 1949 && basin === 'pac') setYear(1949);
     if (typeof window !== 'undefined') {
@@ -133,10 +119,6 @@ export default function App() {
     setMap(prev => !prev);
   }, []);
 
-  const toggleTracker = useCallback(() => {
-    setTracker(prev => !prev);
-  }, []);
-
   const value = useMemo(() => ({
     basin,
     setBasin, 
@@ -152,11 +134,6 @@ export default function App() {
     names,
     maxWinds,
     seasonACE,
-    liveHurdat,
-    forecastCone,
-    tracker,
-    liveStormId,
-    setLiveStormId,
     map,
     toggleCharts,
   }), [
@@ -174,11 +151,6 @@ export default function App() {
     names,
     maxWinds,
     seasonACE,
-    liveHurdat,
-    forecastCone,
-    tracker,  
-    liveStormId,
-    setLiveStormId,
     map,
     toggleCharts,
   ]);
@@ -202,15 +174,10 @@ export default function App() {
                   CYCLOPEDIA
                 </h1>
               </div>
-              <div className="flex items-center gap-3 lg:gap-4">
-                <button type="button" className="button" onClick={toggleTracker}>
-                  <span>{tracker ? "Archive" : "Tracker"}</span>
-                </button>
-              </div>
             </nav>
             <div className="desktop-view">
               <Interface/>
-              {map ? <Map/> : tracker ? <Map/> : <ArchiveCharts />}
+              {map ? <Map/> : <ArchiveCharts />}
             </div>
             <div className="mobile-map">
               <Map/>

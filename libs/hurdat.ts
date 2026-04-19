@@ -35,16 +35,6 @@ interface Storm {
   dead_or_missing?: number;
 }
 
-interface GeoJSONFeature {
-  type: string;
-  properties: any;
-  geometry: any;
-}
-
-interface GeoJSONResponse {
-  features: GeoJSONFeature[];
-}
-
 const options: FetchOptions = {
   method: 'GET',
   headers: {
@@ -65,56 +55,4 @@ export const getArchive = async (basin: string, year: number): Promise<Storm[] |
   }
 };
 
-export const getLive = async (): Promise<GeoJSONFeature[] | undefined> => {
-  try {
-    const response = await fetch('/api/live', options);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: GeoJSONResponse = await response.json();
-    return data.features;
-  } catch (err) {
-    console.error('Server error', err);
-  }
-};
-
-export const getCone = async (): Promise<GeoJSONFeature[] | undefined> => {
-  try {
-    const response = await fetch('/api/cone', options);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: GeoJSONResponse = await response.json();
-    return data.features;
-  } catch (err) {
-    console.error('Server error', err);
-  }
-};
-
-export const getInvestArea = async (): Promise<GeoJSONFeature[] | undefined> => {
-  try {
-    const response = await fetch('/api/invest-area', options);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: GeoJSONResponse = await response.json();
-    return data.features;
-  } catch (err) {
-    console.error('Server error', err);
-  }
-};
-
-export const getInvest = async (): Promise<GeoJSONFeature[] | undefined> => {
-  try {
-    const response = await fetch('/api/invest', options);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: GeoJSONResponse = await response.json();
-    return data.features;
-  } catch (err) {
-    console.error('Server error', err);
-  }
-};
-
-export type { Storm, StormDataPoint, WindRadii, GeoJSONFeature };
+export type { Storm, StormDataPoint, WindRadii };
