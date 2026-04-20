@@ -246,7 +246,7 @@ const Interface = () => {
               MenuProps={SELECTOR_MENU_PROPS}
               sx={SELECTOR_FIELD_SX}
               renderValue={(v) => (
-                <SelectorTrigger label="Season">{v}</SelectorTrigger>
+                <SelectorTrigger label="Year">{v}</SelectorTrigger>
               )}
             >
               {years.map((_, index) => {
