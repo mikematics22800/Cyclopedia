@@ -69,7 +69,7 @@ nav {
 }
 
 .interface-scroll {
-  @apply w-full lg:w-1/4 min-w-96 lg:min-h-0 lg:overflow-y-auto lg:shrink-0;
+  @apply w-full lg:w-[36rem] lg:min-h-0 lg:overflow-y-auto lg:shrink-0;
 }
 
 .interface {
