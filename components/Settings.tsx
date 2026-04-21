@@ -93,18 +93,6 @@ const MapSettings = () => {
         title="Settings"
         placement="bottom"
         arrow
-        slotProps={{
-          popper: {
-            modifiers: [
-              {
-                name: 'offset',
-                options: {
-                  offset: [0, 8],
-                },
-              },
-            ],
-          },
-        }}
       >
         <div
           className={`${panelClass} cursor-pointer`}
