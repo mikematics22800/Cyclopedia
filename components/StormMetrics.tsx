@@ -267,31 +267,6 @@ const StormMetrics = () => {
             {/* Storm Header */}
             <li data-storm-reveal className='header mt-5'>
               {/* Storm Image Section */}
-              <img
-                key={`${basin}-${year}-${stormId}-${stormImageExtIndex}`}
-                src={probeStormImageSrc}
-                alt=''
-                decoding='async'
-                className='absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0'
-                style={{ clip: 'rect(0, 0, 0, 0)' }}
-                aria-hidden
-                onLoad={(e) => {
-                  const url = e.currentTarget.currentSrc || e.currentTarget.src;
-                  const { stormId: id } = stormImageCtxRef.current;
-                  if (!url.includes(`/${id}.`)) return;
-                  setResolvedStormImageUrl(url);
-                }}
-                onError={(e) => {
-                  const url = e.currentTarget.src;
-                  const { stormId: id } = stormImageCtxRef.current;
-                  if (!url.includes(`/${id}.`)) return;
-                  setStormImageExtIndex((i) => {
-                    if (i < STORM_IMAGE_EXTENSIONS.length - 1) return i + 1;
-                    setStormImageUnavailable(true);
-                    return i;
-                  });
-                }}
-              />
               <a 
                 target='_blank' 
                 className={`storm-image ${retired ? 'retired' : ''} ${year < 1995 ? '!pointer-events-none' : ''}`}
@@ -302,11 +277,35 @@ const StormMetrics = () => {
                 }
                 href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
               >
+                <img
+                  key={`${basin}-${year}-${stormId}-${stormImageExtIndex}`}
+                  src={probeStormImageSrc}
+                  alt=''
+                  decoding='async'
+                  className='absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0'
+                  style={{ clip: 'rect(0, 0, 0, 0)' }}
+                  aria-hidden
+                  onLoad={(e) => {
+                    const url = e.currentTarget.currentSrc || e.currentTarget.src;
+                    const { stormId: id } = stormImageCtxRef.current;
+                    if (!url.includes(`/${id}.`)) return;
+                    setResolvedStormImageUrl(url);
+                  }}
+                  onError={(e) => {
+                    const url = e.currentTarget.src;
+                    const { stormId: id } = stormImageCtxRef.current;
+                    if (!url.includes(`/${id}.`)) return;
+                    setStormImageExtIndex((i) => {
+                      if (i < STORM_IMAGE_EXTENSIONS.length - 1) return i + 1;
+                      setStormImageUnavailable(true);
+                      return i;
+                    });
+                  }}
+                />
                 {!resolvedStormImageUrl && !stormImageUnavailable && (
                   <div
                     className='absolute inset-0 z-[1] flex items-center justify-center rounded-3xl bg-gradient-to-b from-gray-400/95 to-gray-500/90'
                     role='status'
-                    aria-label='Loading storm image'
                   >
                     <StormImageLoader />
                   </div>

@@ -189,7 +189,7 @@ ul li h2 {
 }
 
 .storm-image {
-  @apply aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl;
+  @apply relative overflow-hidden aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl;
 }
 
 .retired {
