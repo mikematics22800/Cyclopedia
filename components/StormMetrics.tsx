@@ -257,7 +257,7 @@ const StormMetrics = () => {
   );
 
   return (
-    <div className='storm'>
+    <div className='storm mt-5'>
       <div
         ref={revealRef}
         className='flex flex-col gap-5 w-full items-center'

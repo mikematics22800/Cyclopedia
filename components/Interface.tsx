@@ -298,9 +298,7 @@ const Interface = () => {
           </div>
         </div>
           <SeasonMetrics />
-          <div key={stormId} className="w-full flex flex-col items-center">
-            <StormMetrics />
-          </div>
+          <StormMetrics />
         </div>
         <div className="lg:hidden w-full p-4">
           <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
