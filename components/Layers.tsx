@@ -17,7 +17,7 @@ const panelClass =
   'bg-slate-950/75 backdrop-blur-md border border-white/15 ' +
   'transition-all duration-300 ease-smooth hover:border-white/25';
 
-const ArchiveMapSettings = () => {
+const Layers = () => {
   const { windField, setWindField, year } = useAppContext();
   const windFieldAvailable = year >= 2004;
   const [open, setOpen] = useState(false);
@@ -82,7 +82,23 @@ const ArchiveMapSettings = () => {
           }
         }}
       >
-        <Tooltip title="Layers" placement="bottom" arrow>
+        <Tooltip
+          title="Layers"
+          placement="bottom"
+          arrow
+          slotProps={{
+            popper: {
+              modifiers: [
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, 8],
+                  },
+                },
+              ],
+            },
+          }}
+        >
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
@@ -167,4 +183,4 @@ const ArchiveMapSettings = () => {
   );
 };
 
-export default ArchiveMapSettings;
+export default Layers;

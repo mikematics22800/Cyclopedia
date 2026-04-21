@@ -3,10 +3,10 @@
 import { useAppContext } from "../contexts/AppContext";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import ArchiveStorms from "./ArchiveStorms";
+import ArchiveStorms from "./Storms";
 import WindField from "./WindField";
 import Legend from "./Legend";
-import ArchiveMapSettings from "./ArchiveLayers";
+import ArchiveMapSettings from "./Layers";
 
 const Map = () => {
   const { year, windField } = useAppContext();

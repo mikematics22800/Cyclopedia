@@ -5,7 +5,7 @@ import { Marker, Popup, Polyline } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import { StormDataPoint } from '../libs/hurdat';
 
-const ArchiveStorms = () => {
+const Storms = () => {
   const { season, setStormId, stormId } = useAppContext();
 
   if (!season) return null;
@@ -196,4 +196,4 @@ const ArchiveStorms = () => {
   );
 };
 
-export default ArchiveStorms;
+export default Storms;
