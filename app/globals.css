@@ -201,7 +201,7 @@ ul li h2 {
 }
 
 .header {
-  @apply flex flex-col pb-2 border-b border-gray-600;
+  @apply flex flex-col pb-2.5 border-b border-gray-600;
 }
 
 .data-row {
@@ -209,7 +209,7 @@ ul li h2 {
 }
 
 .title {
-  @apply text-xl font-bold;
+  @apply text-2xl font-bold;
 }
 
 .value {

@@ -46,7 +46,7 @@ const StormMetrics = () => {
     <div className='season'>
       <div className='w-full flex flex-col items-center'>
         <ul className='data-table'>  
-          <li className='data-row border-b'>
+          <li className='data-row border-y'>
             <h2 className='label'>Tropical Cyclones</h2>
             <h2 className='value'>{season.length}</h2>
           </li>
@@ -72,7 +72,7 @@ const StormMetrics = () => {
             <h2 className='label'>Total Dead or Missing</h2>
             <h2 className='value'>{deadOrMissing}</h2>
           </li>
-          <li className='data-row'>
+          <li className='data-row border-b'>
             <h2 className='label'>Total Cost (Million USD)</h2>
             <h2 className='value cost-value'>${cost}</h2>
           </li>

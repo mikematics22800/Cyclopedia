@@ -265,7 +265,7 @@ const StormMetrics = () => {
         {/* Storm Data Section */}
           <ul className='data-table'>
             {/* Storm Header */}
-            <li data-storm-reveal className='header mt-5'>
+            <li data-storm-reveal className='header'>
               {/* Storm Image Section */}
               <a 
                 target='_blank' 
@@ -382,7 +382,7 @@ const StormMetrics = () => {
               <h2 className='value'>{deadOrMissing}</h2>
             </li>
             
-            <li data-storm-reveal className='data-row'>
+            <li data-storm-reveal className='data-row border-b'>
               <h2 className='label'>Cost (Million USD)</h2>
               <h2 className='value cost-value'>${cost}</h2>
             </li>
