@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useLayoutEffect, useCallback } from "react";
+import { useMemo, useRef, useLayoutEffect, useCallback, useState } from "react";
 import gsap from "gsap";
 import { useAppContext } from "../contexts/AppContext";
 import StormMetrics from "./StormMetrics";
@@ -103,6 +103,7 @@ const Interface = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const selectorsRef = useRef<HTMLDivElement>(null);
   const selectorsAnimatedRef = useRef(false);
+  const [hiddenByLabel, setHiddenByLabel] = useState<Record<string, boolean>>({});
 
   const {
     basin,
@@ -194,6 +195,13 @@ const Interface = () => {
     const el = e.currentTarget;
     gsap.killTweensOf(el);
     gsap.to(el, { scale: 1, duration: 0.45, ease: "power3.out" });
+  }, []);
+
+  const handleLegendVisibilityChange = useCallback((label: string, isVisible: boolean) => {
+    setHiddenByLabel((prev) => ({
+      ...prev,
+      [label]: !isVisible,
+    }));
   }, []);
 
   return (
@@ -295,8 +303,8 @@ const Interface = () => {
           </div>
         </div>
         <div className="lg:hidden w-full p-4">
-          <SeasonChart />
-          <StormChart />
+          <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
+          <StormChart hiddenByLabel={hiddenByLabel} />
         </div>
         </div>
       </div>
