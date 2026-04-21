@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useLayoutEffect } from 'react';
+import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import {
   Checkbox,
   FormControlLabel,
@@ -17,16 +17,38 @@ const panelClass =
   'bg-slate-950/75 backdrop-blur-md border border-white/15 ' +
   'transition-all duration-300 ease-smooth hover:border-white/25';
 
-const Layers = () => {
+const legendItems = [
+  { colorClass: 'bg-[dodgerblue]', label: 'Tropical Depression' },
+  { colorClass: 'bg-[lime]', label: 'Tropical Storm' },
+  { colorClass: 'bg-[yellow]', label: 'Category 1 Hurricane' },
+  { colorClass: 'bg-[orange]', label: 'Category 2 Hurricane' },
+  { colorClass: 'bg-[red]', label: 'Category 3 Hurricane' },
+  { colorClass: 'bg-[hotpink]', label: 'Category 4 Hurricane' },
+  { colorClass: 'bg-[pink]', label: 'Category 5 Hurricane' },
+  { colorClass: 'bg-[aqua]', label: 'Subtropical Depression' },
+  { colorClass: 'bg-[#D0F0C0]', label: 'Subtropical Storm' },
+  { colorClass: 'bg-[#7F00FF]', label: 'Extratropical Cyclone' },
+  { colorClass: 'bg-[gray]', label: 'Tropical Wave' },
+  { colorClass: 'bg-[lightgray]', label: 'Tropical Disturbance' },
+  { colorClass: 'bg-white', label: 'Tropical Low' },
+] as const;
+
+const MapSettings = () => {
   const { windField, setWindField, year } = useAppContext();
   const windFieldAvailable = year >= 2004;
   const [open, setOpen] = useState(false);
   const openPanelRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (year < 2004 && windField) {
+      setWindField(false);
+    }
+  }, [year, windField, setWindField]);
+
   useLayoutEffect(() => {
     const panel = openPanelRef.current;
     if (!open || !panel) return;
-    const rows = panel.querySelectorAll('.archive-map-settings-row');
+    const rows = panel.querySelectorAll('.settings-row');
     const ctx = gsap.context(() => {
       gsap.from(rows, {
         opacity: 0,
@@ -41,9 +63,6 @@ const Layers = () => {
 
   const iconButtonSx = {
     padding: 0,
-    '&:hover': {
-      backgroundColor: 'rgba(255,255,255,0.08)',
-    },
   } as const;
 
   const formGroupSx = {
@@ -70,33 +89,33 @@ const Layers = () => {
 
   if (!open) {
     return (
-      <div
-        className={`${panelClass} cursor-pointer`}
-        onClick={() => setOpen(true)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setOpen(true);
-          }
+      <Tooltip
+        title="Settings"
+        placement="bottom"
+        arrow
+        slotProps={{
+          popper: {
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 8],
+                },
+              },
+            ],
+          },
         }}
       >
-        <Tooltip
-          title="Layers"
-          placement="bottom"
-          arrow
-          slotProps={{
-            popper: {
-              modifiers: [
-                {
-                  name: 'offset',
-                  options: {
-                    offset: [0, 8],
-                  },
-                },
-              ],
-            },
+        <div
+          className={`${panelClass} cursor-pointer`}
+          onClick={() => setOpen(true)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpen(true);
+            }
           }}
         >
           <IconButton
@@ -108,8 +127,8 @@ const Layers = () => {
           >
             <Settings className="!text-2xl text-white" />
           </IconButton>
-        </Tooltip>
-      </div>
+        </div>
+      </Tooltip>
     );
   }
 
@@ -118,9 +137,9 @@ const Layers = () => {
       ref={openPanelRef}
       className={`${panelClass} gap-1`}
     >
-      <div className="archive-map-settings-row flex justify-between items-center gap-2 border-b border-white/10 pb-2 mb-1">
+      <div className="settings-row flex justify-between items-center gap-2 border-b border-white/10 pb-2 mb-1">
         <span className="text-sm font-bold tracking-wide text-white/95">
-          Layers
+          Settings
         </span>
         <IconButton
           size="small"
@@ -135,7 +154,7 @@ const Layers = () => {
       </div>
 
       <FormGroup className="gap-0.5 w-fit" sx={formGroupSx}>
-        <div className="archive-map-settings-row rounded-lg py-0.5 pr-1 pl-0 hover:bg-white/5 transition-colors">
+        <div className="settings-row rounded-lg py-0.5 pr-1 pl-0  hover:bg-white/5 transition-colors">
           <Tooltip
             title={
               windFieldAvailable
@@ -179,8 +198,21 @@ const Layers = () => {
           </Tooltip>
         </div>
       </FormGroup>
+      <div className="flex flex-col gap-1 border-t border-white/10 pt-2">
+        {legendItems.map((item) => (
+          <div
+            key={item.label}
+            className="settings-row flex items-center gap-2 rounded-md px-1 py-0.5 hover:bg-white/5 transition-colors"
+          >
+            <span
+              className={`w-3 h-3 rounded-full border border-black ${item.colorClass}`}
+            />
+            <h1 className="text-sm">{item.label}</h1>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default Layers;
+export default MapSettings;

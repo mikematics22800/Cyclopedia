@@ -5,8 +5,7 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import ArchiveStorms from "./Storms";
 import WindField from "./WindField";
-import Legend from "./Legend";
-import ArchiveMapSettings from "./Layers";
+import ArchiveMapSettings from "./Settings";
 
 const Map = () => {
   const { year, windField } = useAppContext();
@@ -15,7 +14,6 @@ const Map = () => {
     <div className="map relative">
       <div className="map-controls-container">
         <ArchiveMapSettings />
-        <Legend />
       </div>
 
       <MapContainer 
