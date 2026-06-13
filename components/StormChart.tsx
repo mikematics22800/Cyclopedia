@@ -159,6 +159,7 @@ const StormIntensity = ({ hiddenByLabel = {} }: StormIntensityProps) => {
         type: 'linear' as const,
         display: true,
         position: 'right' as const,
+        reverse: true,
         ticks: {
           color: 'white',
           stepSize: 50,

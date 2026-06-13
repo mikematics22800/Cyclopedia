@@ -91,6 +91,7 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
       data: minPressures,
       borderColor: 'blue',
       backgroundColor: 'blue',
+      base: 1050,
       ...secondaryAxes,
     },
   ];
@@ -113,6 +114,7 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
       type: 'linear' as const,
       display: true,
       position: 'right' as const,
+      reverse: true,
       ticks: { color: 'white', stepSize: 50 },
       min: 850,
       max: 1050,
@@ -140,6 +142,7 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
       type: 'linear' as const,
       display: true,
       position: 'bottom' as const,
+      reverse: true,
       min: 850,
       max: 1050,
       ticks: { color: 'white', stepSize: 50 },
