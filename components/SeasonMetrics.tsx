@@ -1,18 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { useAppContext } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
 import { calculateSeasonTotalACE } from '../libs/calculateACE';
 
 const StormMetrics = () => {
-  const { season, maxWinds, basin } = useAppContext();
+  const { season, maxWinds, basin, year } = useAppContext();
 
   const [hurricanes, setHurricanes] = useState<number>(0);
   const [majorHurricanes, setMajorHurricanes] = useState<number>(0);
   const [deadOrMissing, setDeadOrMissing] = useState<number>(0);
   const [cost, setCost] = useState<string>('0');
   const [landfalls, setlandfalls] = useState<number>(0);
+  const revealRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!season) return;
@@ -40,12 +42,28 @@ const StormMetrics = () => {
 
   }, [season, maxWinds]);
 
+  useLayoutEffect(() => {
+    const panel = revealRef.current;
+    if (!panel) return;
+    const rows = panel.querySelectorAll('.data-row');
+    const ctx = gsap.context(() => {
+      gsap.from(rows, {
+        opacity: 0,
+        x: -10,
+        stagger: { amount: 0.2 },
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+    }, panel);
+    return () => ctx.revert();
+  }, [basin, year]);
+
   if (!season) return null;
 
 
   return (
     <div className='season'>
-      <div className='w-full flex flex-col items-center'>
+      <div ref={revealRef} className='w-full flex flex-col items-center'>
         <ul className='data-table'>  
           <li className='data-row border-y'>
             <h2 className='label'>Tropical Cyclones</h2>

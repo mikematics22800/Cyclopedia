@@ -7,7 +7,6 @@ import { useAppContext } from '../contexts/AppContext';
 import { calculateStormACE } from '../libs/calculateACE';
 import CycloneIcon from '@mui/icons-material/Cyclone';
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
-import { useGsapReveal } from './hooks/useGsapReveal';
 
 /** Vector spinner: crisp at any DPI, gradient arc + soft glow */
 const StormImageLoader = () => {
@@ -93,13 +92,23 @@ const StormMetrics = () => {
       );
     }, el);
     return () => ctx.revert();
-  }, [stormId]);
+  }, [storm]);
 
-  useGsapReveal(revealRef, [stormId], {
-    selector: '[data-storm-reveal]',
-    stagger: 0.065,
-    y: 18,
-  });
+  useLayoutEffect(() => {
+    const panel = revealRef.current;
+    if (!panel) return;
+    const rows = panel.querySelectorAll('[data-storm-reveal]');
+    const ctx = gsap.context(() => {
+      gsap.from(rows, {
+        opacity: 0,
+        x: -10,
+        stagger: { amount: 0.2 },
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+    }, panel);
+    return () => ctx.revert();
+  }, [storm]);
 
   useEffect(() => {
     setImageState('loading');

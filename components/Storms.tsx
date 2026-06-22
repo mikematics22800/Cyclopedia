@@ -163,11 +163,17 @@ const Storms = () => {
                 }
               }}
             >
-              <Popup className="w-fit font-bold">
-                <h1 className="text-[1rem]">{fullName}</h1>
-                <h1 className="my-1">{formattedDate} at {formattedTime} EST</h1>
-                <h1>Maximum Wind: {point.max_wind_kt} kt</h1>
-                <h1>Minimum Pressure: {point.min_pressure_mb ? `${point.min_pressure_mb} mb` : 'Unknown'}</h1>
+              <Popup className="storm-popup">
+                <div className="popup-panel">
+                  <h1 className="text-sm mt-2 text-white border-b border-white mb-1 pb-1">
+                    {fullName}
+                  </h1>
+                  <ul>
+                    <li>{formattedDate} {formattedTime} EST</li>
+                    <li>Maximum Wind: {point.max_wind_kt} kt</li>
+                    <li>Minimum Pressure: {point.min_pressure_mb ? `${point.min_pressure_mb} mb` : 'Unknown'}</li>
+                  </ul>
+                </div>
               </Popup>
             </Marker>
           );

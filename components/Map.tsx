@@ -3,7 +3,7 @@
 import { useAppContext } from "../contexts/AppContext";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import ArchiveStorms from "./Storms";
+import Storms from "./Storms";
 import WindField from "./WindField";
 import MapLegend from "./MapLegend";
 
@@ -25,7 +25,7 @@ const Map = () => {
         zoom={4}
       >
         <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>
-        <ArchiveStorms />
+        <Storms />
         {year >= 2004 && windField && <WindField/>}
       </MapContainer>
     </div>

@@ -145,7 +145,7 @@ const MapLegend = () => {
       className={`${panelClass} gap-1`}
     >
       <div className="settings-row flex justify-between items-center gap-2 border-b border-white pb-2">
-        <span className="text-sm font-semibold tracking-wide text-white">
+        <span className="text-sm font-semibold  text-white">
           Legend
         </span>
         <IconButton

@@ -82,7 +82,7 @@ nav {
 
 .button h1,
 .button span {
-  @apply text-sm lg:text-base tracking-wide;
+  @apply text-sm lg:text-base ;
 }
 
 /* MUI archive selectors: primary styling lives in `Interface.tsx` (sx). */
@@ -242,4 +242,35 @@ ul li h2 {
 
 .app-background {
   background-image: url('/hurricane.jpg');
+}
+
+.storm-popup .leaflet-popup-content-wrapper {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  backdrop-filter: none !important;
+  border-radius: 0.75rem;
+  padding: 0;
+}
+
+.storm-popup .leaflet-popup-content {
+  margin: 0 !important;
+}
+
+.storm-popup .leaflet-popup-tip {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.storm-popup .leaflet-popup-close-button {
+  color: rgb(255 255 255 / 0.9) !important;
+}
+
+.storm-popup .leaflet-popup-close-button:hover {
+  color: rgb(255 255 255) !important;
+}
+
+.popup-panel {
+  @apply inline-flex flex-col gap-1 font-semibold text-white rounded-xl p-4 bg-slate-950/75 backdrop-blur-md;
 }
