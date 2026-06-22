@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
-import { sum } from '../libs/sum';
-import type { StormDataPoint } from '../libs/hurdat';
+import { cumulativeStormACESeries } from '../libs/calculateACE';
 import {
   Chart,
   CategoryScale,
@@ -15,32 +14,43 @@ import {
   Tooltip,
   Legend,
   type TooltipItem,
+  type Plugin,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-function cumulativeAceSeries(data: StormDataPoint[]): number[] {
-  let ACEPoint = 0;
-  let windArray: number[] = [];
-  return data.map((point) => {
-    const wind = point.max_wind_kt;
-    const hour = typeof point.time_utc === 'number' ? point.time_utc : parseInt(String(point.time_utc), 10);
-    if (['TS', 'SS', 'HU'].includes(point.status)) {
-      if (hour % 600 === 0) {
-        ACEPoint += Math.pow(wind, 2) / 10000;
-        if (windArray.length > 0) {
-          const average = sum(windArray) / windArray.length;
-          ACEPoint += Math.pow(average, 2) / 10000;
-          windArray = [];
-        }
-      } else {
-        windArray.push(wind);
-      }
-    }
-    return ACEPoint;
-  });
-}
+const aceThresholdLinePlugin: Plugin<'line'> = {
+  id: 'ace-threshold-line',
+  beforeDatasetsDraw: (chart) => {
+    const aceDatasetIndex = chart.data.datasets.findIndex(
+      (dataset) => dataset.label === 'Accumulated Cyclone Energy'
+    );
+    if (aceDatasetIndex === -1 || !chart.isDatasetVisible(aceDatasetIndex)) return;
+
+    const yScale = chart.scales.y;
+    if (!yScale) return;
+
+    const thresholdPixel = yScale.getPixelForValue(100);
+    const zeroPixel = yScale.getPixelForValue(0);
+    if (!Number.isFinite(thresholdPixel) || !Number.isFinite(zeroPixel)) return;
+
+    const { left, right } = chart.chartArea;
+    const rangeStart = Math.min(zeroPixel, thresholdPixel);
+    const rangeEnd = Math.max(zeroPixel, thresholdPixel);
+    const { ctx } = chart;
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'purple';
+    ctx.moveTo(left, rangeStart);
+    ctx.lineTo(left, rangeEnd);
+    ctx.moveTo(left, thresholdPixel);
+    ctx.lineTo(right, thresholdPixel);
+    ctx.stroke();
+    ctx.restore();
+  },
+};
 
 type StormIntensityProps = {
   hiddenByLabel?: Record<string, boolean>;
@@ -64,7 +74,7 @@ const StormIntensity = ({ hiddenByLabel = {} }: StormIntensityProps) => {
         return null;
       })
     );
-    setAceSeries(cumulativeAceSeries(data));
+    setAceSeries(cumulativeStormACESeries(data));
   }, [storm]);
 
   const aceRounded = useMemo(
@@ -152,6 +162,9 @@ const StormIntensity = ({ hiddenByLabel = {} }: StormIntensityProps) => {
           color: 'white',
           stepSize: 50,
         },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.22)',
+        },
         min: 0,
         max: 200,
       },
@@ -174,13 +187,16 @@ const StormIntensity = ({ hiddenByLabel = {} }: StormIntensityProps) => {
         ticks: {
           color: 'white',
         },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.22)',
+        },
       },
     },
   };
 
   return (
     <div className="relative h-64 w-full min-h-0 lg:h-96">
-      <Line options={options} data={data} />
+      <Line options={options} data={data} plugins={[aceThresholdLinePlugin]} />
     </div>
   );
 };

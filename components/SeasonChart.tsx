@@ -8,6 +8,47 @@ import { useAppContext } from '../contexts/AppContext';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
+const aceThresholdLinePlugin = {
+  id: 'ace-threshold-line',
+  beforeDatasetsDraw: (chart: Chart<'bar'>) => {
+    const aceDatasetIndex = chart.data.datasets.findIndex(
+      (dataset) => dataset.label === 'Accumulated Cyclone Energy'
+    );
+    if (aceDatasetIndex === -1 || !chart.isDatasetVisible(aceDatasetIndex)) return;
+
+    const isMobile = chart.options.indexAxis === 'y';
+    const valueScale = isMobile ? chart.scales.x : chart.scales.y;
+    if (!valueScale) return;
+
+    const thresholdPixel = valueScale.getPixelForValue(100);
+    const zeroPixel = valueScale.getPixelForValue(0);
+    if (!Number.isFinite(thresholdPixel) || !Number.isFinite(zeroPixel)) return;
+
+    const { left, right, top, bottom } = chart.chartArea;
+    const rangeStart = Math.min(zeroPixel, thresholdPixel);
+    const rangeEnd = Math.max(zeroPixel, thresholdPixel);
+    const { ctx } = chart;
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'purple';
+    if (isMobile) {
+      // Mobile uses x as the value axis: draw 0-100 along top axis and 100 threshold vertically.
+      ctx.moveTo(rangeStart, top);
+      ctx.lineTo(rangeEnd, top);
+      ctx.moveTo(thresholdPixel, top);
+      ctx.lineTo(thresholdPixel, bottom);
+    } else {
+      ctx.moveTo(left, rangeStart);
+      ctx.lineTo(left, rangeEnd);
+      ctx.moveTo(left, thresholdPixel);
+      ctx.lineTo(right, thresholdPixel);
+    }
+    ctx.stroke();
+    ctx.restore();
+  },
+};
+
 function categoryAxisTicksForSelectedLabel(selectedIndex: number) {
   if (selectedIndex < 0) {
     return { color: 'white' as const };
@@ -80,13 +121,6 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
       ...primaryAxes,
     },
     {
-      label: 'Accumulated Cyclone Energy',
-      data: aceRounded,
-      borderColor: 'purple',
-      backgroundColor: 'purple',
-      ...primaryAxes,
-    },
-    {
       label: 'Minimum Pressure (mb)',
       data: minPressures,
       borderColor: 'blue',
@@ -94,6 +128,13 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
       base: 1050,
       ...secondaryAxes,
     },
+    {
+      label: 'Accumulated Cyclone Energy',
+      data: aceRounded,
+      borderColor: 'violet',
+      backgroundColor: 'purple',
+      ...primaryAxes,
+    },  
   ];
 
   const data = {
@@ -107,6 +148,7 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
       display: true,
       position: 'left' as const,
       ticks: { color: 'white', stepSize: 50 },
+      grid: { color: 'rgba(255, 255, 255, 0.22)' },
       min: 0,
       max: 200,
     },
@@ -120,7 +162,10 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
       max: 1050,
       grid: { drawOnChartArea: false },
     },
-    x: { ticks: { ...categoryTickHighlight } },
+    x: {
+      ticks: { ...categoryTickHighlight },
+      grid: { color: 'rgba(255, 255, 255, 0.22)' },
+    },
   };
 
   const mobileScales = {
@@ -129,6 +174,7 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
       display: true,
       position: 'top' as const,
       ticks: { color: 'white', stepSize: 50 },
+      grid: { color: 'rgba(255, 255, 255, 0.22)' },
       min: 0,
       max: 200,
     },
@@ -137,6 +183,7 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
       display: true,
       position: 'left' as const,
       ticks: { ...categoryTickHighlight },
+      grid: { color: 'rgba(255, 255, 255, 0.22)' },
     },
     x1: {
       type: 'linear' as const,
@@ -157,6 +204,18 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
     plugins: {
       legend: {
         display: true,
+        onHover: (_event: ChartEvent, _legendItem: LegendItem, legend: LegendElement<'bar'>) => {
+          const canvas = legend.chart?.canvas;
+          if (canvas) {
+            canvas.style.cursor = 'pointer';
+          }
+        },
+        onLeave: (_event: ChartEvent, _legendItem: LegendItem, legend: LegendElement<'bar'>) => {
+          const canvas = legend.chart?.canvas;
+          if (canvas) {
+            canvas.style.cursor = 'default';
+          }
+        },
         onClick: function (
           this: LegendElement<'bar'>,
           event: ChartEvent,
@@ -202,7 +261,7 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
 
   return (
     <div className="relative lg:h-96 h-[36rem] w-full min-h-0">
-      <Bar options={options} data={data} />
+      <Bar options={options} data={data} plugins={[aceThresholdLinePlugin]} />
     </div>
   );
 };

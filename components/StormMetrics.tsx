@@ -4,13 +4,10 @@ import { useState, useEffect, useLayoutEffect, useRef, useId } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useAppContext } from '../contexts/AppContext';
-import { sum } from '../libs/sum';
+import { calculateStormACE } from '../libs/calculateACE';
 import CycloneIcon from '@mui/icons-material/Cyclone';
+import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 import { useGsapReveal } from './hooks/useGsapReveal';
-
-const STORM_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg'] as const;
-const stormImageUrl = (basin: string, year: number, stormId: string, ext: string) =>
-  `https://cyclopedia-images.s3.us-east-2.amazonaws.com/${basin}/${year}/${stormId}.${ext}`;
 
 /** Vector spinner: crisp at any DPI, gradient arc + soft glow */
 const StormImageLoader = () => {
@@ -77,20 +74,15 @@ const StormMetrics = () => {
   const [inlandMinPressure, setInlandMinPressure] = useState<string>('');
   const [cost, setCost] = useState<string>('');
   const [deadOrMissing, setDeadOrMissing] = useState<string>('');
-  const [stormImageExtIndex, setStormImageExtIndex] = useState(0);
-  const [resolvedStormImageUrl, setResolvedStormImageUrl] = useState<string | null>(null);
-  const [stormImageUnavailable, setStormImageUnavailable] = useState(false);
+  const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>(
+    'loading',
+  );
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const revealRef = useRef<HTMLDivElement>(null);
   const retiredBadgeRef = useRef<HTMLSpanElement>(null);
-  const stormImageCtxRef = useRef({ basin, year, stormId });
-  stormImageCtxRef.current = { basin, year, stormId };
-
-  const showRetiredBadge =
-    retired && !!resolvedStormImageUrl && !stormImageUnavailable;
 
   useLayoutEffect(() => {
-    if (!showRetiredBadge) return;
+    if (!retired) return;
     const el = retiredBadgeRef.current;
     if (!el) return;
     const ctx = gsap.context(() => {
@@ -101,7 +93,7 @@ const StormMetrics = () => {
       );
     }, el);
     return () => ctx.revert();
-  }, [showRetiredBadge, stormId]);
+  }, [stormId]);
 
   useGsapReveal(revealRef, [stormId], {
     selector: '[data-storm-reveal]',
@@ -110,10 +102,14 @@ const StormMetrics = () => {
   });
 
   useEffect(() => {
+    setImageState('loading');
+  }, [stormId]);
+
+  useEffect(() => {
     if (!storm) return;
 
     setStormName(storm.id.split('_')[1]); 
-    setRetired(storm.retired || false);
+    setRetired(storm.retired );
 
     // Clear any existing timeout
     if (timeoutRef.current) {
@@ -212,28 +208,7 @@ const StormMetrics = () => {
     }
     setTextColor(textColor);
 
-    // Calculate ACE
-    let ACEPoint = 0;
-    let windArray: number[] = [];
-    const ACEArray = data.map((point: any) => {
-      const wind = point.max_wind_kt;
-      const hour = parseInt(point.time_utc);
-      if (["TS", "SS", "HU"].includes(point.status)) {
-        if (hour % 600 == 0) {
-          ACEPoint += Math.pow(wind, 2)/10000;
-          if (windArray.length > 0) {
-            const average = sum(windArray)/windArray.length;
-            ACEPoint += Math.pow(average, 2)/10000;
-            windArray = [];
-          }
-        } else {
-          windArray.push(wind);
-        }
-      }
-      return ACEPoint;
-    });
-    const calculatedACE = Math.max(...ACEArray);
-    setACE(calculatedACE);
+    setACE(calculateStormACE(data));
 
     // Cleanup function to clear timeout
     return () => {
@@ -241,20 +216,9 @@ const StormMetrics = () => {
     };
   }, [storm, year]);
 
-  useEffect(() => {
-    setStormImageExtIndex(0);
-    setResolvedStormImageUrl(null);
-    setStormImageUnavailable(false);
-  }, [basin, year, stormId]);
-
   if (!storm) return null;
 
-  const probeStormImageSrc = stormImageUrl(
-    basin,
-    year,
-    stormId,
-    STORM_IMAGE_EXTENSIONS[stormImageExtIndex],
-  );
+  const stormImageUrl = `https://cyclopedia-images.s3.us-east-2.amazonaws.com/${stormId}.png`;
 
   return (
     <div className='storm mt-5'>
@@ -269,68 +233,53 @@ const StormMetrics = () => {
               {/* Storm Image Section */}
               <a 
                 target='_blank' 
-                className={`storm-image ${retired ? 'retired' : ''} ${year < 1995 ? '!pointer-events-none' : ''}`}
+                className={`storm-image retired ${year < 1995 ? '!pointer-events-none' : ''}`}
                 style={
-                  resolvedStormImageUrl && !stormImageUnavailable
-                    ? { backgroundImage: `url(${resolvedStormImageUrl})` }
+                  imageState === 'loaded'
+                    ? { backgroundImage: `url(${stormImageUrl})` }
                     : undefined
                 }
                 href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
               >
                 <img
-                  key={`${basin}-${year}-${stormId}-${stormImageExtIndex}`}
-                  src={probeStormImageSrc}
+                  key={stormId}
+                  src={stormImageUrl}
                   alt=''
                   decoding='async'
                   className='absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0'
                   style={{ clip: 'rect(0, 0, 0, 0)' }}
                   aria-hidden
-                  onLoad={(e) => {
-                    const url = e.currentTarget.currentSrc || e.currentTarget.src;
-                    const { stormId: id } = stormImageCtxRef.current;
-                    if (!url.includes(`/${id}.`)) return;
-                    setResolvedStormImageUrl(url);
-                  }}
-                  onError={(e) => {
-                    const url = e.currentTarget.src;
-                    const { stormId: id } = stormImageCtxRef.current;
-                    if (!url.includes(`/${id}.`)) return;
-                    setStormImageExtIndex((i) => {
-                      if (i < STORM_IMAGE_EXTENSIONS.length - 1) return i + 1;
-                      setStormImageUnavailable(true);
-                      return i;
-                    });
-                  }}
+                  onLoad={() => setImageState('loaded')}
+                  onError={() => setImageState('error')}
                 />
-                {!resolvedStormImageUrl && !stormImageUnavailable && (
+                {imageState === 'loading' && (
                   <div
-                    className='absolute inset-0 z-[1] flex items-center justify-center rounded-3xl bg-gradient-to-b from-gray-400/95 to-gray-500/90'
+                    className='absolute inset-0 z-[1] flex items-center justify-center rounded-3xl bg-gray-400'
                     role='status'
                   >
                     <StormImageLoader />
                   </div>
                 )}
-                {stormImageUnavailable && (
-                  <div className='unavailable'>
-                    <CycloneIcon className='cyclone-icon'/>
-                    <h1 className='text-lg font-bold text-gray-600'>Image Unavailable</h1>
+                {imageState === 'error' && (
+                  <div className='absolute inset-0 z-[1] flex flex-col items-center justify-center gap-2'>
+                    <ImageNotSupportedOutlinedIcon className='!text-6xl' />
+                    <span className='text-xl font-bold'>
+                      Image Unavailable
+                    </span>
                   </div>
                 )}
-                
-                {showRetiredBadge && (
-                  <span ref={retiredBadgeRef} className='inline-flex shrink-0'>
-                    <Image
-                      className='retired-badge'
-                      src='/retired.png'
-                      alt='Retired'
-                      width={120}
-                      height={120}
-                      quality={100}
-                      unoptimized
-                      priority
-                    />
-                  </span>
-                )}
+                {retired && <span ref={retiredBadgeRef} className='inline-flex shrink-0'>
+                  <Image
+                    className='retired-badge'
+                    src='/retired.png'
+                    alt='Retired'
+                    width={120}
+                    height={120}
+                    quality={100}
+                    unoptimized
+                    priority
+                  />
+                </span>}
               </a>
               <h1 className='title my-1' style={{color:textColor}}>
                 {stormName}

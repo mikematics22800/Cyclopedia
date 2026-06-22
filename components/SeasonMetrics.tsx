@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
+import { calculateSeasonTotalACE } from '../libs/calculateACE';
 
 const StormMetrics = () => {
-  const { season, seasonACE, maxWinds, basin } = useAppContext();
+  const { season, maxWinds, basin } = useAppContext();
 
   const [hurricanes, setHurricanes] = useState<number>(0);
   const [majorHurricanes, setMajorHurricanes] = useState<number>(0);
@@ -62,7 +63,7 @@ const StormMetrics = () => {
           </li>
           <li className='data-row border-b'>
             <h2 className='label'>Total Accumulated Cyclone Energy</h2>
-            <h2 className='value'>{sum(seasonACE).toFixed(1)}</h2>
+            <h2 className='value'>{calculateSeasonTotalACE(season).toFixed(1)}</h2>
           </li>
           <li className='data-row border-b'>
             <h2 className='label'>Total Landfalls</h2>

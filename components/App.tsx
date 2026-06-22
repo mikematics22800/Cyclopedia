@@ -4,7 +4,7 @@ import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from "reac
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { getArchive } from "../libs/hurdat";
-import { sum } from "../libs/sum";
+import { calculateSeasonACE } from "../libs/calculateACE";
 import { AppProvider } from "../contexts/AppContext";
 import Interface from "../components/Interface";
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
@@ -90,28 +90,7 @@ export default function App() {
       });
       setMaxWinds(maxWinds);
   
-      const seasonACE = season.map((storm) => {
-        let ACE = 0;
-        let windArray: number[] = [];
-        storm.data.forEach((point: any) => {
-          const wind = point.max_wind_kt;
-          const hour = point.time_utc;
-          if (["TS", "SS", "HU"].includes(point.status)) {
-            if (hour % 600 == 0) {
-              ACE += Math.pow(wind, 2)/10000;
-              if (windArray.length > 0) {
-                const average = sum(windArray)/windArray.length;
-                ACE += Math.pow(average, 2)/10000;
-                windArray = [];
-              }
-            } else {
-              windArray.push(wind);
-            }
-          }
-        });
-        return ACE;
-      });
-      setSeasonACE(seasonACE);
+      setSeasonACE(calculateSeasonACE(season));
     }
   }, [season, year]);
 

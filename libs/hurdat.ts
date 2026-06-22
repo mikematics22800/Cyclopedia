@@ -29,10 +29,9 @@ interface StormDataPoint {
 interface Storm {
   id: string;
   data: StormDataPoint[];
-  image?: string;
-  retired?: boolean;
-  cost_usd?: number;
-  dead_or_missing?: number;
+  retired: boolean;
+  cost_usd: number;
+  dead_or_missing: number;
 }
 
 const options: FetchOptions = {
