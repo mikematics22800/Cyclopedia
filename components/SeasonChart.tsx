@@ -64,7 +64,7 @@ function categoryAxisTicksForSelectedLabel(selectedIndex: number) {
 }
 
 type SeasonIntensityProps = {
-  onLegendVisibilityChange?: (label: string, isVisible: boolean) => void;
+  onLegendVisibilityChange?: (datasetIndex: number, isVisible: boolean) => void;
 };
 
 const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => {
@@ -228,10 +228,7 @@ const SeasonIntensity = ({ onLegendVisibilityChange }: SeasonIntensityProps) => 
           const datasetIndex = legendItem.datasetIndex;
           if (typeof datasetIndex !== 'number') return;
 
-          const label = legendItem.text || legend.chart.data.datasets[datasetIndex]?.label;
-          if (!label) return;
-
-          onLegendVisibilityChange?.(label, legend.chart.isDatasetVisible(datasetIndex));
+          onLegendVisibilityChange?.(datasetIndex, legend.chart.isDatasetVisible(datasetIndex));
         },
         labels: {
           color: 'white',

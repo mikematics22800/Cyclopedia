@@ -103,7 +103,7 @@ const Interface = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const selectorsRef = useRef<HTMLDivElement>(null);
   const selectorsAnimatedRef = useRef(false);
-  const [hiddenByLabel, setHiddenByLabel] = useState<Record<string, boolean>>({});
+  const [hiddenByDatasetIndex, setHiddenByDatasetIndex] = useState<Record<number, boolean>>({});
 
   const {
     basin,
@@ -197,10 +197,10 @@ const Interface = () => {
     gsap.to(el, { scale: 1, duration: 0.45, ease: "power3.out" });
   }, []);
 
-  const handleLegendVisibilityChange = useCallback((label: string, isVisible: boolean) => {
-    setHiddenByLabel((prev) => ({
+  const handleLegendVisibilityChange = useCallback((datasetIndex: number, isVisible: boolean) => {
+    setHiddenByDatasetIndex((prev) => ({
       ...prev,
-      [label]: !isVisible,
+      [datasetIndex]: !isVisible,
     }));
   }, []);
 
@@ -302,7 +302,7 @@ const Interface = () => {
         </div>
         <div className="lg:hidden w-full p-4">
           <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
-          <StormChart hiddenByLabel={hiddenByLabel} />
+          <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
         </div>
         </div>
       </div>

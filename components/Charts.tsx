@@ -6,12 +6,12 @@ import StormChart from './StormChart';
 
 const IntensityCharts = () => {
   const chartsRef = useRef<HTMLDivElement>(null);
-  const [hiddenByLabel, setHiddenByLabel] = useState<Record<string, boolean>>({});
+  const [hiddenByDatasetIndex, setHiddenByDatasetIndex] = useState<Record<number, boolean>>({});
 
-  const handleLegendVisibilityChange = useCallback((label: string, isVisible: boolean) => {
-    setHiddenByLabel((prev) => ({
+  const handleLegendVisibilityChange = useCallback((datasetIndex: number, isVisible: boolean) => {
+    setHiddenByDatasetIndex((prev) => ({
       ...prev,
-      [label]: !isVisible,
+      [datasetIndex]: !isVisible,
     }));
   }, []);
 
@@ -21,7 +21,7 @@ const IntensityCharts = () => {
         <div className="chart-wrapper chart-wrapper--stacked w-full">
         <div className="chart flex w-full flex-col gap-4">
           <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
-          <StormChart hiddenByLabel={hiddenByLabel} />
+          <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
         </div>
       </div>
         </div>

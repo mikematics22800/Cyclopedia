@@ -53,10 +53,10 @@ const aceThresholdLinePlugin: Plugin<'line'> = {
 };
 
 type StormIntensityProps = {
-  hiddenByLabel?: Record<string, boolean>;
+  hiddenByDatasetIndex?: Record<number, boolean>;
 };
 
-const StormIntensity = ({ hiddenByLabel = {} }: StormIntensityProps) => {
+const StormIntensity = ({ hiddenByDatasetIndex = {} }: StormIntensityProps) => {
   const { storm, dates } = useAppContext();
   const [wind, setWind] = useState<number[]>([]);
   const [pressure, setPressure] = useState<(number | null)[]>([]);
@@ -91,7 +91,16 @@ const StormIntensity = ({ hiddenByLabel = {} }: StormIntensityProps) => {
       borderColor: 'red',
       backgroundColor: 'pink',
       yAxisID: 'y' as const,
-      hidden: hiddenByLabel['Maximum Wind (kt)'] ?? false,
+      hidden: hiddenByDatasetIndex[0] ?? false,
+    },
+    {
+      label: 'Minimum Pressure (mb)',
+      data: pressure,
+      borderColor: 'blue',
+      backgroundColor: 'lightblue',
+      yAxisID: 'y1' as const,
+      spanGaps: true,
+      hidden: hiddenByDatasetIndex[1] ?? false,
     },
     {
       label: 'Accumulated Cyclone Energy',
@@ -101,16 +110,7 @@ const StormIntensity = ({ hiddenByLabel = {} }: StormIntensityProps) => {
       pointBackgroundColor: '#e9d5ff',
       pointBorderColor: 'rgba(168, 85, 247, 0.45)',
       yAxisID: 'y' as const,
-      hidden: hiddenByLabel['Accumulated Cyclone Energy'] ?? false,
-    },
-    {
-      label: 'Minimum Pressure (mb)',
-      data: pressure,
-      borderColor: 'blue',
-      backgroundColor: 'lightblue',
-      yAxisID: 'y1' as const,
-      spanGaps: true,
-      hidden: hiddenByLabel['Minimum Pressure (mb)'] ?? false,
+      hidden: hiddenByDatasetIndex[2] ?? false,
     },
   ];
 
