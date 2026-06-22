@@ -160,7 +160,7 @@ const MapLegend = () => {
         </IconButton>
       </div>
       <h1 className="text-sm font-semibold text-white  text-center">Classification</h1>
-      <div className="flex flex-col gap-1 border-t border-white pt-2">
+      <div className="flex flex-col gap-0.5 border-t border-white pt-2">
         {statusItems.map((item) => (
           <div
             key={item.label}
@@ -217,7 +217,7 @@ const MapLegend = () => {
             </span>
           </Tooltip>
         </div>
-        <div className="flex flex-col gap-1 border-t border-white pt-2">
+        <div className="flex flex-col gap-.5 border-t border-white pt-2">
         {windFieldItems.map((item) => (
           <div
             key={item.label}
