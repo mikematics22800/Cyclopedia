@@ -72,8 +72,8 @@ const MapLegend = () => {
       gsap.from(rows, {
         opacity: 0,
         x: -10,
-        stagger: 0.04,
-        duration: 0.34,
+        stagger: { amount: 0.2 },
+        duration: 0.3,
         ease: 'power2.out',
       });
     }, panel);
@@ -173,49 +173,24 @@ const MapLegend = () => {
           </div>
         ))}
       </div>
-      <FormGroup className="gap-0.5 border-t border-white py-2 w-full text-center" sx={formGroupSx}>
+      {year >= 2004 && <FormGroup className="gap-0.5 border-t border-white py-2 w-full text-center" sx={formGroupSx}>
         <div className="settings-row rounded-lg py-0.5 pr-1 pl-0 ">
-          <Tooltip
-            title={
-              windFieldAvailable
-                ? ''
-                : 'Unavailable before 2004'
-            }
-            placement="left"
-            arrow
-            disableHoverListener={windFieldAvailable}
-            disableFocusListener={windFieldAvailable}
-            disableTouchListener={windFieldAvailable}
-            slotProps={{
-              popper: {
-                modifiers: [
-                  {
-                    name: 'offset',
-                    options: {
-                      offset: [0, 8],
-                    },
-                  },
-                ],
-              },
-            }}
-          >
-            <span className="inline-block w-fit max-w-full">
-              <FormControlLabel
-                sx={labelSx}
-                disabled={!windFieldAvailable}
-                control={
-                  <Checkbox
-                    size="small"
-                    className="!text-sky-400 !pl-0 !pr-1 !py-1"
-                    checked={windField}
-                    disabled={!windFieldAvailable}
-                    onChange={(e) => setWindField(e.target.checked)}
-                  />
-                }
-                label="Wind Field"
-              />
-            </span>
-          </Tooltip>
+          <span className="inline-block w-fit max-w-full">
+            <FormControlLabel
+              sx={labelSx}
+              disabled={!windFieldAvailable}
+              control={
+                <Checkbox
+                  size="small"
+                  className="!text-sky-400 !pl-0 !pr-1 !py-1"
+                  checked={windField}
+                  disabled={!windFieldAvailable}
+                  onChange={(e) => setWindField(e.target.checked)}
+                />
+              }
+              label="Wind Field"
+            />
+          </span>
         </div>
         <div className="flex flex-col gap-.5 border-t border-white pt-2">
         {windFieldItems.map((item) => (
@@ -233,8 +208,8 @@ const MapLegend = () => {
             <h1 className="min-w-[3.5rem] text-right text-sm">{item.label}</h1>
           </div>
         ))}
-      </div>
-      </FormGroup>
+        </div>
+      </FormGroup>}
     </div>
   );
 };
