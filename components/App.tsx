@@ -17,7 +17,7 @@ export default function App() {
   const [storm, setStorm] = useState<any | null>(null);
   const [stormId, setStormId] = useState<string>('');
   const [dates, setDates] = useState<string[]>([]);
-  const [windField, setWindField] = useState<boolean>(false);
+  const [windField, setWindField] = useState<boolean>(year >= 2004);
   const [names, setNames] = useState<string[]>([]);
   const [seasonACE, setSeasonACE] = useState<number[]>([]);
   const [map, setMap] = useState<boolean>(true);
@@ -41,6 +41,10 @@ export default function App() {
       }
     }
   }, [basin, year]);
+
+  useEffect(() => {
+    setWindField(year >= 2004);
+  }, [year]);
 
   useLayoutEffect(() => {
     if (!season?.length) return;
