@@ -8,16 +8,16 @@ import {
   Tooltip,
   IconButton,
 } from '@mui/material';
-import { Close, Settings } from '@mui/icons-material';
+import { Close, FormatListBulleted } from '@mui/icons-material';
 import gsap from 'gsap';
 import { useAppContext } from '../contexts/AppContext';
 
 const panelClass =
-  'inline-flex flex-col gap-2 font-bold text-white rounded-xl w-max max-w-[min(18rem,calc(100vw-2rem))] p-3 ' +
+  'inline-flex flex-col gap-2 font-semibold text-white rounded-xl w-max max-w-[min(18rem,calc(100vw-2rem))] p-3 ' +
   'bg-slate-950/75 backdrop-blur-md border border-white/15 ' +
   'transition-all duration-300 ease-smooth hover:border-white/25';
 
-const legendItems = [
+const statusItems = [
   { colorClass: 'bg-[dodgerblue]', label: 'Tropical Depression' },
   { colorClass: 'bg-[lime]', label: 'Tropical Storm' },
   { colorClass: 'bg-[yellow]', label: 'Category 1 Hurricane' },
@@ -33,7 +33,26 @@ const legendItems = [
   { colorClass: 'bg-white', label: 'Tropical Low' },
 ] as const;
 
-const MapSettings = () => {
+const windFieldItems = [
+  {
+    label: '≥34kt',
+    fillColor: 'rgba(255, 255, 0, 0.45)',
+    outlineColor: 'rgba(255, 255, 0, 0.95)',
+  },
+  {
+    label: '≥50kt',
+    fillColor: 'rgba(255, 165, 0, 0.45)',
+    outlineColor: 'rgba(255, 165, 0, 0.95)',
+  },
+  {
+    label: '≥64kt',
+    fillColor: 'rgba(255, 0, 0, 0.45)',
+    outlineColor: 'rgba(255, 0, 0, 0.95)',
+  },
+] as const;
+
+
+const MapLegend = () => {
   const { windField, setWindField, year } = useAppContext();
   const windFieldAvailable = year >= 2004;
   const [open, setOpen] = useState(false);
@@ -90,7 +109,7 @@ const MapSettings = () => {
   if (!open) {
     return (
       <Tooltip
-        title="Settings"
+        title="Legend"
         placement="bottom"
         arrow
       >
@@ -113,7 +132,7 @@ const MapSettings = () => {
             }}
             sx={iconButtonSx}
           >
-            <Settings className="!text-2xl text-white" />
+            <FormatListBulleted className="!text-2xl text-white" />
           </IconButton>
         </div>
       </Tooltip>
@@ -125,9 +144,9 @@ const MapSettings = () => {
       ref={openPanelRef}
       className={`${panelClass} gap-1`}
     >
-      <div className="settings-row flex justify-between items-center gap-2 border-b border-white/10 pb-2 mb-1">
-        <span className="text-sm font-bold tracking-wide text-white/95">
-          Settings
+      <div className="settings-row flex justify-between items-center gap-2 border-b border-white pb-2">
+        <span className="text-sm font-semibold tracking-wide text-white">
+          Legend
         </span>
         <IconButton
           size="small"
@@ -140,9 +159,22 @@ const MapSettings = () => {
           <Close className="!text-xl" />
         </IconButton>
       </div>
-
-      <FormGroup className="gap-0.5 w-fit" sx={formGroupSx}>
-        <div className="settings-row rounded-lg py-0.5 pr-1 pl-0  hover:bg-white/5 transition-colors">
+      <h1 className="text-sm font-semibold text-white  text-center">Classification</h1>
+      <div className="flex flex-col gap-1 border-t border-white pt-2">
+        {statusItems.map((item) => (
+          <div
+            key={item.label}
+            className="settings-row flex items-center gap-2 rounded-md px-1 py-0.5 "
+          >
+            <span
+              className={`w-3 h-3 rounded-full border border-black ${item.colorClass}`}
+            />
+            <h1 className="text-sm">{item.label}</h1>
+          </div>
+        ))}
+      </div>
+      <FormGroup className="gap-0.5 border-t border-white py-2 w-full text-center" sx={formGroupSx}>
+        <div className="settings-row rounded-lg py-0.5 pr-1 pl-0 ">
           <Tooltip
             title={
               windFieldAvailable
@@ -185,22 +217,26 @@ const MapSettings = () => {
             </span>
           </Tooltip>
         </div>
-      </FormGroup>
-      <div className="flex flex-col gap-1 border-t border-white/10 pt-2">
-        {legendItems.map((item) => (
+        <div className="flex flex-col gap-1 border-t border-white pt-2">
+        {windFieldItems.map((item) => (
           <div
             key={item.label}
-            className="settings-row flex items-center gap-2 rounded-md px-1 py-0.5 hover:bg-white/5 transition-colors"
+            className="settings-row flex w-full items-center gap-2 rounded-md px-1 py-0.5"
           >
             <span
-              className={`w-3 h-3 rounded-full border border-black ${item.colorClass}`}
+              className="h-3 flex-1 rounded-sm border"
+              style={{
+                backgroundColor: item.fillColor,
+                borderColor: item.outlineColor,
+              }}
             />
-            <h1 className="text-sm">{item.label}</h1>
+            <h1 className="min-w-[3.5rem] text-right text-sm">{item.label}</h1>
           </div>
         ))}
       </div>
+      </FormGroup>
     </div>
   );
 };
 
-export default MapSettings;
+export default MapLegend;
