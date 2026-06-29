@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html,
+  body {
+    @apply h-full overflow-hidden;
+  }
+}
+
 .storm-font {
   font-family: var(--font-storm), sans-serif;
   font-style: italic;
@@ -45,20 +52,19 @@
 }
 
 .app {
-  @apply w-screen bg-cover bg-center bg-fixed overflow-hidden;
+  @apply w-full min-h-[100vh] bg-cover bg-center bg-fixed overflow-hidden;
 }
 
 .desktop-view {
-  @apply w-full relative;
-  @apply lg:flex lg:h-[calc(100vh-5rem)];
+  @apply hidden lg:flex w-full relative lg:h-[calc(100vh-5rem)] lg:min-h-0;
 }
 
 nav {
-  @apply hidden lg:flex justify-between w-full h-20 items-center lg:px-10 px-5 bg-blue-950 z-10 relative;
+  @apply hidden lg:flex justify-between w-full h-20 shrink-0 items-center lg:px-10 px-5 bg-blue-950 z-10 relative;
 }
 
 .loading-screen {
-  @apply w-screen h-screen flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950;
+  @apply w-full min-h-[100vh] flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950;
 }
 
 .loading-screen--overlay {
@@ -70,13 +76,18 @@ nav {
 }
 
 .interface-scroll {
-  @apply z-20 flex w-full justify-center rounded-t-3xl absolute top-[96%] bg-fixed bg-center bg-cover;
+  @apply z-20 flex w-full justify-center rounded-t-3xl absolute inset-x-0 bottom-0 max-h-[min(92vh,92vh)] overflow-y-auto overscroll-contain;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  @apply lg:relative lg:inset-x-auto lg:bottom-auto lg:max-h-none lg:z-auto lg:w-[36rem] lg:min-h-0 lg:overflow-y-auto lg:shrink-0 lg:rounded-none lg:pb-0;
+}
+
+.interface-panel {
+  @apply w-full h-full min-h-0 bg-fixed bg-center bg-cover;
   background-image: url('/hurricane.jpg');
-  @apply lg:relative lg:top-auto lg:z-auto lg:w-[36rem] lg:min-h-0 lg:overflow-y-auto lg:shrink-0 lg:rounded-none;
 }
 
 @media (min-width: 1024px) {
-  .interface-scroll {
+  .interface-panel {
     background-image: none;
   }
 }
@@ -92,6 +103,22 @@ nav {
 .button h1,
 .button span {
   @apply text-sm lg:text-base ;
+}
+
+.nav-buttons {
+  @apply flex h-10 items-center rounded-xl border border-white bg-red-600 overflow-hidden;
+}
+
+.nav-button {
+  @apply h-full font-bold px-5 flex items-center justify-center text-sm lg:text-base text-white transition-colors duration-200;
+}
+
+.nav-button + .nav-button {
+  @apply border-l border-white/30;
+}
+
+.nav-button--selected {
+  @apply text-[aqua];
 }
 
 .selector {
@@ -195,7 +222,7 @@ nav {
 }
 
 .storm a {
-  @apply w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 max-w-80 rounded-3xl;
+  @apply w-full aspect-square bg-cover bg-center flex flex-col items-center justify-center bg-gray-400 rounded-3xl;
 }
 
 .storm,
@@ -212,7 +239,7 @@ nav {
 }
 
 .selectors {
-  @apply flex w-full gap-2 justify-center flex-wrap my-4 sm:m-0;
+  @apply flex w-full gap-4 justify-center flex-wrap mb-2 sm:mb-4;
 }
 
 .selector-chip {
@@ -220,7 +247,7 @@ nav {
 }
 
 .metrics {
-  @apply sm:rounded-3xl rounded-t-3xl bg-slate-800/80 backdrop-blur-md border border-white w-full flex flex-col items-center gap-2 lg:gap-4 p-4 lg:p-8 ;
+  @apply lg:rounded-3xl bg-slate-800/80 backdrop-blur-md border-t border-white/20 lg:border lg:border-white w-full flex flex-col items-center gap-2 lg:gap-4 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:p-8 lg:pb-8;
 }
 
 
@@ -232,8 +259,7 @@ nav {
 
 .spin {
   animation: spin 2s linear infinite;
-}
-
+}  
 .legend-container {
   @apply flex justify-center cursor-pointer;
 }
@@ -254,17 +280,24 @@ nav {
   @apply w-full h-full relative;
 }
 
-.desktop-view > .map {
-  @apply h-screen fixed top-0 -z-10;
-  @apply lg:relative lg:z-auto lg:h-full lg:flex-1 lg:min-w-0;
+.desktop-view .charts {
+  @apply lg:flex-1 lg:min-h-0 lg:min-w-0;
+}
+
+.desktop-view .charts .map {
+  @apply relative z-auto h-full;
 }
 
 ul li h2 {
   @apply text-sm;
 }
 
+.drag-handle-container {
+  @apply flex w-full shrink-0 cursor-grab touch-none select-none justify-center py-3 lg:hidden active:cursor-grabbing bg-slate-800/80 backdrop-blur-md;
+}
+
 .drag-handle {
-  @apply bg-gray-300 rounded-full w-20 h-1 lg:hidden;
+  @apply bg-gray-300 rounded-full w-20 h-1 lg:hidden pointer-events-none;
 }
 
 .storm-image {
@@ -296,7 +329,15 @@ ul li h2 {
 }
 
 .map-controls-container {
-  @apply absolute top-4 right-4 z-[9999] hidden flex-row gap-2 sm:gap-4 items-start lg:flex;
+  @apply absolute z-[9999] flex flex-row gap-2 items-start;
+  top: max(1rem, env(safe-area-inset-top, 0px));
+  right: max(1rem, env(safe-area-inset-right, 0px));
+}
+
+@media (min-width: 1024px) {
+  .map-controls-container {
+    gap: 1rem;
+  }
 }
 
 .cesium-credit-hidden {
@@ -432,4 +473,61 @@ ul li h2 {
 .wind-field-swatch--64kt {
   background-color: rgb(255 0 0 / 0.45);
   border-color: rgb(255 0 0 / 0.95);
+}
+
+.charts {
+  @apply relative w-full h-full;
+}
+
+.mobile-view {
+  @apply relative flex flex-col lg:hidden w-full min-h-[100vh] overflow-hidden;
+}
+
+.mobile-view .charts {
+  @apply fixed inset-0 h-[100vh] w-full z-0;
+}
+
+.mobile-view .charts .map {
+  @apply h-full w-full;
+}
+
+.mobile-view .interface-sheet {
+  @apply fixed inset-x-0 top-0 z-20 h-[100dvh] w-full overflow-hidden rounded-t-3xl;
+  transition: border-radius 0.2s ease;
+}
+
+.mobile-view .interface-sheet--expanded {
+  @apply rounded-t-none;
+}
+
+.mobile-view .interface-panel {
+  @apply flex h-full min-h-0 flex-col;
+}
+
+.mobile-view .interface-scroll {
+  @apply relative inset-x-auto bottom-auto z-auto min-h-0 flex-1 overflow-y-auto overscroll-contain max-h-none rounded-none pb-0;
+}
+
+.mobile-view .metrics {
+  @apply rounded-t-none border-t-0;
+}
+
+.mobile-view .data-table {
+  @apply max-w-full px-1;
+}
+
+.mobile-view .data-row {
+  @apply gap-2;
+}
+
+.mobile-view .data-row .label {
+  @apply text-left text-xs flex-1 min-w-0;
+}
+
+.mobile-view .data-row .value {
+  @apply shrink-0 text-xs;
+}
+
+.mobile-view .storm-image {
+  @apply max-w-96 mx-auto;
 }

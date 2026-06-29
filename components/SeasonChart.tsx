@@ -63,11 +63,11 @@ function categoryAxisTicksForSelectedLabel(selectedIndex: number) {
   };
 }
 
-type SeasonGraphProps = {
+  type SeasonChartProps = {
   onLegendVisibilityChange?: (datasetIndex: number, isVisible: boolean) => void;
 };
 
-const SeasonGraph = ({ onLegendVisibilityChange }: SeasonGraphProps) => {
+const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
   const { names, maxWinds, season, seasonACE, stormId } = useAppContext();
   const [minPressures, setMinPressures] = useState<number[]>([]);
   const [mobile, setMobile] = useState(false);
@@ -263,4 +263,4 @@ const SeasonGraph = ({ onLegendVisibilityChange }: SeasonGraphProps) => {
   );
 };
 
-export default SeasonGraph;
+export default SeasonChart;

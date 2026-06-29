@@ -28,6 +28,64 @@ declare global {
   }
 }
 
+/**
+ * Approximate camera range (m) for a Leaflet zoom level.
+ * Used to align globe zoom with Map.tsx (minZoom 3, default zoom 4).
+ */
+const leafletZoomToDistance = (zoom: number) => 100_000_000 / 2 ** zoom;
+
+/**
+ * ScreenSpaceCameraController zoom limits (meters).
+ * @see https://cesium.com/learn/cesiumjs/ref-doc/ScreenSpaceCameraController.html#minimumZoomDistance
+ * @see https://cesium.com/learn/cesiumjs/ref-doc/ScreenSpaceCameraController.html#maximumZoomDistance
+ *
+ * Applies to user zoom input (wheel/drag). Requires enableCollisionDetection (default true).
+ */
+const GLOBE_MIN_ZOOM_DISTANCE = leafletZoomToDistance(10);
+const GLOBE_MAX_ZOOM_DISTANCE = leafletZoomToDistance(3);
+const GLOBE_MAX_ZOOM_DISTANCE_MOBILE = GLOBE_MAX_ZOOM_DISTANCE * 2;
+const GLOBE_INITIAL_HEIGHT = leafletZoomToDistance(4);
+
+const isMobileViewport = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(max-width: 1023px)').matches;
+
+const isInteractiveEntity = (
+  viewer: import('cesium').Viewer,
+  entity: CesiumEntity,
+) => {
+  const time = viewer.clock.currentTime;
+  const trackId = entity.properties?.stormTrackId?.getValue(time);
+  const description = entity.description?.getValue(time);
+  return Boolean(trackId || (typeof description === 'string' && description.trim()));
+};
+
+const isOverGlobe = (
+  viewer: import('cesium').Viewer,
+  Cesium: CesiumModule,
+  position: import('cesium').Cartesian2,
+) => {
+  const ray = viewer.camera.getPickRay(position);
+  if (!ray) return false;
+  return Cesium.defined(viewer.scene.globe.pick(ray, viewer.scene));
+};
+
+const getInteractionAt = (
+  viewer: import('cesium').Viewer,
+  Cesium: CesiumModule,
+  position: import('cesium').Cartesian2,
+) => {
+  const picked = viewer.scene.pick(position);
+  const entity = picked?.id as CesiumEntity | undefined;
+  const onInteractive = Boolean(entity && isInteractiveEntity(viewer, entity));
+  const onGlobe = isOverGlobe(viewer, Cesium, position);
+  return {
+    onInteractive,
+    onGlobe,
+    allowCamera: onGlobe && !onInteractive,
+  };
+};
+
 const getEntityWorldPosition = (
   viewer: import('cesium').Viewer,
   entity: CesiumEntity,
@@ -66,6 +124,7 @@ const Globe = () => {
     if (!container) return;
 
     let cancelled = false;
+    let isDragging = false;
     let clickHandler: import('cesium').ScreenSpaceEventHandler | null = null;
 
     const initViewer = async () => {
@@ -105,15 +164,58 @@ const Globe = () => {
       viewer.scene.backgroundColor = Cesium.Color.TRANSPARENT;
       viewer.scene.globe.enableLighting = false;
       viewer.cesiumWidget.canvas.style.background = 'transparent';
+      viewer.cesiumWidget.canvas.style.cursor = 'default';
+
       const cameraController = viewer.scene.screenSpaceCameraController;
-      cameraController.minimumZoomDistance = 1_000;
+      cameraController.minimumZoomDistance = GLOBE_MIN_ZOOM_DISTANCE;
+      cameraController.maximumZoomDistance = isMobileViewport()
+        ? GLOBE_MAX_ZOOM_DISTANCE_MOBILE
+        : GLOBE_MAX_ZOOM_DISTANCE;
+      cameraController.enableRotate = false;
+      cameraController.enableTranslate = false;
+      cameraController.enableTilt = false;
+
+      const updateInteractionState = (position: import('cesium').Cartesian2) => {
+        const { onInteractive, onGlobe, allowCamera } = getInteractionAt(
+          viewer,
+          Cesium,
+          position,
+        );
+
+        cameraController.enableRotate = allowCamera;
+        cameraController.enableTranslate = allowCamera;
+        cameraController.enableTilt = allowCamera;
+
+        viewer.cesiumWidget.canvas.style.cursor = onInteractive
+          ? 'pointer'
+          : onGlobe
+            ? 'grab'
+            : 'default';
+      };
+
       viewer.cesiumWidget.creditContainer.classList.add('cesium-credit-hidden');
 
       viewer.camera.setView({
-        destination: Cesium.Cartesian3.fromDegrees(-60, 30, 5_000_000),
+        destination: Cesium.Cartesian3.fromDegrees(-60, 30, GLOBE_INITIAL_HEIGHT),
       });
 
       clickHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      clickHandler.setInputAction((movement: { endPosition: import('cesium').Cartesian2 }) => {
+        if (!isDragging) {
+          updateInteractionState(movement.endPosition);
+        }
+      }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+      clickHandler.setInputAction((movement: { position: import('cesium').Cartesian2 }) => {
+        const { allowCamera } = getInteractionAt(viewer, Cesium, movement.position);
+        if (allowCamera) {
+          isDragging = true;
+          viewer.cesiumWidget.canvas.style.cursor = 'grabbing';
+        }
+      }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+      clickHandler.setInputAction((movement: { position: import('cesium').Cartesian2 }) => {
+        isDragging = false;
+        updateInteractionState(movement.position);
+      }, Cesium.ScreenSpaceEventType.LEFT_UP);
       clickHandler.setInputAction((movement: { position: import('cesium').Cartesian2 }) => {
         const picked = viewer.scene.pick(movement.position);
         if (!picked?.id) {

@@ -4,8 +4,8 @@ import { useState, useEffect, useLayoutEffect, useRef, useId } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useAppContext } from '../contexts/AppContext';
-import { calculateStormACE } from '../libs/calculateACE';
-import CycloneIcon from '@mui/icons-material/Cyclone';
+import { sum } from '../libs/sum';
+import { calculateSeasonTotalACE, calculateStormACE } from '../libs/calculateACE';
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 
 /** Vector spinner: crisp at any DPI, gradient arc + soft glow */
@@ -59,8 +59,102 @@ const StormImageLoader = () => {
   );
 };
 
+const SeasonMetrics = () => {
+  const { season, maxWinds, basin, year } = useAppContext();
+
+  const [hurricanes, setHurricanes] = useState<number>(0);
+  const [majorHurricanes, setMajorHurricanes] = useState<number>(0);
+  const [deadOrMissing, setDeadOrMissing] = useState<number>(0);
+  const [cost, setCost] = useState<string>('0');
+  const [landfalls, setlandfalls] = useState<number>(0);
+  const revealRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!season) return;
+
+    const landfallCount = season.reduce((acc, storm) => {
+      return (
+        acc + storm.data.filter((point) => point.record === 'L').length
+      );
+    }, 0);
+    setlandfalls(landfallCount);
+
+    const deadOrMissing = season.map((storm) => {
+      return storm.dead_or_missing || 0;
+    });
+    setDeadOrMissing(sum(deadOrMissing));
+    const costs = season.map((storm) => {
+      return storm.cost_usd || 0;
+    });
+    const cost = sum(costs);
+    setCost((cost/1000000).toFixed(1));
+    const hurricanes = maxWinds.filter(wind => wind >= 64).length;
+    setHurricanes(hurricanes);
+    const majorHurricanes = maxWinds.filter(wind => wind >= 96).length;
+    setMajorHurricanes(majorHurricanes);
+
+  }, [season, maxWinds]);
+
+  useLayoutEffect(() => {
+    const panel = revealRef.current;
+    if (!panel) return;
+    const rows = panel.querySelectorAll('.data-row');
+    const ctx = gsap.context(() => {
+      gsap.from(rows, {
+        opacity: 0,
+        x: -10,
+        stagger: { amount: 0.2 },
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+    }, panel);
+    return () => ctx.revert();
+  }, [basin, year]);
+
+  if (!season) return null;
+
+  return (
+    <div className='season'>
+      <div ref={revealRef} className='w-full flex flex-col items-center'>
+        <ul className='data-table'>  
+          <li className='data-row border-y'>
+            <h2 className='label'>Tropical Cyclones</h2>
+            <h2 className='value'>{season.length}</h2>
+          </li>
+          
+          <li className='data-row border-b'>
+            <h2 className='label'>Hurricanes</h2>
+            <h2 className='value'>{hurricanes}</h2>
+          </li>
+          
+          <li className='data-row border-b'>
+            <h2 className='label'>Major Hurricanes</h2>
+            <h2 className='value'>{majorHurricanes}</h2>
+          </li>
+          <li className='data-row border-b'>
+            <h2 className='label'>Total Accumulated Cyclone Energy</h2>
+            <h2 className='value'>{calculateSeasonTotalACE(season).toFixed(1)}</h2>
+          </li>
+          <li className='data-row border-b'>
+            <h2 className='label'>Total Landfalls</h2>
+            <h2 className='value'>{landfalls}</h2>
+          </li>
+          <li className='data-row border-b'>
+            <h2 className='label'>Total Dead or Missing</h2>
+            <h2 className='value'>{deadOrMissing}</h2>
+          </li>
+          <li className='data-row border-b'>
+            <h2 className='label'>Total Cost (Million USD)</h2>
+            <h2 className='value cost-value'>${cost}</h2>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 const StormMetrics = () => {
-  const { year, storm, stormId, basin, graphs, toggleGraphs } = useAppContext();
+  const { year, storm, stormId } = useAppContext();
   const [ACE, setACE] = useState<number>(0);
   const [stormName, setStormName] = useState<string>('');
   const [textColor, setTextColor] = useState<string>('');
@@ -120,7 +214,6 @@ const StormMetrics = () => {
     setStormName(storm.id.split('_')[1]); 
     setRetired(storm.retired );
 
-    // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -219,7 +312,6 @@ const StormMetrics = () => {
 
     setACE(calculateStormACE(data));
 
-    // Cleanup function to clear timeout
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
@@ -235,14 +327,11 @@ const StormMetrics = () => {
         ref={revealRef}
         className='flex flex-col gap-5 w-full items-center'
       >
-        {/* Storm Data Section */}
           <ul className='data-table'>
-            {/* Storm Header */}
             <li data-storm-reveal className='header'>
-              {/* Storm Image Section */}
               <a 
                 target='_blank' 
-                className={`storm-image retired ${year < 1995 ? '!pointer-events-none' : ''}`}
+                className={`storm-image max-w-96 retired ${year < 1995 ? '!pointer-events-none' : ''}`}
                 style={
                   imageState === 'loaded'
                     ? { backgroundImage: `url(${stormImageUrl})` }
@@ -345,18 +434,16 @@ const StormMetrics = () => {
               <h2 className='value cost-value'>${cost}</h2>
             </li>
           </ul>
-          <div className='hidden w-full max-w-[min(100%,24rem)] shrink-0 lg:flex lg:justify-center mt-5'>
-            <button
-              type='button'
-              className='button w-full justify-center shrink-0'
-              onClick={toggleGraphs}
-            >
-              <span>{graphs ? 'Tracking Charts' : 'Intensity Graphs'}</span>
-            </button>
-          </div>
         </div>
     </div>
   );
 };
 
-export default StormMetrics;
+const Metrics = () => (
+  <>
+    <SeasonMetrics />
+    <StormMetrics />
+  </>
+);
+
+export default Metrics;

@@ -2,18 +2,23 @@
 
 import { useRef, useCallback, useState } from "react";
 import { useAppContext } from "../contexts/AppContext";
-import StormMetrics from "./StormMetrics";
-import SeasonMetrics from "./SeasonMetrics";
+import Metrics from "./Metrics";
 import { useGsapReveal } from "./hooks/useGsapReveal";
-import SeasonGraph from './SeasonGraph';
-import StormGraph from './StormGraph';
+import { useMobileSheetDrag } from "./hooks/useMobileSheetDrag";
+import SeasonChart from './SeasonChart';
+import StormChart from './StormChart';
 import Selectors from './Selectors';
 
-const Interface = () => {
+type InterfaceProps = {
+  mobileSheet?: boolean;
+};
+
+const Interface = ({ mobileSheet = false }: InterfaceProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hiddenByDatasetIndex, setHiddenByDatasetIndex] = useState<Record<number, boolean>>({});
 
   const { basin, year } = useAppContext();
+  const { dragHandleProps, sheetStyle, handleRef, snap } = useMobileSheetDrag(mobileSheet);
 
   useGsapReveal(containerRef, [basin, year], {
     stagger: 0.065,
@@ -27,26 +32,52 @@ const Interface = () => {
     }));
   }, []);
 
-  return (
-    <div className="interface-scroll">
-      <div ref={containerRef} className='interface'>
-        <div className="w-full flex flex-col items-center overflow-hidden gap-2 lg:gap-4 pt-3">
-        <div data-gsap-reveal className="drag-handle shrink-0" />
+  const interfaceBody = (
+    <div ref={containerRef} className='interface'>
+      <div className="w-full flex flex-col items-center overflow-hidden gap-2 lg:gap-4">
         <div
           data-gsap-reveal
           className="w-full flex flex-col items-center gap-2 lg:gap-4"
         >
-        <div className="metrics">
-          <Selectors />
-          <SeasonMetrics />
-          <StormMetrics />
+          <div className="metrics">
+            <Selectors />
+            <Metrics />
+            <div className="lg:hidden w-full p-4">
+              <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
+              <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  );
+
+  if (mobileSheet) {
+    return (
+      <div
+        className={`interface-sheet${snap === 'expanded' ? ' interface-sheet--expanded' : ''}`}
+        style={sheetStyle}
+      >
+        <div className="interface-panel">
+          <div
+            ref={handleRef}
+            {...dragHandleProps}
+            className="drag-handle-container"
+          >
+            <div data-gsap-reveal className="drag-handle shrink-0" />
+          </div>
+          <div className="interface-scroll">
+            {interfaceBody}
+          </div>
         </div>
-        <div className="lg:hidden w-full p-4">
-          <SeasonGraph onLegendVisibilityChange={handleLegendVisibilityChange} />
-          <StormGraph hiddenByDatasetIndex={hiddenByDatasetIndex} />
-        </div>
-        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="interface-scroll">
+      <div className="interface-panel">
+        {interfaceBody}
       </div>
     </div>
   );

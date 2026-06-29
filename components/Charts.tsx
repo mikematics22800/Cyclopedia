@@ -1,10 +1,10 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import SeasonChart from './SeasonGraph';
-import StormChart from './StormGraph';
+import SeasonChart from './SeasonChart';
+import StormChart from './StormChart';
 
-const Graphs = () => {
+const Charts = () => {
   const graphsRef = useRef<HTMLDivElement>(null);
   const [hiddenByDatasetIndex, setHiddenByDatasetIndex] = useState<Record<number, boolean>>({});
 
@@ -25,4 +25,4 @@ const Graphs = () => {
   );
 };
 
-export default Graphs;
+export default Charts;

@@ -18,8 +18,8 @@ interface AppContextType {
   names: string[];
   maxWinds: number[];
   seasonACE: number[];
-  graphs: boolean;
-  toggleGraphs: () => void;
+  charts: boolean;
+  toggleCharts: () => void;
   globe: boolean;
   setGlobe: (globe: boolean) => void;
 }

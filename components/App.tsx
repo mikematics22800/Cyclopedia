@@ -1,20 +1,14 @@
 'use client';
 
 import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from "react";
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { getArchive } from "../libs/hurdat";
 import { calculateSeasonACE } from "../libs/calculateACE";
 import { AppProvider } from "../contexts/AppContext";
 import Interface from "../components/Interface";
-const Map = dynamic(() => import("./Map"), { ssr: false });
-import Globe from "../components/Globe";
 import LoadingScreen from "../components/LoadingScreen";
-import MapLegend from "./MapLegend";
-import PublicIcon from '@mui/icons-material/Public';
-import MapIcon from '@mui/icons-material/Map';
-import { IconButton, Tooltip } from "@mui/material";
-import Graphs from "./Graphs";
+import Tracker from "./Tracker";
+import Charts from "./Charts";
 
 export default function App() {
   const [basin, setBasin] = useState<string>('atl');
@@ -26,7 +20,7 @@ export default function App() {
   const [windField, setWindField] = useState<boolean>(year >= 2004);
   const [names, setNames] = useState<string[]>([]);
   const [seasonACE, setSeasonACE] = useState<number[]>([]);
-  const [graphs, setGraphs] = useState<boolean>(false);
+  const [charts, setCharts] = useState<boolean>(false);
   const [maxWinds, setMaxWinds] = useState<number[]>([]);
   const [globe, setGlobe] = useState(false)
   
@@ -107,12 +101,8 @@ export default function App() {
     }
   }, [season, year]);
 
-  const toggleGraphs = useCallback(() => {
-    setGraphs(prev => !prev);
-  }, []);
-
-  const toggleGlobe = useCallback(() => {
-    setGlobe(prev => !prev);
+  const toggleCharts = useCallback(() => {
+    setCharts(prev => !prev);
   }, []);
 
   const value = useMemo(() => ({
@@ -130,8 +120,8 @@ export default function App() {
     names,
     maxWinds,
     seasonACE,
-    graphs,
-    toggleGraphs,
+    charts,
+    toggleCharts,
     globe,
     setGlobe
   }), [
@@ -149,8 +139,8 @@ export default function App() {
     names,
     maxWinds,
     seasonACE,
-    graphs,
-    toggleGraphs,
+    charts,
+    toggleCharts,
     globe,
     setGlobe
   ]);
@@ -160,7 +150,7 @@ export default function App() {
       <div className="app app-background">
         {season && storm ? (
           <>
-            <nav>
+            <nav aria-label="Site header">
               <div className="flex items-center gap-2">
                 <Image
                   src="/cyclone.png"
@@ -170,48 +160,36 @@ export default function App() {
                   priority
                   unoptimized
                 />
-                <h1 className="storm-font text-3xl lg:text-4xl text-white italic hidden lg:block tracking-tight">
+                <h1 className="storm-font text-4xl text-white italic tracking-tight">
                   CYCLOPEDIA
                 </h1>
               </div>
+              <div className="nav-buttons shrink-0">
+                <button
+                  type="button"
+                  className={`font-bold nav-button${!charts ? ' nav-button--selected' : ''}`}
+                  onClick={() => setCharts(false)}
+                  aria-pressed={!charts}
+                >
+                  Tracking Maps
+                </button>
+                <button
+                  type="button"
+                  className={`font-bold nav-button${charts ? ' nav-button--selected' : ''}`}
+                  onClick={() => setCharts(true)}
+                  aria-pressed={charts}
+                >
+                  Intensity Charts
+                </button>
+              </div>
             </nav>
             <div className="desktop-view">
-              <div className="hidden lg:block">
-                <Interface/>
-              </div>
-              {graphs ? <Graphs/> : <div className="w-full">
-                {globe ? <Globe/> : <Map/>}
-                <div className="map-controls-container">
-                  <MapLegend />
-                  <Tooltip
-                    title={globe ? "Map" : "Globe"}
-                    placement="bottom"
-                    arrow
-                  >
-                    <div
-                      className="map-button cursor-pointer"
-                      onClick={toggleGlobe}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          toggleGlobe();
-                        }
-                      }}
-                    >
-                      <IconButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleGlobe();
-                        }}
-                      >
-                        {!globe ? <PublicIcon className="!text-2xl text-white" /> : <MapIcon className="!text-2xl text-white" />}
-                      </IconButton>
-                      </div>
-                    </Tooltip>
-                </div>
-              </div>}
+              <Interface />
+              {!charts ? <Tracker /> : <Charts />}
+            </div>
+            <div className="mobile-view">
+              <Tracker />
+              <Interface mobileSheet />
             </div>
           </>
         ) : (

@@ -52,11 +52,11 @@ const aceThresholdLinePlugin: Plugin<'line'> = {
   },
 };
 
-type StormGraphProps = {
+type StormChartProps = {
   hiddenByDatasetIndex?: Record<number, boolean>;
 };
 
-const StormGraph = ({ hiddenByDatasetIndex = {} }: StormGraphProps) => {
+const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
   const { storm, dates } = useAppContext();
   const [wind, setWind] = useState<number[]>([]);
   const [pressure, setPressure] = useState<(number | null)[]>([]);
@@ -201,4 +201,4 @@ const StormGraph = ({ hiddenByDatasetIndex = {} }: StormGraphProps) => {
   );
 };
 
-export default StormGraph;
+export default StormChart;
