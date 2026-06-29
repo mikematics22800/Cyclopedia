@@ -14,36 +14,32 @@
 /* Modern scrollbars: desktop only (matches Tailwind `lg`). */
 @media (min-width: 1024px) {
   .interface-scroll,
-  .charts-container {
+  .graphs-container {
     scrollbar-width: thin;
     scrollbar-color: rgb(100 116 139) rgb(15 23 42 / 0.35);
   }
 
   .interface-scroll::-webkit-scrollbar,
-  .charts-container::-webkit-scrollbar {
+  .graphs-container::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
 
   .interface-scroll::-webkit-scrollbar-track,
-  .charts-container::-webkit-scrollbar-track {
+  .graphs-container::-webkit-scrollbar-track {
     margin-block: 4px;
     background: rgb(15 23 42 / 0.35);
-    border-radius: 9999px;
   }
 
   .interface-scroll::-webkit-scrollbar-thumb,
-  .charts-container::-webkit-scrollbar-thumb {
+  .graphs-container::-webkit-scrollbar-thumb {
     background: rgb(100 116 139 / 0.85);
-    border-radius: 9999px;
-    border: 2px solid transparent;
     background-clip: padding-box;
   }
 
   .interface-scroll::-webkit-scrollbar-thumb:hover,
-  .charts-container::-webkit-scrollbar-thumb:hover {
+  .graphs-container::-webkit-scrollbar-thumb:hover {
     background: rgb(148 163 184 / 0.9);
-    border: 2px solid transparent;
     background-clip: padding-box;
   }
 }
@@ -53,7 +49,8 @@
 }
 
 .desktop-view {
-  @apply h-[calc(100vh-5rem)] w-full hidden lg:flex;
+  @apply w-full relative;
+  @apply lg:flex lg:h-[calc(100vh-5rem)];
 }
 
 nav {
@@ -64,12 +61,24 @@ nav {
   @apply w-screen h-screen flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950;
 }
 
+.loading-screen--overlay {
+  @apply absolute inset-0 z-10 w-full h-full;
+}
+
 .loading-screen img {
   @apply lg:w-60 w-40;
 }
 
 .interface-scroll {
-  @apply w-full lg:w-[36rem] lg:min-h-0 lg:overflow-y-auto lg:shrink-0;
+  @apply z-20 flex w-full justify-center rounded-t-3xl absolute top-[96%] bg-fixed bg-center bg-cover;
+  background-image: url('/hurricane.jpg');
+  @apply lg:relative lg:top-auto lg:z-auto lg:w-[36rem] lg:min-h-0 lg:overflow-y-auto lg:shrink-0 lg:rounded-none;
+}
+
+@media (min-width: 1024px) {
+  .interface-scroll {
+    background-image: none;
+  }
 }
 
 .interface {
@@ -77,7 +86,7 @@ nav {
 }
 
 .button {
-  @apply h-10 font-bold rounded-xl text-white px-5 flex items-center justify-center gap-2 border border-white/15 bg-red-600 transition-[border-color] duration-200 hover:border-white/55;
+  @apply h-10 font-bold rounded-xl text-white px-5 flex items-center justify-center gap-2 border border-white bg-red-600 transition-[border-color] duration-200 ;
 }
 
 .button h1,
@@ -85,7 +94,93 @@ nav {
   @apply text-sm lg:text-base ;
 }
 
-/* MUI archive selectors: primary styling lives in `Interface.tsx` (sx). */
+.selector {
+  background-color: #000;
+  border: 1px solid #fff;
+  box-shadow: none;
+  transition: border-color 0.25s ease;
+  border-radius: 12px !important;
+}
+
+.selector .MuiOutlinedInput-notchedOutline,
+.selector fieldset {
+  border: none !important;
+}
+
+.selector.Mui-focused,
+.selector .MuiOutlinedInput-root.Mui-focused {
+  outline: none;
+  box-shadow: none;
+}
+
+.selector .MuiSelect-select:focus,
+.selector .MuiSelect-select:focus-visible {
+  outline: none;
+  background-color: transparent;
+}
+
+
+.selector .MuiSelect-icon {
+  color: white;
+  right: 8px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.selector-menu-paper {
+  background-color: #000 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.selector-menu-paper .MuiList-root {
+  background-color: #000;
+  padding: 0;
+}
+
+.selector-menu-paper .MuiMenuItem-root {
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background-color: #000;
+  border: none;
+}
+
+.selector-menu-paper .MuiMenuItem-root:hover,
+.selector-menu-paper .MuiMenuItem-root.Mui-focusVisible,
+.selector-menu-paper .MuiMenuItem-root.Mui-selected,
+.selector-menu-paper .MuiMenuItem-root.Mui-selected:hover {
+  background-color: #000;
+  color: #fff;
+  outline: none;
+  box-shadow: none;
+}
+
+.selector-menu-paper .MuiMenuItem-root:focus,
+.selector-menu-paper .MuiMenuItem-root:focus-visible {
+  outline: none;
+}
+
+.selector-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.25;
+}
+
+.selector-trigger__label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgb(148 163 184 / 0.95);
+}
+
+.selector-trigger__value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgb(248 250 252);
+}
 
 .data-table {
   @apply flex flex-col font-bold text-white text-center w-full max-w-80 gap-0.5;
@@ -108,12 +203,12 @@ nav {
   @apply flex flex-col w-full items-center;
 }
 
-.charts-container {
-  @apply w-full flex flex-col overflow-auto p-0 lg:p-8;
+.graphs-container {
+  @apply w-full flex-col overflow-auto p-0 lg:p-8 hidden lg:flex lg:flex-1 lg:min-h-0 lg:min-w-0;
 }
 
-.charts {
-  @apply flex flex-col gap-4;
+.graphs {
+  @apply flex flex-col gap-4 rounded-3xl bg-slate-800/80 backdrop-blur-md border border-white w-full p-4 lg:p-8;
 }
 
 .selectors {
@@ -124,22 +219,10 @@ nav {
   @apply will-change-transform origin-center;
 }
 
-.archive-panel-shell {
-  @apply sm:rounded-3xl rounded-t-3xl bg-slate-800/80 backdrop-blur-md border border-white/10;
+.metrics {
+  @apply sm:rounded-3xl rounded-t-3xl bg-slate-800/80 backdrop-blur-md border border-white w-full flex flex-col items-center gap-2 lg:gap-4 p-4 lg:p-8 ;
 }
 
-.chart {
-  @apply border border-white/10 p-4 rounded-2xl w-full h-full min-h-0 bg-slate-800/80 backdrop-blur-md;
-}
-
-.chart-wrapper {
-  @apply w-full;
-}
-
-/* Wraps multiple chart blocks + shared controls (taller than single h-96). */
-.chart-wrapper.chart-wrapper--stacked {
-  @apply h-auto;
-}
 
 @keyframes spin {
   to {
@@ -149,15 +232,6 @@ nav {
 
 .spin {
   animation: spin 2s linear infinite;
-}
-
-.mobile-interface {
-  @apply lg:hidden z-20 flex w-full justify-center rounded-t-3xl absolute top-[96%] bg-fixed bg-center bg-cover;
-  background-image: url('/hurricane.jpg'); 
-}
-
-.mobile-map {
-  @apply lg:hidden w-full h-screen fixed top-0 -z-10;
 }
 
 .legend-container {
@@ -178,6 +252,11 @@ nav {
 
 .map {
   @apply w-full h-full relative;
+}
+
+.desktop-view > .map {
+  @apply h-screen fixed top-0 -z-10;
+  @apply lg:relative lg:z-auto lg:h-full lg:flex-1 lg:min-w-0;
 }
 
 ul li h2 {
@@ -217,7 +296,11 @@ ul li h2 {
 }
 
 .map-controls-container {
-  @apply absolute top-4 right-4 z-[9999] flex flex-row gap-4 items-start;
+  @apply absolute top-4 right-4 z-[9999] hidden flex-row gap-2 sm:gap-4 items-start lg:flex;
+}
+
+.cesium-credit-hidden {
+  display: none !important;
 }
 
 .live-storm-card {
@@ -272,5 +355,81 @@ ul li h2 {
 }
 
 .popup-panel {
-  @apply inline-flex flex-col gap-1 font-semibold text-white rounded-xl p-4 bg-slate-950/75 backdrop-blur-md;
+  @apply inline-flex flex-col gap-1 font-semibold text-white rounded-xl p-4 bg-black border border-white;
+}
+
+.popup-panel h1 {
+  @apply text-sm mt-2 text-white border-b border-white mb-1 pb-1;
+}
+
+.popup-panel ul {
+  @apply list-none p-0 m-0;
+}
+
+.globe-popup {
+  @apply absolute z-[1000];
+  transform: translate(-50%, calc(-100% - 12px));
+}
+
+.globe-popup-close {
+  @apply absolute top-1 right-1 z-[1] border-0 bg-transparent text-base font-bold leading-none text-white/90 cursor-pointer p-0 w-5 h-5;
+}
+
+.globe-popup-close:hover {
+  @apply text-white;
+}
+
+.map-button {
+  @apply inline-flex flex-col gap-2 font-semibold text-white rounded-xl w-max max-w-[min(18rem,calc(100vw-2rem))] p-3 bg-slate-950/75 backdrop-blur-md border-white border transition-all duration-300 ease-smooth;
+}
+
+.map-button .MuiIconButton-root {
+  padding: 0;
+}
+
+.map-button .MuiIconButton-root.map-legend-close {
+  color: rgb(255 255 255 / 0.9);
+}
+
+.map-button .MuiIconButton-root.map-legend-close:hover {
+  background-color: rgb(255 255 255 / 0.1);
+}
+
+.map-legend-form-group.MuiFormGroup-root {
+  margin: 0;
+  padding: 0;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.map-legend-label.MuiFormControlLabel-root {
+  margin-right: 0;
+  margin-left: 0;
+  padding-left: 0;
+  width: fit-content;
+}
+
+.map-legend-label .MuiFormControlLabel-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(255 255 255 / 0.92);
+}
+
+.map-legend-label.Mui-disabled .MuiFormControlLabel-label {
+  color: rgb(255 255 255 / 0.92);
+}
+
+.wind-field-swatch--34kt {
+  background-color: rgb(255 255 0 / 0.45);
+  border-color: rgb(255 255 0 / 0.95);
+}
+
+.wind-field-swatch--50kt {
+  background-color: rgb(255 165 0 / 0.45);
+  border-color: rgb(255 165 0 / 0.95);
+}
+
+.wind-field-swatch--64kt {
+  background-color: rgb(255 0 0 / 0.45);
+  border-color: rgb(255 0 0 / 0.95);
 }

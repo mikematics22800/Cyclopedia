@@ -18,8 +18,10 @@ interface AppContextType {
   names: string[];
   maxWinds: number[];
   seasonACE: number[];
-  map: boolean;
-  toggleCharts: () => void;
+  graphs: boolean;
+  toggleGraphs: () => void;
+  globe: boolean;
+  setGlobe: (globe: boolean) => void;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);

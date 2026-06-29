@@ -2,6 +2,20 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        http: false,
+        https: false,
+        zlib: false,
+        url: false,
+      };
+    }
+
+    return config;
+  },
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,

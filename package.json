@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "postinstall": "node scripts/copy-cesium.mjs",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },
@@ -13,6 +14,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
+    "cesium": "^1.142.0",
     "chart.js": "^4.5.1",
     "gsap": "^3.14.2",
     "leaflet": "^1.9.4",

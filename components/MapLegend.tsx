@@ -12,11 +12,6 @@ import { Close, FormatListBulleted } from '@mui/icons-material';
 import gsap from 'gsap';
 import { useAppContext } from '../contexts/AppContext';
 
-const panelClass =
-  'inline-flex flex-col gap-2 font-semibold text-white rounded-xl w-max max-w-[min(18rem,calc(100vw-2rem))] p-3 ' +
-  'bg-slate-950/75 backdrop-blur-md border border-white/15 ' +
-  'transition-all duration-300 ease-smooth hover:border-white/25';
-
 const statusItems = [
   { colorClass: 'bg-[dodgerblue]', label: 'Tropical Depression' },
   { colorClass: 'bg-[lime]', label: 'Tropical Storm' },
@@ -34,21 +29,9 @@ const statusItems = [
 ] as const;
 
 const windFieldItems = [
-  {
-    label: '≥34kt',
-    fillColor: 'rgba(255, 255, 0, 0.45)',
-    outlineColor: 'rgba(255, 255, 0, 0.95)',
-  },
-  {
-    label: '≥50kt',
-    fillColor: 'rgba(255, 165, 0, 0.45)',
-    outlineColor: 'rgba(255, 165, 0, 0.95)',
-  },
-  {
-    label: '≥64kt',
-    fillColor: 'rgba(255, 0, 0, 0.45)',
-    outlineColor: 'rgba(255, 0, 0, 0.95)',
-  },
+  { label: '≥34kt', swatchClass: 'wind-field-swatch--34kt' },
+  { label: '≥50kt', swatchClass: 'wind-field-swatch--50kt' },
+  { label: '≥64kt', swatchClass: 'wind-field-swatch--64kt' },
 ] as const;
 
 
@@ -80,32 +63,6 @@ const MapLegend = () => {
     return () => ctx.revert();
   }, [open]);
 
-  const iconButtonSx = {
-    padding: 0,
-  } as const;
-
-  const formGroupSx = {
-    margin: 0,
-    padding: 0,
-    paddingLeft: 0,
-    marginLeft: 0,
-  } as const;
-
-  const labelSx = {
-    marginRight: 0,
-    marginLeft: 0,
-    paddingLeft: 0,
-    width: 'fit-content',
-    '& .MuiFormControlLabel-label': {
-      fontSize: '0.875rem',
-      fontWeight: 600,
-      color: 'rgba(255,255,255,0.92)',
-    },
-    '&.Mui-disabled .MuiFormControlLabel-label': {
-      color: 'rgba(255,255,255,0.92)',
-    },
-  } as const;
-
   if (!open) {
     return (
       <Tooltip
@@ -114,7 +71,7 @@ const MapLegend = () => {
         arrow
       >
         <div
-          className={`${panelClass} cursor-pointer`}
+          className="map-button cursor-pointer"
           onClick={() => setOpen(true)}
           role="button"
           tabIndex={0}
@@ -130,7 +87,6 @@ const MapLegend = () => {
               e.stopPropagation();
               setOpen(true);
             }}
-            sx={iconButtonSx}
           >
             <FormatListBulleted className="!text-2xl text-white" />
           </IconButton>
@@ -142,7 +98,7 @@ const MapLegend = () => {
   return (
     <div
       ref={openPanelRef}
-      className={`${panelClass} gap-1`}
+      className="map-button gap-1"
     >
       <div className="settings-row flex justify-between items-center gap-2 border-b border-white pb-2">
         <span className="text-sm font-semibold  text-white">
@@ -150,11 +106,8 @@ const MapLegend = () => {
         </span>
         <IconButton
           size="small"
+          className="map-legend-close"
           onClick={() => setOpen(false)}
-          sx={{
-            color: 'rgba(255,255,255,0.9)',
-            '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' },
-          }}
         >
           <Close className="!text-xl" />
         </IconButton>
@@ -173,11 +126,11 @@ const MapLegend = () => {
           </div>
         ))}
       </div>
-      {year >= 2004 && <FormGroup className="gap-0.5 border-t border-white py-2 w-full text-center" sx={formGroupSx}>
+      {year >= 2004 && <FormGroup className="map-legend-form-group gap-0.5 border-t border-white py-2 w-full text-center">
         <div className="settings-row rounded-lg py-0.5 pr-1 pl-0 ">
           <span className="inline-block w-fit max-w-full">
             <FormControlLabel
-              sx={labelSx}
+              className="map-legend-label"
               disabled={!windFieldAvailable}
               control={
                 <Checkbox
@@ -199,11 +152,7 @@ const MapLegend = () => {
             className="settings-row flex w-full items-center gap-2 rounded-md px-1 py-0.5"
           >
             <span
-              className="h-3 flex-1 rounded-sm border"
-              style={{
-                backgroundColor: item.fillColor,
-                borderColor: item.outlineColor,
-              }}
+              className={`h-3 flex-1 rounded-sm border ${item.swatchClass}`}
             />
             <h1 className="min-w-[3.5rem] text-right text-sm">{item.label}</h1>
           </div>

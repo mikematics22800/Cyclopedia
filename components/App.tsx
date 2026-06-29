@@ -7,9 +7,15 @@ import { getArchive } from "../libs/hurdat";
 import { calculateSeasonACE } from "../libs/calculateACE";
 import { AppProvider } from "../contexts/AppContext";
 import Interface from "../components/Interface";
-const Map = dynamic(() => import("../components/Map"), { ssr: false });
-import ArchiveCharts from "./Charts";
+const Map = dynamic(() => import("./Map"), { ssr: false });
+import Globe from "../components/Globe";
 import LoadingScreen from "../components/LoadingScreen";
+import MapLegend from "./MapLegend";
+import PublicIcon from '@mui/icons-material/Public';
+import MapIcon from '@mui/icons-material/Map';
+import { IconButton, Tooltip } from "@mui/material";
+import Graphs from "./Graphs";
+
 export default function App() {
   const [basin, setBasin] = useState<string>('atl');
   const [year, setYear] = useState<number>(2025);
@@ -20,8 +26,11 @@ export default function App() {
   const [windField, setWindField] = useState<boolean>(year >= 2004);
   const [names, setNames] = useState<string[]>([]);
   const [seasonACE, setSeasonACE] = useState<number[]>([]);
-  const [map, setMap] = useState<boolean>(true);
+  const [graphs, setGraphs] = useState<boolean>(false);
   const [maxWinds, setMaxWinds] = useState<number[]>([]);
+  const [globe, setGlobe] = useState(false)
+  
+
   useEffect(() => {
     if (year < 1949 && basin === 'pac') setYear(1949);
     if (typeof window !== 'undefined') {
@@ -98,8 +107,12 @@ export default function App() {
     }
   }, [season, year]);
 
-  const toggleCharts = useCallback(() => {
-    setMap(prev => !prev);
+  const toggleGraphs = useCallback(() => {
+    setGraphs(prev => !prev);
+  }, []);
+
+  const toggleGlobe = useCallback(() => {
+    setGlobe(prev => !prev);
   }, []);
 
   const value = useMemo(() => ({
@@ -117,8 +130,10 @@ export default function App() {
     names,
     maxWinds,
     seasonACE,
-    map,
-    toggleCharts,
+    graphs,
+    toggleGraphs,
+    globe,
+    setGlobe
   }), [
     basin,
     setBasin,
@@ -134,8 +149,10 @@ export default function App() {
     names,
     maxWinds,
     seasonACE,
-    map,
-    toggleCharts,
+    graphs,
+    toggleGraphs,
+    globe,
+    setGlobe
   ]);
 
   return (
@@ -159,14 +176,42 @@ export default function App() {
               </div>
             </nav>
             <div className="desktop-view">
-              <Interface/>
-              {map ? <Map/> : <ArchiveCharts />}
-            </div>
-            <div className="mobile-map">
-              <Map/>
-            </div>  
-            <div className="mobile-interface">
-              <Interface/>
+              <div className="hidden lg:block">
+                <Interface/>
+              </div>
+              {graphs ? <Graphs/> : <div className="w-full">
+                {globe ? <Globe/> : <Map/>}
+                <div className="map-controls-container">
+                  <MapLegend />
+                  <Tooltip
+                    title={globe ? "Map" : "Globe"}
+                    placement="bottom"
+                    arrow
+                  >
+                    <div
+                      className="map-button cursor-pointer"
+                      onClick={toggleGlobe}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleGlobe();
+                        }
+                      }}
+                    >
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleGlobe();
+                        }}
+                      >
+                        {!globe ? <PublicIcon className="!text-2xl text-white" /> : <MapIcon className="!text-2xl text-white" />}
+                      </IconButton>
+                      </div>
+                    </Tooltip>
+                </div>
+              </div>}
             </div>
           </>
         ) : (

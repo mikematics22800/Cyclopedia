@@ -4,7 +4,12 @@ import { useRef, useLayoutEffect } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 
-const LoadingScreen = () => {
+type LoadingScreenProps = {
+  overlay?: boolean;
+  className?: string;
+};
+
+const LoadingScreen = ({ overlay = false, className = '' }: LoadingScreenProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -30,8 +35,16 @@ const LoadingScreen = () => {
     return () => ctx.revert();
   }, []);
 
+  const rootClassName = [
+    'loading-screen',
+    overlay && 'loading-screen--overlay',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div ref={rootRef} className="loading-screen">
+    <div ref={rootRef} className={rootClassName}>
       <div className="loading-logo-wrap">
         <div className="loading-logo-spin spin">
           <Image

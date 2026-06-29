@@ -1,0 +1,41 @@
+/* Cyclopedia storm popup styles for Cesium InfoBox iframe content */
+body {
+  background: transparent;
+  overflow: hidden;
+}
+
+.cesium-infoBox-description {
+  padding: 0;
+  margin: 0;
+  color: rgb(255 255 255);
+}
+
+.popup-panel {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-weight: 600;
+  color: rgb(255 255 255);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: rgb(0 0 0);
+  border: 1px solid rgb(255 255 255);
+}
+
+.popup-panel h1 {
+  font-size: 1rem;
+  margin: 0.5rem 0 0.25rem;
+  color: rgb(255 255 255);
+  border-bottom: 1px solid rgb(255 255 255);
+  padding-bottom: 0.25rem;
+}
+
+.popup-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.popup-panel li {
+  font-size: 0.75rem;
+}

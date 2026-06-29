@@ -60,7 +60,7 @@ const StormImageLoader = () => {
 };
 
 const StormMetrics = () => {
-  const { year, storm, stormId, basin, map, toggleCharts } = useAppContext();
+  const { year, storm, stormId, basin, graphs, toggleGraphs } = useAppContext();
   const [ACE, setACE] = useState<number>(0);
   const [stormName, setStormName] = useState<string>('');
   const [textColor, setTextColor] = useState<string>('');
@@ -345,13 +345,13 @@ const StormMetrics = () => {
               <h2 className='value cost-value'>${cost}</h2>
             </li>
           </ul>
-          <div className='hidden w-full max-w-[min(100%,24rem)] shrink-0 lg:flex lg:justify-center'>
+          <div className='hidden w-full max-w-[min(100%,24rem)] shrink-0 lg:flex lg:justify-center mt-5'>
             <button
               type='button'
               className='button w-full justify-center shrink-0'
-              onClick={toggleCharts}
+              onClick={toggleGraphs}
             >
-              <span>{map ? 'Charts' : 'Map'}</span>
+              <span>{graphs ? 'Tracking Charts' : 'Intensity Graphs'}</span>
             </button>
           </div>
         </div>

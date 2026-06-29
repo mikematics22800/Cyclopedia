@@ -3,38 +3,22 @@
 import { useAppContext } from '../contexts/AppContext';
 import { Polygon, Popup } from 'react-leaflet';
 import type { LatLngExpression } from 'leaflet';
+import { calculateWindRadii } from '../libs/mapUtils';
 
 const WindField = () => {
   const { storm, year } = useAppContext();
 
-  const nmToDeg = (nm: number) => nm / 60;
-
-  const calculatePoints = (lat: number, lng: number, points: [number, number][], radii?: { ne: number; se: number; sw: number; nw: number }) => {
-    let { ne = 0, se = 0, sw = 0, nw = 0 } = radii || {};
-    let radius: number;
-    for (let angle = 0; angle < 360; angle += 2) {
-      if (angle >= 0 && angle < 90) radius = ne;
-      else if (angle >= 90 && angle < 180) radius = se;
-      else if (angle >= 180 && angle < 270) radius = sw;
-      else radius = nw;
-      const degs = nmToDeg(radius);
-      const pointLat = lat + degs * Math.cos((angle * Math.PI) / 180);
-      const pointLng = lng + degs * Math.sin((angle * Math.PI) / 180);
-      points.push([pointLat, pointLng]);
-    }
-  };
-
   if (year < 2004 || !storm) return null;
 
   const windField34kt = storm.data.map((point, i) => {
-    const { lat, lng } = point;
-    const points34kt: [number, number][] = [];  
-    calculatePoints(lat, lng, points34kt, point['34kt_wind_nm']);
+    const points34kt = calculateWindRadii(point.lat, point.lng, point['34kt_wind_nm']);
     return (
       <div key={i}>
         <Polygon positions={points34kt as LatLngExpression[]} color="yellow" weight={2}>
-          <Popup className="font-bold">
-            <h1 className="text-md">{'Wind: ≥34 kt'}</h1>
+          <Popup className="storm-popup">
+            <div className="popup-panel">
+              <h1>Wind: ≥34 kt</h1>
+            </div>
           </Popup>
         </Polygon>
       </div>
@@ -42,14 +26,14 @@ const WindField = () => {
   });
 
   const windField50kt = storm.data.map((point, i) => {
-    const { lat, lng } = point;
-    const points50kt: [number, number][] = [];  
-    calculatePoints(lat, lng, points50kt, point['50kt_wind_nm']);
+    const points50kt = calculateWindRadii(point.lat, point.lng, point['50kt_wind_nm']);
     return (
       <div key={i}>
         <Polygon positions={points50kt as LatLngExpression[]} color="orange" weight={2}>
-          <Popup className="font-bold">
-            <h1 className="text-md">{'Wind: ≥50 kt'}</h1>
+          <Popup className="storm-popup">
+            <div className="popup-panel">
+              <h1>Wind: ≥50 kt</h1>
+            </div>
           </Popup>
         </Polygon>
       </div>
@@ -57,14 +41,14 @@ const WindField = () => {
   });
 
   const windField64kt = storm.data.map((point, i) => {
-    const { lat, lng } = point;
-    const points64kt: [number, number][] = [];  
-    calculatePoints(lat, lng, points64kt, point['64kt_wind_nm']);
+    const points64kt = calculateWindRadii(point.lat, point.lng, point['64kt_wind_nm']);
     return (
       <div key={i}>
         <Polygon positions={points64kt as LatLngExpression[]} color="red" weight={2}>
-          <Popup className="font-bold">
-            <h1 className="text-md">{'Wind: ≥64 kt'}</h1>
+          <Popup className="storm-popup">
+            <div className="popup-panel">
+              <h1>Wind: ≥64 kt</h1>
+            </div>
           </Popup>
         </Polygon>
       </div>
