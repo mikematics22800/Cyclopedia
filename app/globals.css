@@ -118,7 +118,7 @@ nav {
 }
 
 .nav-button--selected {
-  @apply text-[aqua];
+  @apply bg-white text-red-600;
 }
 
 .selector {

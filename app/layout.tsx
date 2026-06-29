@@ -24,13 +24,8 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Lock screen orientation to portrait
               if ('screen' in window && 'orientation' in screen && screen.orientation && 'lock' in screen.orientation) {
-                try {
-                  screen.orientation.lock('portrait');
-                } catch (e) {
-                  console.log('Orientation lock not supported or failed');
-                }
+                screen.orientation.lock('portrait').catch(function () {});
               }
             `,
           }}

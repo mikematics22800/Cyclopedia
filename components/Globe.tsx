@@ -14,6 +14,7 @@ import {
 } from '../libs/mapUtils';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import LoadingScreen from './LoadingScreen';
+import { loadCesium } from '../libs/loadCesium';
 
 type CesiumModule = typeof import('cesium');
 type CesiumEntity = import('cesium').Entity;
@@ -21,12 +22,6 @@ type CesiumEntity = import('cesium').Entity;
 type GlobePopup = {
   content: string;
 };
-
-declare global {
-  interface Window {
-    CESIUM_BASE_URL?: string;
-  }
-}
 
 /**
  * Approximate camera range (m) for a Leaflet zoom level.
@@ -128,8 +123,7 @@ const Globe = () => {
     let clickHandler: import('cesium').ScreenSpaceEventHandler | null = null;
 
     const initViewer = async () => {
-      window.CESIUM_BASE_URL = '/cesium/';
-      const Cesium = await import('cesium');
+      const Cesium = await loadCesium();
       if (cancelled || !containerRef.current) return;
 
       cesiumRef.current = Cesium;

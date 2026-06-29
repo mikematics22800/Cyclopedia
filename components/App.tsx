@@ -171,7 +171,7 @@ export default function App() {
                   onClick={() => setCharts(false)}
                   aria-pressed={!charts}
                 >
-                  Tracking Maps
+                  Storm Tracks
                 </button>
                 <button
                   type="button"

@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import Globe from "./Globe";
 import MapLegend from "./MapLegend";
 import PublicIcon from '@mui/icons-material/Public';
 import MapIcon from '@mui/icons-material/Map';
@@ -9,8 +8,9 @@ import { IconButton, Tooltip } from "@mui/material";
 import { useAppContext } from '../contexts/AppContext';
 
 const Map = dynamic(() => import("./Map"), { ssr: false });
+const Globe = dynamic(() => import("./Globe"), { ssr: false });
 
-const Charts = () => {
+const Tracker = () => {
   const { globe, setGlobe } = useAppContext();
 
   const toggleGlobe = () => setGlobe(!globe);
@@ -52,4 +52,4 @@ const Charts = () => {
   );
 };
 
-export default Charts;
+export default Tracker;

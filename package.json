@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "node scripts/copy-cesium.mjs",
     "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "build": "node scripts/copy-cesium.mjs && next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },
