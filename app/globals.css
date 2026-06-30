@@ -52,7 +52,7 @@
 }
 
 .app {
-  @apply w-full min-h-[100vh] bg-cover bg-center bg-fixed overflow-hidden;
+  @apply w-screen min-h-[100vh] overflow-hidden;
 }
 
 .desktop-view {
@@ -82,8 +82,11 @@ nav {
 }
 
 .interface-panel {
-  @apply w-full h-full min-h-0 bg-fixed bg-center bg-cover;
+  @apply w-full h-full min-h-0;
   background-image: url('/hurricane.jpg');
+  background-size: 100vw auto;
+  background-repeat: repeat-y;
+  background-position: top center;
 }
 
 @media (min-width: 1024px) {
@@ -366,6 +369,9 @@ ul li h2 {
 
 .app-background {
   background-image: url('/hurricane.jpg');
+  background-size: 100vw auto;
+  background-repeat: repeat-y;
+  background-position: top center;
 }
 
 .storm-popup .leaflet-popup-content-wrapper {
