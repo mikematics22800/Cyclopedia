@@ -1,6 +1,6 @@
 # Cyclopedia
 
-An interactive web app for exploring historical Atlantic and eastern Pacific tropical cyclone seasons. Browse storm tracks on a 2D map or 3D globe, inspect season and storm metrics, and visualize intensity with Chart.js—all backed by a local archive of structured storm data from 1850 through 2025.
+An interactive web app for exploring historical Atlantic and eastern Pacific tropical cyclone seasons. Browse storm tracks on a 2D map or 3D globe, inspect season and storm metrics, and visualize intensity with Chart.js—all backed by a local archive of structured storm data from 1851 through present day.
 
 ![Cyclopedia](public/cyclone.png)
 
