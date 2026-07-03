@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "node scripts/copy-cesium.mjs",
+    "postinstall": "node scripts/copy-cesium.mjs && node scripts/copy-archive.mjs",
     "dev": "next dev --webpack",
-    "build": "node scripts/copy-cesium.mjs && next build --webpack",
+    "build": "node scripts/copy-cesium.mjs && node scripts/copy-archive.mjs && next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },

@@ -2,11 +2,13 @@ import { openDB, type IDBPDatabase } from 'idb';
 import {
   BASINS,
   type BasinId,
+  getArchiveFilePath,
   getAvailableBasinsForYear,
   isBasinYearAvailable,
   isGlobalYearAvailable,
   resolveBasinId,
 } from './basins';
+import { normalizeArchiveData } from './normalizeArchive';
 
 interface FetchOptions {
   method: string;
@@ -214,11 +216,11 @@ export const getYearArchiveCached = async (year: number): Promise<YearArchives> 
     if (cached) return cached;
 
     const data = await getYearArchive(year);
-    const archives = data ?? ({} as YearArchives);
+    if (!data) return {} as YearArchives;
 
-    await writeYearArchivesToCache(year, archives);
+    await writeYearArchivesToCache(year, data);
 
-    return archives;
+    return data;
   })();
 
   inflight.set(inflightKey, promise);
@@ -250,14 +252,16 @@ export const getAllBasinSeasons = (
 export const getArchive = async (basin: string, year: number): Promise<Storm[] | undefined> => {
   if (!isBasinYearAvailable(basin, year)) return [];
 
+  const relativePath = getArchiveFilePath(basin, year);
+  if (!relativePath) return [];
+
   try {
-    const response = await fetch(`/api/archive/${basin}/${year}`, options);
+    const response = await fetch(`/${relativePath}`, options);
     if (response.status === 404) return [];
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data: Storm[] = await response.json();
-    return data;
+    return normalizeArchiveData(await response.json());
   } catch (err) {
     console.error('Server error', err);
   }

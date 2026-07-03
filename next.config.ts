@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    '/api/archive/[basin]/[year]': ['./archive/**/*'],
+  },
   /* config options here */
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -68,6 +71,16 @@ const nextConfig: NextConfig = {
           {
             key: "Service-Worker-Allowed",
             value: "/",
+          },
+        ],
+      },
+      {
+        // Archive JSON caching (served from public/archive at build time)
+        source: "/archive/:path*.json",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
