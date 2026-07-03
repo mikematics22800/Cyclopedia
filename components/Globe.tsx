@@ -18,6 +18,18 @@ import LoadingScreen from './LoadingScreen';
 import { getStormOrigin, getStormYear } from '../libs/hurdat';
 import { loadCesium } from '../libs/loadCesium';
 
+// EllipsoidalOccluder still exists at runtime but was removed from public Cesium types.
+type EllipsoidalOccluder = {
+  isPointVisible: (position: import('cesium').Cartesian3) => boolean;
+};
+
+type CesiumWithOccluder = typeof import('cesium') & {
+  EllipsoidalOccluder: new (
+    ellipsoid: import('cesium').Ellipsoid,
+    cameraPosition: import('cesium').Cartesian3,
+  ) => EllipsoidalOccluder;
+};
+
 type CesiumModule = typeof import('cesium');
 type CesiumEntity = import('cesium').Entity;
 
@@ -71,7 +83,7 @@ const trackAppearance = (
 
 const longestVisibleSegment = (
   positions: import('cesium').Cartesian3[],
-  occluder: import('cesium').EllipsoidalOccluder,
+  occluder: EllipsoidalOccluder,
 ) => {
   let longest: import('cesium').Cartesian3[] = [];
   let current: import('cesium').Cartesian3[] = [];
@@ -98,7 +110,7 @@ const createVisibleTrackPositionsProperty = (
     const viewer = getViewer();
     if (!viewer || viewer.isDestroyed()) return allPositions;
 
-    const occluder = new Cesium.EllipsoidalOccluder(
+    const occluder = new (Cesium as CesiumWithOccluder).EllipsoidalOccluder(
       viewer.scene.globe.ellipsoid,
       viewer.camera.positionWC,
     );
@@ -114,7 +126,7 @@ const createVisiblePointShowProperty = (
     const viewer = getViewer();
     if (!viewer || viewer.isDestroyed()) return true;
 
-    const occluder = new Cesium.EllipsoidalOccluder(
+    const occluder = new (Cesium as CesiumWithOccluder).EllipsoidalOccluder(
       viewer.scene.globe.ellipsoid,
       viewer.camera.positionWC,
     );
@@ -460,11 +472,12 @@ const Globe = () => {
             stormTrackId: id,
           },
           position,
+          // Cesium accepts Property at runtime; ConstructorOptions types show as boolean only.
           show: createVisiblePointShowProperty(
             position,
             () => viewerRef.current,
             Cesium,
-          ),
+          ) as unknown as boolean,
           billboard: {
             image: isLandfall ? strikeIconDataUrl(color) : dotIconDataUrl(color),
             width: isLandfall ? 25 : 10,
