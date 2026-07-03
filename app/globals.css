@@ -84,8 +84,8 @@ nav {
 .interface-panel {
   @apply w-full h-full min-h-0;
   background-image: url('/hurricane.jpg');
-  background-size: 100vw auto;
-  background-repeat: repeat-y;
+  background-size: auto 100vh;
+  background-repeat: no-repeat;
   background-position: top center;
 }
 
@@ -165,6 +165,27 @@ nav {
 .selector-menu-paper .MuiList-root {
   background-color: #000;
   padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(100 116 139) rgb(30 30 30);
+}
+
+.selector-menu-paper .MuiList-root::-webkit-scrollbar {
+  width: 8px;
+}
+
+.selector-menu-paper .MuiList-root::-webkit-scrollbar-track {
+  margin-block: 4px;
+  background: rgb(30 30 30);
+}
+
+.selector-menu-paper .MuiList-root::-webkit-scrollbar-thumb {
+  background: rgb(100 116 139 / 0.85);
+  background-clip: padding-box;
+}
+
+.selector-menu-paper .MuiList-root::-webkit-scrollbar-thumb:hover {
+  background: rgb(148 163 184 / 0.9);
+  background-clip: padding-box;
 }
 
 .selector-menu-paper .MuiMenuItem-root {
@@ -369,8 +390,8 @@ ul li h2 {
 
 .app-background {
   background-image: url('/hurricane.jpg');
-  background-size: 100vw auto;
-  background-repeat: repeat-y;
+  background-size: auto 100vh;
+  background-repeat: no-repeat;
   background-position: top center;
 }
 
@@ -407,6 +428,10 @@ ul li h2 {
 
 .popup-panel h1 {
   @apply text-sm mt-2 text-white border-b border-white mb-1 pb-1;
+}
+
+.popup-panel.wind-popup h1 {
+  @apply mt-0 border-b-0 mb-0 pb-0;
 }
 
 .popup-panel ul {

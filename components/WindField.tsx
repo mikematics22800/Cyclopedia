@@ -1,67 +1,67 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+import { polygon, type Polygon as LeafletPolygon } from 'leaflet';
+import { useMap } from 'react-leaflet';
 import { useAppContext } from '../contexts/AppContext';
-import { Polygon, Popup } from 'react-leaflet';
-import type { LatLngExpression } from 'leaflet';
-import { calculateWindRadii } from '../libs/mapUtils';
+import { buildWindPopupHtml, calculateWindRadii, shiftRegionForMapView } from '../libs/mapUtils';
+import { shiftMap } from '../libs/shiftMap';
+
+type WindLayer = {
+  polygon: LeafletPolygon;
+  raw: [number, number][];
+  anchorLng: number;
+};
+
+const WIND_LAYERS = [
+  { key: '34kt_wind_nm' as const, color: 'yellow', label: '≥ 34 kt' },
+  { key: '50kt_wind_nm' as const, color: 'orange', label: '≥ 50 kt' },
+  { key: '64kt_wind_nm' as const, color: 'red', label: '≥ 64 kt' },
+];
 
 const WindField = () => {
+  const map = useMap();
   const { storm, year } = useAppContext();
+  const layersRef = useRef<WindLayer[]>([]);
 
-  if (year < 2004 || !storm) return null;
+  useEffect(() => {
+    layersRef.current.forEach(({ polygon: shape }) => shape.remove());
+    layersRef.current = [];
+    if (year < 2002 || !storm) return;
 
-  const windField34kt = storm.data.map((point, i) => {
-    const points34kt = calculateWindRadii(point.lat, point.lng, point['34kt_wind_nm']);
-    return (
-      <div key={i}>
-        <Polygon positions={points34kt as LatLngExpression[]} color="yellow" weight={2}>
-          <Popup className="storm-popup">
-            <div className="popup-panel">
-              <h1>Wind: ≥34 kt</h1>
-            </div>
-          </Popup>
-        </Polygon>
-      </div>
-    );
+    storm.data.forEach((point) => {
+      WIND_LAYERS.forEach(({ key, color, label }) => {
+        const radii = point[key];
+        if (!radii) return;
+
+        const raw = calculateWindRadii(point.lat, point.lng, radii);
+        if (raw.length < 3) return;
+
+        const shape = polygon([], { color, weight: 2 });
+        shape.bindPopup(buildWindPopupHtml(label), { className: 'storm-popup' });
+        shape.addTo(map);
+        layersRef.current.push({ polygon: shape, raw, anchorLng: point.lng });
+      });
+    });
+
+    const centerLng = map.getCenter().lng;
+    layersRef.current.forEach(({ polygon: shape, raw, anchorLng }) => {
+      shape.setLatLngs(shiftRegionForMapView(raw, anchorLng, centerLng));
+    });
+
+    return () => {
+      layersRef.current.forEach(({ polygon: shape }) => shape.remove());
+      layersRef.current = [];
+    };
+  }, [storm, year, map]);
+
+  shiftMap(map, (centerLng) => {
+    layersRef.current.forEach(({ polygon: shape, raw, anchorLng }) => {
+      shape.setLatLngs(shiftRegionForMapView(raw, anchorLng, centerLng));
+    });
   });
 
-  const windField50kt = storm.data.map((point, i) => {
-    const points50kt = calculateWindRadii(point.lat, point.lng, point['50kt_wind_nm']);
-    return (
-      <div key={i}>
-        <Polygon positions={points50kt as LatLngExpression[]} color="orange" weight={2}>
-          <Popup className="storm-popup">
-            <div className="popup-panel">
-              <h1>Wind: ≥50 kt</h1>
-            </div>
-          </Popup>
-        </Polygon>
-      </div>
-    );
-  });
-
-  const windField64kt = storm.data.map((point, i) => {
-    const points64kt = calculateWindRadii(point.lat, point.lng, point['64kt_wind_nm']);
-    return (
-      <div key={i}>
-        <Polygon positions={points64kt as LatLngExpression[]} color="red" weight={2}>
-          <Popup className="storm-popup">
-            <div className="popup-panel">
-              <h1>Wind: ≥64 kt</h1>
-            </div>
-          </Popup>
-        </Polygon>
-      </div>
-    );
-  });
-
-  return (
-    <>
-      {windField34kt}
-      {windField50kt}
-      {windField64kt}
-    </>
-  );
+  return null;
 };
 
 export default WindField;

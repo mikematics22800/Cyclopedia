@@ -1,20 +1,21 @@
 'use client';
 
 import { useAppContext } from '../contexts/AppContext';
-import { Marker, Popup, Polyline } from 'react-leaflet';
+import { Marker, Popup } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import {
   dotSvg,
   formatDateTime,
   formatStormFullName,
+  getPopupStormStatus,
   getStormStatus,
   strikeSvg,
 } from '../libs/mapUtils';
 
 const Tracks = () => {
-  const { season, setStormId, stormId } = useAppContext();
+  const { globalSeason, selectStorm } = useAppContext();
 
-  if (!season) return null;
+  if (!globalSeason) return null;
 
   const dot = (color: string) => {
     return divIcon({
@@ -34,20 +35,17 @@ const Tracks = () => {
 
   return (
     <>
-      {season.map((storm) => {
+      {globalSeason.map((storm) => {
         const id = storm.id;
         const name = id.split('_')[1];
-        const positions: [number, number][] = [];
-        
+
         const points = storm.data.map((point, i) => {
           const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc);
-          const { lat, lng } = point;
-          const coords: [number, number] = [lat, lng];
-          positions.push(coords);
+          const coords: [number, number] = [point.lat, point.lng];
           
-          const { status, color } = getStormStatus(point);
+          const { color } = getStormStatus(point);
           const icon = point.record === 'L' ? strike(color) : dot(color);
-          const fullName = formatStormFullName(name, status);
+          const fullName = formatStormFullName(name, getPopupStormStatus(point, id));
 
           return (
             <Marker 
@@ -56,7 +54,7 @@ const Tracks = () => {
               icon={icon}
               eventHandlers={{
                 click: () => {
-                  setStormId(id);
+                  selectStorm(id);
                 }
               }}
             >
@@ -74,24 +72,7 @@ const Tracks = () => {
           );
         });
 
-        const isSelected = id === stormId;
-        return (
-          <div key={id}>
-            <Polyline 
-              key={`polyline-${id}-${isSelected}`}
-              positions={positions} 
-              color={isSelected ? "white" : "gray"}
-              opacity={isSelected ? 1 : .5}
-              weight={isSelected ? 4 : 2}
-              eventHandlers={{
-                click: () => {
-                  setStormId(id);
-                }
-              }}
-            />
-            {points}
-          </div>
-        );
+        return <div key={id}>{points}</div>;
       })}
     </>
   );

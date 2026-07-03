@@ -1,4 +1,13 @@
+import { getBasinFromStormId, type BasinId } from './basins';
 import { StormDataPoint, WindRadii } from './hurdat';
+
+const INTENSE_STORM_LABEL: Record<BasinId, string> = {
+  atl: 'Hurricane',
+  epac: 'Hurricane',
+  wpac: 'Typhoon',
+  ind: 'Cyclone',
+  shem: 'Cyclone',
+};
 
 export const getStormStatus = (point: StormDataPoint) => {
   const wind = point.max_wind_kt;
@@ -35,11 +44,11 @@ export const getStormStatus = (point: StormDataPoint) => {
       color = 'yellow';
     } else if (wind > 82 && wind <= 95) {
       color = 'orange';
-    } else if (wind > 95 && wind <= 110) {
+    } else if (wind > 95 && wind <= 112) {
       color = 'red';
-    } else if (wind > 110 && wind <= 135) {
+    } else if (wind > 112 && wind <= 136) {
       color = 'hotpink';
-    } else if (wind > 135) {
+    } else if (wind >= 137) {
       color = 'pink';
     } else {
       color = 'yellow';
@@ -50,6 +59,18 @@ export const getStormStatus = (point: StormDataPoint) => {
   }
 
   return { status, color };
+};
+
+/** Basin-aware classification label for map/globe popups only. */
+export const getPopupStormStatus = (point: StormDataPoint, stormId: string) => {
+  if (point.status === 'MD') return 'Monsoon Depression';
+
+  const basin = getBasinFromStormId(stormId);
+  if (basin && (point.status === 'HU' || point.status === 'TY')) {
+    return INTENSE_STORM_LABEL[basin];
+  }
+
+  return getStormStatus(point).status;
 };
 
 export const formatDateTime = (date: number, time: number) => {
@@ -144,4 +165,43 @@ export const buildPopupHtml = (
 `;
 
 export const buildWindPopupHtml = (label: string) =>
-  `<div class="popup-panel"><h1>Wind: ${label}</h1></div>`;
+  `<div class="popup-panel wind-popup"><h1>Wind: ${label}</h1></div>`;
+
+export const shiftLngToReference = (lng: number, referenceLng: number): number => {
+  let shifted = lng;
+  while (shifted - referenceLng > 180) shifted -= 360;
+  while (shifted - referenceLng < -180) shifted += 360;
+  return shifted;
+};
+
+export const projectPathForMapView = (
+  points: [number, number][],
+  centerLng: number,
+): [number, number][] => {
+  if (points.length === 0) return [];
+
+  const result: [number, number][] = [
+    [points[0][0], shiftLngToReference(points[0][1], centerLng)],
+  ];
+
+  for (let i = 1; i < points.length; i++) {
+    const [lat, lng] = points[i];
+    let adjustedLng = lng;
+    const prevLng = result[i - 1][1];
+    while (adjustedLng - prevLng > 180) adjustedLng -= 360;
+    while (adjustedLng - prevLng < -180) adjustedLng += 360;
+    result.push([lat, adjustedLng]);
+  }
+
+  return result;
+};
+
+export const shiftRegionForMapView = (
+  points: [number, number][],
+  anchorLng: number,
+  centerLng: number,
+): [number, number][] => {
+  const delta = shiftLngToReference(anchorLng, centerLng) - anchorLng;
+  if (delta === 0) return points;
+  return points.map(([lat, lng]) => [lat, lng + delta]);
+};

@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import {
+  BASINS,
+  BASIN_ALIASES,
+  getArchiveFilePath,
+  resolveBasinId,
+} from '../../../../../libs/basins';
+import { normalizeArchiveData } from '../../../../../libs/normalizeArchive';
+
+const VALID_BASINS = [...Object.keys(BASINS), ...Object.keys(BASIN_ALIASES)];
 
 export async function GET(
   request: NextRequest,
@@ -8,55 +17,45 @@ export async function GET(
 ) {
   try {
     const { basin, year } = await params;
-    
-    // Validate basin parameter
-    if (!['atl', 'pac'].includes(basin)) {
+
+    if (!VALID_BASINS.includes(basin)) {
       return NextResponse.json(
-        { error: 'Invalid basin. Must be "atl" or "pac"' },
+        { error: `Invalid basin. Must be one of: ${Object.keys(BASINS).join(', ')}` },
         { status: 400 }
       );
     }
-    
-    // Validate year parameter
+
+    const basinId = resolveBasinId(basin);
+    if (!basinId) {
+      return NextResponse.json({ error: 'Invalid basin' }, { status: 400 });
+    }
+
     const yearNum = parseInt(year);
-    if (isNaN(yearNum) || yearNum < 1850 || yearNum > 2025) {
+    const { startYear, endYear } = BASINS[basinId];
+    if (isNaN(yearNum) || yearNum < startYear || yearNum > endYear) {
       return NextResponse.json(
-        { error: 'Invalid year. Must be between 1850 and 2025' },
+        { error: `Invalid year. Must be between ${startYear} and ${endYear}` },
         { status: 400 }
       );
     }
-    
-    // Construct file path
-    const filePath = path.join(
-      process.cwd(),
-      'archive',
-      basin,
-      year,
-      `${year}.json`,
-    );
-    
-    // Check if file exists
+
+    const relativePath = getArchiveFilePath(basin, yearNum);
+    if (!relativePath) {
+      return NextResponse.json({ error: 'Invalid basin' }, { status: 400 });
+    }
+
+    const filePath = path.join(process.cwd(), ...relativePath.split('/'));
+
     if (!fs.existsSync(filePath)) {
       return NextResponse.json(
         { error: 'Archive data not found for the specified basin and year' },
         { status: 404 }
       );
     }
-    
-    // Read and parse the JSON file
+
     const fileContent = fs.readFileSync(filePath, 'utf8');
-    const jsonData = JSON.parse(fileContent);
+    const jsonData = normalizeArchiveData(JSON.parse(fileContent));
 
-    if (Array.isArray(jsonData)) {
-      for (const storm of jsonData) {
-        if (!storm || typeof storm !== 'object') continue;
-        delete (storm as { image?: string }).image;
-        const id = (storm as { id?: string }).id;
-        if (typeof id !== 'string') continue;
-      }
-    }
-
-    // Set CORS headers
     const response = NextResponse.json(jsonData);
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');

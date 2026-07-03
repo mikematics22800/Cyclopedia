@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useLayoutEffect, useRef, useId } from 'react';
+import { useMemo, useState, useEffect, useLayoutEffect, useRef, useId } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useAppContext } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
 import { calculateSeasonTotalACE, calculateStormACE } from '../libs/calculateACE';
+import { Storm, StormDataPoint } from '../libs/hurdat';
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 
 /** Vector spinner: crisp at any DPI, gradient arc + soft glow */
@@ -59,40 +60,87 @@ const StormImageLoader = () => {
   );
 };
 
+const formatStormDuration = (data: StormDataPoint[]) => {
+  const startArray = data[0].date.toString().split('');
+  const startYear = startArray.slice(0, 4).join('');
+  const startMonth = parseInt(startArray.slice(4, 6).join(''), 10);
+  const startDay = parseInt(startArray.slice(-2).join(''), 10);
+  const startDate = `${startMonth}/${startDay}/${startYear}`;
+
+  const endArray = data[data.length - 1].date.toString().split('');
+  const endYear = endArray.slice(0, 4).join('');
+  const endMonth = parseInt(endArray.slice(4, 6).join(''), 10);
+  const endDay = parseInt(endArray.slice(-2).join(''), 10);
+  const endDate = `${endMonth}/${endDay}/${endYear}`;
+
+  return `${startDate}-${endDate}`;
+};
+
+const getStormTextColor = (data: StormDataPoint[], maxWind: number) => {
+  const statuses = data.map((point) => point.status);
+  if (statuses.includes('HU')) {
+    if (maxWind <= 82) return 'yellow';
+    if (maxWind <= 95) return 'orange';
+    if (maxWind <= 112) return 'red';
+    if (maxWind <= 136) return 'hotpink';
+    return 'pink';
+  }
+  if (statuses.includes('TS')) return 'lime';
+  if (statuses.includes('SS')) return '#D0F0C0';
+  if (statuses.includes('TD')) return 'dodgerblue';
+  return 'aqua';
+};
+
+const buildStormMetrics = (storm: Storm) => {
+  const data = storm.data;
+  const winds = data.map((point) => point.max_wind_kt);
+  const maxWind = Math.max(...winds);
+  const pressures = data.map((point) =>
+    point.min_pressure_mb && point.min_pressure_mb > 0 ? point.min_pressure_mb : 9999,
+  );
+  const minPressure = Math.min(...pressures);
+  const landfalls = data.filter((point) => point.record === 'L');
+  const inlandWinds = landfalls.map((point) => point.max_wind_kt);
+  const inlandPressures = landfalls.map((point) =>
+    point.min_pressure_mb && point.min_pressure_mb > 0 ? point.min_pressure_mb : 9999,
+  );
+
+  return {
+    stormName: storm.id.split('_')[1],
+    retired: storm.retired,
+    duration: formatStormDuration(data),
+    maxWind: maxWind.toString(),
+    minPressure: minPressure.toString(),
+    landfalls,
+    inlandMaxWind: inlandWinds.length ? Math.max(...inlandWinds).toString() : '',
+    inlandMinPressure: inlandPressures.length ? Math.min(...inlandPressures).toString() : '',
+    cost: ((storm.cost_usd || 0) / 1_000_000).toFixed(1),
+    deadOrMissing: (storm.dead_or_missing || 0).toString(),
+    textColor: getStormTextColor(data, maxWind),
+    ace: calculateStormACE(data),
+  };
+};
+
 const SeasonMetrics = () => {
   const { season, maxWinds, basin, year } = useAppContext();
-
-  const [hurricanes, setHurricanes] = useState<number>(0);
-  const [majorHurricanes, setMajorHurricanes] = useState<number>(0);
-  const [deadOrMissing, setDeadOrMissing] = useState<number>(0);
-  const [cost, setCost] = useState<string>('0');
-  const [landfalls, setlandfalls] = useState<number>(0);
   const revealRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!season) return;
+  const metrics = useMemo(() => {
+    if (!season) return null;
 
-    const landfallCount = season.reduce((acc, storm) => {
-      return (
-        acc + storm.data.filter((point) => point.record === 'L').length
-      );
-    }, 0);
-    setlandfalls(landfallCount);
+    const landfalls = season.reduce(
+      (acc, storm) => acc + storm.data.filter((point) => point.record === 'L').length,
+      0,
+    );
 
-    const deadOrMissing = season.map((storm) => {
-      return storm.dead_or_missing || 0;
-    });
-    setDeadOrMissing(sum(deadOrMissing));
-    const costs = season.map((storm) => {
-      return storm.cost_usd || 0;
-    });
-    const cost = sum(costs);
-    setCost((cost/1000000).toFixed(1));
-    const hurricanes = maxWinds.filter(wind => wind >= 64).length;
-    setHurricanes(hurricanes);
-    const majorHurricanes = maxWinds.filter(wind => wind >= 96).length;
-    setMajorHurricanes(majorHurricanes);
-
+    return {
+      hurricanes: maxWinds.filter((wind) => wind >= 64).length,
+      majorHurricanes: maxWinds.filter((wind) => wind >= 96).length,
+      category5Hurricanes: maxWinds.filter((wind) => wind >= 137).length,
+      deadOrMissing: sum(season.map((storm) => storm.dead_or_missing || 0)),
+      cost: (sum(season.map((storm) => storm.cost_usd || 0)) / 1_000_000).toFixed(1),
+      landfalls,
+    };
   }, [season, maxWinds]);
 
   useLayoutEffect(() => {
@@ -109,27 +157,32 @@ const SeasonMetrics = () => {
       });
     }, panel);
     return () => ctx.revert();
-  }, [basin, year]);
+  }, [basin, year, season]);
 
-  if (!season) return null;
+  if (!season || !metrics) return null;
 
   return (
     <div className='season'>
       <div ref={revealRef} className='w-full flex flex-col items-center'>
-        <ul className='data-table'>  
+        <ul className='data-table'>
           <li className='data-row border-y'>
             <h2 className='label'>Tropical Cyclones</h2>
             <h2 className='value'>{season.length}</h2>
           </li>
-          
+
           <li className='data-row border-b'>
-            <h2 className='label'>Hurricanes</h2>
-            <h2 className='value'>{hurricanes}</h2>
+            <h2 className='label'>Hurricanes or Equivalent (≥ 64 kt)</h2>
+            <h2 className='value'>{metrics.hurricanes}</h2>
           </li>
-          
+
           <li className='data-row border-b'>
-            <h2 className='label'>Major Hurricanes</h2>
-            <h2 className='value'>{majorHurricanes}</h2>
+            <h2 className='label'>Major Hurricanes or Equivalent (≥ 96 kt)</h2>
+            <h2 className='value'>{metrics.majorHurricanes}</h2>
+          </li>
+
+          <li className='data-row border-b'>
+            <h2 className='label'>Category 5 Hurricanes or Equivalent (≥ 137 kt)</h2>
+            <h2 className='value'>{metrics.category5Hurricanes}</h2>
           </li>
           <li className='data-row border-b'>
             <h2 className='label'>Total Accumulated Cyclone Energy</h2>
@@ -137,15 +190,15 @@ const SeasonMetrics = () => {
           </li>
           <li className='data-row border-b'>
             <h2 className='label'>Total Landfalls</h2>
-            <h2 className='value'>{landfalls}</h2>
+            <h2 className='value'>{metrics.landfalls}</h2>
           </li>
           <li className='data-row border-b'>
             <h2 className='label'>Total Dead or Missing</h2>
-            <h2 className='value'>{deadOrMissing}</h2>
+            <h2 className='value'>{metrics.deadOrMissing}</h2>
           </li>
           <li className='data-row border-b'>
             <h2 className='label'>Total Cost (Million USD)</h2>
-            <h2 className='value cost-value'>${cost}</h2>
+            <h2 className='value cost-value'>${metrics.cost}</h2>
           </li>
         </ul>
       </div>
@@ -154,28 +207,22 @@ const SeasonMetrics = () => {
 };
 
 const StormMetrics = () => {
-  const { year, storm, stormId } = useAppContext();
-  const [ACE, setACE] = useState<number>(0);
-  const [stormName, setStormName] = useState<string>('');
-  const [textColor, setTextColor] = useState<string>('');
-  const [retired, setRetired] = useState<boolean>(false);
-  const [duration, setDuration] = useState<string>('');
-  const [maxWind, setMaxWind] = useState<string>('');
-  const [minPressure, setMinPressure] = useState<string>('');
-  const [landfalls, setLandfalls] = useState<any[]>([]);
-  const [inlandMaxWind, setInlandMaxWind] = useState<string>('');
-  const [inlandMinPressure, setInlandMinPressure] = useState<string>('');
-  const [cost, setCost] = useState<string>('');
-  const [deadOrMissing, setDeadOrMissing] = useState<string>('');
-  const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>(
-    'loading',
-  );
-  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const { year, storm, stormId, basin } = useAppContext();
+  const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>('loading');
   const revealRef = useRef<HTMLDivElement>(null);
   const retiredBadgeRef = useRef<HTMLSpanElement>(null);
 
+  const metrics = useMemo(
+    () => (storm ? buildStormMetrics(storm) : null),
+    [storm],
+  );
+
+  useEffect(() => {
+    setImageState('loading');
+  }, [stormId]);
+
   useLayoutEffect(() => {
-    if (!retired) return;
+    if (!metrics?.retired) return;
     const el = retiredBadgeRef.current;
     if (!el) return;
     const ctx = gsap.context(() => {
@@ -186,7 +233,7 @@ const StormMetrics = () => {
       );
     }, el);
     return () => ctx.revert();
-  }, [storm]);
+  }, [metrics?.retired, stormId]);
 
   useLayoutEffect(() => {
     const panel = revealRef.current;
@@ -202,124 +249,12 @@ const StormMetrics = () => {
       });
     }, panel);
     return () => ctx.revert();
-  }, [storm]);
-
-  useEffect(() => {
-    setImageState('loading');
   }, [stormId]);
 
-  useEffect(() => {
-    if (!storm) return;
-
-    setStormName(storm.id.split('_')[1]); 
-    setRetired(storm.retired );
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    const data = storm.data;
-
-    const startArray = data[0].date.toString().split('');
-    const startYear = startArray.slice(0,4).join('');
-    const startMonth = parseInt(startArray.slice(4,6).join(''));
-    const startDay = parseInt(startArray.slice(-2).join(''));
-    const startDate = `${startMonth}/${startDay}/${startYear}`;
-    const endArray = data[data.length - 1].date.toString().split('');    
-    const endYear = endArray.slice(0,4).join('');
-    const endMonth = parseInt(endArray.slice(4,6).join(''));
-    const endDay = parseInt(endArray.slice(-2).join(''));
-    const endDate = `${endMonth}/${endDay}/${endYear}`;
-    const duration = `${startDate}-${endDate}`;
-    setDuration(duration);
-
-    const winds = data.map((point) => {
-      return point.max_wind_kt;
-    });
-    const maxWind = Math.max(...winds);
-    setMaxWind(maxWind.toString());
-
-    const pressures = data.map((point) => {
-      if (point.min_pressure_mb && point.min_pressure_mb > 0) {
-        return point.min_pressure_mb;
-      } else {
-        return 9999;
-      }
-    });
-
-    const minPressure = Math.min(...pressures);
-    setMinPressure(minPressure.toString());
-
-    const landfalls = data.filter(point => point.record === "L");
-    setLandfalls(landfalls);
-
-    const inlandWinds = landfalls.map((point) => {
-      return point.max_wind_kt;
-    });
-    setInlandMaxWind(Math.max(...inlandWinds).toString());
-
-    const inlandPressures = landfalls.map((point) => {
-      if (point.min_pressure_mb && point.min_pressure_mb > 0) {
-        return point.min_pressure_mb;
-      } else {
-        return 9999;
-      }
-    });
-    setInlandMinPressure(Math.min(...inlandPressures).toString());
-
-    const cost = ((storm.cost_usd || 0)/1000000).toFixed(1);
-    setCost(cost);
-
-    const deadOrMissing = storm.dead_or_missing || 0;
-    setDeadOrMissing(deadOrMissing.toString());
-
-    let textColor: string = "aqua";
-    const statuses = data.map((point) => {
-      return point.status;
-    });
-    if (statuses.includes("HU")) {
-      if (maxWind <= 82) {
-        textColor = "yellow";
-      }
-      if (maxWind > 82 && maxWind <= 95) {
-        textColor = "orange";
-      }
-      if (maxWind > 95 && maxWind <= 110) {
-        textColor = "red";
-      }
-      if (maxWind > 110 && maxWind <= 135) {
-        textColor = "hotpink";
-      }
-      if (maxWind > 135) {
-        textColor = "pink";
-      }
-    } else {
-      if (statuses.includes("TS")) {
-        textColor = "lime";
-      } else {
-        if (statuses.includes("SS")) {
-          textColor = "#D0F0C0";
-        } else {
-          if (statuses.includes("TD")) {
-            textColor = "dodgerblue";
-          } else {
-            textColor = "aqua";
-          }
-        }
-      }
-    }
-    setTextColor(textColor);
-
-    setACE(calculateStormACE(data));
-
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [storm, year]);
-
-  if (!storm) return null;
+  if (!storm || !metrics) return null;
 
   const stormImageUrl = `https://cyclopedia-images.s3.us-east-2.amazonaws.com/${stormId}.png`;
+  const tcrLinkEnabled = (basin === 'atl' || basin === 'epac') && year >= 1995;
 
   return (
     <div className='storm mt-5'>
@@ -327,46 +262,47 @@ const StormMetrics = () => {
         ref={revealRef}
         className='flex flex-col gap-5 w-full items-center'
       >
-          <ul className='data-table'>
-            <li data-storm-reveal className='header'>
-              <a 
-                target='_blank' 
-                className={`storm-image max-w-96 retired ${year < 1995 ? '!pointer-events-none' : ''}`}
-                style={
-                  imageState === 'loaded'
-                    ? { backgroundImage: `url(${stormImageUrl})` }
-                    : undefined
-                }
-                href={`https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf`}
-              >
-                <img
-                  key={stormId}
-                  src={stormImageUrl}
-                  alt=''
-                  decoding='async'
-                  className='absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0'
-                  style={{ clip: 'rect(0, 0, 0, 0)' }}
-                  aria-hidden
-                  onLoad={() => setImageState('loaded')}
-                  onError={() => setImageState('error')}
-                />
-                {imageState === 'loading' && (
-                  <div
-                    className='absolute inset-0 z-[1] flex items-center justify-center rounded-3xl bg-gray-400'
-                    role='status'
-                  >
-                    <StormImageLoader />
-                  </div>
-                )}
-                {imageState === 'error' && (
-                  <div className='absolute inset-0 z-[1] flex flex-col items-center justify-center gap-2'>
-                    <ImageNotSupportedOutlinedIcon className='!text-6xl' />
-                    <span className='text-xl font-bold'>
-                      Image Unavailable
-                    </span>
-                  </div>
-                )}
-                {retired && <span ref={retiredBadgeRef} className='inline-flex shrink-0'>
+        <ul className='data-table'>
+          <li data-storm-reveal className='header'>
+            <a
+              target='_blank'
+              className={`storm-image max-w-96 retired ${!tcrLinkEnabled ? '!pointer-events-none' : ''}`}
+              style={
+                imageState === 'loaded'
+                  ? { backgroundImage: `url(${stormImageUrl})` }
+                  : undefined
+              }
+              href={tcrLinkEnabled ? `https://www.nhc.noaa.gov/data/tcr/${stormId}.pdf` : undefined}
+            >
+              <img
+                key={stormId}
+                src={stormImageUrl}
+                alt=''
+                decoding='async'
+                className='absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0'
+                style={{ clip: 'rect(0, 0, 0, 0)' }}
+                aria-hidden
+                onLoad={() => setImageState('loaded')}
+                onError={() => setImageState('error')}
+              />
+              {imageState === 'loading' && (
+                <div
+                  className='absolute inset-0 z-[1] flex items-center justify-center rounded-3xl bg-gray-400'
+                  role='status'
+                >
+                  <StormImageLoader />
+                </div>
+              )}
+              {imageState === 'error' && (
+                <div className='absolute inset-0 z-[1] flex flex-col items-center justify-center gap-2'>
+                  <ImageNotSupportedOutlinedIcon className='!text-6xl' />
+                  <span className='text-xl font-bold'>
+                    Image Unavailable
+                  </span>
+                </div>
+              )}
+              {metrics.retired && (
+                <span ref={retiredBadgeRef} className='inline-flex shrink-0'>
                   <Image
                     className='retired-badge'
                     src='/retired.png'
@@ -377,64 +313,66 @@ const StormMetrics = () => {
                     unoptimized
                     priority
                   />
-                </span>}
-              </a>
-              <h1 className='title my-1' style={{color:textColor}}>
-                {stormName}
-              </h1>     
-              <h1 className='font-bold'>
-                {duration}
-              </h1>     
-            </li>
+                </span>
+              )}
+            </a>
+            <h1 className='title my-1' style={{ color: metrics.textColor }}>
+              {metrics.stormName}
+            </h1>
+            <h1 className='font-bold'>
+              {metrics.duration}
+            </h1>
+          </li>
+          <li data-storm-reveal className='data-row border-b'>
+            <h2 className='label'>Maximum Wind</h2>
+            <h2 className='value'>{metrics.maxWind} kt</h2>
+          </li>
+
+          {metrics.landfalls.length > 0 && (
             <li data-storm-reveal className='data-row border-b'>
-              <h2 className='label'>Maximum Wind</h2>
-              <h2 className='value'>{maxWind} kt</h2>
+              <h2 className='label'>Maximum Inland Wind</h2>
+              <h2 className='value'>{metrics.inlandMaxWind} kt</h2>
             </li>
-            
-            {landfalls.length > 0 && (
-              <li data-storm-reveal className='data-row border-b'>
-                <h2 className='label'>Maximum Inland Wind</h2>
-                <h2 className='value'>{inlandMaxWind} kt</h2>
-              </li>
-            )}
-            
+          )}
+
+          <li data-storm-reveal className='data-row border-b'>
+            <h2 className='label'>Minimum Pressure</h2>
+            <h2 className='value'>
+              {metrics.minPressure !== '9999' && metrics.minPressure !== '-999'
+                ? `${metrics.minPressure} mb`
+                : 'Unknown'}
+            </h2>
+          </li>
+
+          {metrics.landfalls.length > 0 && (
             <li data-storm-reveal className='data-row border-b'>
-              <h2 className='label'>Minimum Pressure</h2>
+              <h2 className='label'>Minimum Inland Pressure</h2>
               <h2 className='value'>
-                {minPressure != "9999" && minPressure != "-999" ? `${minPressure} mb` : 'Unknown'}
+                {metrics.inlandMinPressure !== '9999' && metrics.inlandMinPressure !== '-999'
+                  ? `${metrics.inlandMinPressure} mb`
+                  : 'Unknown'}
               </h2>
             </li>
-            
-            {landfalls.length > 0 && (
-            <li data-storm-reveal className='data-row border-b'>
-                <h2 className='label'>Minimum Inland Pressure</h2>
-                <h2 className='value'>
-                  {inlandMinPressure != "9999" && inlandMinPressure != "-999" ? `${inlandMinPressure} mb` : 'Unknown'}
-                </h2>
-              </li>
-            )}
-             <li
-              data-storm-reveal
-              className='data-row border-b'
-            >
-              <h2 className='label'>Accumulated Cyclone Energy</h2>
-              <h2 className='value'>{ACE.toFixed(1)}</h2>
-            </li>
-            <li data-storm-reveal className='data-row border-b'>
-              <h2 className='label'>Landfalls</h2>
-              <h2 className='value'>{landfalls.length}</h2>
-            </li>
-            <li data-storm-reveal className='data-row border-b'>
-              <h2 className='label'>Dead or Missing</h2>
-              <h2 className='value'>{deadOrMissing}</h2>
-            </li>
-            
-            <li data-storm-reveal className='data-row border-b'>
-              <h2 className='label'>Cost (Million USD)</h2>
-              <h2 className='value cost-value'>${cost}</h2>
-            </li>
-          </ul>
-        </div>
+          )}
+          <li data-storm-reveal className='data-row border-b'>
+            <h2 className='label'>Accumulated Cyclone Energy</h2>
+            <h2 className='value'>{metrics.ace.toFixed(1)}</h2>
+          </li>
+          <li data-storm-reveal className='data-row border-b'>
+            <h2 className='label'>Landfalls</h2>
+            <h2 className='value'>{metrics.landfalls.length}</h2>
+          </li>
+          <li data-storm-reveal className='data-row border-b'>
+            <h2 className='label'>Dead or Missing</h2>
+            <h2 className='value'>{metrics.deadOrMissing}</h2>
+          </li>
+
+          <li data-storm-reveal className='data-row border-b'>
+            <h2 className='label'>Cost (Million USD)</h2>
+            <h2 className='value cost-value'>${metrics.cost}</h2>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };

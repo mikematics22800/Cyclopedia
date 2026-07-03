@@ -3,11 +3,25 @@
 import { useMemo, useRef, useLayoutEffect, useCallback } from "react";
 import gsap from "gsap";
 import { useAppContext } from "../contexts/AppContext";
+import {
+  BASINS,
+  getAvailableBasinsForYear,
+  getGlobalYears,
+  type BasinId,
+} from "../libs/basins";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 
+const SELECTOR_MENU_MAX_HEIGHT = 280;
+
 const SELECTOR_MENU_PROPS = {
   PaperProps: { elevation: 0 as const, className: "selector-menu-paper" },
+  MenuListProps: {
+    sx: {
+      maxHeight: SELECTOR_MENU_MAX_HEIGHT,
+      overflowY: "auto",
+    },
+  },
   transitionDuration: 220,
 } as const;
 
@@ -32,30 +46,30 @@ const Selectors = () => {
 
   const {
     basin,
-    setBasin,
+    selectBasin,
     year,
-    setYear,
+    selectYear,
     stormId,
     setStormId,
     season,
   } = useAppContext();
 
-  const startYear = useMemo(() => basin === 'atl' ? 1850 : 1948, [basin]);
-  const years = useMemo(() => new Array(2025 - startYear).fill(0), [startYear]);
+  const years = useMemo(() => [...getGlobalYears()].reverse(), []);
 
-  const stormIds = useMemo(() => {
-    if (season) {
-      return season.map((storm) => storm.id);
-    }
-    return null;
-  }, [season]);
+  const availableBasins = useMemo(
+    () => getAvailableBasinsForYear(year),
+    [year],
+  );
+
+  const stormIds = useMemo(
+    () => season?.map((storm) => storm.id) ?? null,
+    [season],
+  );
 
   const stormLabel = useMemo(() => {
     if (!stormIds?.length) return "Loading…";
     if (!stormId) return "—";
-    const match = stormIds.find((id) => id === stormId);
-    const id = match ?? stormId;
-    return id.split("_")[1] ?? id;
+    return stormId.split("_")[1] ?? stormId;
   }, [stormIds, stormId]);
 
   useLayoutEffect(() => {
@@ -128,19 +142,21 @@ const Selectors = () => {
         <Select
           size="small"
           className="selector"
-          value={basin}
-          onChange={(e: SelectChangeEvent) => setBasin(e.target.value)}
+          value={year}
+          onChange={(e: SelectChangeEvent<number>) =>
+            selectYear(Number(e.target.value))
+          }
           IconComponent={KeyboardArrowDown}
-          displayEmpty
           MenuProps={SELECTOR_MENU_PROPS}
           renderValue={(v) => (
-            <SelectorTrigger label="Basin">
-              {v === "atl" ? "Atlantic" : "Pacific"}
-            </SelectorTrigger>
+            <SelectorTrigger label="Year">{v}</SelectorTrigger>
           )}
         >
-          <MenuItem value="atl">Atlantic</MenuItem>
-          <MenuItem value="pac">Pacific</MenuItem>
+          {years.map((selectedYear) => (
+            <MenuItem key={selectedYear} value={selectedYear}>
+              {selectedYear}
+            </MenuItem>
+          ))}
         </Select>
       </div>
       <div
@@ -152,24 +168,22 @@ const Selectors = () => {
         <Select
           size="small"
           className="selector"
-          value={year}
-          onChange={(e: SelectChangeEvent<number>) =>
-            setYear(Number(e.target.value))
-          }
+          value={basin}
+          onChange={(e: SelectChangeEvent) => selectBasin(e.target.value)}
           IconComponent={KeyboardArrowDown}
+          displayEmpty
           MenuProps={SELECTOR_MENU_PROPS}
           renderValue={(v) => (
-            <SelectorTrigger label="Year">{v}</SelectorTrigger>
+            <SelectorTrigger label="Basin">
+              {BASINS[v as BasinId]?.label ?? v}
+            </SelectorTrigger>
           )}
         >
-          {years.map((_, index) => {
-            const selectedYear = 2025 - index;
-            return (
-              <MenuItem key={selectedYear} value={selectedYear}>
-                {selectedYear}
-              </MenuItem>
-            );
-          })}
+          {availableBasins.map((id) => (
+            <MenuItem key={id} value={id}>
+              {BASINS[id].label}
+            </MenuItem>
+          ))}
         </Select>
       </div>
       <div

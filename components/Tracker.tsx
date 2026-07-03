@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import MapLegend from "./MapLegend";
+import Legend from "./Legend";
 import PublicIcon from '@mui/icons-material/Public';
 import MapIcon from '@mui/icons-material/Map';
 import { IconButton, Tooltip } from "@mui/material";
@@ -19,7 +19,7 @@ const Tracker = () => {
     <div className="charts">
       {globe ? <Globe/> : <Map/>}
       <div className="map-controls-container">
-        <MapLegend />
+        <Legend />
         <Tooltip
           title={globe ? "Map" : "Globe"}
           placement="bottom"

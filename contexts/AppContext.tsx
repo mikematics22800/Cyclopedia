@@ -5,13 +5,16 @@ import { Storm } from '../libs/hurdat';
 
 interface AppContextType {
   basin: string;
-  setBasin: (basin: string) => void;
+  selectBasin: (basin: string) => void;
   year: number;
-  setYear: (year: number) => void;
+  selectYear: (year: number) => void;
   season: Storm[] | null;
+  globalSeason: Storm[] | null;
   storm: Storm | null;
   stormId: string;
-  setStormId: (stormId: string) => void;
+  focusToken: number;
+  setStormId: (stormId: string, options?: { focus?: boolean }) => void;
+  selectStorm: (stormId: string) => void;
   dates: string[];
   windField: boolean;
   setWindField: (windField: boolean) => void;

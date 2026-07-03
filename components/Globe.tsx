@@ -9,11 +9,13 @@ import {
   dotIconDataUrl,
   formatDateTime,
   formatStormFullName,
+  getPopupStormStatus,
   getStormStatus,
   strikeIconDataUrl,
 } from '../libs/mapUtils';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import LoadingScreen from './LoadingScreen';
+import { getStormOrigin, getStormYear } from '../libs/hurdat';
 import { loadCesium } from '../libs/loadCesium';
 
 type CesiumModule = typeof import('cesium');
@@ -40,6 +42,84 @@ const GLOBE_MIN_ZOOM_DISTANCE = leafletZoomToDistance(10);
 const GLOBE_MAX_ZOOM_DISTANCE = leafletZoomToDistance(3);
 const GLOBE_MAX_ZOOM_DISTANCE_MOBILE = GLOBE_MAX_ZOOM_DISTANCE * 2;
 const GLOBE_INITIAL_HEIGHT = leafletZoomToDistance(4);
+const GLOBE_FOCUS_HEIGHT = leafletZoomToDistance(6);
+
+const removeEntitiesWithPrefix = (
+  viewer: import('cesium').Viewer,
+  prefix: string,
+) => {
+  const toRemove = viewer.entities.values.filter(
+    (entity) => typeof entity.id === 'string' && entity.id.startsWith(prefix),
+  );
+  toRemove.forEach((entity) => viewer.entities.remove(entity));
+};
+
+const trackAppearance = (
+  id: string,
+  stormYear: number,
+  selectedStormId: string,
+  selectedYear: number,
+) => {
+  const isSelected = id === selectedStormId;
+  const isSelectedYear = stormYear === selectedYear;
+  return {
+    width: isSelected ? 4 : isSelectedYear ? 2 : 1,
+    alpha: isSelected ? 1 : isSelectedYear ? 0.5 : 0.15,
+    color: isSelected ? 'white' : 'gray',
+  };
+};
+
+const longestVisibleSegment = (
+  positions: import('cesium').Cartesian3[],
+  occluder: import('cesium').EllipsoidalOccluder,
+) => {
+  let longest: import('cesium').Cartesian3[] = [];
+  let current: import('cesium').Cartesian3[] = [];
+
+  for (const position of positions) {
+    if (occluder.isPointVisible(position)) {
+      current.push(position);
+      continue;
+    }
+    if (current.length > longest.length) longest = current;
+    current = [];
+  }
+
+  if (current.length > longest.length) longest = current;
+  return longest.length >= 2 ? longest : [];
+};
+
+const createVisibleTrackPositionsProperty = (
+  allPositions: import('cesium').Cartesian3[],
+  getViewer: () => import('cesium').Viewer | null,
+  Cesium: CesiumModule,
+) =>
+  new Cesium.CallbackProperty(() => {
+    const viewer = getViewer();
+    if (!viewer || viewer.isDestroyed()) return allPositions;
+
+    const occluder = new Cesium.EllipsoidalOccluder(
+      viewer.scene.globe.ellipsoid,
+      viewer.camera.positionWC,
+    );
+    return longestVisibleSegment(allPositions, occluder);
+  }, false);
+
+const createVisiblePointShowProperty = (
+  position: import('cesium').Cartesian3,
+  getViewer: () => import('cesium').Viewer | null,
+  Cesium: CesiumModule,
+) =>
+  new Cesium.CallbackProperty(() => {
+    const viewer = getViewer();
+    if (!viewer || viewer.isDestroyed()) return true;
+
+    const occluder = new Cesium.EllipsoidalOccluder(
+      viewer.scene.globe.ellipsoid,
+      viewer.camera.positionWC,
+    );
+    return occluder.isPointVisible(position);
+  }, false);
 
 const isMobileViewport = () =>
   typeof window !== 'undefined' &&
@@ -103,10 +183,11 @@ const Globe = () => {
   const viewerRef = useRef<import('cesium').Viewer | null>(null);
   const cesiumRef = useRef<CesiumModule | null>(null);
   const selectedEntityRef = useRef<CesiumEntity | null>(null);
+  const lastFocusedTokenRef = useRef(0);
   const [viewerReady, setViewerReady] = useState(false);
   const [popup, setPopup] = useState<GlobePopup | null>(null);
   const [popupPosition, setPopupPosition] = useState<{ x: number; y: number } | null>(null);
-  const { year, windField, season, storm, stormId, setStormId } = useAppContext();
+  const { year, windField, globalSeason, storm, stormId, focusToken, selectStorm } = useAppContext();
 
   const closePopup = useCallback(() => {
     selectedEntityRef.current = null;
@@ -224,7 +305,7 @@ const Globe = () => {
           viewer.clock.currentTime,
         ) as string | undefined;
         if (trackId) {
-          setStormId(trackId);
+          selectStorm(trackId);
         }
 
         const description = entity.description?.getValue(viewer.clock.currentTime);
@@ -256,7 +337,7 @@ const Globe = () => {
       cesiumRef.current = null;
       selectedEntityRef.current = null;
     };
-  }, [setStormId]);
+  }, [selectStorm]);
 
   useEffect(() => {
     if (!viewerReady || !popup) return;
@@ -301,17 +382,15 @@ const Globe = () => {
   useEffect(() => {
     const viewer = viewerRef.current;
     const Cesium = cesiumRef.current;
-    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed() || !season) return;
+    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed()) return;
 
-    selectedEntityRef.current = null;
-    setPopup(null);
-    setPopupPosition(null);
-    viewer.entities.removeAll();
+    removeEntitiesWithPrefix(viewer, 'track-');
+    if (!globalSeason) return;
 
-    season.forEach((stormTrack) => {
+    globalSeason.forEach((stormTrack) => {
       const id = stormTrack.id;
-      const name = id.split('_')[1];
-      const isSelected = id === stormId;
+      const stormYear = getStormYear(id);
+      const { width, alpha, color } = trackAppearance(id, stormYear, stormId, year);
       const positions = stormTrack.data.map((point) =>
         Cesium.Cartesian3.fromDegrees(point.lng, point.lat),
       );
@@ -322,39 +401,81 @@ const Globe = () => {
           stormTrackId: id,
         },
         polyline: {
-          positions,
-          width: isSelected ? 4 : 2,
-          material: Cesium.Color.fromCssColorString(isSelected ? 'white' : 'gray').withAlpha(
-            isSelected ? 1 : 0.5,
+          positions: createVisibleTrackPositionsProperty(
+            positions,
+            () => viewerRef.current,
+            Cesium,
           ),
-          clampToGround: true,
+          width,
+          material: Cesium.Color.fromCssColorString(color).withAlpha(alpha),
+          arcType: Cesium.ArcType.GEODESIC,
         },
       });
+    });
+  }, [globalSeason, viewerReady]);
+
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    const Cesium = cesiumRef.current;
+    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed()) return;
+
+    viewer.entities.values.forEach((entity) => {
+      if (typeof entity.id !== 'string' || !entity.id.startsWith('track-')) return;
+      const id = entity.id.slice('track-'.length);
+      const { width, alpha, color } = trackAppearance(id, getStormYear(id), stormId, year);
+      if (entity.polyline) {
+        entity.polyline.width = new Cesium.ConstantProperty(width);
+        entity.polyline.material = new Cesium.ColorMaterialProperty(
+          Cesium.Color.fromCssColorString(color).withAlpha(alpha),
+        );
+      }
+    });
+  }, [stormId, year, viewerReady]);
+
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    const Cesium = cesiumRef.current;
+    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed() || !globalSeason) return;
+
+    selectedEntityRef.current = null;
+    setPopup(null);
+    setPopupPosition(null);
+    removeEntitiesWithPrefix(viewer, 'point-');
+    removeEntitiesWithPrefix(viewer, 'wind-');
+
+    globalSeason.forEach((stormTrack) => {
+      const id = stormTrack.id;
+      const name = id.split('_')[1];
 
       stormTrack.data.forEach((point, index) => {
         const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc);
-        const { status, color } = getStormStatus(point);
-        const fullName = formatStormFullName(name, status);
+        const { color } = getStormStatus(point);
+        const fullName = formatStormFullName(name, getPopupStormStatus(point, id));
         const isLandfall = point.record === 'L';
 
+        const position = Cesium.Cartesian3.fromDegrees(point.lng, point.lat);
         viewer.entities.add({
           id: `point-${id}-${index}`,
           properties: {
             stormTrackId: id,
           },
-          position: Cesium.Cartesian3.fromDegrees(point.lng, point.lat),
+          position,
+          show: createVisiblePointShowProperty(
+            position,
+            () => viewerRef.current,
+            Cesium,
+          ),
           billboard: {
             image: isLandfall ? strikeIconDataUrl(color) : dotIconDataUrl(color),
             width: isLandfall ? 25 : 10,
             height: isLandfall ? 25 : 10,
-            disableDepthTestDistance: Number.POSITIVE_INFINITY,
           },
           description: buildPopupHtml(fullName, formattedDate, formattedTime, point),
         });
       });
     });
 
-    if (year >= 2004 && windField && storm) {
+    if (year >= 2002 && windField && storm) {
       const windLayers = [
         { key: '34kt_wind_nm' as const, color: Cesium.Color.YELLOW, label: '≥34 kt' },
         { key: '50kt_wind_nm' as const, color: Cesium.Color.ORANGE, label: '≥50 kt' },
@@ -390,7 +511,28 @@ const Globe = () => {
         });
       });
     }
-  }, [season, stormId, windField, year, storm, viewerReady]);
+  }, [globalSeason, windField, year, storm, viewerReady]);
+
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    const Cesium = cesiumRef.current;
+    if (!focusToken || focusToken === lastFocusedTokenRef.current) return;
+    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed()) return;
+    if (!storm?.data.length || storm.id !== stormId) return;
+
+    const origin = getStormOrigin(storm);
+    if (!origin) return;
+
+    const { lat, lng } = origin;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+    lastFocusedTokenRef.current = focusToken;
+
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(lng, lat, GLOBE_FOCUS_HEIGHT),
+      duration: 1.5,
+    });
+  }, [focusToken, storm, stormId, viewerReady]);
 
   return (
     <div className="map relative">

@@ -1,9 +1,22 @@
 'use client';
 
-import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Image from 'next/image';
-import { getArchive } from "../libs/hurdat";
+import {
+  getAllBasinSeasons,
+  getBasinSeason,
+  getYearArchiveCached,
+  type YearArchives,
+} from "../libs/hurdat";
 import { calculateSeasonACE } from "../libs/calculateACE";
+import {
+  clampGlobalYear,
+  getAvailableBasinsForYear,
+  getBasinFromStormId,
+  getGlobalEndYear,
+  getGlobalStartYear,
+  isBasinYearAvailable,
+} from "../libs/basins";
 import { AppProvider } from "../contexts/AppContext";
 import Interface from "../components/Interface";
 import LoadingScreen from "../components/LoadingScreen";
@@ -13,126 +26,139 @@ import Charts from "./Charts";
 export default function App() {
   const [basin, setBasin] = useState<string>('atl');
   const [year, setYear] = useState<number>(2025);
-  const [season, setSeason] = useState<any[] | null>(null);
-  const [storm, setStorm] = useState<any | null>(null);
-  const [stormId, setStormId] = useState<string>('');
-  const [dates, setDates] = useState<string[]>([]);
-  const [windField, setWindField] = useState<boolean>(year >= 2004);
-  const [names, setNames] = useState<string[]>([]);
-  const [seasonACE, setSeasonACE] = useState<number[]>([]);
+  const [yearArchives, setYearArchives] = useState<YearArchives | null>(null);
+  const [stormIdRequest, setStormIdRequest] = useState<string>('');
+  const [focusToken, setFocusToken] = useState(0);
+  const [windField, setWindField] = useState<boolean>(year >= 2002);
   const [charts, setCharts] = useState<boolean>(false);
-  const [maxWinds, setMaxWinds] = useState<number[]>([]);
-  const [globe, setGlobe] = useState(false)
-  
+  const [globe, setGlobe] = useState(false);
 
-  useEffect(() => {
-    if (year < 1949 && basin === 'pac') setYear(1949);
-    if (typeof window !== 'undefined') {
-      const cache = localStorage.getItem(`cyclopedia-${basin}-${year}`);
-      if (cache) {
-        setSeason(JSON.parse(cache));
-      } else {
-        setSeason(null);
-        setStorm(null);
-        setStormId('');
-        getArchive(basin, year).then(data => {
-          if (data) {
-            setSeason(data);
-            localStorage.setItem(`cyclopedia-${basin}-${year}`, JSON.stringify(data));
-          }
-        });
-      }
+  const season = useMemo(() => {
+    if (!yearArchives) return null;
+    const storms = getBasinSeason(yearArchives, basin);
+    return storms.length ? storms : null;
+  }, [yearArchives, basin]);
+
+  const globalSeason = useMemo(() => {
+    if (!yearArchives) return null;
+    const storms = getAllBasinSeasons(yearArchives, year);
+    return storms.length ? storms : null;
+  }, [yearArchives, year]);
+
+  const stormId = useMemo(() => {
+    if (!season?.length) return '';
+    if (stormIdRequest && season.some((s) => s.id === stormIdRequest)) {
+      return stormIdRequest;
     }
-  }, [basin, year]);
+    return season[0].id;
+  }, [season, stormIdRequest]);
 
-  useEffect(() => {
-    setWindField(year >= 2004);
-  }, [year]);
+  const storm = useMemo(() => {
+    if (!globalSeason?.length || !stormId) return null;
+    return globalSeason.find((s) => s.id === stormId) ?? null;
+  }, [globalSeason, stormId]);
 
-  useLayoutEffect(() => {
-    if (!season?.length) return;
-    setStormId((prev) => {
-      if (!prev || prev === 'season' || !season.some((s) => s.id === prev)) {
-        return season[0].id;
-      }
-      return prev;
+  const dates = useMemo(() => {
+    if (!storm) return [];
+    return storm.data.map((point) => {
+      const dateArray = point.date.toString().split("");
+      const month = dateArray.slice(4, 6).join("");
+      const day = dateArray.slice(-2).join("");
+      return `${month}/${day}`;
     });
+  }, [storm]);
+
+  const names = useMemo(() => {
+    if (!season) return [];
+    return season.map((s) => s.id.split('_')[1]);
   }, [season]);
 
-  useEffect(() => {
-    if (season && stormId) {
-      const found = season.find((s) => s.id === stormId);
-      setStorm(found ?? null);
-    } else {
-      setStorm(null);
+  const maxWinds = useMemo(() => {
+    if (!season) return [];
+    return season.map((s) => Math.max(...s.data.map((point) => point.max_wind_kt)));
+  }, [season]);
+
+  const seasonACE = useMemo(() => {
+    if (!season) return [];
+    return calculateSeasonACE(season);
+  }, [season]);
+
+  const requestMapFocus = useCallback(() => {
+    setFocusToken((token) => token + 1);
+  }, []);
+
+  const selectBasin = useCallback((newBasin: string) => {
+    setBasin((current) => (current === newBasin ? current : newBasin));
+    setStormIdRequest('');
+    requestMapFocus();
+  }, [requestMapFocus]);
+
+  const selectYear = useCallback((newYear: number) => {
+    setYear((current) => (current === newYear ? current : newYear));
+    setStormIdRequest('');
+    setWindField(newYear >= 2002);
+    requestMapFocus();
+  }, [requestMapFocus]);
+
+  const setStormId = useCallback((id: string, options?: { focus?: boolean }) => {
+    setStormIdRequest(id);
+    if (options?.focus ?? true) {
+      requestMapFocus();
     }
-  }, [stormId, season]);
+  }, [requestMapFocus]);
+
+  const selectStorm = useCallback((id: string) => {
+    const stormBasin = getBasinFromStormId(id);
+    if (stormBasin) {
+      setBasin(stormBasin);
+    }
+    setStormIdRequest(id);
+  }, []);
 
   useEffect(() => {
-    if (storm) {
-      const dates = storm.data.map((point: any) => {
-        const dateArray = point?.date.toString().split("");
-        const month = dateArray.slice(4,6).join("");
-        const day = dateArray.slice(-2).join("");
-        return `${month}/${day}`;
-      });
-      setDates(dates);
-    } else {
-      setDates([]);
-    }
-  }, [storm, year]);
+    if (isBasinYearAvailable(basin, year)) return;
+    const availableBasins = getAvailableBasinsForYear(year);
+    const nextBasin = availableBasins[0];
+    if (!nextBasin || nextBasin === basin) return;
+    setBasin(nextBasin);
+    setStormIdRequest('');
+  }, [year, basin]);
 
   useEffect(() => {
-    if (season) {
-      const names = season.map((storm) => {
-        return storm.id.split('_')[1];
-      });
-      setNames(names);
-  
-      const maxWinds = season.map((storm) => {
-        const winds = storm.data.map((point: any) => {
-          return point.max_wind_kt;
-        });
-        return Math.max(...winds);
-      });
-      setMaxWinds(maxWinds);
-  
-      setSeasonACE(calculateSeasonACE(season));
+    const startYear = getGlobalStartYear();
+    const endYear = getGlobalEndYear();
+    if (year < startYear || year > endYear) {
+      setYear(clampGlobalYear(year));
+      return;
     }
-  }, [season, year]);
+
+    let cancelled = false;
+    setYearArchives(null);
+    getYearArchiveCached(year).then((data) => {
+      if (!cancelled) setYearArchives(data);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [year]);
 
   const toggleCharts = useCallback(() => {
-    setCharts(prev => !prev);
+    setCharts((prev) => !prev);
   }, []);
 
   const value = useMemo(() => ({
     basin,
-    setBasin, 
-    year, 
-    setYear, 
-    season, 
-    storm, 
-    stormId, 
-    setStormId, 
-    dates, 
-    windField, 
-    setWindField,
-    names,
-    maxWinds,
-    seasonACE,
-    charts,
-    toggleCharts,
-    globe,
-    setGlobe
-  }), [
-    basin,
-    setBasin,
+    selectBasin,
     year,
-    setYear,
+    selectYear,
     season,
+    globalSeason,
     storm,
     stormId,
+    focusToken,
     setStormId,
+    selectStorm,
     dates,
     windField,
     setWindField,
@@ -142,13 +168,33 @@ export default function App() {
     charts,
     toggleCharts,
     globe,
-    setGlobe
+    setGlobe,
+  }), [
+    basin,
+    selectBasin,
+    year,
+    selectYear,
+    season,
+    globalSeason,
+    storm,
+    stormId,
+    focusToken,
+    setStormId,
+    selectStorm,
+    dates,
+    windField,
+    names,
+    maxWinds,
+    seasonACE,
+    charts,
+    toggleCharts,
+    globe,
   ]);
 
   return (
     <AppProvider value={value}>
       <div className="app app-background">
-        {season && storm ? (
+        {globalSeason && storm ? (
           <>
             <nav aria-label="Site header">
               <div className="flex items-center gap-2">
@@ -171,7 +217,7 @@ export default function App() {
                   onClick={() => setCharts(false)}
                   aria-pressed={!charts}
                 >
-                  Storm Tracks
+                  Tracking Maps
                 </button>
                 <button
                   type="button"
