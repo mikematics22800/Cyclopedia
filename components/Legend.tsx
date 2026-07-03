@@ -23,9 +23,7 @@ const statusItems = [
   { colorClass: 'bg-[aqua]', label: 'Subtropical Depression', windRange: '< 34 kt' },
   { colorClass: 'bg-[#D0F0C0]', label: 'Subtropical Storm', windRange: '34-63 kt' },
   { colorClass: 'bg-[#7F00FF]', label: 'Extratropical Cyclone' },
-  { colorClass: 'bg-[gray]', label: 'Tropical Wave' },
-  { colorClass: 'bg-[lightgray]', label: 'Tropical Disturbance' },
-  { colorClass: 'bg-white', label: 'Tropical Low' },
+  { colorClass: 'bg-[lightgray]', label: 'Tropical Low' },
 ] as const;
 
 const windFieldItems = [

@@ -14,15 +14,9 @@ export const getStormStatus = (point: StormDataPoint) => {
   let status: string;
   let color: string;
 
-  if (point.status === 'LO') {
+  if (point.status === 'LO' || point.status === 'DB' || point.status === 'WV' || point.status === 'MD') {
     status = 'Tropical Low';
-    color = 'white';
-  } else if (point.status === 'DB') {
-    status = 'Tropical Disturbance';
     color = 'lightgray';
-  } else if (point.status === 'WV') {
-    status = 'Tropical Wave';
-    color = 'gray';
   } else if (point.status === 'EX' || point.status === 'ET') {
     status = 'Extratropical Cyclone';
     color = '#7F00FF';

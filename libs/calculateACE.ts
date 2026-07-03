@@ -1,7 +1,7 @@
 import type { Storm, StormDataPoint } from './hurdat';
 
 const SYNOPTIC_TIMES = new Set(['0000', '0600', '1200', '1800']);
-const ACE_STATUSES = new Set(['TS', 'SS', 'HU', 'TY', 'TC']);
+const ACE_STATUSES = new Set(['TS', 'SS', 'HU', 'TY', 'ST', 'TC']);
 const ACE_MIN_WIND_KT = 34;
 
 export function formatSynopticTime(timeUtc: number | string): string {
