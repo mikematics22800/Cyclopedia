@@ -455,6 +455,20 @@ ul li h2 {
   @apply inline-flex flex-col gap-2 font-semibold text-white rounded-xl w-max max-w-[min(18rem,calc(100vw-2rem))] p-3 bg-slate-950/75 backdrop-blur-md border-white border transition-all duration-300 ease-smooth;
 }
 
+@media (max-width: 1023px) {
+  .map-button.map-legend {
+    @apply gap-1.5 p-2 max-w-[min(14rem,calc(100vw-1.5rem))] rounded-lg;
+  }
+
+  .map-legend-label .MuiFormControlLabel-label {
+    font-size: 0.75rem;
+  }
+
+  .map-legend-label .MuiCheckbox-root {
+    padding: 2px;
+  }
+}
+
 .map-button .MuiIconButton-root {
   padding: 0;
 }

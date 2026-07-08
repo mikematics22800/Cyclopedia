@@ -96,10 +96,10 @@ const Legend = () => {
   return (
     <div
       ref={openPanelRef}
-      className="map-button gap-1"
+      className="map-button map-legend gap-1"
     >
-      <div className="settings-row flex justify-between items-center gap-2 border-b border-white pb-2">
-        <span className="text-sm font-semibold  text-white">
+      <div className="settings-row flex justify-between items-center gap-1 lg:gap-2 border-b border-white pb-1.5 lg:pb-2">
+        <span className="text-xs lg:text-sm font-semibold text-white">
           Legend
         </span>
         <IconButton
@@ -107,30 +107,30 @@ const Legend = () => {
           className="map-legend-close"
           onClick={() => setOpen(false)}
         >
-          <Close className="!text-xl" />
+          <Close className="!text-lg lg:!text-xl" />
         </IconButton>
       </div>
-      <h1 className="settings-row text-sm font-semibold text-white  text-center">Classification</h1>
-      <div className="flex flex-col gap-0.5 border-t border-white pt-2">
+      <h1 className="settings-row text-xs lg:text-sm font-semibold text-white text-center">Classification</h1>
+      <div className="flex flex-col gap-0.5 border-t border-white pt-1.5 lg:pt-2 lg:gap-0.5">
         {statusItems.map((item) => (
           <div
             key={item.label}
-            className="settings-row flex items-center gap-2 rounded-md px-1 py-0.5 "
+            className="settings-row flex items-center gap-1.5 lg:gap-2 rounded-md px-0.5 lg:px-1 py-0.5"
           >
             <span
-              className={`w-3 h-3 shrink-0 rounded-full border border-black ${item.colorClass}`}
+              className={`w-2 h-2 lg:w-3 lg:h-3 shrink-0 rounded-full border border-black ${item.colorClass}`}
             />
-            <div className="flex min-w-0 flex-1 items-center justify-between gap-6">
-              <h1 className="text-sm text-white">{item.label}</h1>
+            <div className="flex min-w-0 flex-1 items-center justify-between gap-2 lg:gap-6">
+              <h1 className="text-xs lg:text-sm text-white">{item.label}</h1>
               {'windRange' in item && (
-                <span className="shrink-0 text-sm text-white">{item.windRange}</span>
+                <span className="shrink-0 text-xs lg:text-sm text-white">{item.windRange}</span>
               )}
             </div>
           </div>
         ))}
       </div>
-      {year >= 2002 && <FormGroup className="map-legend-form-group gap-0.5 border-t border-white py-2 w-full text-center">
-        <div className="settings-row rounded-lg py-0.5 pr-1 pl-0 ">
+      {year >= 2002 && <FormGroup className="map-legend-form-group gap-0.5 border-t border-white py-1.5 lg:py-2 lg:gap-0.5 w-full text-center">
+        <div className="settings-row rounded-lg py-0.5 pr-0.5 lg:pr-1 pl-0">
           <span className="inline-block w-fit max-w-full">
             <FormControlLabel
               className="map-legend-label"
@@ -138,7 +138,7 @@ const Legend = () => {
               control={
                 <Checkbox
                   size="small"
-                  className="!text-sky-400 !pl-0 !pr-1 !py-1"
+                  className="!text-sky-400 !pl-0 !pr-0.5 lg:!pr-1 !py-0.5 lg:!py-1"
                   checked={windField}
                   disabled={!windFieldAvailable}
                   onChange={(e) => setWindField(e.target.checked)}
@@ -148,16 +148,16 @@ const Legend = () => {
             />
           </span>
         </div>
-        <div className="flex flex-col gap-.5 border-t border-white pt-2">
+        <div className="flex flex-col gap-0.5 border-t border-white pt-1.5 lg:pt-2 lg:gap-0.5">
         {windFieldItems.map((item) => (
           <div
             key={item.label}
-            className="settings-row flex w-full items-center gap-2 rounded-md px-1 py-0.5"
+            className="settings-row flex w-full items-center gap-1.5 lg:gap-2 rounded-md px-0.5 lg:px-1 py-0.5"
           >
             <span
-              className={`h-3 flex-1 rounded-sm border ${item.swatchClass}`}
+              className={`h-2 lg:h-3 flex-1 rounded-sm border ${item.swatchClass}`}
             />
-            <h1 className="min-w-[3.5rem] text-right text-sm">{item.label}</h1>
+            <h1 className="min-w-[2.75rem] lg:min-w-[3.5rem] text-right text-xs lg:text-sm">{item.label}</h1>
           </div>
         ))}
         </div>
