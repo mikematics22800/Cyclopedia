@@ -36,7 +36,7 @@ const COUNT_MAX_BY_BASIN: Record<string, number> = {
 };
 
 const ACE_MAX_BY_BASIN: Record<string, number> = {
-  atl: 350,
+  atl: 300,
   epac: 350,
   ind: 100,
   wpac: 600,
@@ -103,8 +103,8 @@ const TotalsChart = () => {
         const data: YearTotal[] = await response.json();
         if (!cancelled) setTotals(data);
       } catch {
-        if (!cancelled) ([]);
-      }
+        if (!cancelled) setTotals([]);
+      }7 
     }
 
     loadTotals();
@@ -115,7 +115,7 @@ const TotalsChart = () => {
   }, [basin]);
 
   const countMax = COUNT_MAX_BY_BASIN[basin] ?? 35;
-  const aceMax = ACE_MAX_BY_BASIN[basin] ?? 350;
+  const aceMax = ACE_MAX_BY_BASIN[basin] ?? 300;
 
   const selectedYearIndex = useMemo(
     () => totals.findIndex((entry) => entry.year === year),
@@ -248,7 +248,7 @@ const TotalsChart = () => {
   if (!totals.length) return null;
 
   return (
-    <div className="relative h-64 w-full min-h-0 lg:h-96">
+    <div className="relative h-96 w-full">
       <Line data={chartData} options={options} plugins={[selectedYearLinePlugin]} />
     </div>
   );

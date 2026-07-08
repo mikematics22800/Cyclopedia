@@ -193,7 +193,16 @@ export default function App() {
 
   return (
     <AppProvider value={value}>
-      <div className="app app-background">
+      <div className="app relative">
+        <Image
+          src="/hurricane.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="pointer-events-none -z-10 object-cover object-top"
+          aria-hidden
+        />
         {globalSeason && storm ? (
           <>
             <nav aria-label="Site header">

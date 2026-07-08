@@ -388,13 +388,6 @@ ul li h2 {
   @apply text-green-400;
 }
 
-.app-background {
-  background-image: url('/hurricane.jpg');
-  background-size: auto 100vh;
-  background-repeat: no-repeat;
-  background-position: top center;
-}
-
 .storm-popup .leaflet-popup-content-wrapper {
   background: transparent !important;
   box-shadow: none !important;

@@ -5,6 +5,7 @@ import { useAppContext } from "../contexts/AppContext";
 import Metrics from "./Metrics";
 import { useGsapReveal } from "./hooks/useGsapReveal";
 import { useMobileSheetDrag } from "./hooks/useMobileSheetDrag";
+import TotalsChart from "./TotalsChart";
 import SeasonChart from './SeasonChart';
 import StormChart from './StormChart';
 import Selectors from './Selectors';
@@ -43,6 +44,7 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
             <Selectors />
             <Metrics />
             <div className="lg:hidden w-full p-4">
+              <TotalsChart/>
               <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
               <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
             </div>

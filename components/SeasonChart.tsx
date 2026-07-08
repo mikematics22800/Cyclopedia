@@ -257,7 +257,7 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
   };
 
   return (
-    <div className="relative h-96 w-full min-h-0">
+    <div className="relative h-[48rem] lg:h-96 w-full min-h-0">
       <Bar options={options} data={data} plugins={[aceThresholdLinePlugin]} />
     </div>
   );
