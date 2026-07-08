@@ -221,7 +221,7 @@ Track point colors follow Saffir-Simpson categories for hurricanes and distinct 
 | Aqua | Subtropical Depression |
 | Pale green | Subtropical Storm |
 | Purple | Extratropical Cyclone |
-| Gray / Light gray / White | Wave / Disturbance / Low |
+| Gray / Tropical Low |
 
 Landfall points use a strike marker instead of a dot.
 

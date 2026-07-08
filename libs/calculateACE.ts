@@ -13,8 +13,10 @@ export function isSynopticTime(timeUtc: number | string): boolean {
 }
 
 export function isAceEligible(point: StormDataPoint): boolean {
+  const hasEligibleStatus = ACE_STATUSES.has(point.status) || point.status === '';
+
   return (
-    ACE_STATUSES.has(point.status) &&
+    hasEligibleStatus &&
     point.max_wind_kt >= ACE_MIN_WIND_KT &&
     isSynopticTime(point.time_utc)
   );

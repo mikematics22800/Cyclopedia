@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from 'react';
 import SeasonChart from './SeasonChart';
 import StormChart from './StormChart';
+import TotalsChart from './TotalsChart';
 
 const Charts = () => {
   const graphsRef = useRef<HTMLDivElement>(null);
@@ -18,6 +19,7 @@ const Charts = () => {
   return (
     <div className="graphs-container">
       <div ref={graphsRef} className="graphs">
+      <TotalsChart/>
         <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
         <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
       </div>
