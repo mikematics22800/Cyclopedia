@@ -1,5 +1,5 @@
 export const BASINS = {
-  atl: { label: 'Atlantic', startYear: 1851, endYear: 2025, nested: false },
+  atl: { label: 'N Atlantic', startYear: 1851, endYear: 2025, nested: false },
   epac: { label: 'E Pacific', startYear: 1949, endYear: 2025, nested: false },
   wpac: { label: 'W Pacific', startYear: 1945, endYear: 2024, nested: false },
   ind: { label: 'N Indian', startYear: 1945, endYear: 2024, nested: false },
@@ -16,6 +16,24 @@ export const BASIN_MISSING_YEARS: Record<BasinId, readonly number[]> = {
   ind: [1958],
   shem: [],
 };
+
+/**
+ * First season year with complete wind metrics on every track point for
+ * reliable basin ACE totals (derived from archive wind coverage).
+ */
+export const ACE_START_YEAR_BY_BASIN: Partial<Record<BasinId, number>> = {
+  wpac: 1973,
+  ind: 1981,
+  shem: 1992,
+};
+
+export function isAceYearAvailable(basin: string, year: number): boolean {
+  const id = resolveBasinId(basin);
+  if (!id) return true;
+
+  const startYear = ACE_START_YEAR_BY_BASIN[id];
+  return startYear == null || year >= startYear;
+}
 
 export const END_YEAR = Math.max(...Object.values(BASINS).map((b) => b.endYear));
 

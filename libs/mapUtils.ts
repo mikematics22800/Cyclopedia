@@ -32,7 +32,7 @@ export const getStormStatus = (point: StormDataPoint) => {
   } else if (point.status === 'TS') {
     status = 'Tropical Storm';
     color = 'lime';
-  } else if (point.status === 'HU' || point.status === 'TY') {
+  } else if (point.status === 'HU' || point.status === 'TY' || point.status === 'ST' || point.status === 'CY') {
     status = 'Hurricane';
     if (wind <= 82) {
       color = 'yellow';
@@ -104,6 +104,15 @@ export const formatDateTime = (date: number, time: number) => {
 export const formatStormFullName = (name: string, status: string) =>
   name !== 'Unnamed' ? `${status} ${name}` : `${name} ${status}`;
 
+export const isUnknownMetric = (value: number | null | undefined) =>
+  value == null || value === 0 || value === -999;
+
+export const formatWindDisplay = (wind: number | null | undefined) =>
+  isUnknownMetric(wind) ? 'Unknown' : `${wind} kt`;
+
+export const formatPressureDisplay = (pressure: number | null | undefined) =>
+  isUnknownMetric(pressure) ? 'Unknown' : `${pressure} mb`;
+
 export const nmToDeg = (nm: number) => nm / 60;
 
 export const calculateWindRadii = (
@@ -152,8 +161,8 @@ export const buildPopupHtml = (
     <h1>${fullName}</h1>
     <ul>
       <li>${formattedDate} ${formattedTime} EST</li>
-      <li>Maximum Wind: ${point.max_wind_kt} kt</li>
-      <li>Minimum Pressure: ${point.min_pressure_mb ? `${point.min_pressure_mb} mb` : 'Unknown'}</li>
+      <li>Maximum Wind: ${formatWindDisplay(point.max_wind_kt)}</li>
+      <li>Minimum Pressure: ${formatPressureDisplay(point.min_pressure_mb)}</li>
     </ul>
   </div>
 `;

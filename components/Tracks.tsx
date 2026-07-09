@@ -6,7 +6,9 @@ import { divIcon } from 'leaflet';
 import {
   dotSvg,
   formatDateTime,
+  formatPressureDisplay,
   formatStormFullName,
+  formatWindDisplay,
   getPopupStormStatus,
   getStormStatus,
   strikeSvg,
@@ -63,8 +65,8 @@ const Tracks = () => {
                   <h1>{fullName}</h1>
                   <ul>
                     <li>{formattedDate} {formattedTime} EST</li>
-                    <li>Maximum Wind: {point.max_wind_kt} kt</li>
-                    <li>Minimum Pressure: {point.min_pressure_mb ? `${point.min_pressure_mb} mb` : 'Unknown'}</li>
+                    <li>Maximum Wind: {formatWindDisplay(point.max_wind_kt)}</li>
+                    <li>Minimum Pressure: {formatPressureDisplay(point.min_pressure_mb)}</li>
                   </ul>
                 </div>
               </Popup>

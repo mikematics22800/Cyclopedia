@@ -6,6 +6,8 @@ import gsap from 'gsap';
 import { useAppContext } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
 import { calculateSeasonTotalACE, calculateStormACE } from '../libs/calculateACE';
+import { isAceYearAvailable } from '../libs/basins';
+import { formatPressureDisplay, formatWindDisplay, isUnknownMetric } from '../libs/mapUtils';
 import { Storm, StormDataPoint } from '../libs/hurdat';
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 
@@ -93,30 +95,36 @@ const getStormTextColor = (data: StormDataPoint[], maxWind: number) => {
 
 const buildStormMetrics = (storm: Storm) => {
   const data = storm.data;
-  const winds = data.map((point) => point.max_wind_kt);
-  const maxWind = Math.max(...winds);
-  const pressures = data.map((point) =>
-    point.min_pressure_mb && point.min_pressure_mb > 0 ? point.min_pressure_mb : 9999,
-  );
-  const minPressure = Math.min(...pressures);
+  const validWinds = data
+    .map((point) => point.max_wind_kt)
+    .filter((wind) => !isUnknownMetric(wind));
+  const maxWindValue = validWinds.length ? Math.max(...validWinds) : 0;
+  const validPressures = data
+    .map((point) => point.min_pressure_mb)
+    .filter((pressure): pressure is number => !isUnknownMetric(pressure));
+  const minPressure = validPressures.length ? Math.min(...validPressures) : null;
   const landfalls = data.filter((point) => point.record === 'L');
-  const inlandWinds = landfalls.map((point) => point.max_wind_kt);
-  const inlandPressures = landfalls.map((point) =>
-    point.min_pressure_mb && point.min_pressure_mb > 0 ? point.min_pressure_mb : 9999,
-  );
+  const inlandWinds = landfalls
+    .map((point) => point.max_wind_kt)
+    .filter((wind) => !isUnknownMetric(wind));
+  const inlandPressures = landfalls
+    .map((point) => point.min_pressure_mb)
+    .filter((pressure): pressure is number => !isUnknownMetric(pressure));
 
   return {
     stormName: storm.id.split('_')[1],
     retired: storm.retired,
     duration: formatStormDuration(data),
-    maxWind: maxWind.toString(),
-    minPressure: minPressure.toString(),
+    maxWind: formatWindDisplay(maxWindValue),
+    minPressure: formatPressureDisplay(minPressure),
     landfalls,
-    inlandMaxWind: inlandWinds.length ? Math.max(...inlandWinds).toString() : '',
-    inlandMinPressure: inlandPressures.length ? Math.min(...inlandPressures).toString() : '',
+    inlandMaxWind: inlandWinds.length ? formatWindDisplay(Math.max(...inlandWinds)) : 'Unknown',
+    inlandMinPressure: inlandPressures.length
+      ? formatPressureDisplay(Math.min(...inlandPressures))
+      : 'Unknown',
     cost: ((storm.cost_usd || 0) / 1_000_000).toFixed(1),
     deadOrMissing: (storm.dead_or_missing || 0).toString(),
-    textColor: getStormTextColor(data, maxWind),
+    textColor: getStormTextColor(data, maxWindValue),
     ace: calculateStormACE(data),
   };
 };
@@ -186,7 +194,11 @@ const SeasonMetrics = () => {
           </li>
           <li className='data-row border-b'>
             <h2 className='label'>Total Accumulated Cyclone Energy</h2>
-            <h2 className='value'>{calculateSeasonTotalACE(season).toFixed(1)}</h2>
+            <h2 className='value'>
+              {isAceYearAvailable(basin, year)
+                ? calculateSeasonTotalACE(season).toFixed(1)
+                : 'Unknown'}
+            </h2>
           </li>
           <li className='data-row border-b'>
             <h2 className='label'>Total Landfalls</h2>
@@ -325,33 +337,25 @@ const StormMetrics = () => {
           </li>
           <li data-storm-reveal className='data-row border-b'>
             <h2 className='label'>Maximum Wind</h2>
-            <h2 className='value'>{metrics.maxWind} kt</h2>
+            <h2 className='value'>{metrics.maxWind}</h2>
           </li>
 
           {metrics.landfalls.length > 0 && (
             <li data-storm-reveal className='data-row border-b'>
               <h2 className='label'>Maximum Inland Wind</h2>
-              <h2 className='value'>{metrics.inlandMaxWind} kt</h2>
+              <h2 className='value'>{metrics.inlandMaxWind}</h2>
             </li>
           )}
 
           <li data-storm-reveal className='data-row border-b'>
             <h2 className='label'>Minimum Pressure</h2>
-            <h2 className='value'>
-              {metrics.minPressure !== '9999' && metrics.minPressure !== '-999'
-                ? `${metrics.minPressure} mb`
-                : 'Unknown'}
-            </h2>
+            <h2 className='value'>{metrics.minPressure}</h2>
           </li>
 
           {metrics.landfalls.length > 0 && (
             <li data-storm-reveal className='data-row border-b'>
               <h2 className='label'>Minimum Inland Pressure</h2>
-              <h2 className='value'>
-                {metrics.inlandMinPressure !== '9999' && metrics.inlandMinPressure !== '-999'
-                  ? `${metrics.inlandMinPressure} mb`
-                  : 'Unknown'}
-              </h2>
+              <h2 className='value'>{metrics.inlandMinPressure}</h2>
             </li>
           )}
           <li data-storm-reveal className='data-row border-b'>

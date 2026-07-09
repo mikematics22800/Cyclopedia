@@ -18,6 +18,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
+import { isAceYearAvailable } from '../libs/basins';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -40,7 +41,7 @@ const ACE_MAX_BY_BASIN: Record<string, number> = {
   epac: 350,
   ind: 100,
   wpac: 600,
-  shem: 600,
+  shem: 400,
 };
 
 function pointHighlightColors(
@@ -89,6 +90,7 @@ const selectedYearLinePlugin: Plugin<'line'> = {
 const TotalsChart = () => {
   const { basin, year } = useAppContext();
   const [totals, setTotals] = useState<YearTotal[]>([]);
+  const [showCyclones, setShowCyclones] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -104,7 +106,7 @@ const TotalsChart = () => {
         if (!cancelled) setTotals(data);
       } catch {
         if (!cancelled) setTotals([]);
-      }7 
+      }
     }
 
     loadTotals();
@@ -114,33 +116,44 @@ const TotalsChart = () => {
     };
   }, [basin]);
 
+  useEffect(() => {
+    setShowCyclones(true);
+  }, [basin]);
+
   const countMax = COUNT_MAX_BY_BASIN[basin] ?? 35;
   const aceMax = ACE_MAX_BY_BASIN[basin] ?? 350;
 
+  const chartTotals = useMemo(() => {
+    if (showCyclones) return totals;
+    return totals.filter((entry) => isAceYearAvailable(basin, entry.year));
+  }, [totals, showCyclones, basin]);
+
   const selectedYearIndex = useMemo(
-    () => totals.findIndex((entry) => entry.year === year),
-    [totals, year],
+    () => chartTotals.findIndex((entry) => entry.year === year),
+    [chartTotals, year],
   );
 
   const chartData = useMemo(
     () => ({
-      labels: totals.map((entry) => String(entry.year)),
+      labels: chartTotals.map((entry) => String(entry.year)),
       datasets: [
         {
           label: 'Tropical Cyclones',
-          data: totals.map((entry) => entry.count),
+          data: chartTotals.map((entry) => entry.count),
           borderColor: 'red',
           backgroundColor: 'pink',
-          ...pointHighlightColors(totals.length, selectedYearIndex, 'pink', 'red'),
+          ...pointHighlightColors(chartTotals.length, selectedYearIndex, 'pink', 'red'),
           yAxisID: 'y' as const,
         },
         {
           label: 'Accumulated Cyclone Energy',
-          data: totals.map((entry) => entry.ACE),
+          data: chartTotals.map((entry) =>
+            isAceYearAvailable(basin, entry.year) ? entry.ACE : null,
+          ),
           borderColor: 'purple',
           backgroundColor: 'rgba(168, 85, 247, 0.25)',
           ...pointHighlightColors(
-            totals.length,
+            chartTotals.length,
             selectedYearIndex,
             '#e9d5ff',
             'rgba(168, 85, 247, 0.45)',
@@ -149,7 +162,7 @@ const TotalsChart = () => {
         },
       ],
     }),
-    [totals, selectedYearIndex],
+    [chartTotals, selectedYearIndex, basin],
   );
 
   const options = useMemo(
@@ -182,6 +195,19 @@ const TotalsChart = () => {
               canvas.style.cursor = 'default';
             }
           },
+          onClick: function (
+            this: LegendElement<'line'>,
+            event: ChartEvent,
+            legendItem: LegendItem,
+            legend: LegendElement<'line'>,
+          ) {
+            const defaultLegendClick = Chart.defaults.plugins.legend.onClick;
+            defaultLegendClick?.call(this, event, legendItem, legend);
+
+            if (legendItem.datasetIndex === 0) {
+              setShowCyclones(legend.chart.isDatasetVisible(0));
+            }
+          },
           labels: {
             color: 'white',
           },
@@ -193,7 +219,7 @@ const TotalsChart = () => {
             label: (context: TooltipItem<'line'>) => {
               const label = context.dataset.label || '';
               const v = context.parsed.y;
-              if (v == null) return label;
+              if (v == null) return undefined;
               if (label.includes('Energy') || label.includes('ACE')) {
                 return `${label}: ${v.toFixed(1)}`;
               }
