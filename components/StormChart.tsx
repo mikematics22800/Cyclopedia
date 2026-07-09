@@ -70,8 +70,7 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
     setPressure(
       data.map((point) => {
         const p = point.min_pressure_mb;
-        if (p && p > 0) return p;
-        return null;
+        return p != null && p > 0 ? p : null;
       })
     );
     setAceSeries(cumulativeStormACESeries(data));
@@ -99,7 +98,6 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
       borderColor: 'blue',
       backgroundColor: 'lightblue',
       yAxisID: 'y1' as const,
-      spanGaps: true,
       hidden: hiddenByDatasetIndex[1] ?? false,
     },
     {

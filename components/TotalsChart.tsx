@@ -36,11 +36,11 @@ const COUNT_MAX_BY_BASIN: Record<string, number> = {
 };
 
 const ACE_MAX_BY_BASIN: Record<string, number> = {
-  atl: 300,
+  atl: 350,
   epac: 350,
   ind: 100,
   wpac: 600,
-  shem: 400,
+  shem: 600,
 };
 
 function pointHighlightColors(
@@ -115,7 +115,7 @@ const TotalsChart = () => {
   }, [basin]);
 
   const countMax = COUNT_MAX_BY_BASIN[basin] ?? 35;
-  const aceMax = ACE_MAX_BY_BASIN[basin] ?? 300;
+  const aceMax = ACE_MAX_BY_BASIN[basin] ?? 350;
 
   const selectedYearIndex = useMemo(
     () => totals.findIndex((entry) => entry.year === year),

@@ -69,7 +69,7 @@ function categoryAxisTicksForSelectedLabel(selectedIndex: number) {
 
 const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
   const { names, maxWinds, season, seasonACE, stormId } = useAppContext();
-  const [minPressures, setMinPressures] = useState<number[]>([]);
+  const [minPressures, setMinPressures] = useState<(number | null)[]>([]);
   const [mobile, setMobile] = useState(false);
 
   const selectedStormIndex = useMemo(() => {
@@ -92,8 +92,8 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
     const minPressures = season.map((storm) => {
       const pressures = storm.data
         .map((point) => point.min_pressure_mb)
-        .filter((pressure): pressure is number => pressure !== undefined && pressure > 0);
-      return pressures.length > 0 ? Math.min(...pressures) : 0;
+        .filter((pressure): pressure is number => pressure != null && pressure > 0);
+      return pressures.length > 0 ? Math.min(...pressures) : null;
     });
     setMinPressures(minPressures);
   }, [season]);
