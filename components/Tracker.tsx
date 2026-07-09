@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Legend from "./Legend";
+import Playback from "./Playback";
 import PublicIcon from '@mui/icons-material/Public';
 import MapIcon from '@mui/icons-material/Map';
 import { IconButton, Tooltip } from "@mui/material";
@@ -19,6 +20,7 @@ const Tracker = () => {
     <div className="charts">
       {globe ? <Globe/> : <Map/>}
       <div className="map-controls-container">
+        <Playback />
         <Legend />
         <Tooltip
           title={globe ? "Map" : "Globe"}

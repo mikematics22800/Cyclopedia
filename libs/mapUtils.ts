@@ -68,14 +68,14 @@ export const getPopupStormStatus = (point: StormDataPoint, stormId: string) => {
 };
 
 export const formatDateTime = (date: number, time: number) => {
-  const dateArray = date.toString().split('');
-  const year = dateArray.slice(0, 4).join('');
-  const month = dateArray.slice(4, 6).join('');
-  const day = dateArray.slice(-2).join('');
+  const dateStr = String(date).padStart(8, '0');
+  const year = dateStr.slice(0, 4);
+  const month = dateStr.slice(4, 6);
+  const day = dateStr.slice(6, 8);
 
-  const timeArray = time.toString().split('');
-  const hour = timeArray.slice(0, 2).join('');
-  const minute = timeArray.slice(-2).join('');
+  const timeStr = String(time).padStart(4, '0');
+  const hour = timeStr.slice(0, 2);
+  const minute = timeStr.slice(2, 4);
 
   let estHour = parseInt(hour, 10) - 5;
   let estDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:00Z`);

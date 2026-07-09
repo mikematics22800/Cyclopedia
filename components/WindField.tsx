@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { polygon, type Polygon as LeafletPolygon } from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useAppContext } from '../contexts/AppContext';
+import { usePlaybackContext } from '../contexts/PlaybackContext';
 import { buildWindPopupHtml, calculateWindRadii, shiftRegionForMapView } from '../libs/mapUtils';
 import { shiftMap } from '../libs/shiftMap';
 
@@ -11,6 +12,7 @@ type WindLayer = {
   polygon: LeafletPolygon;
   raw: [number, number][];
   anchorLng: number;
+  pointIndex: number;
 };
 
 const WIND_LAYERS = [
@@ -22,14 +24,30 @@ const WIND_LAYERS = [
 const WindField = () => {
   const map = useMap();
   const { storm, year } = useAppContext();
+  const { getVisiblePointCount } = usePlaybackContext();
   const layersRef = useRef<WindLayer[]>([]);
+  const getVisiblePointCountRef = useRef(getVisiblePointCount);
+  getVisiblePointCountRef.current = getVisiblePointCount;
+
+  const applyPlaybackToLayers = (centerLng: number) => {
+    if (!storm) return;
+    const count = getVisiblePointCountRef.current(storm.id);
+
+    layersRef.current.forEach(({ polygon: shape, raw, anchorLng, pointIndex }) => {
+      const visible = pointIndex < count;
+      if (visible) {
+        shape.setLatLngs(shiftRegionForMapView(raw, anchorLng, centerLng));
+      }
+      shape.setStyle({ opacity: visible ? 0.45 : 0, fillOpacity: visible ? 0.45 : 0 });
+    });
+  };
 
   useEffect(() => {
     layersRef.current.forEach(({ polygon: shape }) => shape.remove());
     layersRef.current = [];
     if (year < 2002 || !storm) return;
 
-    storm.data.forEach((point) => {
+    storm.data.forEach((point, pointIndex) => {
       WIND_LAYERS.forEach(({ key, color, label }) => {
         const radii = point[key];
         if (!radii) return;
@@ -40,14 +58,11 @@ const WindField = () => {
         const shape = polygon([], { color, weight: 2 });
         shape.bindPopup(buildWindPopupHtml(label), { className: 'storm-popup' });
         shape.addTo(map);
-        layersRef.current.push({ polygon: shape, raw, anchorLng: point.lng });
+        layersRef.current.push({ polygon: shape, raw, anchorLng: point.lng, pointIndex });
       });
     });
 
-    const centerLng = map.getCenter().lng;
-    layersRef.current.forEach(({ polygon: shape, raw, anchorLng }) => {
-      shape.setLatLngs(shiftRegionForMapView(raw, anchorLng, centerLng));
-    });
+    applyPlaybackToLayers(map.getCenter().lng);
 
     return () => {
       layersRef.current.forEach(({ polygon: shape }) => shape.remove());
@@ -55,10 +70,12 @@ const WindField = () => {
     };
   }, [storm, year, map]);
 
+  useEffect(() => {
+    applyPlaybackToLayers(map.getCenter().lng);
+  }, [getVisiblePointCount, storm, map]);
+
   shiftMap(map, (centerLng) => {
-    layersRef.current.forEach(({ polygon: shape, raw, anchorLng }) => {
-      shape.setLatLngs(shiftRegionForMapView(raw, anchorLng, centerLng));
-    });
+    applyPlaybackToLayers(centerLng);
   });
 
   return null;

@@ -18,6 +18,7 @@ import {
   isBasinYearAvailable,
 } from "../libs/basins";
 import { AppProvider } from "../contexts/AppContext";
+import { PlaybackProvider } from "../contexts/PlaybackContext";
 import Interface from "../components/Interface";
 import LoadingScreen from "../components/LoadingScreen";
 import Tracker from "./Tracker";
@@ -193,6 +194,7 @@ export default function App() {
 
   return (
     <AppProvider value={value}>
+      <PlaybackProvider globalSeason={globalSeason} year={year}>
       <div className="app relative">
         <Image
           src="/hurricane.jpg"
@@ -251,6 +253,7 @@ export default function App() {
           <LoadingScreen />
         )}
       </div>
+      </PlaybackProvider>
     </AppProvider>
   );
 }

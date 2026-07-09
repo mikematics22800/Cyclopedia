@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { polyline, type Polyline as LeafletPolyline } from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useAppContext } from '../contexts/AppContext';
+import { usePlaybackContext } from '../contexts/PlaybackContext';
 import { getStormYear } from '../libs/hurdat';
 import { projectPathForMapView } from '../libs/mapUtils';
 import { shiftMap } from '../libs/shiftMap';
@@ -33,9 +34,20 @@ const trackStyle = (
 const TrackPolylines = () => {
   const map = useMap();
   const { globalSeason, stormId, year, selectStorm } = useAppContext();
+  const { getVisiblePointCount } = usePlaybackContext();
   const layersRef = useRef<TrackLayer[]>([]);
   const selectStormRef = useRef(selectStorm);
+  const getVisiblePointCountRef = useRef(getVisiblePointCount);
   selectStormRef.current = selectStorm;
+  getVisiblePointCountRef.current = getVisiblePointCount;
+
+  const applyPlaybackToLayers = (centerLng: number) => {
+    layersRef.current.forEach(({ polyline: line, raw, id }) => {
+      const count = getVisiblePointCountRef.current(id);
+      const visible = raw.slice(0, count);
+      line.setLatLngs(projectPathForMapView(visible, centerLng));
+    });
+  };
 
   useEffect(() => {
     layersRef.current.forEach(({ polyline: line }) => line.remove());
@@ -56,11 +68,12 @@ const TrackPolylines = () => {
       layersRef.current.push({ polyline: line, raw, id: storm.id, stormYear });
     });
 
-    const centerLng = map.getCenter().lng;
-    layersRef.current.forEach(({ polyline: line, raw }) => {
-      line.setLatLngs(projectPathForMapView(raw, centerLng));
-    });
+    applyPlaybackToLayers(map.getCenter().lng);
   }, [globalSeason, map]);
+
+  useEffect(() => {
+    applyPlaybackToLayers(map.getCenter().lng);
+  }, [getVisiblePointCount, map]);
 
   useEffect(() => {
     layersRef.current.forEach(({ polyline: line, id, stormYear }) => {
@@ -69,9 +82,7 @@ const TrackPolylines = () => {
   }, [stormId, year]);
 
   shiftMap(map, (centerLng) => {
-    layersRef.current.forEach(({ polyline: line, raw }) => {
-      line.setLatLngs(projectPathForMapView(raw, centerLng));
-    });
+    applyPlaybackToLayers(centerLng);
   });
 
   return null;
