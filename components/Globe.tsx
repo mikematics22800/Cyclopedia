@@ -3,36 +3,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import {
-  buildPopupHtml,
   buildWindPopupHtml,
   calculateWindRadii,
-  dotIconDataUrl,
-  formatDateTime,
-  formatStormFullName,
-  getPopupStormStatus,
-  getStormStatus,
-  strikeIconDataUrl,
 } from '../libs/mapUtils';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import LoadingScreen from './LoadingScreen';
-import { getStormOrigin, getStormYear } from '../libs/hurdat';
+import { getStormOrigin } from '../libs/hurdat';
 import { loadCesium } from '../libs/loadCesium';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
-
-// EllipsoidalOccluder still exists at runtime but was removed from public Cesium types.
-type EllipsoidalOccluder = {
-  isPointVisible: (position: import('cesium').Cartesian3) => boolean;
-};
-
-type CesiumWithOccluder = typeof import('cesium') & {
-  EllipsoidalOccluder: new (
-    ellipsoid: import('cesium').Ellipsoid,
-    cameraPosition: import('cesium').Cartesian3,
-  ) => EllipsoidalOccluder;
-};
-
-type CesiumModule = typeof import('cesium');
-type CesiumEntity = import('cesium').Entity;
+import { useGlobePolylines } from './GlobePolylines';
+import { useGlobeTracks } from './GlobeTracks';
+import { removeEntitiesWithPrefix, type CesiumModule, type CesiumEntity } from '../libs/globeTrackUtils';
 
 type GlobePopup = {
   content: string;
@@ -56,51 +37,6 @@ const GLOBE_MAX_ZOOM_DISTANCE = leafletZoomToDistance(3);
 const GLOBE_MAX_ZOOM_DISTANCE_MOBILE = GLOBE_MAX_ZOOM_DISTANCE * 2;
 const GLOBE_INITIAL_HEIGHT = leafletZoomToDistance(4);
 const GLOBE_FOCUS_HEIGHT = leafletZoomToDistance(6);
-
-const removeEntitiesWithPrefix = (
-  viewer: import('cesium').Viewer,
-  prefix: string,
-) => {
-  const toRemove = viewer.entities.values.filter(
-    (entity) => typeof entity.id === 'string' && entity.id.startsWith(prefix),
-  );
-  toRemove.forEach((entity) => viewer.entities.remove(entity));
-};
-
-const trackAppearance = (
-  id: string,
-  stormYear: number,
-  selectedStormId: string,
-  selectedYear: number,
-) => {
-  const isSelected = id === selectedStormId;
-  const isSelectedYear = stormYear === selectedYear;
-  return {
-    width: isSelected ? 4 : isSelectedYear ? 2 : 1,
-    alpha: isSelected ? 1 : isSelectedYear ? 0.5 : 0.15,
-    color: isSelected ? 'white' : 'gray',
-  };
-};
-
-const longestVisibleSegment = (
-  positions: import('cesium').Cartesian3[],
-  occluder: EllipsoidalOccluder,
-) => {
-  let longest: import('cesium').Cartesian3[] = [];
-  let current: import('cesium').Cartesian3[] = [];
-
-  for (const position of positions) {
-    if (occluder.isPointVisible(position)) {
-      current.push(position);
-      continue;
-    }
-    if (current.length > longest.length) longest = current;
-    current = [];
-  }
-
-  if (current.length > longest.length) longest = current;
-  return longest.length >= 2 ? longest : [];
-};
 
 const isMobileViewport = () =>
   typeof window !== 'undefined' &&
@@ -168,9 +104,8 @@ const Globe = () => {
   const [viewerReady, setViewerReady] = useState(false);
   const [popup, setPopup] = useState<GlobePopup | null>(null);
   const [popupPosition, setPopupPosition] = useState<{ x: number; y: number } | null>(null);
-  const { year, windField, globalSeason, storm, stormId, focusToken, selectStorm } = useAppContext();
+  const { year, windField, storm, stormId, focusToken, selectStorm } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
-  const visibleCountsRef = useRef<Map<string, number>>(new Map());
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
   const windLayersRef = useRef<Array<{ entity: CesiumEntity; pointIndex: number }>>([]);
   getVisiblePointCountRef.current = getVisiblePointCount;
@@ -180,6 +115,9 @@ const Globe = () => {
     setPopup(null);
     setPopupPosition(null);
   }, []);
+
+  useGlobePolylines({ viewerRef, cesiumRef, viewerReady });
+  useGlobeTracks({ viewerRef, cesiumRef, viewerReady, onClearPopup: closePopup });
 
   useEffect(() => {
     const container = containerRef.current;
@@ -370,120 +308,6 @@ const Globe = () => {
     const Cesium = cesiumRef.current;
     if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed()) return;
 
-    removeEntitiesWithPrefix(viewer, 'track-');
-    if (!globalSeason) return;
-
-    globalSeason.forEach((stormTrack) => {
-      const id = stormTrack.id;
-      const stormYear = getStormYear(id);
-      const { width, alpha, color } = trackAppearance(id, stormYear, stormId, year);
-      const fullPositions = stormTrack.data.map((point) =>
-        Cesium.Cartesian3.fromDegrees(point.lng, point.lat),
-      );
-      if (fullPositions.length < 2) return;
-
-      viewer.entities.add({
-        id: `track-${id}`,
-        properties: {
-          stormTrackId: id,
-        },
-        polyline: {
-          positions: new Cesium.CallbackProperty(() => {
-            const count = visibleCountsRef.current.get(id) ?? fullPositions.length;
-            const sliced = fullPositions.slice(0, count);
-            if (sliced.length < 2) return [];
-
-            const activeViewer = viewerRef.current;
-            if (!activeViewer || activeViewer.isDestroyed()) return sliced;
-
-            const occluder = new (Cesium as CesiumWithOccluder).EllipsoidalOccluder(
-              activeViewer.scene.globe.ellipsoid,
-              activeViewer.camera.positionWC,
-            );
-            return longestVisibleSegment(sliced, occluder);
-          }, false),
-          width,
-          material: Cesium.Color.fromCssColorString(color).withAlpha(alpha),
-          arcType: Cesium.ArcType.GEODESIC,
-        },
-      });
-    });
-  }, [globalSeason, viewerReady, stormId, year]);
-
-  useEffect(() => {
-    const viewer = viewerRef.current;
-    const Cesium = cesiumRef.current;
-    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed()) return;
-
-    viewer.entities.values.forEach((entity) => {
-      if (typeof entity.id !== 'string' || !entity.id.startsWith('track-')) return;
-      const id = entity.id.slice('track-'.length);
-      const { width, alpha, color } = trackAppearance(id, getStormYear(id), stormId, year);
-      if (entity.polyline) {
-        entity.polyline.width = new Cesium.ConstantProperty(width);
-        entity.polyline.material = new Cesium.ColorMaterialProperty(
-          Cesium.Color.fromCssColorString(color).withAlpha(alpha),
-        );
-      }
-    });
-  }, [stormId, year, viewerReady]);
-
-  useEffect(() => {
-    const viewer = viewerRef.current;
-    const Cesium = cesiumRef.current;
-    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed() || !globalSeason) return;
-
-    selectedEntityRef.current = null;
-    setPopup(null);
-    setPopupPosition(null);
-    removeEntitiesWithPrefix(viewer, 'point-');
-
-    globalSeason.forEach((stormTrack) => {
-      const id = stormTrack.id;
-      const name = id.split('_')[1];
-
-      stormTrack.data.forEach((point, index) => {
-        const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc);
-        const { color } = getStormStatus(point);
-        const fullName = formatStormFullName(name, getPopupStormStatus(point, id));
-        const isLandfall = point.record === 'L';
-
-        const position = Cesium.Cartesian3.fromDegrees(point.lng, point.lat);
-        viewer.entities.add({
-          id: `point-${id}-${index}`,
-          properties: {
-            stormTrackId: id,
-          },
-          position,
-          show: new Cesium.CallbackProperty(() => {
-            const count = visibleCountsRef.current.get(id) ?? stormTrack.data.length;
-            if (index >= count) return false;
-
-            const activeViewer = viewerRef.current;
-            if (!activeViewer || activeViewer.isDestroyed()) return true;
-
-            const occluder = new (Cesium as CesiumWithOccluder).EllipsoidalOccluder(
-              activeViewer.scene.globe.ellipsoid,
-              activeViewer.camera.positionWC,
-            );
-            return occluder.isPointVisible(position);
-          }, false) as unknown as boolean,
-          billboard: {
-            image: isLandfall ? strikeIconDataUrl(color) : dotIconDataUrl(color),
-            width: isLandfall ? 25 : 10,
-            height: isLandfall ? 25 : 10,
-          },
-          description: buildPopupHtml(fullName, formattedDate, formattedTime, point),
-        });
-      });
-    });
-  }, [globalSeason, viewerReady]);
-
-  useEffect(() => {
-    const viewer = viewerRef.current;
-    const Cesium = cesiumRef.current;
-    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed()) return;
-
     windLayersRef.current.forEach(({ entity }) => viewer.entities.remove(entity));
     windLayersRef.current = [];
     removeEntitiesWithPrefix(viewer, 'wind-');
@@ -528,15 +352,6 @@ const Globe = () => {
   }, [windField, year, storm, viewerReady]);
 
   useEffect(() => {
-    if (!globalSeason) return;
-
-    globalSeason.forEach((stormTrack) => {
-      visibleCountsRef.current.set(
-        stormTrack.id,
-        getVisiblePointCountRef.current(stormTrack.id),
-      );
-    });
-
     const viewer = viewerRef.current;
     const Cesium = cesiumRef.current;
     if (!viewer || !Cesium || viewer.isDestroyed() || !storm) return;
@@ -545,7 +360,8 @@ const Globe = () => {
     windLayersRef.current.forEach(({ entity, pointIndex }) => {
       entity.show = new Cesium.ConstantProperty(pointIndex < count) as unknown as boolean;
     });
-  }, [getVisiblePointCount, globalSeason, storm]);
+    viewer.scene.requestRender();
+  }, [getVisiblePointCount, storm]);
 
   useEffect(() => {
     const viewer = viewerRef.current;

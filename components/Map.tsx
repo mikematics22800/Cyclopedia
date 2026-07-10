@@ -3,8 +3,8 @@
 import { useAppContext } from "../contexts/AppContext";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import Tracks from "./Tracks";
-import TrackPolylines from "./TrackPolylines";
+import MapTracks from "./MapTracks";
+import MapPolylines from "./MapPolylines";
 import MapStormFocus from "./MapStormFocus";
 import WindField from "./WindField";
 
@@ -21,9 +21,9 @@ const Map = () => {
         worldCopyJump
       >
         <TileLayer url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'/>
-        <TrackPolylines />
+        <MapPolylines />
         <MapStormFocus />
-        <Tracks />
+        <MapTracks />
         {year >= 2002 && windField && <WindField />}
       </MapContainer>
     </div>

@@ -9,7 +9,6 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { Close } from '@mui/icons-material';
 import { IconButton, Slider, Tooltip } from '@mui/material';
 import gsap from 'gsap';
-import { useAppContext } from '../contexts/AppContext';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
 import { formatPlaybackTimestamp } from '../libs/playback';
 

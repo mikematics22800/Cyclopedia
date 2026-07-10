@@ -31,7 +31,7 @@ const trackStyle = (
   };
 };
 
-const TrackPolylines = () => {
+const MapPolylines = () => {
   const map = useMap();
   const { globalSeason, stormId, year, selectStorm } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
@@ -88,4 +88,4 @@ const TrackPolylines = () => {
   return null;
 };
 
-export default TrackPolylines;
+export default MapPolylines;

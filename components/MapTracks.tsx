@@ -21,7 +21,7 @@ type StormMarkerLayer = {
   markers: LeafletMarker[];
 };
 
-const Tracks = () => {
+const MapTracks = () => {
   const map = useMap();
   const { globalSeason, selectStorm } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
@@ -99,4 +99,4 @@ const Tracks = () => {
   return null;
 };
 
-export default Tracks;
+export default MapTracks;
