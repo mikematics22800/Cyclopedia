@@ -358,8 +358,32 @@ ul li h2 {
   right: max(1rem, env(safe-area-inset-right, 0px));
 }
 
+.map-controls-panels {
+  @apply flex flex-row gap-2 items-start;
+}
+
+@media (max-width: 1023px) {
+  .map-controls-container:has(.map-controls-panels > .map-legend ~ .map-legend) {
+    @apply flex-col items-end;
+  }
+
+  .map-controls-container:has(.map-controls-panels > .map-legend ~ .map-legend) .map-controls-toggle {
+    order: 1;
+  }
+
+  .map-controls-container:has(.map-controls-panels > .map-legend ~ .map-legend) .map-controls-panels {
+    @apply flex-col items-stretch;
+    order: 2;
+    width: min(14rem, calc(100vw - 1.5rem));
+  }
+}
+
 @media (min-width: 1024px) {
   .map-controls-container {
+    gap: 1rem;
+  }
+
+  .map-controls-panels {
     gap: 1rem;
   }
 }
@@ -448,9 +472,14 @@ ul li h2 {
   @apply inline-flex flex-col gap-2 font-semibold text-white rounded-xl w-max max-w-[min(18rem,calc(100vw-2rem))] p-3 bg-slate-950/75 backdrop-blur-md border-white border transition-all duration-300 ease-smooth;
 }
 
+.map-button.map-legend {
+  width: min(18rem, calc(100vw - 2rem));
+}
+
 @media (max-width: 1023px) {
   .map-button.map-legend {
-    @apply gap-1.5 p-2 max-w-[min(14rem,calc(100vw-1.5rem))] rounded-lg;
+    @apply gap-1.5 p-2 rounded-lg;
+    width: min(14rem, calc(100vw - 1.5rem));
   }
 
   .map-legend-label .MuiFormControlLabel-label {

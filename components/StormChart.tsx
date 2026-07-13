@@ -193,7 +193,7 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
   };
 
   return (
-    <div className="relative w-full min-h-0 h-96">
+    <div className="relative w-full min-h-0 lg:h-96 h-64">
       <Line options={options} data={data} plugins={[aceThresholdLinePlugin]} />
     </div>
   );

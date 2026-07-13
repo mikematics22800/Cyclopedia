@@ -274,7 +274,7 @@ const TotalsChart = () => {
   if (!totals.length) return null;
 
   return (
-    <div className="relative h-96 w-full">
+    <div className="relative lg:h-96 h-64 w-full">
       <Line data={chartData} options={options} plugins={[selectedYearLinePlugin]} />
     </div>
   );

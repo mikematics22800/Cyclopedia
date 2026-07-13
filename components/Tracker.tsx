@@ -20,35 +20,39 @@ const Tracker = () => {
     <div className="charts">
       {globe ? <Globe/> : <Map/>}
       <div className="map-controls-container">
-        <Playback />
-        <Legend />
-        <Tooltip
-          title={globe ? "Map" : "Globe"}
-          placement="bottom"
-          arrow
-        >
-          <div
-            className="map-button cursor-pointer"
-            onClick={toggleGlobe}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                toggleGlobe();
-              }
-            }}
+        <div className="map-controls-panels">
+          <Playback />
+          <Legend />
+        </div>
+        <div className="map-controls-toggle">
+          <Tooltip
+            title={globe ? "Map" : "Globe"}
+            placement="bottom"
+            arrow
           >
-            <IconButton
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleGlobe();
+            <div
+              className="map-button cursor-pointer"
+              onClick={toggleGlobe}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleGlobe();
+                }
               }}
             >
-              {!globe ? <PublicIcon className="!text-2xl text-white" /> : <MapIcon className="!text-2xl text-white" />}
-            </IconButton>
-          </div>
-        </Tooltip>
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleGlobe();
+                }}
+              >
+                {!globe ? <PublicIcon className="!text-2xl text-white" /> : <MapIcon className="!text-2xl text-white" />}
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
       </div>
     </div>
   );
