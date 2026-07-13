@@ -15,7 +15,17 @@ import { formatPlaybackTimestamp } from '../libs/playback';
 const SPEEDS = [1, 2, 4, 8, 16] as const;
 const BASE_INTERVAL_MS = 600;
 
-const Playback = () => {
+type PlaybackProps = {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  part?: 'combined' | 'button' | 'panel';
+};
+
+const Playback = ({
+  open: controlledOpen,
+  onOpenChange,
+  part = 'combined',
+}: PlaybackProps) => {
   const {
     timestamps,
     playbackIndex,
@@ -31,7 +41,9 @@ const Playback = () => {
     togglePlayback,
   } = usePlaybackContext();
 
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const setOpen = onOpenChange ?? setInternalOpen;
   const openPanelRef = useRef<HTMLDivElement>(null);
 
   const sliderValue = playbackIndex ?? Math.max(0, timestamps.length - 1);
@@ -40,6 +52,7 @@ const Playback = () => {
   const disabled = timestamps.length === 0;
 
   useLayoutEffect(() => {
+    if (part === 'button') return;
     const panel = openPanelRef.current;
     if (!open || !panel) return;
 
@@ -55,9 +68,10 @@ const Playback = () => {
     }, panel);
 
     return () => ctx.revert();
-  }, [open]);
+  }, [open, part]);
 
   useEffect(() => {
+    if (part === 'panel') return;
     if (!playing || timestamps.length === 0) return;
 
     const timer = window.setInterval(() => {
@@ -75,37 +89,35 @@ const Playback = () => {
     }, BASE_INTERVAL_MS / playbackSpeed);
 
     return () => window.clearInterval(timer);
-  }, [playing, playbackSpeed, playbackForward, timestamps.length, setPlaybackIndex, setPlaying]);
+  }, [part, playing, playbackSpeed, playbackForward, timestamps.length, setPlaybackIndex, setPlaying]);
 
-  if (!open) {
-    return (
-      <Tooltip title="Playback" placement="bottom" arrow>
-        <div
-          className="map-button cursor-pointer"
-          onClick={() => setOpen(true)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              setOpen(true);
-            }
+  const button = (
+    <Tooltip title="Playback" placement="bottom" arrow>
+      <div
+        className={`map-button cursor-pointer${open ? ' map-button--active' : ''}`}
+        onClick={() => setOpen(!open)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setOpen(!open);
+          }
+        }}
+      >
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(!open);
           }}
         >
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpen(true);
-            }}
-          >
-            <PlayCircleIcon className="!text-2xl text-white" />
-          </IconButton>
-        </div>
-      </Tooltip>
-    );
-  }
+          <PlayCircleIcon className="!text-2xl text-white" />
+        </IconButton>
+      </div>
+    </Tooltip>
+  );
 
-  return (
+  const panel = open ? (
     <div ref={openPanelRef} className="map-button map-legend gap-1">
       <div className="settings-row flex justify-between items-center gap-1 lg:gap-2 border-b border-white pb-1.5 lg:pb-2">
         <span className="text-xs lg:text-sm font-semibold text-white">Playback</span>
@@ -207,7 +219,11 @@ const Playback = () => {
         ))}
       </div>
     </div>
-  );
+  ) : null;
+
+  if (part === 'button') return button;
+  if (part === 'panel') return panel;
+  return open ? panel : button;
 };
 
 export default Playback;

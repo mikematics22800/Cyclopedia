@@ -33,19 +33,33 @@ const windFieldItems = [
 ] as const;
 
 
-const Legend = () => {
+type LegendProps = {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  part?: 'combined' | 'button' | 'panel';
+};
+
+const Legend = ({
+  open: controlledOpen,
+  onOpenChange,
+  part = 'combined',
+}: LegendProps) => {
   const { windField, setWindField, year } = useAppContext();
   const windFieldAvailable = year >= 2002;
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const setOpen = onOpenChange ?? setInternalOpen;
   const openPanelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (part === 'panel') return;
     if (year < 2002 && windField) {
       setWindField(false);
     }
-  }, [year, windField, setWindField]);
+  }, [part, year, windField, setWindField]);
 
   useLayoutEffect(() => {
+    if (part === 'button') return;
     const panel = openPanelRef.current;
     if (!open || !panel) return;
     const rows = panel.querySelectorAll('.settings-row');
@@ -59,41 +73,39 @@ const Legend = () => {
       });
     }, panel);
     return () => ctx.revert();
-  }, [open]);
+  }, [open, part]);
 
-  if (!open) {
-    return (
-      <Tooltip
-        title="Legend"
-        placement="bottom"
-        arrow
+  const button = (
+    <Tooltip
+      title="Legend"
+      placement="bottom"
+      arrow
+    >
+      <div
+        className={`map-button cursor-pointer${open ? ' map-button--active' : ''}`}
+        onClick={() => setOpen(!open)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setOpen(!open);
+          }
+        }}
       >
-        <div
-          className="map-button cursor-pointer"
-          onClick={() => setOpen(true)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              setOpen(true);
-            }
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(!open);
           }}
         >
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpen(true);
-            }}
-          >
-            <FormatListBulleted className="!text-2xl text-white" />
-          </IconButton>
-        </div>
-      </Tooltip>
-    );
-  }
+          <FormatListBulleted className="!text-2xl text-white" />
+        </IconButton>
+      </div>
+    </Tooltip>
+  );
 
-  return (
+  const panel = open ? (
     <div
       ref={openPanelRef}
       className="map-button map-legend gap-1"
@@ -163,7 +175,11 @@ const Legend = () => {
         </div>
       </FormGroup>}
     </div>
-  );
+  ) : null;
+
+  if (part === 'button') return button;
+  if (part === 'panel') return panel;
+  return open ? panel : button;
 };
 
 export default Legend;

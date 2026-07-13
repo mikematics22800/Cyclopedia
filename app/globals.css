@@ -363,28 +363,23 @@ ul li h2 {
 }
 
 @media (max-width: 1023px) {
-  .map-controls-container:has(.map-controls-panels > .map-legend ~ .map-legend) {
-    @apply flex-col items-end;
-  }
-
-  .map-controls-container:has(.map-controls-panels > .map-legend ~ .map-legend) .map-controls-toggle {
-    order: 1;
-  }
-
-  .map-controls-container:has(.map-controls-panels > .map-legend ~ .map-legend) .map-controls-panels {
-    @apply flex-col items-stretch;
-    order: 2;
-    width: min(14rem, calc(100vw - 1.5rem));
-  }
-}
-
-@media (min-width: 1024px) {
   .map-controls-container {
-    gap: 1rem;
+    @apply fixed flex-col items-end gap-2 pointer-events-none;
+    top: max(1rem, env(safe-area-inset-top, 0px));
+    right: max(1rem, env(safe-area-inset-right, 0px));
+  }
+
+  .map-controls-buttons,
+  .map-controls-panels {
+    @apply flex flex-col items-end gap-2 pointer-events-auto;
   }
 
   .map-controls-panels {
-    gap: 1rem;
+    width: min(14rem, calc(100vw - 1.5rem));
+  }
+
+  .map-controls-panels .map-button.map-legend {
+    @apply w-full;
   }
 }
 
@@ -470,6 +465,10 @@ ul li h2 {
 
 .map-button {
   @apply inline-flex flex-col gap-2 font-semibold text-white rounded-xl w-max max-w-[min(18rem,calc(100vw-2rem))] p-3 bg-slate-950/75 backdrop-blur-md border-white border transition-all duration-300 ease-smooth;
+}
+
+.map-button--active {
+  @apply border-sky-400/80 ring-1 ring-sky-400/50;
 }
 
 .map-button.map-legend {
