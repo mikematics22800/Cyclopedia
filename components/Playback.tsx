@@ -119,7 +119,7 @@ const Playback = ({
 
   const panel = open ? (
     <div ref={openPanelRef} className="map-button map-legend gap-1">
-      <div className="settings-row flex justify-between items-center gap-1 lg:gap-2 border-b border-white pb-1.5 lg:pb-2">
+      <div className="settings-row flex justify-between items-center gap-1 lg:gap-2 border-b border-white pb-1 lg:pb-2">
         <span className="text-xs lg:text-sm font-semibold text-white">Playback</span>
         <IconButton
           size="small"
@@ -130,12 +130,13 @@ const Playback = ({
         </IconButton>
       </div>
 
-      <p className="settings-row text-xs lg:text-sm text-white text-center">
+      <p className="settings-row text-xs lg:text-sm text-white text-center leading-tight m-0">
         {displayTimestamp ? formatPlaybackTimestamp(displayTimestamp) : 'No track data'}
       </p>
 
-      <div className="settings-row px-0.5 lg:px-1">
+      <div className="settings-row px-0 lg:px-1 -mt-1 lg:mt-0">
         <Slider
+          className="playback-slider"
           size="small"
           min={0}
           max={Math.max(0, timestamps.length - 1)}
@@ -147,10 +148,11 @@ const Playback = ({
           }}
           sx={{
             color: 'rgb(56 189 248)',
-            padding: '4px 0',
+            py: { xs: 0, lg: '4px' },
+            px: { xs: 0, lg: '4px' },
             '& .MuiSlider-thumb': {
-              width: 12,
-              height: 12,
+              width: { xs: 10, lg: 12 },
+              height: { xs: 10, lg: 12 },
             },
             '& .MuiSlider-rail': {
               opacity: 0.35,

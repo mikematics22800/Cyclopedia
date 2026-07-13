@@ -486,6 +486,11 @@ ul li h2 {
     width: min(14rem, calc(100vw - 1.5rem));
   }
 
+  .map-button.map-legend .playback-slider.MuiSlider-root {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
   .map-legend-label .MuiFormControlLabel-label {
     font-size: 0.75rem;
   }
