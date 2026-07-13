@@ -480,15 +480,15 @@ ul li h2 {
   width: min(18rem, calc(100vw - 2rem));
 }
 
+.map-button.map-legend .playback-slider.MuiSlider-root {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 @media (max-width: 1023px) {
   .map-button.map-legend {
     @apply gap-1.5 p-2 rounded-lg;
     width: min(14rem, calc(100vw - 1.5rem));
-  }
-
-  .map-button.map-legend .playback-slider.MuiSlider-root {
-    padding-top: 0;
-    padding-bottom: 0;
   }
 
   .map-legend-label .MuiFormControlLabel-label {

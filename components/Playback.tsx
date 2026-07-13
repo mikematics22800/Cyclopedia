@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -8,8 +8,8 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { Close } from '@mui/icons-material';
 import { IconButton, Slider, Tooltip } from '@mui/material';
-import gsap from 'gsap';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
+import { useSettingsPanelAnimation } from './hooks/useSettingsPanelAnimation';
 import { formatPlaybackTimestamp } from '../libs/playback';
 
 const SPEEDS = [1, 2, 4, 8, 16] as const;
@@ -45,30 +45,16 @@ const Playback = ({
   const open = controlledOpen ?? internalOpen;
   const setOpen = onOpenChange ?? setInternalOpen;
   const openPanelRef = useRef<HTMLDivElement>(null);
+  const panelVisible = useSettingsPanelAnimation(
+    open,
+    openPanelRef,
+    part !== 'button'
+  );
 
   const sliderValue = playbackIndex ?? Math.max(0, timestamps.length - 1);
   const displayTimestamp =
     playbackTimestamp ?? timestamps[timestamps.length - 1] ?? null;
   const disabled = timestamps.length === 0;
-
-  useLayoutEffect(() => {
-    if (part === 'button') return;
-    const panel = openPanelRef.current;
-    if (!open || !panel) return;
-
-    const rows = panel.querySelectorAll('.settings-row');
-    const ctx = gsap.context(() => {
-      gsap.from(rows, {
-        opacity: 0,
-        x: -10,
-        stagger: { amount: 0.2 },
-        duration: 0.3,
-        ease: 'power2.out',
-      });
-    }, panel);
-
-    return () => ctx.revert();
-  }, [open, part]);
 
   useEffect(() => {
     if (part === 'panel') return;
@@ -117,7 +103,7 @@ const Playback = ({
     </Tooltip>
   );
 
-  const panel = open ? (
+  const panel = panelVisible ? (
     <div ref={openPanelRef} className="map-button map-legend gap-1">
       <div className="settings-row flex justify-between items-center gap-1 lg:gap-2 border-b border-white pb-1 lg:pb-2">
         <span className="text-xs lg:text-sm font-semibold text-white">Playback</span>
@@ -130,38 +116,39 @@ const Playback = ({
         </IconButton>
       </div>
 
-      <p className="settings-row text-xs lg:text-sm text-white text-center leading-tight m-0">
-        {displayTimestamp ? formatPlaybackTimestamp(displayTimestamp) : 'No track data'}
-      </p>
+      <div className="settings-row flex flex-col gap-0">
+        <p className="text-xs lg:text-sm text-white text-center leading-none m-0">
+          {displayTimestamp ? formatPlaybackTimestamp(displayTimestamp) : 'No track data'}
+        </p>
 
-      <div className="settings-row px-0 lg:px-1 -mt-1 lg:mt-0">
-        <Slider
-          className="playback-slider"
-          size="small"
-          min={0}
-          max={Math.max(0, timestamps.length - 1)}
-          value={sliderValue}
-          disabled={disabled}
-          onChange={(_, value) => {
-            setPlaying(false);
-            setPlaybackIndex(Array.isArray(value) ? value[0] : value);
-          }}
-          sx={{
-            color: 'rgb(56 189 248)',
-            py: { xs: 0, lg: '4px' },
-            px: { xs: 0, lg: '4px' },
-            '& .MuiSlider-thumb': {
-              width: { xs: 10, lg: 12 },
-              height: { xs: 10, lg: 12 },
-            },
-            '& .MuiSlider-rail': {
-              opacity: 0.35,
-            },
-          }}
-        />
-      </div>
+        <div className="px-0 lg:px-1 -my-0.5">
+          <Slider
+            className="playback-slider"
+            size="small"
+            min={0}
+            max={Math.max(0, timestamps.length - 1)}
+            value={sliderValue}
+            disabled={disabled}
+            onChange={(_, value) => {
+              setPlaying(false);
+              setPlaybackIndex(Array.isArray(value) ? value[0] : value);
+            }}
+            sx={{
+              color: 'rgb(56 189 248)',
+              py: 0,
+              px: { xs: 0, lg: '4px' },
+              '& .MuiSlider-thumb': {
+                width: { xs: 10, lg: 12 },
+                height: { xs: 10, lg: 12 },
+              },
+              '& .MuiSlider-rail': {
+                opacity: 0.35,
+              },
+            }}
+          />
+        </div>
 
-      <div className="settings-row flex items-center justify-center gap-1 lg:gap-2 border-t border-white pt-1.5 lg:pt-2">
+        <div className="flex items-center justify-center gap-1 lg:gap-2 -mt-0.5">
         <Tooltip title="Step backward" placement="bottom" arrow>
           <span>
             <IconButton
@@ -201,9 +188,10 @@ const Playback = ({
             </IconButton>
           </span>
         </Tooltip>
+        </div>
       </div>
 
-      <div className="settings-row flex flex-wrap justify-center gap-1 border-t border-white pt-1.5 lg:pt-2">
+      <div className="settings-row flex flex-wrap justify-center gap-1 -mt-0.5">
         {SPEEDS.map((speed) => (
           <button
             key={speed}
@@ -225,7 +213,7 @@ const Playback = ({
 
   if (part === 'button') return button;
   if (part === 'panel') return panel;
-  return open ? panel : button;
+  return panelVisible ? panel : button;
 };
 
 export default Playback;

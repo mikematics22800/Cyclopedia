@@ -1,16 +1,14 @@
 'use client';
 
-import { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Checkbox,
-  FormControlLabel,
-  FormGroup,
   Tooltip,
   IconButton,
 } from '@mui/material';
 import { Close, FormatListBulleted } from '@mui/icons-material';
-import gsap from 'gsap';
 import { useAppContext } from '../contexts/AppContext';
+import { useSettingsPanelAnimation } from './hooks/useSettingsPanelAnimation';
 
 const statusItems = [
   { colorClass: 'bg-[dodgerblue]', label: 'Tropical Depression', windRange: '< 34 kt' },
@@ -32,6 +30,11 @@ const windFieldItems = [
   { label: '≥ 64 kt', swatchClass: 'wind-field-swatch--64kt' },
 ] as const;
 
+const LEGEND_SECTION_HEADER_TEXT =
+  'text-xs lg:text-sm font-semibold text-white text-center m-0';
+const LEGEND_SECTION_HEADER = `settings-row ${LEGEND_SECTION_HEADER_TEXT}`;
+const LEGEND_SECTION_LIST =
+  'flex flex-col gap-0.5 border-t border-white pt-1.5 lg:pt-2 lg:gap-0.5';
 
 type LegendProps = {
   open?: boolean;
@@ -50,6 +53,11 @@ const Legend = ({
   const open = controlledOpen ?? internalOpen;
   const setOpen = onOpenChange ?? setInternalOpen;
   const openPanelRef = useRef<HTMLDivElement>(null);
+  const panelVisible = useSettingsPanelAnimation(
+    open,
+    openPanelRef,
+    part !== 'button'
+  );
 
   useEffect(() => {
     if (part === 'panel') return;
@@ -57,23 +65,6 @@ const Legend = ({
       setWindField(false);
     }
   }, [part, year, windField, setWindField]);
-
-  useLayoutEffect(() => {
-    if (part === 'button') return;
-    const panel = openPanelRef.current;
-    if (!open || !panel) return;
-    const rows = panel.querySelectorAll('.settings-row');
-    const ctx = gsap.context(() => {
-      gsap.from(rows, {
-        opacity: 0,
-        x: -10,
-        stagger: { amount: 0.2 },
-        duration: 0.3,
-        ease: 'power2.out',
-      });
-    }, panel);
-    return () => ctx.revert();
-  }, [open, part]);
 
   const button = (
     <Tooltip
@@ -105,7 +96,7 @@ const Legend = ({
     </Tooltip>
   );
 
-  const panel = open ? (
+  const panel = panelVisible ? (
     <div
       ref={openPanelRef}
       className="map-button map-legend gap-1"
@@ -122,8 +113,8 @@ const Legend = ({
           <Close className="!text-lg lg:!text-xl" />
         </IconButton>
       </div>
-      <h1 className="settings-row text-xs lg:text-sm font-semibold text-white text-center">Classification</h1>
-      <div className="flex flex-col gap-0.5 border-t border-white pt-1.5 lg:pt-2 lg:gap-0.5">
+      <h1 className={LEGEND_SECTION_HEADER}>Classification</h1>
+      <div className={LEGEND_SECTION_LIST}>
         {statusItems.map((item) => (
           <div
             key={item.label}
@@ -141,45 +132,41 @@ const Legend = ({
           </div>
         ))}
       </div>
-      {year >= 2002 && <FormGroup className="map-legend-form-group gap-0.5 border-t border-white py-1.5 lg:py-2 lg:gap-0.5 w-full text-center">
-        <div className="settings-row rounded-lg py-0.5 pr-0.5 lg:pr-1 pl-0">
-          <span className="inline-block w-fit max-w-full">
-            <FormControlLabel
-              className="map-legend-label"
+      {year >= 2002 && (
+        <>
+          <div className="settings-row flex items-center justify-center gap-1 lg:gap-1.5 border-t border-white pt-1.5 lg:pt-2">
+            <h1 className={LEGEND_SECTION_HEADER_TEXT}>Wind Field</h1>
+            <Checkbox
+              size="small"
+              className="!text-sky-400 !p-0"
+              checked={windField}
               disabled={!windFieldAvailable}
-              control={
-                <Checkbox
-                  size="small"
-                  className="!text-sky-400 !pl-0 !pr-0.5 lg:!pr-1 !py-0.5 lg:!py-1"
-                  checked={windField}
-                  disabled={!windFieldAvailable}
-                  onChange={(e) => setWindField(e.target.checked)}
-                />
-              }
-              label="Wind Field"
+              onChange={(e) => setWindField(e.target.checked)}
             />
-          </span>
-        </div>
-        <div className="flex flex-col gap-0.5 border-t border-white pt-1.5 lg:pt-2 lg:gap-0.5">
-        {windFieldItems.map((item) => (
-          <div
-            key={item.label}
-            className="settings-row flex w-full items-center gap-1.5 lg:gap-2 rounded-md px-0.5 lg:px-1 py-0.5"
-          >
-            <span
-              className={`h-2 lg:h-3 flex-1 rounded-sm border ${item.swatchClass}`}
-            />
-            <h1 className="min-w-[2.75rem] lg:min-w-[3.5rem] text-right text-xs lg:text-sm">{item.label}</h1>
           </div>
-        ))}
-        </div>
-      </FormGroup>}
+          <div className={LEGEND_SECTION_LIST}>
+            {windFieldItems.map((item) => (
+              <div
+                key={item.label}
+                className="settings-row flex w-full items-center gap-1.5 lg:gap-2 rounded-md px-0.5 lg:px-1 py-0.5"
+              >
+                <span
+                  className={`h-2 lg:h-3 flex-1 rounded-sm border ${item.swatchClass}`}
+                />
+                <h1 className="min-w-[2.75rem] lg:min-w-[3.5rem] text-right text-xs lg:text-sm">
+                  {item.label}
+                </h1>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   ) : null;
 
   if (part === 'button') return button;
   if (part === 'panel') return panel;
-  return open ? panel : button;
+  return panelVisible ? panel : button;
 };
 
 export default Legend;
