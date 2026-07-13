@@ -301,7 +301,7 @@ nav {
 }
 
 .map {
-  @apply w-full h-full relative;
+  @apply w-full h-full relative overflow-visible;
 }
 
 .desktop-view .charts {
@@ -435,7 +435,7 @@ ul li h2 {
 }
 
 .popup-panel {
-  @apply inline-flex flex-col gap-1 font-semibold text-white rounded-xl p-4 bg-black border border-white;
+  @apply inline-flex flex-col gap-1 font-semibold text-white rounded-xl p-4 bg-slate-950/75 backdrop-blur-md border border-white;
 }
 
 .popup-panel h1 {
@@ -451,8 +451,13 @@ ul li h2 {
 }
 
 .globe-popup {
-  @apply absolute z-[1000];
+  @apply absolute z-[1000] w-max max-w-none shrink-0;
   transform: translate(-50%, calc(-100% - 12px));
+}
+
+.globe-popup-content,
+.globe-popup .popup-panel {
+  @apply w-max shrink-0;
 }
 
 .globe-popup-close {
@@ -618,7 +623,8 @@ body {
   color: rgb(255 255 255);
   border-radius: 0.75rem;
   padding: 1rem;
-  background: rgb(0 0 0);
+  background: rgb(2 6 23 / 0.75);
+  backdrop-filter: blur(12px);
   border: 1px solid rgb(255 255 255);
 }
 

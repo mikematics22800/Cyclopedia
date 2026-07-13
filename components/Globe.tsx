@@ -400,7 +400,10 @@ const Globe = () => {
           >
             ×
           </button>
-          <div dangerouslySetInnerHTML={{ __html: popup.content }} />
+          <div
+            className="globe-popup-content"
+            dangerouslySetInnerHTML={{ __html: popup.content }}
+          />
         </div>
       )}
       {!viewerReady && <LoadingScreen overlay />}
