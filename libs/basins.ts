@@ -37,7 +37,7 @@ export function isAceYearAvailable(basin: string, year: number): boolean {
 
 export const END_YEAR = Math.max(...Object.values(BASINS).map((b) => b.endYear));
 
-/** Legacy basin code kept for cached API/localStorage requests. */
+/** Legacy basin code kept for cached localStorage requests. */
 export const BASIN_ALIASES: Record<string, BasinId> = {
   pac: 'epac',
 };

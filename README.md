@@ -48,7 +48,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-`postinstall` copies Cesium assets and archive data into `public/`. Production builds run the same copy steps automatically.
+`postinstall` copies Cesium assets into `public/`. Production builds run the same copy step automatically.
 
 ### Scripts
 
@@ -64,7 +64,6 @@ Open [http://localhost:3000](http://localhost:3000).
 ```
 Cyclopedia/
 ├── app/                    # Next.js App Router
-│   ├── api/archive/        # Archive JSON API route
 │   ├── layout.tsx          # Root layout, PWA meta, service worker
 │   └── page.tsx
 ├── components/             # React UI
@@ -84,12 +83,11 @@ Cyclopedia/
 │   ├── normalizeArchive.ts # Data normalization
 │   └── mapUtils.ts         # Map helpers
 ├── public/
-│   ├── archive/            # Storm JSON by basin/year
+│   ├── archive/            # Storm JSON by basin/year (static files)
 │   ├── sw.js               # Service worker
 │   └── manifest.json       # PWA manifest
 ├── scripts/
-│   ├── copy-cesium.mjs     # Copy Cesium static assets
-│   └── copy-archive.mjs    # Sync archive to public/
+│   └── copy-cesium.mjs     # Copy Cesium static assets
 └── script.js               # Landfall detection utility
 ```
 
@@ -134,15 +132,11 @@ node script.js               # Write landfall markers to archive JSON
 
 Processes `wpac`, `shem`, and `ind` basins. Downloads `ne_50m_land.geojson` to `scripts/data/` on first run.
 
-## API
+## Archive Data
 
-Archive data is also exposed via a Next.js API route:
+Storm archives are static JSON files served from `public/archive/` at `/archive/{basin}/{year}.json`. The app fetches them directly and normalizes fields client-side via `libs/normalizeArchive.ts`. Repeat visits are accelerated with IndexedDB caching in `libs/hurdat.ts`.
 
-```
-GET /api/archive/{basin}/{year}
-```
-
-Returns the same JSON as the static files under `/archive/{basin}/{year}.json`, with CORS and cache headers configured in `next.config.ts`.
+Season totals are available at `/archive/{basin}/totals.json`.
 
 ## Deployment
 
