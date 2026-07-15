@@ -11,7 +11,8 @@
 
 .storm-font {
   font-family: var(--font-storm), sans-serif;
-  font-style: italic;
+  font-style: italic;  
+  @apply  text-4xl text-white
 }
 
 *::-webkit-scrollbar {

@@ -11,6 +11,7 @@ import {
 } from "../libs/basins";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import Image from "next/image";
 
 const SELECTOR_MENU_MAX_HEIGHT = 280;
 

@@ -209,7 +209,7 @@ const SeasonMetrics = () => {
             <h2 className='value'>{metrics.deadOrMissing}</h2>
           </li>
           <li className='data-row border-b'>
-            <h2 className='label'>Total Cost (Million USD)</h2>
+            <h2 className='label'>Total Cost (Million {year} USD)</h2>
             <h2 className='value cost-value'>${metrics.cost}</h2>
           </li>
         </ul>
@@ -372,7 +372,7 @@ const StormMetrics = () => {
           </li>
 
           <li data-storm-reveal className='data-row border-b'>
-            <h2 className='label'>Cost (Million USD)</h2>
+            <h2 className='label'>Cost (Million {year} USD)</h2>
             <h2 className='value cost-value'>${metrics.cost}</h2>
           </li>
         </ul>

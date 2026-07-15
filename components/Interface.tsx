@@ -9,6 +9,7 @@ import TotalsChart from "./TotalsChart";
 import SeasonChart from './SeasonChart';
 import StormChart from './StormChart';
 import Selectors from './Selectors';
+import Image from "next/image";
 
 type InterfaceProps = {
   mobileSheet?: boolean;
@@ -47,6 +48,24 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
               <TotalsChart/>
               <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
               <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
+            </div>
+            <div className="flex items-center w-full justify-between">
+              <Image
+                src="/NOAA.svg"
+                alt="NOAA"
+                width={60}
+                height={60}
+                priority
+                unoptimized
+              />
+              <Image
+                src="/JTWC.svg"
+                alt="JTWC"
+                width={50}
+                height={50}
+                priority
+                unoptimized
+              />
             </div>
           </div>
         </div>

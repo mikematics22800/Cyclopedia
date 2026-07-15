@@ -217,7 +217,7 @@ export default function App() {
                   priority
                   unoptimized
                 />
-                <h1 className="storm-font text-4xl text-white italic tracking-tight">
+                <h1 className="storm-font">
                   CYCLOPEDIA
                 </h1>
               </div>
