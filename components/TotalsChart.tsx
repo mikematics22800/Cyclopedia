@@ -91,7 +91,7 @@ const selectedYearLinePlugin: Plugin<'line'> = {
   },
 };
 
-const TotalsChart = () => {
+const TotalsChart = ({ extraPlugins = [] }: { extraPlugins?: Plugin[] }) => {
   const { basin, year } = useAppContext();
   const [totals, setTotals] = useState<YearTotal[]>([]);
   const [showCyclones, setShowCyclones] = useState(true);
@@ -284,7 +284,7 @@ const TotalsChart = () => {
 
   return (
     <div className="relative lg:h-96 h-64 w-full">
-      <Line data={chartData} options={options} plugins={[selectedYearLinePlugin]} />
+      <Line data={chartData} options={options} plugins={[selectedYearLinePlugin, ...extraPlugins]} />
     </div>
   );
 };

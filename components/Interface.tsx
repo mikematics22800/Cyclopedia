@@ -1,13 +1,11 @@
 'use client';
 
-import { useRef, useCallback, useState } from "react";
+import { useRef } from "react";
 import { useAppContext } from "../contexts/AppContext";
 import Metrics from "./Metrics";
 import { useGsapReveal } from "./hooks/useGsapReveal";
 import { useMobileSheetDrag } from "./hooks/useMobileSheetDrag";
-import TotalsChart from "./TotalsChart";
-import SeasonChart from './SeasonChart';
-import StormChart from './StormChart';
+import Charts from './Charts';
 import Selectors from './Selectors';
 import Image from "next/image";
 
@@ -17,7 +15,6 @@ type InterfaceProps = {
 
 const Interface = ({ mobileSheet = false }: InterfaceProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [hiddenByDatasetIndex, setHiddenByDatasetIndex] = useState<Record<number, boolean>>({});
 
   const { basin, year } = useAppContext();
   const { dragHandleProps, sheetStyle, handleRef, snap } = useMobileSheetDrag(mobileSheet);
@@ -26,13 +23,6 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
     stagger: 0.065,
     y: 18,
   });
-
-  const handleLegendVisibilityChange = useCallback((datasetIndex: number, isVisible: boolean) => {
-    setHiddenByDatasetIndex((prev) => ({
-      ...prev,
-      [datasetIndex]: !isVisible,
-    }));
-  }, []);
 
   const interfaceBody = (
     <div ref={containerRef} className='interface'>
@@ -44,11 +34,7 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
           <div className="metrics">
             <Selectors />
             <Metrics />
-            <div className="lg:hidden w-full p-4">
-              <TotalsChart/>
-              <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
-              <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
-            </div>
+            <Charts embedded />
             <div className="flex items-center w-full justify-between">
               <Image
                 src="/NOAA.svg"
