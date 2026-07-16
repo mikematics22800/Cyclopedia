@@ -31,7 +31,7 @@ type YearTotal = {
 const COUNT_MAX_BY_BASIN: Record<string, number> = {
   n_atlantic: 35,
   e_pacific: 35,
-  n_indian: 20,
+  n_indian: 25,
   w_pacific: 60,
   s_indian: 35,
   s_pacific: 35,
