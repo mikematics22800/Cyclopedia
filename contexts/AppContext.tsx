@@ -2,6 +2,7 @@
 
 import { createContext, useContext, ReactNode } from 'react';
 import { Storm } from '../libs/hurdat';
+import type { BasinId } from '../libs/basins';
 
 interface AppContextType {
   basin: string;
@@ -10,6 +11,11 @@ interface AppContextType {
   selectYear: (year: number) => void;
   season: Storm[] | null;
   globalSeason: Storm[] | null;
+  mapSeason: Storm[] | null;
+  visibleBasins: Set<BasinId>;
+  toggleBasinVisibility: (basinId: BasinId) => void;
+  setBasinVisibility: (basinId: BasinId, visible: boolean) => void;
+  setAllBasinsVisible: (visible: boolean) => void;
   storm: Storm | null;
   stormId: string;
   focusToken: number;

@@ -18,7 +18,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
-import { isAceYearAvailable } from '../libs/basins';
+import { getTotalsFilePath, isAceYearAvailable } from '../libs/basins';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -29,19 +29,23 @@ type YearTotal = {
 };
 
 const COUNT_MAX_BY_BASIN: Record<string, number> = {
-  atl: 35,
-  epac: 35,
-  ind: 20,
-  wpac: 60,
-  shem: 60,
+  n_atlantic: 35,
+  e_pacific: 35,
+  n_indian: 20,
+  w_pacific: 60,
+  s_indian: 35,
+  s_pacific: 35,
+  s_atlantic: 5,
 };
 
 const ACE_MAX_BY_BASIN: Record<string, number> = {
-  atl: 350,
-  epac: 350,
-  ind: 100,
-  wpac: 600,
-  shem: 400,
+  n_atlantic: 350,
+  e_pacific: 350,
+  n_indian: 100,
+  w_pacific: 600,
+  s_indian: 350,
+  s_pacific: 350,
+  s_atlantic: 50,
 };
 
 function pointHighlightColors(
@@ -97,7 +101,12 @@ const TotalsChart = () => {
 
     async function loadTotals() {
       try {
-        const response = await fetch(`/archive/${basin}/totals.json`);
+        const path = getTotalsFilePath(basin);
+        if (!path) {
+          if (!cancelled) setTotals([]);
+          return;
+        }
+        const response = await fetch(`/${path}`);
         if (!response.ok) {
           if (!cancelled) setTotals([]);
           return;

@@ -3,14 +3,21 @@
 import { useEffect, useRef, type RefObject } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
+import { getBasinFromStormId } from '../libs/basins';
 import { getStormYear } from '../libs/hurdat';
 import {
+  type CesiumEntity,
   type CesiumModule,
   type CesiumWithOccluder,
   longestVisibleSegment,
   removeEntitiesWithPrefix,
   trackAppearance,
 } from '../libs/globeTrackUtils';
+
+type TrackEntity = {
+  entity: CesiumEntity;
+  stormId: string;
+};
 
 type UseGlobePolylinesOptions = {
   viewerRef: RefObject<import('cesium').Viewer | null>;
@@ -23,17 +30,46 @@ export const useGlobePolylines = ({
   cesiumRef,
   viewerReady,
 }: UseGlobePolylinesOptions) => {
-  const { globalSeason, stormId, year } = useAppContext();
+  const { globalSeason, visibleBasins, stormId, year } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
+  const trackEntitiesRef = useRef<TrackEntity[]>([]);
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
+  const visibleBasinsRef = useRef(visibleBasins);
   getVisiblePointCountRef.current = getVisiblePointCount;
+  visibleBasinsRef.current = visibleBasins;
+
+  const applyBasinVisibility = () => {
+    const viewer = viewerRef.current;
+    if (!viewer || viewer.isDestroyed()) return;
+
+    trackEntitiesRef.current.forEach(({ entity, stormId: id }) => {
+      const basinId = getBasinFromStormId(id);
+      const shouldShow = basinId != null && visibleBasinsRef.current.has(basinId);
+      const inCollection = viewer.entities.contains(entity);
+
+      if (shouldShow && !inCollection) {
+        viewer.entities.add(entity);
+      } else if (!shouldShow && inCollection) {
+        viewer.entities.remove(entity);
+      }
+    });
+
+    viewer.scene.requestRender();
+  };
 
   useEffect(() => {
     const viewer = viewerRef.current;
     const Cesium = cesiumRef.current;
     if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed()) return;
 
+    trackEntitiesRef.current.forEach(({ entity }) => {
+      if (viewer.entities.contains(entity)) {
+        viewer.entities.remove(entity);
+      }
+    });
+    trackEntitiesRef.current = [];
     removeEntitiesWithPrefix(viewer, 'track-');
+
     if (!globalSeason) return;
 
     globalSeason.forEach((stormTrack) => {
@@ -45,7 +81,7 @@ export const useGlobePolylines = ({
       );
       if (fullPositions.length < 2) return;
 
-      viewer.entities.add({
+      const entity = viewer.entities.add({
         id: `track-${id}`,
         properties: {
           stormTrackId: id,
@@ -70,17 +106,21 @@ export const useGlobePolylines = ({
           arcType: Cesium.ArcType.GEODESIC,
         },
       });
+
+      trackEntitiesRef.current.push({ entity, stormId: id });
     });
-  }, [globalSeason, viewerReady, stormId, year, viewerRef, cesiumRef]);
+
+    applyBasinVisibility();
+  }, [globalSeason, viewerReady, viewerRef, cesiumRef]);
 
   useEffect(() => {
     const viewer = viewerRef.current;
     const Cesium = cesiumRef.current;
     if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed()) return;
 
-    viewer.entities.values.forEach((entity) => {
-      if (typeof entity.id !== 'string' || !entity.id.startsWith('track-')) return;
-      const id = entity.id.slice('track-'.length);
+    trackEntitiesRef.current.forEach(({ entity, stormId: id }) => {
+      if (!viewer.entities.contains(entity)) return;
+
       const { width, alpha, color } = trackAppearance(id, getStormYear(id), stormId, year);
       if (entity.polyline) {
         entity.polyline.width = new Cesium.ConstantProperty(width);
@@ -89,7 +129,13 @@ export const useGlobePolylines = ({
         );
       }
     });
+
+    viewer.scene.requestRender();
   }, [stormId, year, viewerReady, viewerRef, cesiumRef]);
+
+  useEffect(() => {
+    applyBasinVisibility();
+  }, [visibleBasins]);
 
   useEffect(() => {
     const viewer = viewerRef.current;

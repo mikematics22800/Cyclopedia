@@ -3,6 +3,7 @@
 import { useEffect, useRef, type RefObject } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
+import { getBasinFromStormId, type BasinId } from '../libs/basins';
 import {
   buildPopupHtml,
   dotIconDataUrl,
@@ -21,6 +22,7 @@ import {
 
 type PointLayer = {
   stormId: string;
+  basinId: BasinId;
   points: Array<{ entity: CesiumEntity; index: number }>;
 };
 
@@ -37,20 +39,44 @@ export const useGlobeTracks = ({
   viewerReady,
   onClearPopup,
 }: UseGlobeTracksOptions) => {
-  const { globalSeason } = useAppContext();
+  const { globalSeason, visibleBasins } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const pointLayersRef = useRef<PointLayer[]>([]);
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
+  const visibleBasinsRef = useRef(visibleBasins);
   getVisiblePointCountRef.current = getVisiblePointCount;
+  visibleBasinsRef.current = visibleBasins;
+
+  const applyBasinVisibility = () => {
+    const viewer = viewerRef.current;
+    if (!viewer || viewer.isDestroyed()) return;
+
+    pointLayersRef.current.forEach(({ basinId, points }) => {
+      const shouldShow = visibleBasinsRef.current.has(basinId);
+      points.forEach(({ entity }) => {
+        const inCollection = viewer.entities.contains(entity);
+        if (shouldShow && !inCollection) {
+          viewer.entities.add(entity);
+        } else if (!shouldShow && inCollection) {
+          viewer.entities.remove(entity);
+        }
+      });
+    });
+
+    viewer.scene.requestRender();
+  };
 
   const applyPlaybackToPoints = () => {
     const viewer = viewerRef.current;
     const Cesium = cesiumRef.current;
     if (!viewer || !Cesium || viewer.isDestroyed()) return;
 
-    pointLayersRef.current.forEach(({ stormId, points }) => {
+    pointLayersRef.current.forEach(({ stormId, basinId, points }) => {
+      if (!visibleBasinsRef.current.has(basinId)) return;
+
       const count = getVisiblePointCountRef.current(stormId);
       points.forEach(({ entity, index }) => {
+        if (!viewer.entities.contains(entity)) return;
         const playbackVisible = index < count;
         if (entity.billboard) {
           entity.billboard.show = new Cesium.ConstantProperty(playbackVisible);
@@ -67,11 +93,21 @@ export const useGlobeTracks = ({
     if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed() || !globalSeason) return;
 
     onClearPopup();
-    removeEntitiesWithPrefix(viewer, 'point-');
+    pointLayersRef.current.forEach(({ points }) => {
+      points.forEach(({ entity }) => {
+        if (viewer.entities.contains(entity)) {
+          viewer.entities.remove(entity);
+        }
+      });
+    });
     pointLayersRef.current = [];
+    removeEntitiesWithPrefix(viewer, 'point-');
 
     globalSeason.forEach((stormTrack) => {
       const id = stormTrack.id;
+      const basinId = getBasinFromStormId(id);
+      if (!basinId) return;
+
       const name = id.split('_')[1];
       const points: PointLayer['points'] = [];
 
@@ -90,7 +126,7 @@ export const useGlobeTracks = ({
           position,
           show: new Cesium.CallbackProperty(() => {
             const activeViewer = viewerRef.current;
-            if (!activeViewer || activeViewer.isDestroyed()) return true;
+            if (!activeViewer || activeViewer.isDestroyed()) return false;
 
             const occluder = new (Cesium as CesiumWithOccluder).EllipsoidalOccluder(
               activeViewer.scene.globe.ellipsoid,
@@ -110,13 +146,15 @@ export const useGlobeTracks = ({
         points.push({ entity, index });
       });
 
-      pointLayersRef.current.push({ stormId: id, points });
+      pointLayersRef.current.push({ stormId: id, basinId, points });
     });
 
+    applyBasinVisibility();
     applyPlaybackToPoints();
   }, [globalSeason, viewerReady, viewerRef, cesiumRef, onClearPopup]);
 
   useEffect(() => {
+    applyBasinVisibility();
     applyPlaybackToPoints();
-  }, [getVisiblePointCount]);
+  }, [getVisiblePointCount, visibleBasins]);
 };

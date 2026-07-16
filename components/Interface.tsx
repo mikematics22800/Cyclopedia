@@ -53,8 +53,8 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
               <Image
                 src="/NOAA.svg"
                 alt="NOAA"
-                width={60}
-                height={60}
+                width={50}
+                height={50}
                 priority
                 unoptimized
               />

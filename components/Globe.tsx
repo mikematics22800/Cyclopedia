@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { getBasinFromStormId } from '../libs/basins';
 import {
   buildWindPopupHtml,
   calculateWindRadii,
@@ -104,7 +105,7 @@ const Globe = () => {
   const [viewerReady, setViewerReady] = useState(false);
   const [popup, setPopup] = useState<GlobePopup | null>(null);
   const [popupPosition, setPopupPosition] = useState<{ x: number; y: number } | null>(null);
-  const { year, windField, storm, stormId, focusToken, selectStorm } = useAppContext();
+  const { year, windField, storm, stormId, focusToken, selectStorm, visibleBasins } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
   const windLayersRef = useRef<Array<{ entity: CesiumEntity; pointIndex: number }>>([]);
@@ -312,7 +313,11 @@ const Globe = () => {
     windLayersRef.current = [];
     removeEntitiesWithPrefix(viewer, 'wind-');
 
-    if (year < 2002 || !windField || !storm) return;
+    const stormBasinId = storm ? getBasinFromStormId(storm.id) : undefined;
+    const basinVisible =
+      stormBasinId != null && visibleBasins.has(stormBasinId);
+
+    if (year < 2002 || !windField || !storm || !basinVisible) return;
 
     const windLayers = [
       { key: '34kt_wind_nm' as const, color: Cesium.Color.YELLOW, label: '≥34 kt' },
@@ -349,7 +354,7 @@ const Globe = () => {
         windLayersRef.current.push({ entity, pointIndex: index });
       });
     });
-  }, [windField, year, storm, viewerReady]);
+  }, [windField, year, storm, viewerReady, visibleBasins]);
 
   useEffect(() => {
     const viewer = viewerRef.current;

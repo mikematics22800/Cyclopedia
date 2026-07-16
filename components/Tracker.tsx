@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Legend from "./Legend";
+import Layers from "./Layers";
 import Playback from "./Playback";
 import PublicIcon from '@mui/icons-material/Public';
 import MapIcon from '@mui/icons-material/Map';
@@ -15,6 +16,7 @@ const Globe = dynamic(() => import("./Globe"), { ssr: false });
 const Tracker = () => {
   const { globe, setGlobe } = useAppContext();
   const isMobile = useMediaQuery('(max-width: 1023px)');
+  const [layersOpen, setLayersOpen] = useState(false);
   const [playbackOpen, setPlaybackOpen] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
 
@@ -57,14 +59,16 @@ const Tracker = () => {
         {isMobile ? (
           <div className="map-controls-buttons">
             {globeButton}
-            <Playback open={playbackOpen} onOpenChange={setPlaybackOpen} />
+            <Layers open={layersOpen} onOpenChange={setLayersOpen} />
             <Legend open={legendOpen} onOpenChange={setLegendOpen} />
+            <Playback open={playbackOpen} onOpenChange={setPlaybackOpen} />
           </div>
         ) : (
           <>
             <div className="map-controls-panels">
-              <Playback open={playbackOpen} onOpenChange={setPlaybackOpen} />
+              <Layers open={layersOpen} onOpenChange={setLayersOpen} />
               <Legend open={legendOpen} onOpenChange={setLegendOpen} />
+              <Playback open={playbackOpen} onOpenChange={setPlaybackOpen} />
             </div>
             <div className="map-controls-toggle">
               {globeButton}

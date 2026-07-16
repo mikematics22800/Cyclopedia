@@ -2,11 +2,13 @@ import { getBasinFromStormId, type BasinId } from './basins';
 import { StormDataPoint, WindRadii } from './hurdat';
 
 const INTENSE_STORM_LABEL: Record<BasinId, string> = {
-  atl: 'Hurricane',
-  epac: 'Hurricane',
-  wpac: 'Typhoon',
-  ind: 'Cyclone',
-  shem: 'Cyclone',
+  n_atlantic: 'Hurricane',
+  e_pacific: 'Hurricane',
+  w_pacific: 'Typhoon',
+  n_indian: 'Cyclone',
+  s_indian: 'Cyclone',
+  s_pacific: 'Cyclone',
+  s_atlantic: 'Cyclone',
 };
 
 export const getStormStatus = (point: StormDataPoint) => {

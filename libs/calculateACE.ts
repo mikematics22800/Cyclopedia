@@ -1,8 +1,12 @@
 import type { Storm, StormDataPoint } from './hurdat';
 
 const SYNOPTIC_TIMES = new Set(['0000', '0600', '1200', '1800']);
-const ACE_STATUSES = new Set(['TS', 'SS', 'HU', 'TY', 'ST', 'CY']);
+const ACE_STATUSES = new Set(['TS', 'SS', 'HU', 'TY', 'CY']);
 const ACE_MIN_WIND_KT = 34;
+
+function isUnknownMetric(value: number | null | undefined): boolean {
+  return value == null || value === 0 || value === -999;
+}
 
 export function formatSynopticTime(timeUtc: number | string): string {
   return String(timeUtc).padStart(4, '0');
@@ -13,10 +17,9 @@ export function isSynopticTime(timeUtc: number | string): boolean {
 }
 
 export function isAceEligible(point: StormDataPoint): boolean {
-  const hasEligibleStatus = ACE_STATUSES.has(point.status) || point.status === '';
-
   return (
-    hasEligibleStatus &&
+    ACE_STATUSES.has(point.status) &&
+    !isUnknownMetric(point.max_wind_kt) &&
     point.max_wind_kt >= ACE_MIN_WIND_KT &&
     isSynopticTime(point.time_utc)
   );

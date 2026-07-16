@@ -48,7 +48,7 @@ interface Storm {
 
 type YearArchives = Record<BasinId, Storm[]>;
 
-const DB_NAME = 'cyclopedia-archive';
+const DB_NAME = 'cyclopedia-new-archive';
 const STORE_NAME = 'storms';
 const DB_VERSION = 1;
 

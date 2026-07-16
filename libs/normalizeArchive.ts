@@ -24,6 +24,8 @@ export function normalizeArchiveData(data: unknown): Storm[] {
 
     if ('retired' in normalized) {
       normalized.retired = normalizeRetired(normalized.retired);
+    } else {
+      normalized.retired = false;
     }
 
     if (Array.isArray(normalized.data)) {

@@ -59,6 +59,16 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // Legacy archive JSON caching
+        source: "/archive/:path*.json",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
         // Static assets caching
         source: "/:path*(.jpg|.jpeg|.png|.gif|.svg|.ico|.webp)",
         headers: [

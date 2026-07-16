@@ -481,6 +481,10 @@ ul li h2 {
   width: min(18rem, calc(100vw - 2rem));
 }
 
+.map-button.map-layers {
+  width: fit-content;
+}
+
 .map-button.map-legend .playback-slider.MuiSlider-root {
   padding-top: 0;
   padding-bottom: 0;
@@ -490,6 +494,11 @@ ul li h2 {
   .map-button.map-legend {
     @apply gap-1.5 p-2 rounded-lg;
     width: min(14rem, calc(100vw - 1.5rem));
+  }
+
+  .map-controls-panels .map-button.map-layers,
+  .map-button.map-layers {
+    width: fit-content;
   }
 
   .map-legend-label .MuiFormControlLabel-label {

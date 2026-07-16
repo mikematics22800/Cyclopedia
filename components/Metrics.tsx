@@ -266,7 +266,7 @@ const StormMetrics = () => {
   if (!storm || !metrics) return null;
 
   const stormImageUrl = `https://cyclopedia-images.s3.us-east-2.amazonaws.com/${stormId}.png`;
-  const tcrLinkEnabled = (basin === 'atl' || basin === 'epac') && year >= 1995;
+  const tcrLinkEnabled = (basin === 'n_atlantic' || basin === 'e_pacific') && year >= 1995;
 
   return (
     <div className='storm mt-5'>
