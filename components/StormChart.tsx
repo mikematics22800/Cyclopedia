@@ -58,7 +58,7 @@ type StormChartProps = {
 
 const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
   const { storm, dates } = useAppContext();
-  const [wind, setWind] = useState<number[]>([]);
+  const [wind, setWind] = useState<(number | null)[]>([]);
   const [pressure, setPressure] = useState<(number | null)[]>([]);
   const [aceSeries, setAceSeries] = useState<number[]>([]);
 

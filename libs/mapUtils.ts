@@ -60,7 +60,6 @@ export const getStormStatus = (point: StormDataPoint) => {
 
 /** Basin-aware classification label for map/globe popups only. */
 export const getPopupStormStatus = (point: StormDataPoint, stormId: string) => {
-  if (point.status === 'MD') return 'Monsoon Depression';
   if (point.status === 'CY') return 'Cyclone';
   if (point.status === 'TY') return 'Typhoon';
 

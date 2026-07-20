@@ -12,7 +12,9 @@ export function isSynopticTime(timeUtc: number | string): boolean {
   return SYNOPTIC_TIMES.has(formatSynopticTime(timeUtc));
 }
 
-export function isAceEligible(point: StormDataPoint): boolean {
+export function isAceEligible(
+  point: StormDataPoint,
+): point is StormDataPoint & { max_wind_kt: number } {
   const hasEligibleStatus =
     point.status == null || ACE_STATUSES.has(point.status);
 
