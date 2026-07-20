@@ -1,11 +1,13 @@
 'use client';
 
-import { useRef } from "react";
+import { useRef, useCallback, useState } from "react";
 import { useAppContext } from "../contexts/AppContext";
 import Metrics from "./Metrics";
 import { useGsapReveal } from "./hooks/useGsapReveal";
 import { useMobileSheetDrag } from "./hooks/useMobileSheetDrag";
-import Charts from './Charts';
+import TotalsChart from "./TotalsChart";
+import SeasonChart from './SeasonChart';
+import StormChart from './StormChart';
 import Selectors from './Selectors';
 import Image from "next/image";
 
@@ -15,6 +17,7 @@ type InterfaceProps = {
 
 const Interface = ({ mobileSheet = false }: InterfaceProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hiddenByDatasetIndex, setHiddenByDatasetIndex] = useState<Record<number, boolean>>({});
 
   const { basin, year } = useAppContext();
   const { dragHandleProps, sheetStyle, handleRef, snap } = useMobileSheetDrag(mobileSheet);
@@ -23,6 +26,13 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
     stagger: 0.065,
     y: 18,
   });
+
+  const handleLegendVisibilityChange = useCallback((datasetIndex: number, isVisible: boolean) => {
+    setHiddenByDatasetIndex((prev) => ({
+      ...prev,
+      [datasetIndex]: !isVisible,
+    }));
+  }, []);
 
   const interfaceBody = (
     <div ref={containerRef} className='interface'>
@@ -34,7 +44,11 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
           <div className="metrics">
             <Selectors />
             <Metrics />
-            <Charts embedded />
+            <div className="lg:hidden w-full">
+              <TotalsChart/>
+              <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
+              <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
+            </div>
             <div className="flex items-center w-full justify-between">
               <Image
                 src="/NOAA.svg"
@@ -66,6 +80,12 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
         style={sheetStyle}
       >
         <div className="interface-panel">
+          <img
+            src="/hurricane.jpg"
+            alt=""
+            aria-hidden
+            className="interface-background"
+          />
           <div
             ref={handleRef}
             {...dragHandleProps}

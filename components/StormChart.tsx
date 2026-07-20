@@ -67,12 +67,7 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
 
     const data = storm.data;
     setWind(data.map((point) => point.max_wind_kt));
-    setPressure(
-      data.map((point) => {
-        const p = point.min_pressure_mb;
-        return p != null && p > 0 ? p : null;
-      })
-    );
+    setPressure(data.map((point) => point.min_pressure_mb ?? null));
     setAceSeries(cumulativeStormACESeries(data));
   }, [storm]);
 

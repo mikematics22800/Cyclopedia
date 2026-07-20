@@ -5,7 +5,6 @@ import { polygon, type Polygon as LeafletPolygon } from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useAppContext } from '../contexts/AppContext';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
-import { getBasinFromStormId } from '../libs/basins';
 import { buildWindPopupHtml, calculateWindRadii, shiftRegionForMapView } from '../libs/mapUtils';
 import { shiftMap } from '../libs/shiftMap';
 
@@ -24,15 +23,11 @@ const WIND_LAYERS = [
 
 const WindField = () => {
   const map = useMap();
-  const { storm, year, visibleBasins } = useAppContext();
+  const { storm, year } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const layersRef = useRef<WindLayer[]>([]);
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
   getVisiblePointCountRef.current = getVisiblePointCount;
-
-  const stormBasinId = storm ? getBasinFromStormId(storm.id) : undefined;
-  const basinVisible =
-    stormBasinId != null && visibleBasins.has(stormBasinId);
 
   const applyPlaybackToLayers = (centerLng: number) => {
     if (!storm) return;
@@ -50,7 +45,7 @@ const WindField = () => {
   useEffect(() => {
     layersRef.current.forEach(({ polygon: shape }) => shape.remove());
     layersRef.current = [];
-    if (year < 2002 || !storm || !basinVisible) return;
+    if (year < 2002 || !storm) return;
 
     storm.data.forEach((point, pointIndex) => {
       WIND_LAYERS.forEach(({ key, color, label }) => {
@@ -73,7 +68,7 @@ const WindField = () => {
       layersRef.current.forEach(({ polygon: shape }) => shape.remove());
       layersRef.current = [];
     };
-  }, [storm, year, map, basinVisible]);
+  }, [storm, year, map]);
 
   useEffect(() => {
     applyPlaybackToLayers(map.getCenter().lng);

@@ -8,7 +8,6 @@ const INTENSE_STORM_LABEL: Record<BasinId, string> = {
   n_indian: 'Cyclone',
   s_indian: 'Cyclone',
   s_pacific: 'Cyclone',
-  s_atlantic: 'Cyclone',
 };
 
 export const getStormStatus = (point: StormDataPoint) => {
@@ -36,7 +35,9 @@ export const getStormStatus = (point: StormDataPoint) => {
     color = 'lime';
   } else if (point.status === 'HU' || point.status === 'TY' || point.status === 'ST' || point.status === 'CY') {
     status = 'Hurricane';
-    if (wind <= 82) {
+    if (wind == null) {
+      color = 'white';
+    } else if (wind <= 82) {
       color = 'yellow';
     } else if (wind > 82 && wind <= 95) {
       color = 'orange';
@@ -60,9 +61,11 @@ export const getStormStatus = (point: StormDataPoint) => {
 /** Basin-aware classification label for map/globe popups only. */
 export const getPopupStormStatus = (point: StormDataPoint, stormId: string) => {
   if (point.status === 'MD') return 'Monsoon Depression';
+  if (point.status === 'CY') return 'Cyclone';
+  if (point.status === 'TY') return 'Typhoon';
 
   const basin = getBasinFromStormId(stormId);
-  if (basin && (point.status === 'HU' || point.status === 'TY')) {
+  if (basin && point.status === 'HU') {
     return INTENSE_STORM_LABEL[basin];
   }
 
@@ -106,8 +109,7 @@ export const formatDateTime = (date: number, time: number) => {
 export const formatStormFullName = (name: string, status: string) =>
   name !== 'Unnamed' ? `${status} ${name}` : `${name} ${status}`;
 
-export const isUnknownMetric = (value: number | null | undefined) =>
-  value == null || value === 0 || value === -999;
+export const isUnknownMetric = (value: number | null | undefined) => value == null;
 
 export const formatWindDisplay = (wind: number | null | undefined) =>
   isUnknownMetric(wind) ? 'Unknown' : `${wind} kt`;

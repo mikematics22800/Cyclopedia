@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from "chart.js";
-import type { ChartEvent, LegendElement, LegendItem, Plugin, TooltipItem } from "chart.js";
+import type { ChartEvent, LegendElement, LegendItem, TooltipItem } from "chart.js";
 import { Bar } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
 
@@ -64,11 +64,10 @@ function categoryAxisTicksForSelectedLabel(selectedIndex: number) {
 }
 
   type SeasonChartProps = {
-  extraPlugins?: Plugin[];
   onLegendVisibilityChange?: (datasetIndex: number, isVisible: boolean) => void;
 };
 
-const SeasonChart = ({ extraPlugins = [], onLegendVisibilityChange }: SeasonChartProps) => {
+const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
   const { names, maxWinds, season, seasonACE, stormId } = useAppContext();
   const [minPressures, setMinPressures] = useState<(number | null)[]>([]);
   const [mobile, setMobile] = useState(false);
@@ -93,7 +92,7 @@ const SeasonChart = ({ extraPlugins = [], onLegendVisibilityChange }: SeasonChar
     const minPressures = season.map((storm) => {
       const pressures = storm.data
         .map((point) => point.min_pressure_mb)
-        .filter((pressure): pressure is number => pressure != null && pressure > 0);
+        .filter((pressure): pressure is number => pressure != null);
       return pressures.length > 0 ? Math.min(...pressures) : null;
     });
     setMinPressures(minPressures);
@@ -259,7 +258,7 @@ const SeasonChart = ({ extraPlugins = [], onLegendVisibilityChange }: SeasonChar
 
   return (
     <div className="relative h-[48rem] lg:h-96 w-full min-h-0">
-      <Bar options={options} data={data} plugins={[aceThresholdLinePlugin, ...extraPlugins]} />
+      <Bar options={options} data={data} plugins={[aceThresholdLinePlugin]} />
     </div>
   );
 };

@@ -1,11 +1,10 @@
 export const BASINS = {
   n_atlantic: { label: 'N Atlantic', startYear: 1851, endYear: 2025, nested: false },
-  e_pacific: { label: 'E Pacific', startYear: 1876, endYear: 2025, nested: false },
-  w_pacific: { label: 'W Pacific', startYear: 1884, endYear: 2024, nested: false },
-  n_indian: { label: 'N Indian', startYear: 1842, endYear: 2024, nested: false },
-  s_indian: { label: 'S Indian', startYear: 1848, endYear: 2025, nested: false },
-  s_pacific: { label: 'S Pacific', startYear: 1897, endYear: 2025, nested: false },
-  s_atlantic: { label: 'S Atlantic', startYear: 2004, endYear: 2011, nested: false },
+  e_pacific: { label: 'E Pacific', startYear: 1949, endYear: 2025, nested: false },
+  w_pacific: { label: 'W Pacific', startYear: 1945, endYear: 2024, nested: false },
+  n_indian: { label: 'N Indian', startYear: 1945, endYear: 2024, nested: false },
+  s_indian: { label: 'S Indian', startYear: 1945, endYear: 2024, nested: false },
+  s_pacific: { label: 'S Pacific', startYear: 1945, endYear: 2024, nested: false },
 } as const;
 
 export type BasinId = keyof typeof BASINS;
@@ -13,23 +12,11 @@ export type BasinId = keyof typeof BASINS;
 /** Years in a basin's nominal range with no archive file on disk. */
 export const BASIN_MISSING_YEARS: Record<BasinId, readonly number[]> = {
   n_atlantic: [],
-  e_pacific: [
-    1877, 1878, 1879, 1880, 1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889,
-    1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1903,
-    1904, 1905, 1906, 1907, 1908, 1909, 1910, 1912, 1913, 1914, 1915, 1916, 1917,
-    1918, 1919, 1920, 1921, 1922, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931,
-    1932, 1933, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1947,
-    1948,
-  ],
+  e_pacific: [],
   w_pacific: [],
-  n_indian: [
-    1843, 1844, 1846, 1847, 1848, 1849, 1850, 1851, 1852, 1853, 1855, 1856, 1857,
-    1858, 1859, 1860, 1861, 1862, 1863, 1864, 1865, 1866, 1867, 1868, 1869, 1870,
-    1871, 1872, 1873, 1874, 1875, 1876,
-  ],
-  s_indian: [1849, 1850, 1853],
-  s_pacific: [1903, 1904],
-  s_atlantic: [2005, 2006, 2007, 2008, 2009],
+  n_indian: [1958],
+  s_indian: [],
+  s_pacific: [],
 };
 
 /**
@@ -53,14 +40,14 @@ export function isAceYearAvailable(basin: string, year: number): boolean {
 
 export const END_YEAR = Math.max(...Object.values(BASINS).map((b) => b.endYear));
 
-/** Legacy basin codes kept for cached requests and deep links. */
+/** Legacy basin code aliases. */
 export const BASIN_ALIASES: Record<string, BasinId> = {
   atl: 'n_atlantic',
   epac: 'e_pacific',
-  pac: 'e_pacific',
   wpac: 'w_pacific',
   ind: 'n_indian',
   shem: 's_indian',
+  pac: 'e_pacific',
 };
 
 export function resolveBasinId(basin: string): BasinId | undefined {
@@ -75,7 +62,6 @@ const STORM_PREFIX_TO_BASIN: Record<string, BasinId> = {
   WP: 'w_pacific',
   IO: 'n_indian',
   SI: 's_indian',
-  SA: 's_atlantic',
   SP: 's_pacific',
 };
 
@@ -178,11 +164,4 @@ export function getArchiveFilePath(basin: string, year: number): string | null {
   }
 
   return ['archive', id, `${yearStr}.json`].join('/');
-}
-
-export function getTotalsFilePath(basin: string): string | null {
-  const id = resolveBasinId(basin);
-  if (!id) return null;
-
-  return ['archive', id, 'totals.json'].join('/');
 }

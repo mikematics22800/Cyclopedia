@@ -7,8 +7,7 @@
     "dev": "next dev --webpack",
     "build": "node scripts/copy-cesium.mjs && next build --webpack",
     "start": "next start",
-    "lint": "eslint",
-    "calc-totals": "node calcTotals.js"
+    "lint": "eslint"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -18,7 +17,6 @@
     "cesium": "^1.142.0",
     "chart.js": "^4.5.1",
     "gsap": "^3.14.2",
-    "idb": "^8.0.3",
     "leaflet": "^1.9.4",
     "next": "16.2.3",
     "react": "19.2.0",

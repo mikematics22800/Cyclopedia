@@ -1,7 +1,6 @@
 'use client';
 
 import { useAppContext } from "../contexts/AppContext";
-import { getBasinFromStormId } from "../libs/basins";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import MapTracks from "./MapTracks";
@@ -10,14 +9,7 @@ import MapStormFocus from "./MapStormFocus";
 import WindField from "./WindField";
 
 const Map = () => {
-  const { year, windField, storm, visibleBasins } = useAppContext();
-
-  const stormBasinId = storm ? getBasinFromStormId(storm.id) : undefined;
-  const showWindField =
-    year >= 2002 &&
-    windField &&
-    stormBasinId != null &&
-    visibleBasins.has(stormBasinId);
+  const { year, windField } = useAppContext();
 
   return (
     <div className="map relative">
@@ -32,7 +24,7 @@ const Map = () => {
         <MapPolylines />
         <MapStormFocus />
         <MapTracks />
-        {showWindField && <WindField />}
+        {year >= 2002 && windField && <WindField />}
       </MapContainer>
     </div>
   );

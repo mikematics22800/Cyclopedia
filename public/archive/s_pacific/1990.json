@@ -1,814 +1,6 @@
 [
   {
-    "id": "SP011990_Felicity",
-    "dead_or_missing": 0,
-    "cost_usd": 0,
-    "retired": false,
-    "data": [
-      {
-        "date": "19891212",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -10,
-        "lng": 132.7,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891212",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -10.3,
-        "lng": 132.8,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891212",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -10.6,
-        "lng": 132.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891212",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -10.8,
-        "lng": 133,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891212",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -11.1,
-        "lng": 133.2,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891212",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -11.4,
-        "lng": 133.4,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891213",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -11.8,
-        "lng": 133.7,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1001
-      },
-      {
-        "date": "19891213",
-        "time_utc": "0300",
-        "record": "L",
-        "status": "TD",
-        "lat": -12.2,
-        "lng": 133.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891213",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -12.6,
-        "lng": 134.1,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891213",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -13,
-        "lng": 134.3,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891213",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -13.4,
-        "lng": 134.4,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19891213",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -13.9,
-        "lng": 134.6,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1001
-      },
-      {
-        "date": "19891213",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -14.3,
-        "lng": 134.8,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1001
-      },
-      {
-        "date": "19891213",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -14.5,
-        "lng": 135.1,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1001
-      },
-      {
-        "date": "19891214",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -14.6,
-        "lng": 135.4,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19891214",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -14.8,
-        "lng": 135.7,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 998
-      },
-      {
-        "date": "19891214",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -15,
-        "lng": 136,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891214",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -15.1,
-        "lng": 136.3,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891214",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -15.3,
-        "lng": 136.7,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891214",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -15.5,
-        "lng": 137.1,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891214",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -15.7,
-        "lng": 137.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891214",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -15.8,
-        "lng": 138.2,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19891215",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -15.9,
-        "lng": 138.9,
-        "max_wind_kt": 50,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19891215",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -16.1,
-        "lng": 139.7,
-        "max_wind_kt": 55,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19891215",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -16.3,
-        "lng": 140.5,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 975
-      },
-      {
-        "date": "19891215",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -16.5,
-        "lng": 141.1,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19891215",
-        "time_utc": "1030",
-        "record": "L",
-        "status": "TS",
-        "lat": -16.6,
-        "lng": 141.3,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19891215",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -16.7,
-        "lng": 141.6,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19891215",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -17,
-        "lng": 142.2,
-        "max_wind_kt": 53,
-        "min_pressure_mb": 993
-      },
-      {
-        "date": "19891215",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -17.3,
-        "lng": 142.8,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19891215",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -17.4,
-        "lng": 143.4,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19891216",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -17.4,
-        "lng": 144,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19891216",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -17.6,
-        "lng": 144.6,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19891216",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -17.7,
-        "lng": 145.3,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891216",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -17.7,
-        "lng": 146,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891216",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -17.7,
-        "lng": 146.6,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19891216",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -17.6,
-        "lng": 147.2,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19891216",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -17.5,
-        "lng": 147.8,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19891216",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -17.3,
-        "lng": 148.4,
-        "max_wind_kt": 43,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19891217",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -17,
-        "lng": 148.9,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 993
-      },
-      {
-        "date": "19891217",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -16.7,
-        "lng": 149.4,
-        "max_wind_kt": 48,
-        "min_pressure_mb": 993
-      },
-      {
-        "date": "19891217",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -16.4,
-        "lng": 149.9,
-        "max_wind_kt": 50,
-        "min_pressure_mb": 992
-      },
-      {
-        "date": "19891217",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -16.2,
-        "lng": 150.4,
-        "max_wind_kt": 53,
-        "min_pressure_mb": 993
-      },
-      {
-        "date": "19891217",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -16,
-        "lng": 150.9,
-        "max_wind_kt": 55,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19891217",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -15.8,
-        "lng": 151.4,
-        "max_wind_kt": 53,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891217",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -15.6,
-        "lng": 152,
-        "max_wind_kt": 50,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891217",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -15.5,
-        "lng": 152.7,
-        "max_wind_kt": 48,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891218",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -15.5,
-        "lng": 153.5,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891218",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -15.7,
-        "lng": 154.3,
-        "max_wind_kt": 43,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891218",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -16.1,
-        "lng": 155,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891218",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -16.5,
-        "lng": 155.6,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891218",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -16.9,
-        "lng": 156.1,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891218",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -17.3,
-        "lng": 156.7,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891218",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -17.7,
-        "lng": 157.4,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891218",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -18,
-        "lng": 158.2,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891219",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -18.3,
-        "lng": 158.9,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891219",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -18.6,
-        "lng": 159.3,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891219",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -18.8,
-        "lng": 159.7,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891219",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -19,
-        "lng": 160.1,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891219",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -19.3,
-        "lng": 160.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19891219",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -19.8,
-        "lng": 161.1,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19891219",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -20.4,
-        "lng": 161.5,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19891219",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -21,
-        "lng": 161.8,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 998
-      },
-      {
-        "date": "19891220",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -21.7,
-        "lng": 162.1,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891220",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -22.7,
-        "lng": 161.2,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891220",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -23.1,
-        "lng": 161.5,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891220",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -23.5,
-        "lng": 161.7,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891220",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -24,
-        "lng": 162,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891220",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -24.6,
-        "lng": 162.3,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891220",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -25.3,
-        "lng": 162.7,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891220",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -26.2,
-        "lng": 163.3,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891221",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -27,
-        "lng": 164,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891221",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -27.6,
-        "lng": 164.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891221",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -28,
-        "lng": 165.1,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891221",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -28.4,
-        "lng": 165.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891221",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -28.8,
-        "lng": 166.2,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891221",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -29.3,
-        "lng": 166.8,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891221",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -29.7,
-        "lng": 167.5,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19891221",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -30,
-        "lng": 168.3,
-        "max_wind_kt": 28,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19891222",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -30.3,
-        "lng": 169.1,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      }
-    ]
-  },
-  {
-    "id": "SP021990_Nancy",
+    "id": "SP011990_Unnamed",
     "dead_or_missing": 0,
     "cost_usd": 0,
     "retired": false,
@@ -817,7 +9,7 @@
         "date": "19900127",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -17.6,
         "lng": 156.4,
         "max_wind_kt": 20,
@@ -825,19 +17,9 @@
       },
       {
         "date": "19900127",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -17.8,
-        "lng": 156.3,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900127",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -17.9,
         "lng": 156.1,
         "max_wind_kt": 20,
@@ -845,19 +27,9 @@
       },
       {
         "date": "19900127",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -18,
-        "lng": 155.9,
-        "max_wind_kt": 23,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900127",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -18.2,
         "lng": 155.8,
         "max_wind_kt": 25,
@@ -865,31 +37,11 @@
       },
       {
         "date": "19900127",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -18.4,
-        "lng": 155.7,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900127",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -18.5,
         "lng": 155.5,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900127",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -18.6,
-        "lng": 155.3,
         "max_wind_kt": 25,
         "min_pressure_mb": null
       },
@@ -897,21 +49,11 @@
         "date": "19900128",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -18.7,
         "lng": 155.1,
         "max_wind_kt": 25,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900128",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -18.7,
-        "lng": 154.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 997
+        "min_pressure_mb": null
       },
       {
         "date": "19900128",
@@ -921,17 +63,7 @@
         "lat": -18.7,
         "lng": 154.8,
         "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900128",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -18.7,
-        "lng": 154.6,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 1000
+        "min_pressure_mb": null
       },
       {
         "date": "19900128",
@@ -941,17 +73,7 @@
         "lat": -18.6,
         "lng": 154.4,
         "max_wind_kt": 30,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900128",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -18.4,
-        "lng": 154.2,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 1000
+        "min_pressure_mb": null
       },
       {
         "date": "19900128",
@@ -961,16 +83,6 @@
         "lat": -18.2,
         "lng": 154,
         "max_wind_kt": 30,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900128",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -17.9,
-        "lng": 153.7,
-        "max_wind_kt": 33,
         "min_pressure_mb": null
       },
       {
@@ -981,17 +93,7 @@
         "lat": -17.6,
         "lng": 153.4,
         "max_wind_kt": 35,
-        "min_pressure_mb": 998
-      },
-      {
-        "date": "19900129",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -17.2,
-        "lng": 153,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 997
+        "min_pressure_mb": null
       },
       {
         "date": "19900129",
@@ -1001,17 +103,7 @@
         "lat": -16.8,
         "lng": 152.7,
         "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900129",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -16.3,
-        "lng": 152.5,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900129",
@@ -1021,17 +113,7 @@
         "lat": -15.9,
         "lng": 152.5,
         "max_wind_kt": 40,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900129",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -15.5,
-        "lng": 152.6,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900129",
@@ -1041,17 +123,7 @@
         "lat": -15.2,
         "lng": 152.9,
         "max_wind_kt": 40,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900129",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -15,
-        "lng": 153.5,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900130",
@@ -1061,17 +133,7 @@
         "lat": -14.9,
         "lng": 154.1,
         "max_wind_kt": 40,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900130",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -14.9,
-        "lng": 154.6,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900130",
@@ -1081,17 +143,7 @@
         "lat": -14.9,
         "lng": 155.1,
         "max_wind_kt": 40,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900130",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -15,
-        "lng": 155.9,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 993
+        "min_pressure_mb": null
       },
       {
         "date": "19900130",
@@ -1101,17 +153,7 @@
         "lat": -15.2,
         "lng": 156.8,
         "max_wind_kt": 40,
-        "min_pressure_mb": 991
-      },
-      {
-        "date": "19900130",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -15.4,
-        "lng": 157.6,
-        "max_wind_kt": 43,
-        "min_pressure_mb": 991
+        "min_pressure_mb": null
       },
       {
         "date": "19900130",
@@ -1121,17 +163,7 @@
         "lat": -15.7,
         "lng": 158.3,
         "max_wind_kt": 45,
-        "min_pressure_mb": 991
-      },
-      {
-        "date": "19900130",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -16.1,
-        "lng": 158.9,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 991
+        "min_pressure_mb": null
       },
       {
         "date": "19900131",
@@ -1141,17 +173,7 @@
         "lat": -16.7,
         "lng": 159.5,
         "max_wind_kt": 45,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900131",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -17.2,
-        "lng": 160,
-        "max_wind_kt": 48,
-        "min_pressure_mb": 989
+        "min_pressure_mb": null
       },
       {
         "date": "19900131",
@@ -1161,17 +183,7 @@
         "lat": -17.9,
         "lng": 160.4,
         "max_wind_kt": 50,
-        "min_pressure_mb": 988
-      },
-      {
-        "date": "19900131",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -18.7,
-        "lng": 160.7,
-        "max_wind_kt": 55,
-        "min_pressure_mb": 988
+        "min_pressure_mb": null
       },
       {
         "date": "19900131",
@@ -1181,17 +193,7 @@
         "lat": -19.6,
         "lng": 160.9,
         "max_wind_kt": 60,
-        "min_pressure_mb": 988
-      },
-      {
-        "date": "19900131",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -20.4,
-        "lng": 160.9,
-        "max_wind_kt": 63,
-        "min_pressure_mb": 984
+        "min_pressure_mb": null
       },
       {
         "date": "19900131",
@@ -1201,17 +203,7 @@
         "lat": -21.2,
         "lng": 160.6,
         "max_wind_kt": 65,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900131",
-        "time_utc": "2100",
-        "record": null,
-        "status": "CY",
-        "lat": -22,
-        "lng": 160.2,
-        "max_wind_kt": 65,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900201",
@@ -1221,17 +213,7 @@
         "lat": -22.7,
         "lng": 159.6,
         "max_wind_kt": 65,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900201",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -23.3,
-        "lng": 159,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900201",
@@ -1241,17 +223,7 @@
         "lat": -23.7,
         "lng": 158.4,
         "max_wind_kt": 55,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900201",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -24.1,
-        "lng": 157.8,
-        "max_wind_kt": 50,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900201",
@@ -1261,17 +233,7 @@
         "lat": -24.5,
         "lng": 157.2,
         "max_wind_kt": 45,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900201",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -24.9,
-        "lng": 156.4,
-        "max_wind_kt": 43,
-        "min_pressure_mb": 983
+        "min_pressure_mb": null
       },
       {
         "date": "19900201",
@@ -1281,17 +243,7 @@
         "lat": -25.3,
         "lng": 155.7,
         "max_wind_kt": 40,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900201",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -25.7,
-        "lng": 155.2,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900202",
@@ -1301,17 +253,7 @@
         "lat": -26,
         "lng": 154.8,
         "max_wind_kt": 40,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900202",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -26.3,
-        "lng": 154.5,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 983
+        "min_pressure_mb": null
       },
       {
         "date": "19900202",
@@ -1321,17 +263,7 @@
         "lat": -26.6,
         "lng": 154.3,
         "max_wind_kt": 40,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900202",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -26.9,
-        "lng": 154.1,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900202",
@@ -1341,17 +273,7 @@
         "lat": -27.2,
         "lng": 153.9,
         "max_wind_kt": 40,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900202",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -27.7,
-        "lng": 153.8,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900202",
@@ -1361,17 +283,7 @@
         "lat": -28.1,
         "lng": 153.7,
         "max_wind_kt": 40,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900202",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -28.4,
-        "lng": 153.7,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900203",
@@ -1381,17 +293,7 @@
         "lat": -28.6,
         "lng": 153.7,
         "max_wind_kt": 40,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900203",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -28.9,
-        "lng": 153.7,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900203",
@@ -1401,17 +303,7 @@
         "lat": -29.2,
         "lng": 153.8,
         "max_wind_kt": 40,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900203",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -29.6,
-        "lng": 153.8,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 983
+        "min_pressure_mb": null
       },
       {
         "date": "19900203",
@@ -1421,17 +313,7 @@
         "lat": -30,
         "lng": 153.9,
         "max_wind_kt": 40,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900203",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -30.4,
-        "lng": 154,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 986
+        "min_pressure_mb": null
       },
       {
         "date": "19900203",
@@ -1441,17 +323,7 @@
         "lat": -30.8,
         "lng": 154.2,
         "max_wind_kt": 40,
-        "min_pressure_mb": 986
-      },
-      {
-        "date": "19900203",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -31.3,
-        "lng": 154.4,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 988
+        "min_pressure_mb": null
       },
       {
         "date": "19900204",
@@ -1461,17 +333,7 @@
         "lat": -32,
         "lng": 154.7,
         "max_wind_kt": 40,
-        "min_pressure_mb": 989
-      },
-      {
-        "date": "19900204",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -32.8,
-        "lng": 155.4,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900204",
@@ -1481,17 +343,7 @@
         "lat": -33.5,
         "lng": 156.3,
         "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900204",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -34.1,
-        "lng": 157.4,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 993
+        "min_pressure_mb": null
       },
       {
         "date": "19900204",
@@ -1501,292 +353,12 @@
         "lat": -34.6,
         "lng": 158.7,
         "max_wind_kt": 40,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900204",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -35.8,
-        "lng": 155.1,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900204",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -37.3,
-        "lng": 155,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900204",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -38.8,
-        "lng": 155,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900205",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -40,
-        "lng": 155,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900205",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -40.8,
-        "lng": 154.9,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900205",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -41.2,
-        "lng": 154.9,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900205",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -41.4,
-        "lng": 154.9,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900205",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -41.5,
-        "lng": 155,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900205",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -41.6,
-        "lng": 155,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900205",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -41.6,
-        "lng": 155.2,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900205",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -41.7,
-        "lng": 155.7,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900206",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -41.8,
-        "lng": 156.7,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900206",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -42.1,
-        "lng": 158.3,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19900206",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -42.4,
-        "lng": 160,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900206",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -42.5,
-        "lng": 161.2,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900206",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -42.5,
-        "lng": 162.1,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900206",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -42.5,
-        "lng": 163,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900206",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -42.5,
-        "lng": 164,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900206",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -42.4,
-        "lng": 165.1,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900207",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -42.2,
-        "lng": 166.2,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900207",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -42,
-        "lng": 167.2,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 998
-      },
-      {
-        "date": "19900207",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -41.8,
-        "lng": 168,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 998
-      },
-      {
-        "date": "19900207",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -41.6,
-        "lng": 168.6,
-        "max_wind_kt": 25,
         "min_pressure_mb": null
-      },
-      {
-        "date": "19900207",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -41.4,
-        "lng": 169,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900207",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -41.2,
-        "lng": 169.5,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900207",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -41,
-        "lng": 170,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900207",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -40.6,
-        "lng": 170.5,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900208",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -40,
-        "lng": 170.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
       }
     ]
   },
   {
-    "id": "SP031990_Ofa",
+    "id": "SP021990_Unnamed",
     "dead_or_missing": 0,
     "cost_usd": 0,
     "retired": false,
@@ -1795,7 +367,7 @@
         "date": "19900128",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -9.7,
         "lng": -177.1,
         "max_wind_kt": 25,
@@ -1803,19 +375,9 @@
       },
       {
         "date": "19900128",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -10,
-        "lng": -177.2,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900128",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -10.3,
         "lng": -177.4,
         "max_wind_kt": 25,
@@ -1823,19 +385,9 @@
       },
       {
         "date": "19900128",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -10.6,
-        "lng": -177.8,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900128",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -10.7,
         "lng": -178.2,
         "max_wind_kt": 25,
@@ -1843,31 +395,11 @@
       },
       {
         "date": "19900128",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -10.6,
-        "lng": -178.6,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900128",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -10.4,
         "lng": -178.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900128",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -10.1,
-        "lng": -179.1,
         "max_wind_kt": 25,
         "min_pressure_mb": null
       },
@@ -1875,7 +407,7 @@
         "date": "19900129",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -9.7,
         "lng": -179.3,
         "max_wind_kt": 25,
@@ -1883,19 +415,9 @@
       },
       {
         "date": "19900129",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -9.4,
-        "lng": -179.4,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900129",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -9.1,
         "lng": -179.4,
         "max_wind_kt": 25,
@@ -1903,19 +425,9 @@
       },
       {
         "date": "19900129",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -8.8,
-        "lng": -179.5,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900129",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -8.6,
         "lng": -179.5,
         "max_wind_kt": 25,
@@ -1923,153 +435,73 @@
       },
       {
         "date": "19900129",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -8.4,
-        "lng": -179.5,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900129",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -8.3,
         "lng": -179.6,
         "max_wind_kt": 25,
         "min_pressure_mb": null
       },
       {
-        "date": "19900129",
-        "time_utc": "2100",
+        "date": "19900130",
+        "time_utc": "0000",
         "record": null,
-        "status": "TS",
-        "lat": -8.2,
+        "status": "TD",
+        "lat": -8,
+        "lng": -179.8,
+        "max_wind_kt": 25,
+        "min_pressure_mb": null
+      },
+      {
+        "date": "19900130",
+        "time_utc": "0600",
+        "record": null,
+        "status": "TD",
+        "lat": -7.6,
         "lng": -179.7,
         "max_wind_kt": 25,
         "min_pressure_mb": null
       },
       {
         "date": "19900130",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -8,
-        "lng": -179.8,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900130",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -7.8,
-        "lng": -179.8,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900130",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -7.6,
-        "lng": -179.7,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19900130",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -7.5,
-        "lng": -179.5,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19900130",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -7.4,
         "lng": -179.3,
         "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900130",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -7.4,
-        "lng": -179.1,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 994
+        "min_pressure_mb": null
       },
       {
         "date": "19900130",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -7.5,
         "lng": -178.9,
         "max_wind_kt": 30,
-        "min_pressure_mb": 993
-      },
-      {
-        "date": "19900130",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -7.5,
-        "lng": -178.8,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 991
+        "min_pressure_mb": null
       },
       {
         "date": "19900131",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -7.6,
         "lng": -178.7,
         "max_wind_kt": 30,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900131",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -7.7,
-        "lng": -178.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 989
+        "min_pressure_mb": null
       },
       {
         "date": "19900131",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -7.8,
         "lng": -178.5,
         "max_wind_kt": 30,
-        "min_pressure_mb": 989
-      },
-      {
-        "date": "19900131",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -7.9,
-        "lng": -178.4,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 988
+        "min_pressure_mb": null
       },
       {
         "date": "19900131",
@@ -2079,17 +511,7 @@
         "lat": -8,
         "lng": -178.2,
         "max_wind_kt": 35,
-        "min_pressure_mb": 987
-      },
-      {
-        "date": "19900131",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -8.1,
-        "lng": -178.1,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 986
+        "min_pressure_mb": null
       },
       {
         "date": "19900131",
@@ -2099,17 +521,7 @@
         "lat": -8.3,
         "lng": -177.9,
         "max_wind_kt": 40,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900131",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -8.4,
-        "lng": -177.7,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900201",
@@ -2119,17 +531,7 @@
         "lat": -8.5,
         "lng": -177.5,
         "max_wind_kt": 50,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900201",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -8.6,
-        "lng": -177.2,
-        "max_wind_kt": 53,
-        "min_pressure_mb": 983
+        "min_pressure_mb": null
       },
       {
         "date": "19900201",
@@ -2139,477 +541,237 @@
         "lat": -8.7,
         "lng": -177,
         "max_wind_kt": 55,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900201",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -8.8,
-        "lng": -176.8,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900201",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -9,
         "lng": -176.7,
         "max_wind_kt": 65,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900201",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -9.1,
-        "lng": -176.5,
-        "max_wind_kt": 70,
-        "min_pressure_mb": 978
+        "min_pressure_mb": null
       },
       {
         "date": "19900201",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -9.3,
         "lng": -176.2,
         "max_wind_kt": 75,
-        "min_pressure_mb": 975
-      },
-      {
-        "date": "19900201",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -9.6,
-        "lng": -175.8,
-        "max_wind_kt": 80,
-        "min_pressure_mb": 973
+        "min_pressure_mb": null
       },
       {
         "date": "19900202",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -9.9,
         "lng": -175.5,
         "max_wind_kt": 85,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900202",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -10.1,
-        "lng": -175.3,
-        "max_wind_kt": 88,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900202",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -10.2,
         "lng": -175.2,
         "max_wind_kt": 90,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900202",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -10.4,
-        "lng": -175,
-        "max_wind_kt": 93,
-        "min_pressure_mb": 968
+        "min_pressure_mb": null
       },
       {
         "date": "19900202",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -10.6,
         "lng": -174.8,
         "max_wind_kt": 95,
-        "min_pressure_mb": 965
-      },
-      {
-        "date": "19900202",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -11,
-        "lng": -174.5,
-        "max_wind_kt": 98,
-        "min_pressure_mb": 963
+        "min_pressure_mb": null
       },
       {
         "date": "19900202",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -11.4,
         "lng": -174.3,
         "max_wind_kt": 100,
-        "min_pressure_mb": 960
-      },
-      {
-        "date": "19900202",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -11.9,
-        "lng": -174.2,
-        "max_wind_kt": 103,
-        "min_pressure_mb": 960
+        "min_pressure_mb": null
       },
       {
         "date": "19900203",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -12.3,
         "lng": -174.1,
         "max_wind_kt": 105,
-        "min_pressure_mb": 960
-      },
-      {
-        "date": "19900203",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -12.6,
-        "lng": -174,
-        "max_wind_kt": 108,
-        "min_pressure_mb": 958
+        "min_pressure_mb": null
       },
       {
         "date": "19900203",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -12.9,
         "lng": -173.9,
         "max_wind_kt": 110,
-        "min_pressure_mb": 955
-      },
-      {
-        "date": "19900203",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -13.3,
-        "lng": -173.9,
-        "max_wind_kt": 110,
-        "min_pressure_mb": 950
+        "min_pressure_mb": null
       },
       {
         "date": "19900203",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -13.6,
         "lng": -173.9,
         "max_wind_kt": 110,
-        "min_pressure_mb": 945
-      },
-      {
-        "date": "19900203",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -13.8,
-        "lng": -173.9,
-        "max_wind_kt": 110,
-        "min_pressure_mb": 943
+        "min_pressure_mb": null
       },
       {
         "date": "19900203",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -14,
         "lng": -173.8,
         "max_wind_kt": 110,
-        "min_pressure_mb": 940
-      },
-      {
-        "date": "19900203",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -14.3,
-        "lng": -173.7,
-        "max_wind_kt": 110,
-        "min_pressure_mb": 940
+        "min_pressure_mb": null
       },
       {
         "date": "19900204",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -14.7,
         "lng": -173.6,
         "max_wind_kt": 110,
-        "min_pressure_mb": 940
-      },
-      {
-        "date": "19900204",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -15.2,
-        "lng": -173.3,
-        "max_wind_kt": 113,
-        "min_pressure_mb": 935
+        "min_pressure_mb": null
       },
       {
         "date": "19900204",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -15.7,
         "lng": -172.9,
         "max_wind_kt": 115,
-        "min_pressure_mb": 930
-      },
-      {
-        "date": "19900204",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -16.2,
-        "lng": -172.4,
-        "max_wind_kt": 115,
-        "min_pressure_mb": 928
+        "min_pressure_mb": null
       },
       {
         "date": "19900204",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -16.7,
         "lng": -172,
         "max_wind_kt": 115,
-        "min_pressure_mb": 925
-      },
-      {
-        "date": "19900204",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -17.2,
-        "lng": -171.6,
-        "max_wind_kt": 113,
-        "min_pressure_mb": 925
+        "min_pressure_mb": null
       },
       {
         "date": "19900204",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -17.8,
         "lng": -171.3,
         "max_wind_kt": 110,
-        "min_pressure_mb": 925
-      },
-      {
-        "date": "19900204",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -18.5,
-        "lng": -171,
-        "max_wind_kt": 110,
-        "min_pressure_mb": 925
+        "min_pressure_mb": null
       },
       {
         "date": "19900205",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -19.1,
         "lng": -170.7,
         "max_wind_kt": 110,
-        "min_pressure_mb": 925
-      },
-      {
-        "date": "19900205",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -19.5,
-        "lng": -170.3,
-        "max_wind_kt": 108,
-        "min_pressure_mb": 925
+        "min_pressure_mb": null
       },
       {
         "date": "19900205",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -19.9,
         "lng": -169.9,
         "max_wind_kt": 105,
-        "min_pressure_mb": 925
-      },
-      {
-        "date": "19900205",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -20.3,
-        "lng": -169.5,
-        "max_wind_kt": 103,
-        "min_pressure_mb": 928
+        "min_pressure_mb": null
       },
       {
         "date": "19900205",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -20.8,
         "lng": -169.2,
         "max_wind_kt": 100,
-        "min_pressure_mb": 930
-      },
-      {
-        "date": "19900205",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -21.3,
-        "lng": -169,
-        "max_wind_kt": 98,
-        "min_pressure_mb": 935
+        "min_pressure_mb": null
       },
       {
         "date": "19900205",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -21.8,
         "lng": -168.9,
         "max_wind_kt": 95,
-        "min_pressure_mb": 940
-      },
-      {
-        "date": "19900205",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -22.3,
-        "lng": -168.8,
-        "max_wind_kt": 98,
-        "min_pressure_mb": 943
+        "min_pressure_mb": null
       },
       {
         "date": "19900206",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -22.7,
         "lng": -168.7,
         "max_wind_kt": 100,
-        "min_pressure_mb": 945
-      },
-      {
-        "date": "19900206",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -23.1,
-        "lng": -168.6,
-        "max_wind_kt": 100,
-        "min_pressure_mb": 945
+        "min_pressure_mb": null
       },
       {
         "date": "19900206",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -23.5,
         "lng": -168.6,
         "max_wind_kt": 100,
-        "min_pressure_mb": 945
-      },
-      {
-        "date": "19900206",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -23.9,
-        "lng": -168.7,
-        "max_wind_kt": 95,
-        "min_pressure_mb": 950
+        "min_pressure_mb": null
       },
       {
         "date": "19900206",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -24.3,
         "lng": -168.8,
         "max_wind_kt": 90,
-        "min_pressure_mb": 955
-      },
-      {
-        "date": "19900206",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -24.8,
-        "lng": -168.9,
-        "max_wind_kt": 85,
-        "min_pressure_mb": 960
+        "min_pressure_mb": null
       },
       {
         "date": "19900206",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -25.2,
         "lng": -169.1,
         "max_wind_kt": 80,
-        "min_pressure_mb": 965
-      },
-      {
-        "date": "19900206",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -25.5,
-        "lng": -169.2,
-        "max_wind_kt": 73,
-        "min_pressure_mb": 968
+        "min_pressure_mb": null
       },
       {
         "date": "19900207",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "CY",
         "lat": -25.8,
         "lng": -169.4,
         "max_wind_kt": 65,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900207",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -26.3,
-        "lng": -169.6,
-        "max_wind_kt": 58,
-        "min_pressure_mb": 973
+        "min_pressure_mb": null
       },
       {
         "date": "19900207",
@@ -2619,17 +781,7 @@
         "lat": -26.7,
         "lng": -169.8,
         "max_wind_kt": 50,
-        "min_pressure_mb": 975
-      },
-      {
-        "date": "19900207",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -27,
-        "lng": -169.9,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 978
+        "min_pressure_mb": null
       },
       {
         "date": "19900207",
@@ -2639,17 +791,7 @@
         "lat": -27.3,
         "lng": -170.1,
         "max_wind_kt": 40,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900207",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -27.6,
-        "lng": -170.3,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900207",
@@ -2659,17 +801,7 @@
         "lat": -28,
         "lng": -170.6,
         "max_wind_kt": 40,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900207",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -28.3,
-        "lng": -170.8,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 983
+        "min_pressure_mb": null
       },
       {
         "date": "19900208",
@@ -2679,232 +811,72 @@
         "lat": -28.7,
         "lng": -171.1,
         "max_wind_kt": 35,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900208",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -29.1,
-        "lng": -171.4,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 986
+        "min_pressure_mb": null
       },
       {
         "date": "19900208",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -29.5,
         "lng": -171.7,
         "max_wind_kt": 30,
-        "min_pressure_mb": 987
-      },
-      {
-        "date": "19900208",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -29.9,
-        "lng": -171.9,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 989
+        "min_pressure_mb": null
       },
       {
         "date": "19900208",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -30.2,
         "lng": -172,
         "max_wind_kt": 30,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900208",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -30.5,
-        "lng": -172.3,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 993
+        "min_pressure_mb": null
       },
       {
         "date": "19900208",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -30.7,
         "lng": -172.5,
         "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900208",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -30.8,
-        "lng": -172.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900209",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -30.9,
         "lng": -172.6,
         "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900209",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -31,
-        "lng": -172.7,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900209",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -31,
         "lng": -172.8,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900209",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -31,
-        "lng": -172.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900209",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -31.1,
-        "lng": -172.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900209",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -31.9,
-        "lng": -172.4,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900209",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -31.9,
-        "lng": -172.5,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900209",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -31.7,
-        "lng": -172.6,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19900210",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -31.5,
-        "lng": -172.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900210",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -31.4,
-        "lng": -172.4,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900210",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -31.4,
-        "lng": -172.1,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900210",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -31.5,
-        "lng": -171.8,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 998
-      },
-      {
-        "date": "19900210",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -31.7,
-        "lng": -171.6,
         "max_wind_kt": 25,
         "min_pressure_mb": null
       },
       {
-        "date": "19900210",
-        "time_utc": "1500",
+        "date": "19900209",
+        "time_utc": "1200",
         "record": null,
         "status": "TD",
-        "lat": -31.9,
-        "lng": -171.4,
+        "lat": -31.1,
+        "lng": -172.9,
         "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900210",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -32,
-        "lng": -171.3,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
+        "min_pressure_mb": null
       }
     ]
   },
   {
-    "id": "SP041990_Peni",
+    "id": "SP031990_Unnamed",
     "dead_or_missing": 0,
     "cost_usd": 0,
     "retired": false,
@@ -2913,7 +885,7 @@
         "date": "19900212",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -8.6,
         "lng": -154.3,
         "max_wind_kt": 15,
@@ -2921,19 +893,9 @@
       },
       {
         "date": "19900212",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -8.8,
-        "lng": -154.1,
-        "max_wind_kt": 18,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900212",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -9,
         "lng": -154,
         "max_wind_kt": 20,
@@ -2941,93 +903,43 @@
       },
       {
         "date": "19900212",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -9.2,
-        "lng": -153.9,
-        "max_wind_kt": 23,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900212",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -9.5,
         "lng": -154,
         "max_wind_kt": 25,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900212",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -9.8,
-        "lng": -154.2,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900212",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -10.2,
         "lng": -154.6,
         "max_wind_kt": 25,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900212",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -10.5,
-        "lng": -155,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900213",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -10.8,
         "lng": -155.5,
         "max_wind_kt": 25,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900213",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -11.1,
-        "lng": -156,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900213",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -11.5,
         "lng": -156.6,
         "max_wind_kt": 30,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900213",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -11.8,
-        "lng": -157.1,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900213",
@@ -3037,17 +949,7 @@
         "lat": -12.2,
         "lng": -157.6,
         "max_wind_kt": 35,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900213",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -12.6,
-        "lng": -157.9,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900213",
@@ -3057,17 +959,7 @@
         "lat": -13.1,
         "lng": -158.2,
         "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900213",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -13.5,
-        "lng": -158.4,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900214",
@@ -3077,17 +969,7 @@
         "lat": -13.9,
         "lng": -158.6,
         "max_wind_kt": 40,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900214",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -14.1,
-        "lng": -158.7,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900214",
@@ -3097,17 +979,7 @@
         "lat": -14.3,
         "lng": -158.7,
         "max_wind_kt": 40,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900214",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -14.5,
-        "lng": -158.8,
-        "max_wind_kt": 43,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900214",
@@ -3117,17 +989,7 @@
         "lat": -14.8,
         "lng": -158.9,
         "max_wind_kt": 45,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900214",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -15.2,
-        "lng": -159,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900214",
@@ -3137,17 +999,7 @@
         "lat": -15.6,
         "lng": -159.1,
         "max_wind_kt": 45,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900214",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -16,
-        "lng": -159.2,
-        "max_wind_kt": 48,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900215",
@@ -3157,17 +1009,7 @@
         "lat": -16.5,
         "lng": -159.3,
         "max_wind_kt": 50,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900215",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -17,
-        "lng": -159.4,
-        "max_wind_kt": 53,
-        "min_pressure_mb": 975
+        "min_pressure_mb": null
       },
       {
         "date": "19900215",
@@ -3177,17 +1019,7 @@
         "lat": -17.5,
         "lng": -159.4,
         "max_wind_kt": 55,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900215",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -18,
-        "lng": -159.3,
-        "max_wind_kt": 58,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900215",
@@ -3197,17 +1029,7 @@
         "lat": -18.6,
         "lng": -159,
         "max_wind_kt": 60,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900215",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -19.1,
-        "lng": -158.7,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900215",
@@ -3217,17 +1039,7 @@
         "lat": -19.6,
         "lng": -158.2,
         "max_wind_kt": 60,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900215",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -20.2,
-        "lng": -157.7,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900216",
@@ -3237,17 +1049,7 @@
         "lat": -20.9,
         "lng": -157,
         "max_wind_kt": 60,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900216",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -21.6,
-        "lng": -156.3,
-        "max_wind_kt": 55,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900216",
@@ -3257,17 +1059,7 @@
         "lat": -22.3,
         "lng": -155.5,
         "max_wind_kt": 50,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900216",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -23,
-        "lng": -154.8,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900216",
@@ -3277,17 +1069,7 @@
         "lat": -23.7,
         "lng": -154,
         "max_wind_kt": 40,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900216",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -24.4,
-        "lng": -153.3,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900216",
@@ -3297,112 +1079,22 @@
         "lat": -25.1,
         "lng": -152.4,
         "max_wind_kt": 35,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900216",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -25.8,
-        "lng": -151.4,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900217",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -26.6,
         "lng": -150.2,
         "max_wind_kt": 30,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900217",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -27.8,
-        "lng": -149.6,
-        "max_wind_kt": 63,
-        "min_pressure_mb": 973
-      },
-      {
-        "date": "19900217",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -28.7,
-        "lng": -148.2,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 975
-      },
-      {
-        "date": "19900217",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -29.5,
-        "lng": -147,
-        "max_wind_kt": 58,
-        "min_pressure_mb": 978
-      },
-      {
-        "date": "19900217",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -30.3,
-        "lng": -146,
-        "max_wind_kt": 55,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900217",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -31.2,
-        "lng": -145.1,
-        "max_wind_kt": 53,
-        "min_pressure_mb": 983
-      },
-      {
-        "date": "19900217",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -32,
-        "lng": -144.3,
-        "max_wind_kt": 50,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900217",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -32.7,
-        "lng": -143.4,
-        "max_wind_kt": 50,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900218",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -33.4,
-        "lng": -142.5,
-        "max_wind_kt": 50,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       }
     ]
   },
   {
-    "id": "SP051990_Greg",
+    "id": "SP041990_Unnamed",
     "dead_or_missing": 0,
     "cost_usd": 0,
     "retired": false,
@@ -3411,7 +1103,7 @@
         "date": "19900228",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -13,
         "lng": 135,
         "max_wind_kt": 15,
@@ -3419,19 +1111,9 @@
       },
       {
         "date": "19900228",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -12.9,
-        "lng": 135.6,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900228",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.8,
         "lng": 136.1,
         "max_wind_kt": 15,
@@ -3439,31 +1121,11 @@
       },
       {
         "date": "19900228",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -12.7,
-        "lng": 136.5,
-        "max_wind_kt": 18,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900228",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.6,
         "lng": 136.8,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900228",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -12.5,
-        "lng": 137.1,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
@@ -3471,7 +1133,7 @@
         "date": "19900301",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.3,
         "lng": 137.4,
         "max_wind_kt": 20,
@@ -3479,19 +1141,9 @@
       },
       {
         "date": "19900301",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -12.1,
-        "lng": 137.6,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900301",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -11.8,
         "lng": 137.7,
         "max_wind_kt": 20,
@@ -3499,31 +1151,11 @@
       },
       {
         "date": "19900301",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -11.5,
-        "lng": 137.8,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900301",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -11.3,
         "lng": 137.8,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900301",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -11.1,
-        "lng": 137.9,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
@@ -3535,17 +1167,7 @@
         "lat": -11,
         "lng": 138,
         "max_wind_kt": 20,
-        "min_pressure_mb": 1004
-      },
-      {
-        "date": "19900301",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -10.9,
-        "lng": 138.1,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 1004
+        "min_pressure_mb": null
       },
       {
         "date": "19900302",
@@ -3555,17 +1177,7 @@
         "lat": -10.8,
         "lng": 138.1,
         "max_wind_kt": 20,
-        "min_pressure_mb": 1003
-      },
-      {
-        "date": "19900302",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -10.8,
-        "lng": 138.2,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 1002
+        "min_pressure_mb": null
       },
       {
         "date": "19900302",
@@ -3575,17 +1187,7 @@
         "lat": -10.8,
         "lng": 138.3,
         "max_wind_kt": 20,
-        "min_pressure_mb": 1001
-      },
-      {
-        "date": "19900302",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -10.8,
-        "lng": 138.4,
-        "max_wind_kt": 23,
-        "min_pressure_mb": 1000
+        "min_pressure_mb": null
       },
       {
         "date": "19900302",
@@ -3595,17 +1197,7 @@
         "lat": -10.9,
         "lng": 138.6,
         "max_wind_kt": 25,
-        "min_pressure_mb": 998
-      },
-      {
-        "date": "19900302",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -11,
-        "lng": 138.8,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 997
+        "min_pressure_mb": null
       },
       {
         "date": "19900302",
@@ -3615,17 +1207,7 @@
         "lat": -11.1,
         "lng": 139,
         "max_wind_kt": 25,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19900302",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -11.3,
-        "lng": 139.3,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 994
+        "min_pressure_mb": null
       },
       {
         "date": "19900303",
@@ -3635,17 +1217,7 @@
         "lat": -11.7,
         "lng": 139.7,
         "max_wind_kt": 25,
-        "min_pressure_mb": 992
-      },
-      {
-        "date": "19900303",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -12.5,
-        "lng": 140,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 991
+        "min_pressure_mb": null
       },
       {
         "date": "19900303",
@@ -3655,17 +1227,7 @@
         "lat": -13.4,
         "lng": 140.2,
         "max_wind_kt": 30,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900303",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -13.8,
-        "lng": 140.3,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900303",
@@ -3675,17 +1237,7 @@
         "lat": -14,
         "lng": 140.3,
         "max_wind_kt": 30,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900303",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -14.2,
-        "lng": 140.3,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 992
+        "min_pressure_mb": null
       },
       {
         "date": "19900303",
@@ -3695,17 +1247,7 @@
         "lat": -14.4,
         "lng": 140.2,
         "max_wind_kt": 30,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900303",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -14.5,
-        "lng": 140.1,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 993
+        "min_pressure_mb": null
       },
       {
         "date": "19900304",
@@ -3715,17 +1257,7 @@
         "lat": -14.6,
         "lng": 139.9,
         "max_wind_kt": 30,
-        "min_pressure_mb": 992
-      },
-      {
-        "date": "19900304",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -14.8,
-        "lng": 139.7,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 993
+        "min_pressure_mb": null
       },
       {
         "date": "19900304",
@@ -3735,17 +1267,7 @@
         "lat": -15,
         "lng": 139.5,
         "max_wind_kt": 30,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900304",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -15.2,
-        "lng": 139.4,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 994
+        "min_pressure_mb": null
       },
       {
         "date": "19900304",
@@ -3755,17 +1277,7 @@
         "lat": -15.5,
         "lng": 139.3,
         "max_wind_kt": 30,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900304",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -15.8,
-        "lng": 139.2,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 994
+        "min_pressure_mb": null
       },
       {
         "date": "19900304",
@@ -3775,17 +1287,7 @@
         "lat": -16.1,
         "lng": 139.2,
         "max_wind_kt": 30,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900304",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -16.4,
-        "lng": 139.3,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 994
+        "min_pressure_mb": null
       },
       {
         "date": "19900305",
@@ -3795,17 +1297,7 @@
         "lat": -16.8,
         "lng": 139.5,
         "max_wind_kt": 30,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900305",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -17.3,
-        "lng": 139.9,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900305",
@@ -3815,17 +1307,7 @@
         "lat": -17.8,
         "lng": 140.3,
         "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900305",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -18.4,
-        "lng": 140.7,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 998
+        "min_pressure_mb": null
       },
       {
         "date": "19900305",
@@ -3835,12 +1317,12 @@
         "lat": -19.1,
         "lng": 141.1,
         "max_wind_kt": 25,
-        "min_pressure_mb": 1000
+        "min_pressure_mb": null
       }
     ]
   },
   {
-    "id": "SP061990_Hilda",
+    "id": "SP051990_Unnamed",
     "dead_or_missing": 0,
     "cost_usd": 0,
     "retired": false,
@@ -3849,7 +1331,7 @@
         "date": "19900301",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -14.5,
         "lng": 170,
         "max_wind_kt": 15,
@@ -3857,19 +1339,9 @@
       },
       {
         "date": "19900301",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -13.7,
-        "lng": 169.1,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900301",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.9,
         "lng": 168.3,
         "max_wind_kt": 15,
@@ -3877,31 +1349,11 @@
       },
       {
         "date": "19900301",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -12,
-        "lng": 167.4,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900301",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -11.3,
         "lng": 166.6,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900301",
-        "time_utc": "2100",
-        "record": "L",
-        "status": "TS",
-        "lat": -10.8,
-        "lng": 165.8,
         "max_wind_kt": 15,
         "min_pressure_mb": null
       },
@@ -3909,7 +1361,7 @@
         "date": "19900302",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -10.6,
         "lng": 164.9,
         "max_wind_kt": 15,
@@ -3917,19 +1369,9 @@
       },
       {
         "date": "19900302",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -10.5,
-        "lng": 163.9,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900302",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -10.6,
         "lng": 162.9,
         "max_wind_kt": 15,
@@ -3937,19 +1379,9 @@
       },
       {
         "date": "19900302",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -11,
-        "lng": 161.8,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900302",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -11.6,
         "lng": 160.7,
         "max_wind_kt": 15,
@@ -3957,31 +1389,11 @@
       },
       {
         "date": "19900302",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -12.4,
-        "lng": 159.7,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900302",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -13.2,
         "lng": 158.8,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900302",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -14,
-        "lng": 158,
         "max_wind_kt": 15,
         "min_pressure_mb": null
       },
@@ -3989,7 +1401,7 @@
         "date": "19900303",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -14.7,
         "lng": 157.3,
         "max_wind_kt": 15,
@@ -3997,19 +1409,9 @@
       },
       {
         "date": "19900303",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -15.3,
-        "lng": 156.7,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900303",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -15.9,
         "lng": 156.2,
         "max_wind_kt": 15,
@@ -4017,19 +1419,9 @@
       },
       {
         "date": "19900303",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -16.4,
-        "lng": 155.7,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900303",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -16.8,
         "lng": 155.3,
         "max_wind_kt": 15,
@@ -4037,32 +1429,12 @@
       },
       {
         "date": "19900303",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -17.1,
-        "lng": 155,
-        "max_wind_kt": 18,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900303",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -17.3,
         "lng": 154.7,
         "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900303",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -17.7,
-        "lng": 154.3,
-        "max_wind_kt": 23,
         "min_pressure_mb": null
       },
       {
@@ -4073,17 +1445,7 @@
         "lat": -18.1,
         "lng": 153.9,
         "max_wind_kt": 25,
-        "min_pressure_mb": 1002
-      },
-      {
-        "date": "19900304",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -18.6,
-        "lng": 153.6,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 1000
+        "min_pressure_mb": null
       },
       {
         "date": "19900304",
@@ -4093,17 +1455,7 @@
         "lat": -19,
         "lng": 153.4,
         "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900304",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -19.4,
-        "lng": 153.2,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 997
+        "min_pressure_mb": null
       },
       {
         "date": "19900304",
@@ -4113,17 +1465,7 @@
         "lat": -19.7,
         "lng": 153,
         "max_wind_kt": 35,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19900304",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -19.9,
-        "lng": 152.8,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 996
+        "min_pressure_mb": null
       },
       {
         "date": "19900304",
@@ -4133,17 +1475,7 @@
         "lat": -20,
         "lng": 152.7,
         "max_wind_kt": 35,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19900304",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -20,
-        "lng": 152.6,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 996
+        "min_pressure_mb": null
       },
       {
         "date": "19900305",
@@ -4153,17 +1485,7 @@
         "lat": -20,
         "lng": 152.5,
         "max_wind_kt": 35,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19900305",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -19.9,
-        "lng": 152.5,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900305",
@@ -4173,17 +1495,7 @@
         "lat": -19.7,
         "lng": 152.5,
         "max_wind_kt": 35,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900305",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -19.5,
-        "lng": 152.5,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 994
+        "min_pressure_mb": null
       },
       {
         "date": "19900305",
@@ -4193,17 +1505,7 @@
         "lat": -19.2,
         "lng": 152.6,
         "max_wind_kt": 35,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900305",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -18.8,
-        "lng": 152.6,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 987
+        "min_pressure_mb": null
       },
       {
         "date": "19900305",
@@ -4213,17 +1515,7 @@
         "lat": -18.5,
         "lng": 152.8,
         "max_wind_kt": 35,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900305",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -18.2,
-        "lng": 153.1,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 975
+        "min_pressure_mb": null
       },
       {
         "date": "19900306",
@@ -4233,17 +1525,7 @@
         "lat": -18,
         "lng": 153.6,
         "max_wind_kt": 40,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900306",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -18,
-        "lng": 154.1,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900306",
@@ -4253,17 +1535,7 @@
         "lat": -18.2,
         "lng": 154.7,
         "max_wind_kt": 50,
-        "min_pressure_mb": 970
-      },
-      {
-        "date": "19900306",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -18.4,
-        "lng": 155.3,
-        "max_wind_kt": 53,
-        "min_pressure_mb": 975
+        "min_pressure_mb": null
       },
       {
         "date": "19900306",
@@ -4273,17 +1545,7 @@
         "lat": -18.6,
         "lng": 156,
         "max_wind_kt": 55,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900306",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -19,
-        "lng": 156.7,
-        "max_wind_kt": 58,
-        "min_pressure_mb": 980
+        "min_pressure_mb": null
       },
       {
         "date": "19900306",
@@ -4293,17 +1555,7 @@
         "lat": -19.4,
         "lng": 157.4,
         "max_wind_kt": 60,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900306",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -19.8,
-        "lng": 158.2,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 983
+        "min_pressure_mb": null
       },
       {
         "date": "19900307",
@@ -4313,17 +1565,7 @@
         "lat": -20.3,
         "lng": 159.1,
         "max_wind_kt": 60,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900307",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -20.8,
-        "lng": 160.3,
-        "max_wind_kt": 58,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900307",
@@ -4333,17 +1575,7 @@
         "lat": -21.4,
         "lng": 161.5,
         "max_wind_kt": 55,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900307",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -22.1,
-        "lng": 162.6,
-        "max_wind_kt": 55,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900307",
@@ -4353,17 +1585,7 @@
         "lat": -23.2,
         "lng": 163.6,
         "max_wind_kt": 55,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900307",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -24.5,
-        "lng": 164.7,
-        "max_wind_kt": 53,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900307",
@@ -4373,17 +1595,7 @@
         "lat": -26.3,
         "lng": 165.7,
         "max_wind_kt": 50,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900307",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -28.5,
-        "lng": 166.2,
-        "max_wind_kt": 48,
-        "min_pressure_mb": 986
+        "min_pressure_mb": null
       },
       {
         "date": "19900308",
@@ -4393,112 +1605,12 @@
         "lat": -31,
         "lng": 166.5,
         "max_wind_kt": 45,
-        "min_pressure_mb": 987
-      },
-      {
-        "date": "19900308",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -32.7,
-        "lng": 165,
-        "max_wind_kt": 43,
-        "min_pressure_mb": 989
-      },
-      {
-        "date": "19900308",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -34,
-        "lng": 165,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900308",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -35.3,
-        "lng": 165,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900308",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -36.5,
-        "lng": 165,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900308",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -37.6,
-        "lng": 165,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900308",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -38.7,
-        "lng": 165,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900308",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -39.8,
-        "lng": 165,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900309",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -40.9,
-        "lng": 165.1,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900309",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -42,
-        "lng": 165.3,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900309",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -43,
-        "lng": 165.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
+        "min_pressure_mb": null
       }
     ]
   },
   {
-    "id": "SP071990_Ivor",
+    "id": "SP061990_Unnamed",
     "dead_or_missing": 0,
     "cost_usd": 0,
     "retired": false,
@@ -4507,7 +1619,7 @@
         "date": "19900314",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -13,
         "lng": 170,
         "max_wind_kt": 15,
@@ -4515,19 +1627,9 @@
       },
       {
         "date": "19900314",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -13.2,
-        "lng": 169.4,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900314",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -13.4,
         "lng": 168.8,
         "max_wind_kt": 15,
@@ -4535,39 +1637,19 @@
       },
       {
         "date": "19900314",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -13.7,
-        "lng": 168.2,
-        "max_wind_kt": 15,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900314",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -14.1,
         "lng": 167.6,
         "max_wind_kt": 15,
         "min_pressure_mb": null
       },
       {
-        "date": "19900314",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -14.3,
-        "lng": 167.1,
-        "max_wind_kt": 18,
-        "min_pressure_mb": null
-      },
-      {
         "date": "19900315",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -14.5,
         "lng": 166.5,
         "max_wind_kt": 20,
@@ -4575,19 +1657,9 @@
       },
       {
         "date": "19900315",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -14.8,
-        "lng": 165.8,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900315",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -15.1,
         "lng": 165,
         "max_wind_kt": 20,
@@ -4595,19 +1667,9 @@
       },
       {
         "date": "19900315",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -15.3,
-        "lng": 164.4,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900315",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -15.5,
         "lng": 163.8,
         "max_wind_kt": 20,
@@ -4615,31 +1677,11 @@
       },
       {
         "date": "19900315",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -16,
-        "lng": 163.1,
-        "max_wind_kt": 23,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900315",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -16.5,
         "lng": 162.3,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900315",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -16.7,
-        "lng": 161.6,
         "max_wind_kt": 25,
         "min_pressure_mb": null
       },
@@ -4651,17 +1693,7 @@
         "lat": -16.7,
         "lng": 160.7,
         "max_wind_kt": 25,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900316",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -16.8,
-        "lng": 159.6,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900316",
@@ -4671,17 +1703,7 @@
         "lat": -16.9,
         "lng": 158.5,
         "max_wind_kt": 30,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900316",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -16.9,
-        "lng": 157.7,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 994
+        "min_pressure_mb": null
       },
       {
         "date": "19900316",
@@ -4691,17 +1713,7 @@
         "lat": -16.8,
         "lng": 156.9,
         "max_wind_kt": 35,
-        "min_pressure_mb": 992
-      },
-      {
-        "date": "19900316",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -16.7,
-        "lng": 156.1,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 992
+        "min_pressure_mb": null
       },
       {
         "date": "19900316",
@@ -4711,17 +1723,7 @@
         "lat": -16.6,
         "lng": 155.2,
         "max_wind_kt": 40,
-        "min_pressure_mb": 992
-      },
-      {
-        "date": "19900316",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -16.5,
-        "lng": 154.2,
-        "max_wind_kt": 43,
-        "min_pressure_mb": 991
+        "min_pressure_mb": null
       },
       {
         "date": "19900317",
@@ -4731,17 +1733,7 @@
         "lat": -16.4,
         "lng": 153.3,
         "max_wind_kt": 45,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900317",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -16.1,
-        "lng": 152.5,
-        "max_wind_kt": 48,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900317",
@@ -4751,17 +1743,7 @@
         "lat": -15.8,
         "lng": 151.8,
         "max_wind_kt": 50,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900317",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -15.4,
-        "lng": 151.2,
-        "max_wind_kt": 53,
-        "min_pressure_mb": 987
+        "min_pressure_mb": null
       },
       {
         "date": "19900317",
@@ -4771,17 +1753,7 @@
         "lat": -15,
         "lng": 150.7,
         "max_wind_kt": 55,
-        "min_pressure_mb": 984
-      },
-      {
-        "date": "19900317",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -14.7,
-        "lng": 150.1,
-        "max_wind_kt": 55,
-        "min_pressure_mb": 982
+        "min_pressure_mb": null
       },
       {
         "date": "19900317",
@@ -4791,17 +1763,7 @@
         "lat": -14.4,
         "lng": 149.6,
         "max_wind_kt": 55,
-        "min_pressure_mb": 980
-      },
-      {
-        "date": "19900317",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -14.2,
-        "lng": 149.1,
-        "max_wind_kt": 60,
-        "min_pressure_mb": 978
+        "min_pressure_mb": null
       },
       {
         "date": "19900318",
@@ -4811,17 +1773,7 @@
         "lat": -14.1,
         "lng": 148.6,
         "max_wind_kt": 65,
-        "min_pressure_mb": 976
-      },
-      {
-        "date": "19900318",
-        "time_utc": "0300",
-        "record": null,
-        "status": "CY",
-        "lat": -14,
-        "lng": 148.1,
-        "max_wind_kt": 70,
-        "min_pressure_mb": 974
+        "min_pressure_mb": null
       },
       {
         "date": "19900318",
@@ -4831,17 +1783,7 @@
         "lat": -13.9,
         "lng": 147.7,
         "max_wind_kt": 75,
-        "min_pressure_mb": 971
-      },
-      {
-        "date": "19900318",
-        "time_utc": "0900",
-        "record": null,
-        "status": "CY",
-        "lat": -13.8,
-        "lng": 147.4,
-        "max_wind_kt": 75,
-        "min_pressure_mb": 970
+        "min_pressure_mb": null
       },
       {
         "date": "19900318",
@@ -4851,17 +1793,7 @@
         "lat": -13.8,
         "lng": 147.1,
         "max_wind_kt": 75,
-        "min_pressure_mb": 969
-      },
-      {
-        "date": "19900318",
-        "time_utc": "1500",
-        "record": null,
-        "status": "CY",
-        "lat": -13.8,
-        "lng": 146.7,
-        "max_wind_kt": 75,
-        "min_pressure_mb": 968
+        "min_pressure_mb": null
       },
       {
         "date": "19900318",
@@ -4871,17 +1803,7 @@
         "lat": -13.9,
         "lng": 146.2,
         "max_wind_kt": 75,
-        "min_pressure_mb": 966
-      },
-      {
-        "date": "19900318",
-        "time_utc": "2100",
-        "record": null,
-        "status": "CY",
-        "lat": -14,
-        "lng": 145.8,
-        "max_wind_kt": 73,
-        "min_pressure_mb": 966
+        "min_pressure_mb": null
       },
       {
         "date": "19900319",
@@ -4891,17 +1813,7 @@
         "lat": -14.1,
         "lng": 145.5,
         "max_wind_kt": 70,
-        "min_pressure_mb": 965
-      },
-      {
-        "date": "19900319",
-        "time_utc": "0300",
-        "record": null,
-        "status": "CY",
-        "lat": -14.1,
-        "lng": 145.1,
-        "max_wind_kt": 65,
-        "min_pressure_mb": 965
+        "min_pressure_mb": null
       },
       {
         "date": "19900319",
@@ -4911,17 +1823,7 @@
         "lat": -14.1,
         "lng": 144.7,
         "max_wind_kt": 60,
-        "min_pressure_mb": 965
-      },
-      {
-        "date": "19900319",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -14.1,
-        "lng": 144.3,
-        "max_wind_kt": 55,
-        "min_pressure_mb": 965
+        "min_pressure_mb": null
       },
       {
         "date": "19900319",
@@ -4931,47 +1833,17 @@
         "lat": -14.1,
         "lng": 143.8,
         "max_wind_kt": 50,
-        "min_pressure_mb": 965
-      },
-      {
-        "date": "19900319",
-        "time_utc": "1500",
-        "record": "L",
-        "status": "TS",
-        "lat": -14.1,
-        "lng": 143.3,
-        "max_wind_kt": 50,
-        "min_pressure_mb": 965
-      },
-      {
-        "date": "19900319",
-        "time_utc": "1600",
-        "record": null,
-        "status": "TS",
-        "lat": -14.1,
-        "lng": 143.2,
-        "max_wind_kt": 50,
-        "min_pressure_mb": 965
+        "min_pressure_mb": null
       },
       {
         "date": "19900319",
         "time_utc": "1800",
-        "record": null,
+        "record": "L",
         "status": "TS",
         "lat": -14.1,
         "lng": 142.9,
         "max_wind_kt": 50,
-        "min_pressure_mb": 983
-      },
-      {
-        "date": "19900319",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -14,
-        "lng": 142.5,
-        "max_wind_kt": 45,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900320",
@@ -4981,17 +1853,7 @@
         "lat": -14,
         "lng": 142.2,
         "max_wind_kt": 40,
-        "min_pressure_mb": 986
-      },
-      {
-        "date": "19900320",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -14,
-        "lng": 142,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 987
+        "min_pressure_mb": null
       },
       {
         "date": "19900320",
@@ -5001,17 +1863,7 @@
         "lat": -14,
         "lng": 141.8,
         "max_wind_kt": 35,
-        "min_pressure_mb": 988
-      },
-      {
-        "date": "19900320",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -14,
-        "lng": 141.7,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 988
+        "min_pressure_mb": null
       },
       {
         "date": "19900320",
@@ -5021,17 +1873,7 @@
         "lat": -14,
         "lng": 141.6,
         "max_wind_kt": 35,
-        "min_pressure_mb": 988
-      },
-      {
-        "date": "19900320",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -14.1,
-        "lng": 141.6,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 987
+        "min_pressure_mb": null
       },
       {
         "date": "19900320",
@@ -5041,17 +1883,7 @@
         "lat": -14.2,
         "lng": 141.6,
         "max_wind_kt": 35,
-        "min_pressure_mb": 986
-      },
-      {
-        "date": "19900320",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -14.2,
-        "lng": 141.6,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900321",
@@ -5061,17 +1893,7 @@
         "lat": -14.3,
         "lng": 141.6,
         "max_wind_kt": 35,
-        "min_pressure_mb": 984
-      },
-      {
-        "date": "19900321",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -14.4,
-        "lng": 141.6,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 986
+        "min_pressure_mb": null
       },
       {
         "date": "19900321",
@@ -5081,17 +1903,7 @@
         "lat": -14.5,
         "lng": 141.7,
         "max_wind_kt": 35,
-        "min_pressure_mb": 988
-      },
-      {
-        "date": "19900321",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -14.5,
-        "lng": 141.8,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900321",
@@ -5101,17 +1913,7 @@
         "lat": -14.6,
         "lng": 141.9,
         "max_wind_kt": 30,
-        "min_pressure_mb": 992
-      },
-      {
-        "date": "19900321",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -14.8,
-        "lng": 142.1,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 993
+        "min_pressure_mb": null
       },
       {
         "date": "19900321",
@@ -5121,17 +1923,7 @@
         "lat": -15,
         "lng": 142.4,
         "max_wind_kt": 30,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900321",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -15.3,
-        "lng": 142.6,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 997
+        "min_pressure_mb": null
       },
       {
         "date": "19900322",
@@ -5140,16 +1932,6 @@
         "status": "TS",
         "lat": -15.7,
         "lng": 142.9,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900322",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -16.1,
-        "lng": 143.2,
         "max_wind_kt": 35,
         "min_pressure_mb": null
       },
@@ -5160,16 +1942,6 @@
         "status": "TS",
         "lat": -16.4,
         "lng": 143.5,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 998
-      },
-      {
-        "date": "19900322",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -16.6,
-        "lng": 143.7,
         "max_wind_kt": 35,
         "min_pressure_mb": null
       },
@@ -5185,16 +1957,6 @@
       },
       {
         "date": "19900322",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -16.9,
-        "lng": 144.1,
-        "max_wind_kt": 33,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900322",
         "time_utc": "1800",
         "record": null,
         "status": "TD",
@@ -5204,16 +1966,6 @@
         "min_pressure_mb": null
       },
       {
-        "date": "19900322",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -17.1,
-        "lng": 144.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 1000
-      },
-      {
         "date": "19900323",
         "time_utc": "0000",
         "record": null,
@@ -5221,17 +1973,7 @@
         "lat": -17.1,
         "lng": 144.8,
         "max_wind_kt": 30,
-        "min_pressure_mb": 1001
-      },
-      {
-        "date": "19900323",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -17.1,
-        "lng": 145,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 1000
+        "min_pressure_mb": null
       },
       {
         "date": "19900323",
@@ -5242,271 +1984,11 @@
         "lng": 145.2,
         "max_wind_kt": 25,
         "min_pressure_mb": null
-      },
-      {
-        "date": "19900323",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -17,
-        "lng": 145.7,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900323",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -17,
-        "lng": 146.2,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1001
-      },
-      {
-        "date": "19900323",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -17.1,
-        "lng": 146.6,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900323",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -17.3,
-        "lng": 146.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900323",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -17.7,
-        "lng": 146.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900324",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -18.3,
-        "lng": 146.9,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900324",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -18.9,
-        "lng": 147.1,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900324",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -19.4,
-        "lng": 147.3,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 1000
-      },
-      {
-        "date": "19900324",
-        "time_utc": "0900",
-        "record": "L",
-        "status": "TD",
-        "lat": -19.7,
-        "lng": 147.4,
-        "max_wind_kt": 23,
-        "min_pressure_mb": 1001
-      },
-      {
-        "date": "19900324",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -19.9,
-        "lng": 147.5,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 1002
-      },
-      {
-        "date": "19900324",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -20,
-        "lng": 147.7,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 1002
-      },
-      {
-        "date": "19900324",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -20.1,
-        "lng": 147.9,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 1002
-      },
-      {
-        "date": "19900324",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -20.4,
-        "lng": 148,
-        "max_wind_kt": 18,
-        "min_pressure_mb": 1004
-      },
-      {
-        "date": "19900325",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -20.7,
-        "lng": 148.1,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1005
-      },
-      {
-        "date": "19900325",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -20.9,
-        "lng": 148.4,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1005
-      },
-      {
-        "date": "19900325",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -20.9,
-        "lng": 148.8,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1005
-      },
-      {
-        "date": "19900325",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -20.7,
-        "lng": 149.2,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1006
-      },
-      {
-        "date": "19900325",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -20.6,
-        "lng": 149.6,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1006
-      },
-      {
-        "date": "19900325",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TD",
-        "lat": -20.7,
-        "lng": 149.9,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1006
-      },
-      {
-        "date": "19900325",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TD",
-        "lat": -21,
-        "lng": 149.9,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1006
-      },
-      {
-        "date": "19900325",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -21.3,
-        "lng": 149.7,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1007
-      },
-      {
-        "date": "19900326",
-        "time_utc": "0000",
-        "record": "L",
-        "status": "TD",
-        "lat": -21.6,
-        "lng": 149.3,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1008
-      },
-      {
-        "date": "19900326",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TD",
-        "lat": -21.9,
-        "lng": 148.6,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1008
-      },
-      {
-        "date": "19900326",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TD",
-        "lat": -22,
-        "lng": 147.9,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1008
-      },
-      {
-        "date": "19900326",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TD",
-        "lat": -22,
-        "lng": 147.3,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1008
-      },
-      {
-        "date": "19900326",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TD",
-        "lat": -21.9,
-        "lng": 146.8,
-        "max_wind_kt": 15,
-        "min_pressure_mb": 1008
       }
     ]
   },
   {
-    "id": "SP081990_Rae",
+    "id": "SP071990_Unnamed",
     "dead_or_missing": 0,
     "cost_usd": 0,
     "retired": false,
@@ -5515,7 +1997,7 @@
         "date": "19900317",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12,
         "lng": 165,
         "max_wind_kt": 20,
@@ -5523,31 +2005,11 @@
       },
       {
         "date": "19900317",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -12.3,
-        "lng": 165.2,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900317",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.6,
         "lng": 165.4,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900317",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -12.8,
-        "lng": 165.8,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
@@ -5555,19 +2017,9 @@
         "date": "19900317",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.8,
         "lng": 166.2,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900317",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -12.8,
-        "lng": 166.5,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
@@ -5575,19 +2027,9 @@
         "date": "19900318",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.6,
         "lng": 166.8,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900318",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -12.3,
-        "lng": 167,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
@@ -5595,7 +2037,7 @@
         "date": "19900318",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12,
         "lng": 167,
         "max_wind_kt": 20,
@@ -5603,31 +2045,11 @@
       },
       {
         "date": "19900318",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -11.8,
-        "lng": 166.9,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900318",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -11.6,
         "lng": 166.7,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900318",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -11.5,
-        "lng": 166.6,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
@@ -5635,38 +2057,18 @@
         "date": "19900318",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -11.5,
         "lng": 166.4,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
       {
-        "date": "19900318",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -11.6,
-        "lng": 166.2,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
         "date": "19900319",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -11.7,
-        "lng": 166,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900319",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -11.8,
         "lng": 166,
         "max_wind_kt": 20,
         "min_pressure_mb": null
@@ -5675,18 +2077,8 @@
         "date": "19900319",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12,
-        "lng": 166,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900319",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -12.1,
         "lng": 166,
         "max_wind_kt": 20,
         "min_pressure_mb": null
@@ -5695,18 +2087,8 @@
         "date": "19900319",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.2,
-        "lng": 166.1,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900319",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -12.3,
         "lng": 166.1,
         "max_wind_kt": 20,
         "min_pressure_mb": null
@@ -5715,39 +2097,19 @@
         "date": "19900319",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.4,
         "lng": 166.2,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
       {
-        "date": "19900319",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -12.5,
-        "lng": 166.3,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
         "date": "19900320",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.6,
         "lng": 166.4,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900320",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -12.7,
-        "lng": 166.6,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
@@ -5755,7 +2117,7 @@
         "date": "19900320",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -12.9,
         "lng": 167,
         "max_wind_kt": 20,
@@ -5763,31 +2125,11 @@
       },
       {
         "date": "19900320",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -13.2,
-        "lng": 167.9,
-        "max_wind_kt": 20,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900320",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -13.6,
         "lng": 169.1,
-        "max_wind_kt": 20,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900320",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -14.3,
-        "lng": 170.5,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
@@ -5795,39 +2137,19 @@
         "date": "19900320",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -15.2,
         "lng": 171.8,
         "max_wind_kt": 20,
         "min_pressure_mb": null
       },
       {
-        "date": "19900320",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -15.9,
-        "lng": 172.8,
-        "max_wind_kt": 23,
-        "min_pressure_mb": null
-      },
-      {
         "date": "19900321",
         "time_utc": "0000",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -16.6,
         "lng": 173.4,
-        "max_wind_kt": 25,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900321",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -17.1,
-        "lng": 173.7,
         "max_wind_kt": 25,
         "min_pressure_mb": null
       },
@@ -5835,18 +2157,8 @@
         "date": "19900321",
         "time_utc": "0600",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -17.6,
-        "lng": 173.8,
-        "max_wind_kt": 25,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19900321",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -18.1,
         "lng": 173.8,
         "max_wind_kt": 25,
         "min_pressure_mb": null
@@ -5855,41 +2167,21 @@
         "date": "19900321",
         "time_utc": "1200",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -18.6,
         "lng": 173.7,
         "max_wind_kt": 25,
-        "min_pressure_mb": 997
-      },
-      {
-        "date": "19900321",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -19.1,
-        "lng": 173.6,
-        "max_wind_kt": 28,
-        "min_pressure_mb": 995
+        "min_pressure_mb": null
       },
       {
         "date": "19900321",
         "time_utc": "1800",
         "record": null,
-        "status": "TS",
+        "status": "TD",
         "lat": -19.5,
         "lng": 173.5,
         "max_wind_kt": 30,
-        "min_pressure_mb": 994
-      },
-      {
-        "date": "19900321",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -19.9,
-        "lng": 173.5,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 992
+        "min_pressure_mb": null
       },
       {
         "date": "19900322",
@@ -5899,17 +2191,7 @@
         "lat": -20.2,
         "lng": 173.5,
         "max_wind_kt": 35,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900322",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -20.6,
-        "lng": 173.5,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 989
+        "min_pressure_mb": null
       },
       {
         "date": "19900322",
@@ -5919,17 +2201,7 @@
         "lat": -21,
         "lng": 173.6,
         "max_wind_kt": 35,
-        "min_pressure_mb": 989
-      },
-      {
-        "date": "19900322",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -21.4,
-        "lng": 173.7,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 988
+        "min_pressure_mb": null
       },
       {
         "date": "19900322",
@@ -5939,17 +2211,7 @@
         "lat": -21.6,
         "lng": 173.9,
         "max_wind_kt": 35,
-        "min_pressure_mb": 987
-      },
-      {
-        "date": "19900322",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -21.7,
-        "lng": 174.3,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 987
+        "min_pressure_mb": null
       },
       {
         "date": "19900322",
@@ -5959,17 +2221,7 @@
         "lat": -21.7,
         "lng": 174.8,
         "max_wind_kt": 35,
-        "min_pressure_mb": 986
-      },
-      {
-        "date": "19900322",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -21.7,
-        "lng": 175.4,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 986
+        "min_pressure_mb": null
       },
       {
         "date": "19900323",
@@ -5979,17 +2231,7 @@
         "lat": -21.8,
         "lng": 176.1,
         "max_wind_kt": 35,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900323",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -21.9,
-        "lng": 177,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900323",
@@ -5999,17 +2241,7 @@
         "lat": -22,
         "lng": 178.1,
         "max_wind_kt": 35,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900323",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -22.2,
-        "lng": 179.3,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 985
+        "min_pressure_mb": null
       },
       {
         "date": "19900323",
@@ -6019,17 +2251,7 @@
         "lat": -22.5,
         "lng": -179.5,
         "max_wind_kt": 35,
-        "min_pressure_mb": 985
-      },
-      {
-        "date": "19900323",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -22.9,
-        "lng": -178.3,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 986
+        "min_pressure_mb": null
       },
       {
         "date": "19900323",
@@ -6039,17 +2261,7 @@
         "lat": -23.3,
         "lng": -177,
         "max_wind_kt": 40,
-        "min_pressure_mb": 987
-      },
-      {
-        "date": "19900323",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TS",
-        "lat": -23.6,
-        "lng": -175.8,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 989
+        "min_pressure_mb": null
       },
       {
         "date": "19900324",
@@ -6059,17 +2271,7 @@
         "lat": -24,
         "lng": -174.5,
         "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900324",
-        "time_utc": "0300",
-        "record": null,
-        "status": "TS",
-        "lat": -24.6,
-        "lng": -172.9,
-        "max_wind_kt": 40,
-        "min_pressure_mb": 990
+        "min_pressure_mb": null
       },
       {
         "date": "19900324",
@@ -6079,67 +2281,7 @@
         "lat": -25.3,
         "lng": -171.1,
         "max_wind_kt": 40,
-        "min_pressure_mb": 990
-      },
-      {
-        "date": "19900324",
-        "time_utc": "0900",
-        "record": null,
-        "status": "TS",
-        "lat": -25.7,
-        "lng": -170.3,
-        "max_wind_kt": 38,
-        "min_pressure_mb": 993
-      },
-      {
-        "date": "19900324",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -26.5,
-        "lng": -168.5,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900324",
-        "time_utc": "1500",
-        "record": null,
-        "status": "TS",
-        "lat": -27.6,
-        "lng": -166.2,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900324",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -28.8,
-        "lng": -163.8,
-        "max_wind_kt": 35,
-        "min_pressure_mb": 995
-      },
-      {
-        "date": "19900324",
-        "time_utc": "2100",
-        "record": null,
-        "status": "TD",
-        "lat": -29.9,
-        "lng": -161.6,
-        "max_wind_kt": 33,
-        "min_pressure_mb": 996
-      },
-      {
-        "date": "19900325",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TD",
-        "lat": -30.9,
-        "lng": -159.6,
-        "max_wind_kt": 30,
-        "min_pressure_mb": 997
+        "min_pressure_mb": null
       }
     ]
   }

@@ -56,6 +56,10 @@
   @apply w-screen min-h-[100vh] overflow-hidden;
 }
 
+.app-background {
+  @apply pointer-events-none absolute inset-0 -z-10 w-full h-full object-cover object-top;
+}
+
 .desktop-view {
   @apply hidden lg:flex w-full relative lg:h-[calc(100vh-5rem)] lg:min-h-0;
 }
@@ -84,16 +88,6 @@ nav {
 
 .interface-panel {
   @apply w-full h-full min-h-0;
-  background-image: url('/hurricane.jpg');
-  background-size: auto 100vh;
-  background-repeat: no-repeat;
-  background-position: top center;
-}
-
-@media (min-width: 1024px) {
-  .interface-panel {
-    background-image: none;
-  }
 }
 
 .interface {
@@ -481,10 +475,6 @@ ul li h2 {
   width: min(18rem, calc(100vw - 2rem));
 }
 
-.map-button.map-layers {
-  width: fit-content;
-}
-
 .map-button.map-legend .playback-slider.MuiSlider-root {
   padding-top: 0;
   padding-bottom: 0;
@@ -494,11 +484,6 @@ ul li h2 {
   .map-button.map-legend {
     @apply gap-1.5 p-2 rounded-lg;
     width: min(14rem, calc(100vw - 1.5rem));
-  }
-
-  .map-controls-panels .map-button.map-layers,
-  .map-button.map-layers {
-    width: fit-content;
   }
 
   .map-legend-label .MuiFormControlLabel-label {
@@ -587,11 +572,15 @@ ul li h2 {
 }
 
 .mobile-view .interface-panel {
-  @apply flex h-full min-h-0 flex-col;
+  @apply relative flex h-full min-h-0 flex-col overflow-hidden;
+}
+
+.mobile-view .interface-background {
+  @apply pointer-events-none absolute left-1/2 top-1/2 z-0 h-screen w-full -translate-x-1/2 -translate-y-1/2 object-cover object-center;
 }
 
 .mobile-view .interface-scroll {
-  @apply relative inset-x-auto bottom-auto z-auto min-h-0 flex-1 overflow-y-auto overscroll-contain max-h-none rounded-none pb-0;
+  @apply relative inset-x-auto bottom-auto z-10 min-h-0 flex-1 overflow-y-auto overscroll-contain max-h-none rounded-none pb-0;
 }
 
 .mobile-view .metrics {

@@ -5,7 +5,6 @@ import { divIcon, marker, type Marker as LeafletMarker } from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useAppContext } from '../contexts/AppContext';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
-import { getBasinFromStormId, type BasinId } from '../libs/basins';
 import {
   dotSvg,
   formatDateTime,
@@ -19,46 +18,27 @@ import {
 
 type StormMarkerLayer = {
   stormId: string;
-  basinId: BasinId;
   markers: LeafletMarker[];
 };
 
 const MapTracks = () => {
   const map = useMap();
-  const { globalSeason, visibleBasins, selectStorm } = useAppContext();
+  const { globalSeason, selectStorm } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const layersRef = useRef<StormMarkerLayer[]>([]);
   const selectStormRef = useRef(selectStorm);
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
-  const visibleBasinsRef = useRef(visibleBasins);
   selectStormRef.current = selectStorm;
   getVisiblePointCountRef.current = getVisiblePointCount;
-  visibleBasinsRef.current = visibleBasins;
 
   const setMarkerVisible = (leafletMarker: LeafletMarker, visible: boolean) => {
     leafletMarker.setOpacity(visible ? 1 : 0);
   };
 
-  const applyBasinVisibility = () => {
-    layersRef.current.forEach(({ basinId, markers }) => {
-      const shouldShow = visibleBasinsRef.current.has(basinId);
-      markers.forEach((leafletMarker) => {
-        if (shouldShow && !map.hasLayer(leafletMarker)) {
-          leafletMarker.addTo(map);
-        } else if (!shouldShow && map.hasLayer(leafletMarker)) {
-          leafletMarker.remove();
-        }
-      });
-    });
-  };
-
   const applyPlaybackToMarkers = () => {
-    layersRef.current.forEach(({ stormId, basinId, markers }) => {
-      if (!visibleBasinsRef.current.has(basinId)) return;
-
+    layersRef.current.forEach(({ stormId, markers }) => {
       const count = getVisiblePointCountRef.current(stormId);
       markers.forEach((leafletMarker, index) => {
-        if (!map.hasLayer(leafletMarker)) return;
         setMarkerVisible(leafletMarker, index < count);
       });
     });
@@ -74,9 +54,6 @@ const MapTracks = () => {
 
     globalSeason.forEach((storm) => {
       const id = storm.id;
-      const basinId = getBasinFromStormId(id);
-      if (!basinId) return;
-
       const name = id.split('_')[1];
       const markers: LeafletMarker[] = [];
 
@@ -109,17 +86,15 @@ const MapTracks = () => {
         markers.push(leafletMarker);
       });
 
-      layersRef.current.push({ stormId: id, basinId, markers });
+      layersRef.current.push({ stormId: id, markers });
     });
 
-    applyBasinVisibility();
     applyPlaybackToMarkers();
   }, [globalSeason, map]);
 
   useEffect(() => {
-    applyBasinVisibility();
     applyPlaybackToMarkers();
-  }, [getVisiblePointCount, visibleBasins]);
+  }, [getVisiblePointCount]);
 
   return null;
 };

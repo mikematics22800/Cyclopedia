@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useLayoutEffect } from 'react';
-import Image from 'next/image';
 import gsap from 'gsap';
 
 type LoadingScreenProps = {
@@ -47,14 +46,12 @@ const LoadingScreen = ({ overlay = false, className = '' }: LoadingScreenProps) 
     <div ref={rootRef} className={rootClassName}>
       <div className="loading-logo-wrap">
         <div className="loading-logo-spin spin">
-          <Image
+          <img
             className="loading-logo lg:w-60 w-40 h-auto"
             src="/cyclone.png"
             alt="Loading"
             width={240}
             height={240}
-            priority
-            unoptimized
           />
         </div>
       </div>

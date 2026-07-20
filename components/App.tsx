@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import Image from 'next/image';
 import {
   getAllBasinSeasons,
   getBasinSeason,
-  getYearArchiveCached,
+  getYearArchive,
   type YearArchives,
 } from "../libs/hurdat";
 import { calculateSeasonACE } from "../libs/calculateACE";
@@ -16,7 +15,6 @@ import {
   getGlobalEndYear,
   getGlobalStartYear,
   isBasinYearAvailable,
-  type BasinId,
 } from "../libs/basins";
 import { AppProvider } from "../contexts/AppContext";
 import { PlaybackProvider } from "../contexts/PlaybackContext";
@@ -34,9 +32,6 @@ export default function App() {
   const [windField, setWindField] = useState<boolean>(year >= 2002);
   const [charts, setCharts] = useState<boolean>(false);
   const [globe, setGlobe] = useState(false);
-  const [visibleBasins, setVisibleBasins] = useState<Set<BasinId>>(
-    () => new Set(getAvailableBasinsForYear(2025)),
-  );
 
   const season = useMemo(() => {
     if (!yearArchives) return null;
@@ -49,15 +44,6 @@ export default function App() {
     const storms = getAllBasinSeasons(yearArchives, year);
     return storms.length ? storms : null;
   }, [yearArchives, year]);
-
-  const mapSeason = useMemo(() => {
-    if (!globalSeason) return null;
-    const visible = globalSeason.filter((s) => {
-      const basinId = getBasinFromStormId(s.id);
-      return basinId != null && visibleBasins.has(basinId);
-    });
-    return visible.length ? visible : null;
-  }, [globalSeason, visibleBasins]);
 
   const stormId = useMemo(() => {
     if (!season?.length) return '';
@@ -89,7 +75,12 @@ export default function App() {
 
   const maxWinds = useMemo(() => {
     if (!season) return [];
-    return season.map((s) => Math.max(...s.data.map((point) => point.max_wind_kt)));
+    return season.map((s) => {
+      const winds = s.data
+        .map((point) => point.max_wind_kt)
+        .filter((wind): wind is number => wind != null);
+      return winds.length ? Math.max(...winds) : 0;
+    });
   }, [season]);
 
   const seasonACE = useMemo(() => {
@@ -139,40 +130,6 @@ export default function App() {
   }, [year, basin]);
 
   useEffect(() => {
-    setVisibleBasins(new Set(getAvailableBasinsForYear(year)));
-  }, [year]);
-
-  const toggleBasinVisibility = useCallback((basinId: BasinId) => {
-    setVisibleBasins((prev) => {
-      if (prev.has(basinId) && prev.size === 1) return prev;
-      const next = new Set(prev);
-      if (next.has(basinId)) next.delete(basinId);
-      else next.add(basinId);
-      return next;
-    });
-  }, []);
-
-  const setBasinVisibility = useCallback((basinId: BasinId, visible: boolean) => {
-    setVisibleBasins((prev) => {
-      if (!visible && prev.has(basinId) && prev.size === 1) return prev;
-      const next = new Set(prev);
-      if (visible) next.add(basinId);
-      else next.delete(basinId);
-      return next;
-    });
-  }, []);
-
-  const setAllBasinsVisible = useCallback((visible: boolean) => {
-    const available = getAvailableBasinsForYear(year);
-    if (!available.length) return;
-    if (visible) {
-      setVisibleBasins(new Set(available));
-    } else {
-      setVisibleBasins(new Set([available[0]]));
-    }
-  }, [year]);
-
-  useEffect(() => {
     const startYear = getGlobalStartYear();
     const endYear = getGlobalEndYear();
     if (year < startYear || year > endYear) {
@@ -182,7 +139,7 @@ export default function App() {
 
     let cancelled = false;
     setYearArchives(null);
-    getYearArchiveCached(year).then((data) => {
+    getYearArchive(year).then((data) => {
       if (!cancelled) setYearArchives(data);
     });
 
@@ -202,11 +159,6 @@ export default function App() {
     selectYear,
     season,
     globalSeason,
-    mapSeason,
-    visibleBasins,
-    toggleBasinVisibility,
-    setBasinVisibility,
-    setAllBasinsVisible,
     storm,
     stormId,
     focusToken,
@@ -229,11 +181,6 @@ export default function App() {
     selectYear,
     season,
     globalSeason,
-    mapSeason,
-    visibleBasins,
-    toggleBasinVisibility,
-    setBasinVisibility,
-    setAllBasinsVisible,
     storm,
     stormId,
     focusToken,
@@ -251,28 +198,23 @@ export default function App() {
 
   return (
     <AppProvider value={value}>
-      <PlaybackProvider globalSeason={mapSeason} year={year}>
+      <PlaybackProvider globalSeason={globalSeason} year={year}>
       <div className="app relative">
-        <Image
+        <img
           src="/hurricane.jpg"
           alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="pointer-events-none -z-10 object-cover object-top"
           aria-hidden
+          className="app-background"
         />
         {globalSeason && storm ? (
           <>
             <nav aria-label="Site header">
               <div className="flex items-center gap-2">
-                <Image
+                <img
                   src="/cyclone.png"
                   alt="Cyclopedia"
                   width={40}
                   height={40}
-                  priority
-                  unoptimized
                 />
                 <h1 className="storm-font">
                   CYCLOPEDIA

@@ -58,10 +58,7 @@ const Selectors = () => {
   const years = useMemo(() => [...getGlobalYears()].reverse(), []);
 
   const availableBasins = useMemo(
-    () =>
-      getAvailableBasinsForYear(year).sort((a, b) =>
-        BASINS[a].label.localeCompare(BASINS[b].label),
-      ),
+    () => getAvailableBasinsForYear(year),
     [year],
   );
 
