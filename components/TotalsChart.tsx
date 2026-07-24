@@ -19,13 +19,12 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
 import { isAceYearAvailable } from '../libs/basins';
+import type { YearTotal } from './hooks/useBasinTotals';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-type YearTotal = {
-  year: number;
-  count: number;
-  ACE: number;
+type TotalsChartProps = {
+  totals: YearTotal[];
 };
 
 const COUNT_MAX_BY_BASIN: Record<string, number> = {
@@ -89,34 +88,9 @@ const selectedYearLinePlugin: Plugin<'line'> = {
   },
 };
 
-const TotalsChart = () => {
+const TotalsChart = ({ totals }: TotalsChartProps) => {
   const { basin, year } = useAppContext();
-  const [totals, setTotals] = useState<YearTotal[]>([]);
   const [showCyclones, setShowCyclones] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadTotals() {
-      try {
-        const response = await fetch(`/archive/${basin}/totals.json`);
-        if (!response.ok) {
-          if (!cancelled) setTotals([]);
-          return;
-        }
-        const data: YearTotal[] = await response.json();
-        if (!cancelled) setTotals(data);
-      } catch {
-        if (!cancelled) setTotals([]);
-      }
-    }
-
-    loadTotals();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [basin]);
 
   useEffect(() => {
     setShowCyclones(true);

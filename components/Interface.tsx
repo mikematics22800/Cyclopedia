@@ -10,6 +10,7 @@ import SeasonChart from './SeasonChart';
 import StormChart from './StormChart';
 import Selectors from './Selectors';
 import Image from "next/image";
+import { useBasinTotals } from "./hooks/useBasinTotals";
 
 type InterfaceProps = {
   mobileSheet?: boolean;
@@ -20,6 +21,7 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
   const [hiddenByDatasetIndex, setHiddenByDatasetIndex] = useState<Record<number, boolean>>({});
 
   const { basin, year } = useAppContext();
+  const totals = useBasinTotals(basin);
   const { dragHandleProps, sheetStyle, handleRef, snap } = useMobileSheetDrag(mobileSheet);
 
   useGsapReveal(containerRef, [basin, year], {
@@ -45,9 +47,13 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
             <Selectors />
             <Metrics />
             <div className="lg:hidden w-full">
-              <TotalsChart/>
-              <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
-              <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
+              {totals !== null && (
+                <>
+                  <TotalsChart totals={totals} />
+                  <SeasonChart onLegendVisibilityChange={handleLegendVisibilityChange} />
+                  <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
+                </>
+              )}
             </div>
             <div className="flex items-center w-full justify-between">
               <Image
