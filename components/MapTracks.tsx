@@ -23,7 +23,7 @@ type StormMarkerLayer = {
 
 const MapTracks = () => {
   const map = useMap();
-  const { globalSeason, selectStorm } = useAppContext();
+  const { displaySeason, selectStorm } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const layersRef = useRef<StormMarkerLayer[]>([]);
   const selectStormRef = useRef(selectStorm);
@@ -50,9 +50,9 @@ const MapTracks = () => {
     });
     layersRef.current = [];
 
-    if (!globalSeason) return;
+    if (!displaySeason) return;
 
-    globalSeason.forEach((storm) => {
+    displaySeason.forEach((storm) => {
       const id = storm.id;
       const name = id.split('_')[1];
       const markers: LeafletMarker[] = [];
@@ -90,7 +90,7 @@ const MapTracks = () => {
     });
 
     applyPlaybackToMarkers();
-  }, [globalSeason, map]);
+  }, [displaySeason, map]);
 
   useEffect(() => {
     applyPlaybackToMarkers();

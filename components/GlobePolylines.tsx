@@ -23,7 +23,7 @@ export const useGlobePolylines = ({
   cesiumRef,
   viewerReady,
 }: UseGlobePolylinesOptions) => {
-  const { globalSeason, stormId, year } = useAppContext();
+  const { displaySeason, stormId, year } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
   getVisiblePointCountRef.current = getVisiblePointCount;
@@ -34,9 +34,9 @@ export const useGlobePolylines = ({
     if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed()) return;
 
     removeEntitiesWithPrefix(viewer, 'track-');
-    if (!globalSeason) return;
+    if (!displaySeason) return;
 
-    globalSeason.forEach((stormTrack) => {
+    displaySeason.forEach((stormTrack) => {
       const id = stormTrack.id;
       const stormYear = getStormYear(id);
       const { width, alpha, color } = trackAppearance(id, stormYear, stormId, year);
@@ -71,7 +71,7 @@ export const useGlobePolylines = ({
         },
       });
     });
-  }, [globalSeason, viewerReady, stormId, year, viewerRef, cesiumRef]);
+  }, [displaySeason, viewerReady, stormId, year, viewerRef, cesiumRef]);
 
   useEffect(() => {
     const viewer = viewerRef.current;

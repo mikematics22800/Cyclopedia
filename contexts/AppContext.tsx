@@ -10,6 +10,11 @@ interface AppContextType {
   selectYear: (year: number) => void;
   season: Storm[] | null;
   globalSeason: Storm[] | null;
+  displaySeason: Storm[] | null;
+  isolateBasin: boolean;
+  setIsolateBasin: (isolateBasin: boolean) => void;
+  isolateStorm: boolean;
+  setIsolateStorm: (isolateStorm: boolean) => void;
   storm: Storm | null;
   stormId: string;
   focusToken: number;

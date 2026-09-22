@@ -33,7 +33,7 @@ const trackStyle = (
 
 const MapPolylines = () => {
   const map = useMap();
-  const { globalSeason, stormId, year, selectStorm } = useAppContext();
+  const { displaySeason, stormId, year, selectStorm } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const layersRef = useRef<TrackLayer[]>([]);
   const selectStormRef = useRef(selectStorm);
@@ -53,9 +53,9 @@ const MapPolylines = () => {
     layersRef.current.forEach(({ polyline: line }) => line.remove());
     layersRef.current = [];
 
-    if (!globalSeason) return;
+    if (!displaySeason) return;
 
-    globalSeason.forEach((storm) => {
+    displaySeason.forEach((storm) => {
       const raw = storm.data.map(
         (point) => [point.lat, point.lng] as [number, number],
       );
@@ -69,7 +69,7 @@ const MapPolylines = () => {
     });
 
     applyPlaybackToLayers(map.getCenter().lng);
-  }, [globalSeason, map]);
+  }, [displaySeason, map]);
 
   useEffect(() => {
     applyPlaybackToLayers(map.getCenter().lng);

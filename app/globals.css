@@ -508,17 +508,17 @@ ul li h2 {
 }
 
 .map-legend-form-group.MuiFormGroup-root {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   margin: 0;
-  padding: 0;
-  padding-left: 0;
-  margin-left: 0;
-}
-
-.map-legend-label.MuiFormControlLabel-root {
-  margin-right: 0;
   margin-left: 0;
   padding-left: 0;
-  width: fit-content;
+  padding-right: 0;
+  padding-bottom: 0;
 }
 
 .map-legend-label .MuiFormControlLabel-label {

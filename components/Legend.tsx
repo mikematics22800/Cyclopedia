@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import {
   Checkbox,
+  FormGroup,
   Tooltip,
   IconButton,
 } from '@mui/material';
@@ -47,7 +48,15 @@ const Legend = ({
   onOpenChange,
   part = 'combined',
 }: LegendProps) => {
-  const { windField, setWindField, year } = useAppContext();
+  const {
+    windField,
+    setWindField,
+    isolateBasin,
+    setIsolateBasin,
+    isolateStorm,
+    setIsolateStorm,
+    year,
+  } = useAppContext();
   const windFieldAvailable = year >= 2002;
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen ?? internalOpen;
@@ -113,7 +122,10 @@ const Legend = ({
           <Close className="!text-lg lg:!text-xl" />
         </IconButton>
       </div>
-      <h1 className={LEGEND_SECTION_HEADER}>Classification</h1>
+      <div className="flex flex-row items-center justify-between w-full">
+        <h1 className={LEGEND_SECTION_HEADER}>Classification</h1>
+        <h1 className={LEGEND_SECTION_HEADER}>Wind Speed</h1>
+      </div>
       <div className={LEGEND_SECTION_LIST}>
         {statusItems.map((item) => (
           <div
@@ -161,6 +173,31 @@ const Legend = ({
           </div>
         </>
       )}
+      <FormGroup
+        row
+        className="map-legend-form-group settings-row flex !flex-row flex-nowrap items-center justify-between gap-2 w-full border-t border-white pt-1.5 lg:pt-2"
+      >
+        <div className="flex items-center justify-center gap-1 lg:gap-1.5">
+          <h1 className={LEGEND_SECTION_HEADER_TEXT}>Isolate Basin</h1>
+          <Checkbox
+            size="small"
+            className="!text-sky-400 !p-0"
+            checked={isolateBasin}
+            onChange={(e) => setIsolateBasin(e.target.checked)}
+            inputProps={{ 'aria-label': 'Isolate selected basin' }}
+          />
+        </div>
+        <div className="flex items-center justify-center gap-1 lg:gap-1.5">
+          <h1 className={LEGEND_SECTION_HEADER_TEXT}>Isolate Storm</h1>
+          <Checkbox
+            size="small"
+            className="!text-sky-400 !p-0"
+            checked={isolateStorm}
+            onChange={(e) => setIsolateStorm(e.target.checked)}
+            inputProps={{ 'aria-label': 'Isolate selected storm' }}
+          />
+        </div>
+      </FormGroup>
     </div>
   ) : null;
 

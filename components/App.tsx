@@ -30,6 +30,8 @@ export default function App() {
   const [stormIdRequest, setStormIdRequest] = useState<string>('');
   const [focusToken, setFocusToken] = useState(0);
   const [windField, setWindField] = useState<boolean>(year >= 2002);
+  const [isolateBasin, setIsolateBasin] = useState(false);
+  const [isolateStorm, setIsolateStorm] = useState(false);
   const [charts, setCharts] = useState<boolean>(false);
   const [globe, setGlobe] = useState(false);
 
@@ -57,6 +59,12 @@ export default function App() {
     if (!globalSeason?.length || !stormId) return null;
     return globalSeason.find((s) => s.id === stormId) ?? null;
   }, [globalSeason, stormId]);
+
+  const displaySeason = useMemo(() => {
+    if (isolateStorm) return storm ? [storm] : null;
+    if (isolateBasin) return season;
+    return globalSeason;
+  }, [isolateStorm, isolateBasin, storm, season, globalSeason]);
 
   const dates = useMemo(() => {
     if (!storm) return [];
@@ -159,6 +167,11 @@ export default function App() {
     selectYear,
     season,
     globalSeason,
+    displaySeason,
+    isolateBasin,
+    setIsolateBasin,
+    isolateStorm,
+    setIsolateStorm,
     storm,
     stormId,
     focusToken,
@@ -181,6 +194,9 @@ export default function App() {
     selectYear,
     season,
     globalSeason,
+    displaySeason,
+    isolateBasin,
+    isolateStorm,
     storm,
     stormId,
     focusToken,

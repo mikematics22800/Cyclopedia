@@ -37,7 +37,7 @@ export const useGlobeTracks = ({
   viewerReady,
   onClearPopup,
 }: UseGlobeTracksOptions) => {
-  const { globalSeason } = useAppContext();
+  const { displaySeason } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const pointLayersRef = useRef<PointLayer[]>([]);
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
@@ -64,13 +64,13 @@ export const useGlobeTracks = ({
   useEffect(() => {
     const viewer = viewerRef.current;
     const Cesium = cesiumRef.current;
-    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed() || !globalSeason) return;
+    if (!viewerReady || !viewer || !Cesium || viewer.isDestroyed() || !displaySeason) return;
 
     onClearPopup();
     removeEntitiesWithPrefix(viewer, 'point-');
     pointLayersRef.current = [];
 
-    globalSeason.forEach((stormTrack) => {
+    displaySeason.forEach((stormTrack) => {
       const id = stormTrack.id;
       const name = id.split('_')[1];
       const points: PointLayer['points'] = [];
@@ -114,7 +114,7 @@ export const useGlobeTracks = ({
     });
 
     applyPlaybackToPoints();
-  }, [globalSeason, viewerReady, viewerRef, cesiumRef, onClearPopup]);
+  }, [displaySeason, viewerReady, viewerRef, cesiumRef, onClearPopup]);
 
   useEffect(() => {
     applyPlaybackToPoints();
