@@ -123,7 +123,7 @@ const buildStormMetrics = (storm: Storm) => {
       ? formatPressureDisplay(Math.min(...inlandPressures))
       : 'Unknown',
     cost: ((storm.cost_usd || 0) / 1_000_000).toFixed(1),
-    deadOrMissing: (storm.dead_or_missing || 0).toString(),
+    casualties: (storm.casualties || 0).toString(),
     textColor: getStormTextColor(data, maxWindValue),
     ace: calculateStormACE(data),
   };
@@ -145,7 +145,7 @@ const SeasonMetrics = () => {
       hurricanes: maxWinds.filter((wind) => wind >= 64).length,
       majorHurricanes: maxWinds.filter((wind) => wind >= 96).length,
       category5Hurricanes: maxWinds.filter((wind) => wind >= 137).length,
-      deadOrMissing: sum(season.map((storm) => storm.dead_or_missing || 0)),
+      casualties: sum(season.map((storm) => storm.casualties || 0)),
       cost: (sum(season.map((storm) => storm.cost_usd || 0)) / 1_000_000).toFixed(1),
       landfalls,
     };
@@ -205,8 +205,8 @@ const SeasonMetrics = () => {
             <h2 className='value'>{metrics.landfalls}</h2>
           </li>
           <li className='data-row border-b'>
-            <h2 className='label'>Total Dead or Missing</h2>
-            <h2 className='value'>{metrics.deadOrMissing}</h2>
+            <h2 className='label'>Total Casualties</h2>
+            <h2 className='value'>{metrics.casualties}</h2>
           </li>
           <li className='data-row border-b'>
             <h2 className='label'>Total Cost (Million {year} USD)</h2>
@@ -367,8 +367,8 @@ const StormMetrics = () => {
             <h2 className='value'>{metrics.landfalls.length}</h2>
           </li>
           <li data-storm-reveal className='data-row border-b'>
-            <h2 className='label'>Dead or Missing</h2>
-            <h2 className='value'>{metrics.deadOrMissing}</h2>
+            <h2 className='label'>Casualties</h2>
+            <h2 className='value'>{metrics.casualties}</h2>
           </li>
 
           <li data-storm-reveal className='data-row border-b'>

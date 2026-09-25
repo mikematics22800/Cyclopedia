@@ -66,7 +66,7 @@ Each archive file (`public/archive/{basin}/{year}.json`) is an array of storm ob
   "id": "AL011851_One",
   "retired": false,
   "cost_usd": 0,
-  "dead_or_missing": 1,
+  "casualties": 1,
   "data": [
     {
       "date": "18510625",

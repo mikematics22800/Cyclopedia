@@ -41,7 +41,7 @@ interface Storm {
   data: StormDataPoint[];
   retired: boolean;
   cost_usd: number;
-  dead_or_missing: number;
+  casualties: number;
 }
 
 type YearArchives = Record<BasinId, Storm[]>;

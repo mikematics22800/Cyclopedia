@@ -1,15 +1,16 @@
 'use client';
 
-import { useMemo, useRef, useLayoutEffect, useCallback } from "react";
+import { useMemo, useRef, useLayoutEffect, useCallback, useState } from "react";
 import gsap from "gsap";
 import { useAppContext } from "../contexts/AppContext";
 import {
   BASINS,
+  clampGlobalYear,
   getAvailableBasinsForYear,
   getGlobalYears,
   type BasinId,
 } from "../libs/basins";
-import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Menu, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import Image from "next/image";
 
@@ -38,6 +39,124 @@ function SelectorTrigger({
       <span className="selector-trigger__label">{label}</span>
       <span className="selector-trigger__value">{children}</span>
     </span>
+  );
+}
+
+function YearSelector({
+  year,
+  years,
+  onSelect,
+}: {
+  year: number;
+  years: number[];
+  onSelect: (year: number) => void;
+}) {
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const selectedItemRef = useRef<HTMLLIElement>(null);
+  const [draft, setDraft] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+
+  const commitYear = useCallback(
+    (raw: string) => {
+      if (!/^\d{4}$/.test(raw)) return;
+      onSelect(clampGlobalYear(Number(raw)));
+      setDraft(null);
+    },
+    [onSelect],
+  );
+
+  return (
+    <div ref={anchorRef} className="selector year-selector">
+      <span className="selector-trigger">
+        <button
+          type="button"
+          className="selector-trigger__label year-selector__label"
+          onClick={() => setOpen(true)}
+        >
+          Year
+        </button>
+        <input
+          className="selector-trigger__value year-selector__input"
+          inputMode="numeric"
+          autoComplete="off"
+          spellCheck={false}
+          maxLength={4}
+          aria-label="Year"
+          value={draft ?? String(year)}
+          onFocus={(e) => e.currentTarget.select()}
+          onChange={(e) => {
+            const digits = e.target.value.replace(/\D/g, "").slice(0, 4);
+            if (digits.length === 4) {
+              commitYear(digits);
+              e.currentTarget.blur();
+              return;
+            }
+            if (digits === (draft ?? "")) {
+              e.currentTarget.value = digits;
+            }
+            setDraft(digits);
+          }}
+          onBlur={() => setDraft(null)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              const raw = draft ?? String(year);
+              if (raw.length === 4) {
+                commitYear(raw);
+                e.currentTarget.blur();
+              }
+            } else if (e.key === "ArrowDown") {
+              e.preventDefault();
+              setOpen(true);
+            }
+          }}
+        />
+      </span>
+      <button
+        type="button"
+        className="year-selector__chevron"
+        aria-label="Choose year"
+        aria-expanded={open}
+        onClick={() => setOpen(true)}
+      >
+        <KeyboardArrowDown />
+      </button>
+      <Menu
+        anchorEl={anchorRef.current}
+        open={open}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
+        transitionDuration={SELECTOR_MENU_PROPS.transitionDuration}
+        disableAutoFocusItem
+        PaperProps={{
+          elevation: 0,
+          className: "selector-menu-paper",
+          style: { minWidth: anchorRef.current?.offsetWidth },
+        }}
+        MenuListProps={SELECTOR_MENU_PROPS.MenuListProps}
+        TransitionProps={{
+          onEntered: () => {
+            selectedItemRef.current?.scrollIntoView({ block: "center" });
+          },
+        }}
+      >
+        {years.map((selectedYear) => (
+          <MenuItem
+            key={selectedYear}
+            selected={selectedYear === year}
+            ref={selectedYear === year ? selectedItemRef : undefined}
+            onClick={() => {
+              onSelect(selectedYear);
+              setDraft(null);
+              setOpen(false);
+            }}
+          >
+            {selectedYear}
+          </MenuItem>
+        ))}
+      </Menu>
+    </div>
   );
 }
 
@@ -140,25 +259,7 @@ const Selectors = () => {
         onPointerEnter={chipPointerEnter}
         onPointerLeave={chipPointerLeave}
       >
-        <Select
-          size="small"
-          className="selector"
-          value={year}
-          onChange={(e: SelectChangeEvent<number>) =>
-            selectYear(Number(e.target.value))
-          }
-          IconComponent={KeyboardArrowDown}
-          MenuProps={SELECTOR_MENU_PROPS}
-          renderValue={(v) => (
-            <SelectorTrigger label="Year">{v}</SelectorTrigger>
-          )}
-        >
-          {years.map((selectedYear) => (
-            <MenuItem key={selectedYear} value={selectedYear}>
-              {selectedYear}
-            </MenuItem>
-          ))}
-        </Select>
+        <YearSelector year={year} years={years} onSelect={selectYear} />
       </div>
       <div
         data-selector-chip
