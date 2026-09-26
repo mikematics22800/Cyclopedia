@@ -11,6 +11,7 @@ import StormChart from './StormChart';
 import Selectors from './Selectors';
 import Image from "next/image";
 import { useBasinTotals } from "./hooks/useBasinTotals";
+import { t } from "../libs/i18n";
 
 type InterfaceProps = {
   mobileSheet?: boolean;
@@ -20,7 +21,7 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hiddenByDatasetIndex, setHiddenByDatasetIndex] = useState<Record<number, boolean>>({});
 
-  const { basin, year } = useAppContext();
+  const { basin, year, lang, setLang } = useAppContext();
   const totals = useBasinTotals(basin);
   const { dragHandleProps, sheetStyle, handleRef, snap } = useMobileSheetDrag(mobileSheet);
 
@@ -44,6 +45,26 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
           className="w-full flex flex-col items-center gap-2 lg:gap-4"
         >
           <div className="metrics">
+          <div className="flex w-full justify-center mb-5 lg:hidden">
+              <div className="nav-buttons">
+                <button
+                  type="button"
+                  className={`font-bold nav-button${lang === 'en' ? ' nav-button--selected' : ''}`}
+                  onClick={() => setLang('en')}
+                  aria-pressed={lang === 'en'}
+                >
+                  {t(lang, 'english')}
+                </button>
+                <button
+                  type="button"
+                  className={`font-bold nav-button${lang === 'ja' ? ' nav-button--selected' : ''}`}
+                  onClick={() => setLang('ja')}
+                  aria-pressed={lang === 'ja'}
+                >
+                  {t(lang, 'japanese')}
+                </button>
+              </div>
+            </div>
             <Selectors />
             <Metrics />
             <div className="lg:hidden w-full">
@@ -92,12 +113,13 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
             aria-hidden
             className="interface-background"
           />
-          <div
-            ref={handleRef}
-            {...dragHandleProps}
-            className="drag-handle-container"
-          >
-            <div data-gsap-reveal className="drag-handle shrink-0" />
+          <div ref={handleRef} className="mobile-sheet-header">
+            <div
+              {...dragHandleProps}
+              className="drag-handle-container"
+            >
+              <div data-gsap-reveal className="drag-handle shrink-0" />
+            </div>
           </div>
           <div className="interface-scroll">
             {interfaceBody}

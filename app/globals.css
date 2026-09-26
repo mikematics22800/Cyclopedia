@@ -373,8 +373,12 @@ ul li h2 {
   @apply text-sm;
 }
 
+.mobile-sheet-header {
+  @apply flex w-full shrink-0 flex-col items-center bg-slate-800/80 backdrop-blur-md lg:hidden;
+}
+
 .drag-handle-container {
-  @apply flex w-full shrink-0 cursor-grab touch-none select-none justify-center py-3 lg:hidden active:cursor-grabbing bg-slate-800/80 backdrop-blur-md;
+  @apply flex w-full shrink-0 cursor-grab touch-none select-none justify-center py-3 lg:hidden active:cursor-grabbing;
 }
 
 .drag-handle {
