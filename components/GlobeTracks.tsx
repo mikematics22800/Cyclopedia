@@ -37,7 +37,7 @@ export const useGlobeTracks = ({
   viewerReady,
   onClearPopup,
 }: UseGlobeTracksOptions) => {
-  const { displaySeason } = useAppContext();
+  const { displaySeason, lang } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const pointLayersRef = useRef<PointLayer[]>([]);
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
@@ -76,9 +76,9 @@ export const useGlobeTracks = ({
       const points: PointLayer['points'] = [];
 
       stormTrack.data.forEach((point, index) => {
-        const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc);
+        const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc, lang);
         const { color } = getStormStatus(point);
-        const fullName = formatStormFullName(name, getPopupStormStatus(point, id));
+        const fullName = formatStormFullName(name, getPopupStormStatus(point, id, lang), lang);
         const isLandfall = point.record === 'L';
 
         const position = Cesium.Cartesian3.fromDegrees(point.lng, point.lat);
@@ -104,7 +104,7 @@ export const useGlobeTracks = ({
             height: isLandfall ? 25 : 10,
             show: true,
           },
-          description: buildPopupHtml(fullName, formattedDate, formattedTime, point),
+          description: buildPopupHtml(fullName, formattedDate, formattedTime, point, lang),
         });
 
         points.push({ entity, index });
@@ -114,7 +114,7 @@ export const useGlobeTracks = ({
     });
 
     applyPlaybackToPoints();
-  }, [displaySeason, viewerReady, viewerRef, cesiumRef, onClearPopup]);
+  }, [displaySeason, viewerReady, viewerRef, cesiumRef, onClearPopup, lang]);
 
   useEffect(() => {
     applyPlaybackToPoints();

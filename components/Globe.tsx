@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useAppContext } from '../contexts/AppContext';
+import { useAppContext, useT } from '../contexts/AppContext';
+import { t } from '../libs/i18n';
 import {
   buildWindPopupHtml,
   calculateWindRadii,
@@ -104,7 +105,8 @@ const Globe = () => {
   const [viewerReady, setViewerReady] = useState(false);
   const [popup, setPopup] = useState<GlobePopup | null>(null);
   const [popupPosition, setPopupPosition] = useState<{ x: number; y: number } | null>(null);
-  const { year, windField, storm, stormId, focusToken, selectStorm } = useAppContext();
+  const { year, windField, storm, stormId, focusToken, selectStorm, lang } = useAppContext();
+  const translate = useT();
   const { getVisiblePointCount } = usePlaybackContext();
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
   const windLayersRef = useRef<Array<{ entity: CesiumEntity; pointIndex: number }>>([]);
@@ -315,9 +317,9 @@ const Globe = () => {
     if (year < 2002 || !windField || !storm) return;
 
     const windLayers = [
-      { key: '34kt_wind_nm' as const, color: Cesium.Color.YELLOW, label: '≥34 kt' },
-      { key: '50kt_wind_nm' as const, color: Cesium.Color.ORANGE, label: '≥50 kt' },
-      { key: '64kt_wind_nm' as const, color: Cesium.Color.RED, label: '≥64 kt' },
+      { key: '34kt_wind_nm' as const, color: Cesium.Color.YELLOW, label: t(lang, 'windGte34') },
+      { key: '50kt_wind_nm' as const, color: Cesium.Color.ORANGE, label: t(lang, 'windGte50') },
+      { key: '64kt_wind_nm' as const, color: Cesium.Color.RED, label: t(lang, 'windGte64') },
     ];
 
     storm.data.forEach((point, index) => {
@@ -344,12 +346,12 @@ const Globe = () => {
             outlineWidth: 2,
             height: 0,
           },
-          description: buildWindPopupHtml(label),
+          description: buildWindPopupHtml(label, lang),
         });
         windLayersRef.current.push({ entity, pointIndex: index });
       });
     });
-  }, [windField, year, storm, viewerReady]);
+  }, [windField, year, storm, viewerReady, lang]);
 
   useEffect(() => {
     const viewer = viewerRef.current;
@@ -395,7 +397,7 @@ const Globe = () => {
           <button
             type="button"
             className="globe-popup-close"
-            aria-label="Close popup"
+            aria-label={translate('closePopup')}
             onClick={closePopup}
           >
             ×

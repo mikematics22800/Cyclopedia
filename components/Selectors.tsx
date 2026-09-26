@@ -2,13 +2,12 @@
 
 import { useMemo, useRef, useLayoutEffect, useCallback, useState } from "react";
 import gsap from "gsap";
-import { useAppContext } from "../contexts/AppContext";
+import { useAppContext, useT } from "../contexts/AppContext";
+import { basinLabel, displayStormName } from "../libs/i18n";
 import {
-  BASINS,
   clampGlobalYear,
   getAvailableBasinsForYear,
   getGlobalYears,
-  type BasinId,
 } from "../libs/basins";
 import { Menu, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
@@ -55,6 +54,7 @@ function YearSelector({
   const selectedItemRef = useRef<HTMLLIElement>(null);
   const [draft, setDraft] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const translate = useT();
 
   const commitYear = useCallback(
     (raw: string) => {
@@ -73,7 +73,7 @@ function YearSelector({
           className="selector-trigger__label year-selector__label"
           onClick={() => setOpen(true)}
         >
-          Year
+          {translate('year')}
         </button>
         <input
           className="selector-trigger__value year-selector__input"
@@ -81,7 +81,7 @@ function YearSelector({
           autoComplete="off"
           spellCheck={false}
           maxLength={4}
-          aria-label="Year"
+          aria-label={translate('year')}
           value={draft ?? String(year)}
           onFocus={(e) => e.currentTarget.select()}
           onChange={(e) => {
@@ -115,7 +115,7 @@ function YearSelector({
       <button
         type="button"
         className="year-selector__chevron"
-        aria-label="Choose year"
+        aria-label={translate('chooseYear')}
         aria-expanded={open}
         onClick={() => setOpen(true)}
       >
@@ -172,7 +172,9 @@ const Selectors = () => {
     stormId,
     setStormId,
     season,
+    lang,
   } = useAppContext();
+  const translate = useT();
 
   const years = useMemo(() => [...getGlobalYears()].reverse(), []);
 
@@ -187,10 +189,10 @@ const Selectors = () => {
   );
 
   const stormLabel = useMemo(() => {
-    if (!stormIds?.length) return "Loading…";
+    if (!stormIds?.length) return translate("loading");
     if (!stormId) return "—";
-    return stormId.split("_")[1] ?? stormId;
-  }, [stormIds, stormId]);
+    return displayStormName(stormId.split("_")[1] ?? stormId, lang);
+  }, [stormIds, stormId, lang, translate]);
 
   useLayoutEffect(() => {
     const root = selectorsRef.current;
@@ -276,14 +278,14 @@ const Selectors = () => {
           displayEmpty
           MenuProps={SELECTOR_MENU_PROPS}
           renderValue={(v) => (
-            <SelectorTrigger label="Basin">
-              {BASINS[v as BasinId]?.label ?? v}
+            <SelectorTrigger label={translate("basin")}>
+              {basinLabel(lang, v)}
             </SelectorTrigger>
           )}
         >
           {availableBasins.map((id) => (
             <MenuItem key={id} value={id}>
-              {BASINS[id].label}
+              {basinLabel(lang, id)}
             </MenuItem>
           ))}
         </Select>
@@ -304,11 +306,11 @@ const Selectors = () => {
           displayEmpty
           MenuProps={SELECTOR_MENU_PROPS}
           renderValue={() => (
-            <SelectorTrigger label="Storm">{stormLabel}</SelectorTrigger>
+            <SelectorTrigger label={translate("storm")}>{stormLabel}</SelectorTrigger>
           )}
         >
           {stormIds?.map((id) => {
-            const name = id.split("_")[1];
+            const name = displayStormName(id.split("_")[1], lang);
             return (
               <MenuItem key={id} value={id}>
                 {name}

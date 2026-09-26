@@ -7,13 +7,14 @@ import Playback from "./Playback";
 import PublicIcon from '@mui/icons-material/Public';
 import MapIcon from '@mui/icons-material/Map';
 import { IconButton, Tooltip, useMediaQuery } from "@mui/material";
-import { useAppContext } from '../contexts/AppContext';
+import { useAppContext, useT } from '../contexts/AppContext';
 
 const Map = dynamic(() => import("./Map"), { ssr: false });
 const Globe = dynamic(() => import("./Globe"), { ssr: false });
 
 const Tracker = () => {
   const { globe, setGlobe } = useAppContext();
+  const translate = useT();
   const isMobile = useMediaQuery('(max-width: 1023px)');
   const [playbackOpen, setPlaybackOpen] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
@@ -22,7 +23,7 @@ const Tracker = () => {
 
   const globeButton = (
     <Tooltip
-      title={globe ? "Map" : "Globe"}
+      title={globe ? translate('map') : translate('globe')}
       placement="bottom"
       arrow
     >

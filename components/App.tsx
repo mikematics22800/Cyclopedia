@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import {
   getAllBasinSeasons,
   getBasinSeason,
@@ -16,6 +16,7 @@ import {
   getGlobalStartYear,
   isBasinYearAvailable,
 } from "../libs/basins";
+import { isLang, LANG_STORAGE_KEY, t, type Lang } from "../libs/i18n";
 import { AppProvider } from "../contexts/AppContext";
 import { PlaybackProvider } from "../contexts/PlaybackContext";
 import Interface from "../components/Interface";
@@ -34,6 +35,27 @@ export default function App() {
   const [isolateStorm, setIsolateStorm] = useState(false);
   const [charts, setCharts] = useState<boolean>(false);
   const [globe, setGlobe] = useState(false);
+  const [lang, setLangState] = useState<Lang>('en');
+  const skipLangPersist = useRef(true);
+
+  const setLang = useCallback((next: Lang) => {
+    setLangState(next);
+  }, []);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(LANG_STORAGE_KEY);
+    if (isLang(stored)) setLangState(stored);
+    else skipLangPersist.current = false;
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    if (skipLangPersist.current) {
+      skipLangPersist.current = false;
+      return;
+    }
+    localStorage.setItem(LANG_STORAGE_KEY, lang);
+  }, [lang]);
 
   const season = useMemo(() => {
     if (!yearArchives) return null;
@@ -187,6 +209,8 @@ export default function App() {
     toggleCharts,
     globe,
     setGlobe,
+    lang,
+    setLang,
   }), [
     basin,
     selectBasin,
@@ -210,6 +234,8 @@ export default function App() {
     charts,
     toggleCharts,
     globe,
+    lang,
+    setLang,
   ]);
 
   return (
@@ -224,7 +250,7 @@ export default function App() {
         />
         {globalSeason && storm ? (
           <>
-            <nav aria-label="Site header">
+            <nav aria-label={t(lang, 'siteHeader')}>
               <div className="flex items-center gap-2">
                 <img
                   src="/cyclone.png"
@@ -236,14 +262,14 @@ export default function App() {
                   CYCLOPEDIA
                 </h1>
               </div>
-              <div className="nav-buttons shrink-0">
+              <div className="nav-buttons justify-self-center">
                 <button
                   type="button"
                   className={`font-bold nav-button${!charts ? ' nav-button--selected' : ''}`}
                   onClick={() => setCharts(false)}
                   aria-pressed={!charts}
                 >
-                  Tracking Maps
+                  {t(lang, 'trackingMaps')}
                 </button>
                 <button
                   type="button"
@@ -251,7 +277,25 @@ export default function App() {
                   onClick={() => setCharts(true)}
                   aria-pressed={charts}
                 >
-                  Intensity Charts
+                  {t(lang, 'metricCharts')}
+                </button>
+              </div>
+              <div className="nav-buttons justify-self-end">
+                <button
+                  type="button"
+                  className={`font-bold nav-button${lang === 'en' ? ' nav-button--selected' : ''}`}
+                  onClick={() => setLang('en')}
+                  aria-pressed={lang === 'en'}
+                >
+                  {t(lang, 'english')}
+                </button>
+                <button
+                  type="button"
+                  className={`font-bold nav-button${lang === 'ja' ? ' nav-button--selected' : ''}`}
+                  onClick={() => setLang('ja')}
+                  aria-pressed={lang === 'ja'}
+                >
+                  {t(lang, 'japanese')}
                 </button>
               </div>
             </nav>

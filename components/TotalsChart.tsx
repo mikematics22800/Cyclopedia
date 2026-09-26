@@ -19,6 +19,8 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
 import { isAceYearAvailable } from '../libs/basins';
+import { chartMetricOf } from '../libs/chartMetric';
+import { t } from '../libs/i18n';
 import type { YearTotal } from './hooks/useBasinTotals';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -95,7 +97,7 @@ const selectedYearLinePlugin: Plugin<'line'> = {
 };
 
 const TotalsChart = ({ totals }: TotalsChartProps) => {
-  const { basin, year } = useAppContext();
+  const { basin, year, lang } = useAppContext();
   const [showCyclones, setShowCyclones] = useState(true);
   const [mobile, setMobile] = useState(false);
 
@@ -132,7 +134,8 @@ const TotalsChart = ({ totals }: TotalsChartProps) => {
       labels: chartTotals.map((entry) => String(entry.year)),
       datasets: [
         {
-          label: 'Tropical Cyclones',
+          label: t(lang, 'tropicalCyclones'),
+          metric: 'cyclones' as const,
           data: chartTotals.map((entry) => entry.count),
           borderColor: 'red',
           backgroundColor: 'pink',
@@ -140,7 +143,8 @@ const TotalsChart = ({ totals }: TotalsChartProps) => {
           ...primaryAxes,
         },
         {
-          label: 'Accumulated Cyclone Energy',
+          label: t(lang, 'ace'),
+          metric: 'ace' as const,
           data: chartTotals.map((entry) =>
             isAceYearAvailable(basin, entry.year) ? entry.ACE : null,
           ),
@@ -156,7 +160,7 @@ const TotalsChart = ({ totals }: TotalsChartProps) => {
         },
       ],
     };
-  }, [chartTotals, selectedYearIndex, basin, mobile]);
+  }, [chartTotals, selectedYearIndex, basin, mobile, lang]);
 
   const options = useMemo(() => {
     const desktopScales = {
@@ -294,9 +298,10 @@ const TotalsChart = ({ totals }: TotalsChartProps) => {
           callbacks: {
             label: (context: TooltipItem<'line'>) => {
               const label = context.dataset.label || '';
+              const metric = chartMetricOf(context.dataset);
               const v = mobile ? context.parsed.x : context.parsed.y;
               if (v == null) return undefined;
-              if (label.includes('Energy') || label.includes('ACE')) {
+              if (metric === 'ace') {
                 return `${label}: ${v.toFixed(1)}`;
               }
               return `${label}: ${v}`;

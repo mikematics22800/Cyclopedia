@@ -6,11 +6,10 @@ import { useMap } from 'react-leaflet';
 import { useAppContext } from '../contexts/AppContext';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
 import {
+  buildPopupHtml,
   dotSvg,
   formatDateTime,
-  formatPressureDisplay,
   formatStormFullName,
-  formatWindDisplay,
   getPopupStormStatus,
   getStormStatus,
   strikeSvg,
@@ -23,7 +22,7 @@ type StormMarkerLayer = {
 
 const MapTracks = () => {
   const map = useMap();
-  const { displaySeason, selectStorm } = useAppContext();
+  const { displaySeason, selectStorm, lang } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const layersRef = useRef<StormMarkerLayer[]>([]);
   const selectStormRef = useRef(selectStorm);
@@ -58,10 +57,10 @@ const MapTracks = () => {
       const markers: LeafletMarker[] = [];
 
       storm.data.forEach((point) => {
-        const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc);
+        const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc, lang);
         const { color } = getStormStatus(point);
         const isLandfall = point.record === 'L';
-        const fullName = formatStormFullName(name, getPopupStormStatus(point, id));
+        const fullName = formatStormFullName(name, getPopupStormStatus(point, id, lang), lang);
 
         const icon = divIcon({
           className: 'bg-opacity-0',
@@ -71,14 +70,7 @@ const MapTracks = () => {
 
         const leafletMarker = marker([point.lat, point.lng], { icon });
         leafletMarker.bindPopup(
-          `<div class="popup-panel">
-            <h1>${fullName}</h1>
-            <ul>
-              <li>${formattedDate} ${formattedTime} EST</li>
-              <li>Maximum Wind: ${formatWindDisplay(point.max_wind_kt)}</li>
-              <li>Minimum Pressure: ${formatPressureDisplay(point.min_pressure_mb)}</li>
-            </ul>
-          </div>`,
+          buildPopupHtml(fullName, formattedDate, formattedTime, point, lang),
           { className: 'storm-popup' },
         );
         leafletMarker.on('click', () => selectStormRef.current(id));
@@ -90,7 +82,7 @@ const MapTracks = () => {
     });
 
     applyPlaybackToMarkers();
-  }, [displaySeason, map]);
+  }, [displaySeason, map, lang]);
 
   useEffect(() => {
     applyPlaybackToMarkers();

@@ -5,6 +5,8 @@ import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElemen
 import type { ChartEvent, LegendElement, LegendItem, TooltipItem } from "chart.js";
 import { Bar } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
+import { chartMetricOf } from '../libs/chartMetric';
+import { displayStormName, t } from '../libs/i18n';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
@@ -12,7 +14,7 @@ const aceThresholdLinePlugin = {
   id: 'ace-threshold-line',
   beforeDatasetsDraw: (chart: Chart<'bar'>) => {
     const aceDatasetIndex = chart.data.datasets.findIndex(
-      (dataset) => dataset.label === 'Accumulated Cyclone Energy'
+      (dataset) => chartMetricOf(dataset) === 'ace'
     );
     if (aceDatasetIndex === -1 || !chart.isDatasetVisible(aceDatasetIndex)) return;
 
@@ -68,7 +70,7 @@ function categoryAxisTicksForSelectedLabel(selectedIndex: number) {
 };
 
 const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
-  const { names, maxWinds, season, seasonACE, stormId } = useAppContext();
+  const { names, maxWinds, season, seasonACE, stormId, lang } = useAppContext();
   const [minPressures, setMinPressures] = useState<(number | null)[]>([]);
   const [mobile, setMobile] = useState(false);
 
@@ -114,14 +116,16 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
 
   const datasets = [
     {
-      label: 'Maximum Wind (kt)',
+      label: t(lang, 'maximumWindKt'),
+      metric: 'wind' as const,
       data: maxWinds,
       borderColor: 'red',
       backgroundColor: 'red',
       ...primaryAxes,
     },
     {
-      label: 'Minimum Pressure (mb)',
+      label: t(lang, 'minimumPressureMb'),
+      metric: 'pressure' as const,
       data: minPressures,
       borderColor: 'blue',
       backgroundColor: 'blue',
@@ -129,7 +133,8 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
       ...secondaryAxes,
     },
     {
-      label: 'Accumulated Cyclone Energy',
+      label: t(lang, 'ace'),
+      metric: 'ace' as const,
       data: aceRounded,
       borderColor: 'violet',
       backgroundColor: 'purple',
@@ -138,7 +143,7 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
   ];
 
   const data = {
-    labels: names,
+    labels: names.map((name) => displayStormName(name, lang)),
     datasets,
   };
 
@@ -240,15 +245,16 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
         callbacks: {
           label: (context: TooltipItem<"bar">) => {
             const label = context.dataset.label || "";
+            const metric = chartMetricOf(context.dataset);
             const value = mobile ? context.parsed.x : context.parsed.y;
             if (value === undefined || value === null) return label;
-            if (label.includes('Energy') || label.includes('ACE')) {
+            if (metric === 'ace') {
               return `${label}: ${Number(value).toFixed(1)}`;
             }
-            if (label.includes('Pressure')) {
-              return `${label}: ${value} mb`;
+            if (metric === 'pressure') {
+              return `${label}: ${value} ${t(lang, 'mb')}`;
             }
-            return `${label}: ${value} kt`;
+            return `${label}: ${value} ${t(lang, 'kt')}`;
           },
         },
       },

@@ -65,7 +65,7 @@
 }
 
 nav {
-  @apply hidden lg:flex justify-between w-full h-20 shrink-0 items-center lg:px-10 px-5 bg-blue-950 z-10 relative;
+  @apply hidden lg:grid lg:grid-cols-[1fr_auto_1fr] w-full h-20 shrink-0 items-center lg:px-10 px-5 bg-blue-950 z-10 relative;
 }
 
 .loading-screen {

@@ -1,13 +1,35 @@
 import { getBasinFromStormId, type BasinId } from './basins';
 import { StormDataPoint, WindRadii } from './hurdat';
+import { t, type Lang, type MessageKey } from './i18n';
 
-const INTENSE_STORM_LABEL: Record<BasinId, string> = {
-  n_atlantic: 'Hurricane',
-  e_pacific: 'Hurricane',
-  w_pacific: 'Typhoon',
-  n_indian: 'Cyclone',
-  s_indian: 'Cyclone',
-  s_pacific: 'Cyclone',
+const INTENSE_STORM_KEY: Record<BasinId, MessageKey> = {
+  n_atlantic: 'hurricane',
+  e_pacific: 'hurricane',
+  w_pacific: 'typhoon',
+  n_indian: 'cyclone',
+  s_indian: 'cyclone',
+  s_pacific: 'cyclone',
+};
+
+const classificationKey = (point: StormDataPoint, stormId: string): MessageKey => {
+  if (point.status === 'CY') return 'cyclone';
+  if (point.status === 'TY') return 'typhoon';
+
+  const basin = getBasinFromStormId(stormId);
+  if (basin && point.status === 'HU') return INTENSE_STORM_KEY[basin];
+
+  if (point.status === 'LO' || point.status === 'DB' || point.status === 'WV' || point.status === 'MD') {
+    return 'tropicalLow';
+  }
+  if (point.status === 'EX' || point.status === 'ET') return 'extratropicalCyclone';
+  if (point.status === 'SD') return 'subtropicalDepression';
+  if (point.status === 'SS') return 'subtropicalStorm';
+  if (point.status === 'TD') return 'tropicalDepression';
+  if (point.status === 'TS') return 'tropicalStorm';
+  if (point.status === 'HU' || point.status === 'TY' || point.status === 'ST' || point.status === 'CY') {
+    return 'hurricane';
+  }
+  return 'unknown';
 };
 
 export const getStormStatus = (point: StormDataPoint) => {
@@ -59,19 +81,13 @@ export const getStormStatus = (point: StormDataPoint) => {
 };
 
 /** Basin-aware classification label for map/globe popups only. */
-export const getPopupStormStatus = (point: StormDataPoint, stormId: string) => {
-  if (point.status === 'CY') return 'Cyclone';
-  if (point.status === 'TY') return 'Typhoon';
+export const getPopupStormStatus = (
+  point: StormDataPoint,
+  stormId: string,
+  lang: Lang = 'en',
+) => t(lang, classificationKey(point, stormId));
 
-  const basin = getBasinFromStormId(stormId);
-  if (basin && point.status === 'HU') {
-    return INTENSE_STORM_LABEL[basin];
-  }
-
-  return getStormStatus(point).status;
-};
-
-export const formatDateTime = (date: number, time: number) => {
+export const formatDateTime = (date: number, time: number, lang: Lang = 'en') => {
   const dateStr = String(date).padStart(8, '0');
   const year = dateStr.slice(0, 4);
   const month = dateStr.slice(4, 6);
@@ -90,7 +106,7 @@ export const formatDateTime = (date: number, time: number) => {
   }
 
   let hour12 = estHour;
-  const ampm = hour12 >= 12 ? 'PM' : 'AM';
+  const ampm = hour12 >= 12 ? t(lang, 'pm') : t(lang, 'am');
   if (hour12 === 0) hour12 = 12;
   if (hour12 > 12) hour12 -= 12;
 
@@ -105,16 +121,18 @@ export const formatDateTime = (date: number, time: number) => {
   return { formattedDate: formattedDateEST, formattedTime };
 };
 
-export const formatStormFullName = (name: string, status: string) =>
-  name !== 'Unnamed' ? `${status} ${name}` : `${name} ${status}`;
+export const formatStormFullName = (name: string, status: string, lang: Lang = 'en') => {
+  const displayName = name === 'Unnamed' ? t(lang, 'unnamed') : name;
+  return name !== 'Unnamed' ? `${status} ${displayName}` : `${displayName} ${status}`;
+};
 
 export const isUnknownMetric = (value: number | null | undefined) => value == null;
 
-export const formatWindDisplay = (wind: number | null | undefined) =>
-  isUnknownMetric(wind) ? 'Unknown' : `${wind} kt`;
+export const formatWindDisplay = (wind: number | null | undefined, lang: Lang = 'en') =>
+  isUnknownMetric(wind) ? t(lang, 'unknown') : `${wind} ${t(lang, 'kt')}`;
 
-export const formatPressureDisplay = (pressure: number | null | undefined) =>
-  isUnknownMetric(pressure) ? 'Unknown' : `${pressure} mb`;
+export const formatPressureDisplay = (pressure: number | null | undefined, lang: Lang = 'en') =>
+  isUnknownMetric(pressure) ? t(lang, 'unknown') : `${pressure} ${t(lang, 'mb')}`;
 
 export const nmToDeg = (nm: number) => nm / 60;
 
@@ -159,19 +177,20 @@ export const buildPopupHtml = (
   formattedDate: string,
   formattedTime: string,
   point: StormDataPoint,
+  lang: Lang = 'en',
 ) => `
   <div class="popup-panel">
     <h1>${fullName}</h1>
     <ul>
-      <li>${formattedDate} ${formattedTime} EST</li>
-      <li>Maximum Wind: ${formatWindDisplay(point.max_wind_kt)}</li>
-      <li>Minimum Pressure: ${formatPressureDisplay(point.min_pressure_mb)}</li>
+      <li>${formattedDate} ${formattedTime} ${t(lang, 'est')}</li>
+      <li>${t(lang, 'maximumWind')}: ${formatWindDisplay(point.max_wind_kt, lang)}</li>
+      <li>${t(lang, 'minimumPressure')}: ${formatPressureDisplay(point.min_pressure_mb, lang)}</li>
     </ul>
   </div>
 `;
 
-export const buildWindPopupHtml = (label: string) =>
-  `<div class="popup-panel wind-popup"><h1>Wind: ${label}</h1></div>`;
+export const buildWindPopupHtml = (label: string, lang: Lang = 'en') =>
+  `<div class="popup-panel wind-popup"><h1>${t(lang, 'wind')}: ${label}</h1></div>`;
 
 export const shiftLngToReference = (lng: number, referenceLng: number): number => {
   let shifted = lng;

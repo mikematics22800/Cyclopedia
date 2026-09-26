@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { chartMetricOf } from '../libs/chartMetric';
+import { t } from '../libs/i18n';
 import { cumulativeStormACESeries } from '../libs/calculateACE';
 import {
   Chart,
@@ -24,7 +26,7 @@ const aceThresholdLinePlugin: Plugin<'line'> = {
   id: 'ace-threshold-line',
   beforeDatasetsDraw: (chart) => {
     const aceDatasetIndex = chart.data.datasets.findIndex(
-      (dataset) => dataset.label === 'Accumulated Cyclone Energy'
+      (dataset) => chartMetricOf(dataset) === 'ace'
     );
     if (aceDatasetIndex === -1 || !chart.isDatasetVisible(aceDatasetIndex)) return;
 
@@ -65,7 +67,7 @@ type StormChartProps = {
 };
 
 const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
-  const { storm, dates } = useAppContext();
+  const { storm, dates, lang } = useAppContext();
   const [wind, setWind] = useState<(number | null)[]>([]);
   const [pressure, setPressure] = useState<(number | null)[]>([]);
   const [aceSeries, setAceSeries] = useState<number[]>([]);
@@ -100,7 +102,8 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
 
   const datasets = [
     {
-      label: 'Maximum Wind (kt)',
+      label: t(lang, 'maximumWindKt'),
+      metric: 'wind' as const,
       data: wind,
       borderColor: 'red',
       backgroundColor: 'pink',
@@ -108,7 +111,8 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
       hidden: hiddenByDatasetIndex[0] ?? false,
     },
     {
-      label: 'Minimum Pressure (mb)',
+      label: t(lang, 'minimumPressureMb'),
+      metric: 'pressure' as const,
       data: pressure,
       borderColor: 'blue',
       backgroundColor: 'lightblue',
@@ -116,7 +120,8 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
       hidden: hiddenByDatasetIndex[1] ?? false,
     },
     {
-      label: 'Accumulated Cyclone Energy',
+      label: t(lang, 'ace'),
+      metric: 'ace' as const,
       data: aceRounded,
       borderColor: 'purple',
       backgroundColor: 'rgba(168, 85, 247, 0.25)',
@@ -234,16 +239,17 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
         callbacks: {
           label: function (context: TooltipItem<'line'>) {
             const label = context.dataset.label || '';
+            const metric = chartMetricOf(context.dataset);
             const v = mobile ? context.parsed.x : context.parsed.y;
             if (v == null) return label;
-            if (label === 'Accumulated Cyclone Energy') {
+            if (metric === 'ace') {
               return `${label}: ${v.toFixed(1)}`;
             }
-            if (label.includes('Pressure')) {
-              return `${label}: ${v} mb`;
+            if (metric === 'pressure') {
+              return `${label}: ${v} ${t(lang, 'mb')}`;
             }
-            if (label.includes('Wind')) {
-              return `${label}: ${v} kt`;
+            if (metric === 'wind') {
+              return `${label}: ${v} ${t(lang, 'kt')}`;
             }
             return `${label}: ${v}`;
           },

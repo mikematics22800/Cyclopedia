@@ -2,6 +2,7 @@
 
 import { createContext, useContext, ReactNode } from 'react';
 import { Storm } from '../libs/hurdat';
+import { t, type Lang, type MessageKey } from '../libs/i18n';
 
 interface AppContextType {
   basin: string;
@@ -30,6 +31,8 @@ interface AppContextType {
   toggleCharts: () => void;
   globe: boolean;
   setGlobe: (globe: boolean) => void;
+  lang: Lang;
+  setLang: (lang: Lang) => void;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -41,6 +44,11 @@ export const useAppContext = () => {
   }
   return context;
 };
+
+export function useT() {
+  const { lang } = useAppContext();
+  return (key: MessageKey, vars?: Record<string, string | number>) => t(lang, key, vars);
+}
 
 interface AppProviderProps {
   children: ReactNode;

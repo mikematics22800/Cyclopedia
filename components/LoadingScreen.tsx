@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useLayoutEffect } from 'react';
+import { useT } from '../contexts/AppContext';
 import gsap from 'gsap';
 
 type LoadingScreenProps = {
@@ -10,6 +11,7 @@ type LoadingScreenProps = {
 
 const LoadingScreen = ({ overlay = false, className = '' }: LoadingScreenProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
+  const translate = useT();
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -49,7 +51,7 @@ const LoadingScreen = ({ overlay = false, className = '' }: LoadingScreenProps) 
           <img
             className="loading-logo lg:w-60 w-40 h-auto"
             src="/cyclone.png"
-            alt="Loading"
+            alt={translate('loadingAlt')}
             width={240}
             height={240}
           />

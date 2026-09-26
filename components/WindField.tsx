@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { polygon, type Polygon as LeafletPolygon } from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useAppContext } from '../contexts/AppContext';
+import { t } from '../libs/i18n';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
 import { buildWindPopupHtml, calculateWindRadii, shiftRegionForMapView } from '../libs/mapUtils';
 import { shiftMap } from '../libs/shiftMap';
@@ -16,14 +17,14 @@ type WindLayer = {
 };
 
 const WIND_LAYERS = [
-  { key: '34kt_wind_nm' as const, color: 'yellow', label: '≥ 34 kt' },
-  { key: '50kt_wind_nm' as const, color: 'orange', label: '≥ 50 kt' },
-  { key: '64kt_wind_nm' as const, color: 'red', label: '≥ 64 kt' },
+  { key: '34kt_wind_nm' as const, color: 'yellow', labelKey: 'windGte34' as const },
+  { key: '50kt_wind_nm' as const, color: 'orange', labelKey: 'windGte50' as const },
+  { key: '64kt_wind_nm' as const, color: 'red', labelKey: 'windGte64' as const },
 ];
 
 const WindField = () => {
   const map = useMap();
-  const { storm, year } = useAppContext();
+  const { storm, year, lang } = useAppContext();
   const { getVisiblePointCount } = usePlaybackContext();
   const layersRef = useRef<WindLayer[]>([]);
   const getVisiblePointCountRef = useRef(getVisiblePointCount);
@@ -48,7 +49,7 @@ const WindField = () => {
     if (year < 2002 || !storm) return;
 
     storm.data.forEach((point, pointIndex) => {
-      WIND_LAYERS.forEach(({ key, color, label }) => {
+      WIND_LAYERS.forEach(({ key, color, labelKey }) => {
         const radii = point[key];
         if (!radii) return;
 
@@ -56,7 +57,7 @@ const WindField = () => {
         if (raw.length < 3) return;
 
         const shape = polygon([], { color, weight: 2 });
-        shape.bindPopup(buildWindPopupHtml(label), { className: 'storm-popup' });
+        shape.bindPopup(buildWindPopupHtml(t(lang, labelKey), lang), { className: 'storm-popup' });
         shape.addTo(map);
         layersRef.current.push({ polygon: shape, raw, anchorLng: point.lng, pointIndex });
       });
@@ -68,7 +69,7 @@ const WindField = () => {
       layersRef.current.forEach(({ polygon: shape }) => shape.remove());
       layersRef.current = [];
     };
-  }, [storm, year, map]);
+  }, [storm, year, map, lang]);
 
   useEffect(() => {
     applyPlaybackToLayers(map.getCenter().lng);

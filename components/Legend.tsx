@@ -8,27 +8,27 @@ import {
   IconButton,
 } from '@mui/material';
 import { Close, FormatListBulleted } from '@mui/icons-material';
-import { useAppContext } from '../contexts/AppContext';
+import { useAppContext, useT } from '../contexts/AppContext';
 import { useSettingsPanelAnimation } from './hooks/useSettingsPanelAnimation';
 
 const statusItems = [
-  { colorClass: 'bg-[dodgerblue]', label: 'Tropical Depression', windRange: '< 34 kt' },
-  { colorClass: 'bg-[lime]', label: 'Tropical Storm', windRange: '34-63 kt' },
-  { colorClass: 'bg-[yellow]', label: 'Category 1 Hurricane', windRange: '64-82 kt' },
-  { colorClass: 'bg-[orange]', label: 'Category 2 Hurricane', windRange: '83-95 kt' },
-  { colorClass: 'bg-[red]', label: 'Category 3 Hurricane', windRange: '96-112 kt' },
-  { colorClass: 'bg-[hotpink]', label: 'Category 4 Hurricane', windRange: '113-136 kt' },
-  { colorClass: 'bg-[pink]', label: 'Category 5 Hurricane', windRange: '≥ 137 kt' },
-  { colorClass: 'bg-[aqua]', label: 'Subtropical Depression', windRange: '< 34 kt' },
-  { colorClass: 'bg-[#D0F0C0]', label: 'Subtropical Storm', windRange: '34-63 kt' },
-  { colorClass: 'bg-[#7F00FF]', label: 'Extratropical Cyclone' },
-  { colorClass: 'bg-[lightgray]', label: 'Tropical Low' },
+  { colorClass: 'bg-[dodgerblue]', labelKey: 'tropicalDepression', windKey: 'windLt34' },
+  { colorClass: 'bg-[lime]', labelKey: 'tropicalStorm', windKey: 'wind34to63' },
+  { colorClass: 'bg-[yellow]', labelKey: 'category1Hurricane', windKey: 'wind64to82' },
+  { colorClass: 'bg-[orange]', labelKey: 'category2Hurricane', windKey: 'wind83to95' },
+  { colorClass: 'bg-[red]', labelKey: 'category3Hurricane', windKey: 'wind96to112' },
+  { colorClass: 'bg-[hotpink]', labelKey: 'category4Hurricane', windKey: 'wind113to136' },
+  { colorClass: 'bg-[pink]', labelKey: 'category5Hurricane', windKey: 'windGte137' },
+  { colorClass: 'bg-[aqua]', labelKey: 'subtropicalDepression', windKey: 'windLt34' },
+  { colorClass: 'bg-[#D0F0C0]', labelKey: 'subtropicalStorm', windKey: 'wind34to63' },
+  { colorClass: 'bg-[#7F00FF]', labelKey: 'extratropicalCyclone' },
+  { colorClass: 'bg-[lightgray]', labelKey: 'tropicalLow' },
 ] as const;
 
 const windFieldItems = [
-  { label: '≥ 34 kt', swatchClass: 'wind-field-swatch--34kt' },
-  { label: '≥ 50 kt', swatchClass: 'wind-field-swatch--50kt' },
-  { label: '≥ 64 kt', swatchClass: 'wind-field-swatch--64kt' },
+  { labelKey: 'windGte34', swatchClass: 'wind-field-swatch--34kt' },
+  { labelKey: 'windGte50', swatchClass: 'wind-field-swatch--50kt' },
+  { labelKey: 'windGte64', swatchClass: 'wind-field-swatch--64kt' },
 ] as const;
 
 const LEGEND_SECTION_HEADER_TEXT =
@@ -57,6 +57,7 @@ const Legend = ({
     setIsolateStorm,
     year,
   } = useAppContext();
+  const translate = useT();
   const windFieldAvailable = year >= 2002;
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen ?? internalOpen;
@@ -77,7 +78,7 @@ const Legend = ({
 
   const button = (
     <Tooltip
-      title="Legend"
+      title={translate('legend')}
       placement="bottom"
       arrow
     >
@@ -112,7 +113,7 @@ const Legend = ({
     >
       <div className="settings-row flex justify-between items-center gap-1 lg:gap-2 border-b border-white pb-1.5 lg:pb-2">
         <span className="text-xs lg:text-sm font-semibold text-white">
-          Legend
+          {translate('legend')}
         </span>
         <IconButton
           size="small"
@@ -123,22 +124,22 @@ const Legend = ({
         </IconButton>
       </div>
       <div className="flex flex-row items-center justify-between w-full">
-        <h1 className={LEGEND_SECTION_HEADER}>Classification</h1>
-        <h1 className={LEGEND_SECTION_HEADER}>Wind Speed</h1>
+        <h1 className={LEGEND_SECTION_HEADER}>{translate('classification')}</h1>
+        <h1 className={LEGEND_SECTION_HEADER}>{translate('windSpeed')}</h1>
       </div>
       <div className={LEGEND_SECTION_LIST}>
         {statusItems.map((item) => (
           <div
-            key={item.label}
+            key={item.labelKey}
             className="settings-row flex items-center gap-1.5 lg:gap-2 rounded-md px-0.5 lg:px-1 py-0.5"
           >
             <span
               className={`w-2 h-2 lg:w-3 lg:h-3 shrink-0 rounded-full border border-black ${item.colorClass}`}
             />
             <div className="flex min-w-0 flex-1 items-center justify-between gap-2 lg:gap-6">
-              <h1 className="text-xs lg:text-sm text-white">{item.label}</h1>
-              {'windRange' in item && (
-                <span className="shrink-0 text-xs lg:text-sm text-white">{item.windRange}</span>
+              <h1 className="text-xs lg:text-sm text-white">{translate(item.labelKey)}</h1>
+              {'windKey' in item && (
+                <span className="shrink-0 text-xs lg:text-sm text-white">{translate(item.windKey)}</span>
               )}
             </div>
           </div>
@@ -147,7 +148,7 @@ const Legend = ({
       {year >= 2002 && (
         <>
           <div className="settings-row flex items-center justify-center gap-1 lg:gap-1.5 border-t border-white pt-1.5 lg:pt-2">
-            <h1 className={LEGEND_SECTION_HEADER_TEXT}>Wind Field</h1>
+            <h1 className={LEGEND_SECTION_HEADER_TEXT}>{translate('windField')}</h1>
             <Checkbox
               size="small"
               className="!text-sky-400 !p-0"
@@ -159,14 +160,14 @@ const Legend = ({
           <div className={LEGEND_SECTION_LIST}>
             {windFieldItems.map((item) => (
               <div
-                key={item.label}
+                key={item.labelKey}
                 className="settings-row flex w-full items-center gap-1.5 lg:gap-2 rounded-md px-0.5 lg:px-1 py-0.5"
               >
                 <span
                   className={`h-2 lg:h-3 flex-1 rounded-sm border ${item.swatchClass}`}
                 />
                 <h1 className="min-w-[2.75rem] lg:min-w-[3.5rem] text-right text-xs lg:text-sm">
-                  {item.label}
+                  {translate(item.labelKey)}
                 </h1>
               </div>
             ))}
@@ -178,23 +179,23 @@ const Legend = ({
         className="map-legend-form-group settings-row flex !flex-row flex-nowrap items-center justify-between gap-2 w-full border-t border-white pt-1.5 lg:pt-2"
       >
         <div className="flex items-center justify-center gap-1 lg:gap-1.5">
-          <h1 className={LEGEND_SECTION_HEADER_TEXT}>Isolate Basin</h1>
+          <h1 className={LEGEND_SECTION_HEADER_TEXT}>{translate('isolateBasin')}</h1>
           <Checkbox
             size="small"
             className="!text-sky-400 !p-0"
             checked={isolateBasin}
             onChange={(e) => setIsolateBasin(e.target.checked)}
-            inputProps={{ 'aria-label': 'Isolate selected basin' }}
+            inputProps={{ 'aria-label': translate('isolateSelectedBasin') }}
           />
         </div>
         <div className="flex items-center justify-center gap-1 lg:gap-1.5">
-          <h1 className={LEGEND_SECTION_HEADER_TEXT}>Isolate Storm</h1>
+          <h1 className={LEGEND_SECTION_HEADER_TEXT}>{translate('isolateStorm')}</h1>
           <Checkbox
             size="small"
             className="!text-sky-400 !p-0"
             checked={isolateStorm}
             onChange={(e) => setIsolateStorm(e.target.checked)}
-            inputProps={{ 'aria-label': 'Isolate selected storm' }}
+            inputProps={{ 'aria-label': translate('isolateSelectedStorm') }}
           />
         </div>
       </FormGroup>

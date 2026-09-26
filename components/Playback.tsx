@@ -9,6 +9,7 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { Close } from '@mui/icons-material';
 import { IconButton, Slider, Tooltip } from '@mui/material';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
+import { useAppContext, useT } from '../contexts/AppContext';
 import { useSettingsPanelAnimation } from './hooks/useSettingsPanelAnimation';
 import { formatPlaybackTimestamp } from '../libs/playback';
 
@@ -40,6 +41,8 @@ const Playback = ({
     stepPlayback,
     togglePlayback,
   } = usePlaybackContext();
+  const translate = useT();
+  const { lang } = useAppContext();
 
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen ?? internalOpen;
@@ -78,7 +81,7 @@ const Playback = ({
   }, [part, playing, playbackSpeed, playbackForward, timestamps.length, setPlaybackIndex, setPlaying]);
 
   const button = (
-    <Tooltip title="Playback" placement="bottom" arrow>
+    <Tooltip title={translate('playback')} placement="bottom" arrow>
       <div
         className={`map-button cursor-pointer${open ? ' map-button--active' : ''}`}
         onClick={() => setOpen(!open)}
@@ -106,7 +109,7 @@ const Playback = ({
   const panel = panelVisible ? (
     <div ref={openPanelRef} className="map-button map-legend gap-1">
       <div className="settings-row flex justify-between items-center gap-1 lg:gap-2 border-b border-white pb-1 lg:pb-2">
-        <span className="text-xs lg:text-sm font-semibold text-white">Playback</span>
+        <span className="text-xs lg:text-sm font-semibold text-white">{translate('playback')}</span>
         <IconButton
           size="small"
           className="map-legend-close"
@@ -118,7 +121,7 @@ const Playback = ({
 
       <div className="settings-row flex flex-col gap-0">
         <p className="text-xs lg:text-sm text-white text-center leading-none m-0">
-          {displayTimestamp ? formatPlaybackTimestamp(displayTimestamp) : 'No track data'}
+          {displayTimestamp ? formatPlaybackTimestamp(displayTimestamp, lang) : translate('noTrackData')}
         </p>
 
         <div className="px-0 lg:px-1 -my-0.5">
@@ -149,7 +152,7 @@ const Playback = ({
         </div>
 
         <div className="flex items-center justify-center gap-1 lg:gap-2 -mt-0.5">
-        <Tooltip title="Step backward" placement="bottom" arrow>
+        <Tooltip title={translate('stepBackward')} placement="bottom" arrow>
           <span>
             <IconButton
               size="small"
@@ -163,7 +166,7 @@ const Playback = ({
             </IconButton>
           </span>
         </Tooltip>
-        <Tooltip title={playing ? 'Pause' : 'Play'} placement="bottom" arrow>
+        <Tooltip title={playing ? translate('pause') : translate('play')} placement="bottom" arrow>
           <span>
             <IconButton size="small" disabled={disabled} onClick={togglePlayback}>
               {playing ? (
@@ -174,7 +177,7 @@ const Playback = ({
             </IconButton>
           </span>
         </Tooltip>
-        <Tooltip title="Step forward" placement="bottom" arrow>
+        <Tooltip title={translate('stepForward')} placement="bottom" arrow>
           <span>
             <IconButton
               size="small"

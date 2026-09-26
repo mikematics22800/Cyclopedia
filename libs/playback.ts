@@ -1,4 +1,5 @@
 import type { Storm, StormDataPoint } from './hurdat';
+import { t, type Lang } from './i18n';
 import { formatDateTime } from './mapUtils';
 
 /** Sortable archive timestamp: YYYYMMDD * 10000 + HHMM (UTC). */
@@ -79,10 +80,10 @@ export function decodeTimestamp(timestamp: number): { date: number; time_utc: nu
   };
 }
 
-export function formatPlaybackTimestamp(timestamp: number): string {
+export function formatPlaybackTimestamp(timestamp: number, lang: Lang = 'en'): string {
   const { date, time_utc } = decodeTimestamp(timestamp);
-  const { formattedDate, formattedTime } = formatDateTime(date, time_utc);
-  return `${formattedDate} ${formattedTime} EST`;
+  const { formattedDate, formattedTime } = formatDateTime(date, time_utc, lang);
+  return `${formattedDate} ${formattedTime} ${t(lang, 'est')}`;
 }
 
 export function isPointActiveAtTimestamp(

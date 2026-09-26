@@ -3,11 +3,12 @@
 import { useMemo, useState, useEffect, useLayoutEffect, useRef, useId } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
-import { useAppContext } from '../contexts/AppContext';
+import { useAppContext, useT } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
 import { calculateSeasonTotalACE, calculateStormACE } from '../libs/calculateACE';
 import { isAceYearAvailable } from '../libs/basins';
 import { formatPressureDisplay, formatWindDisplay, isUnknownMetric } from '../libs/mapUtils';
+import { displayStormName, t, type Lang } from '../libs/i18n';
 import { Storm, StormDataPoint } from '../libs/hurdat';
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 
@@ -93,7 +94,7 @@ const getStormTextColor = (data: StormDataPoint[], maxWind: number) => {
   return 'aqua';
 };
 
-const buildStormMetrics = (storm: Storm) => {
+const buildStormMetrics = (storm: Storm, lang: Lang) => {
   const data = storm.data;
   const validWinds = data
     .map((point) => point.max_wind_kt)
@@ -115,13 +116,13 @@ const buildStormMetrics = (storm: Storm) => {
     stormName: storm.id.split('_')[1],
     retired: storm.retired,
     duration: formatStormDuration(data),
-    maxWind: formatWindDisplay(maxWindValue),
-    minPressure: formatPressureDisplay(minPressure),
+    maxWind: formatWindDisplay(maxWindValue, lang),
+    minPressure: formatPressureDisplay(minPressure, lang),
     landfalls,
-    inlandMaxWind: inlandWinds.length ? formatWindDisplay(Math.max(...inlandWinds)) : 'Unknown',
+    inlandMaxWind: inlandWinds.length ? formatWindDisplay(Math.max(...inlandWinds), lang) : t(lang, 'unknown'),
     inlandMinPressure: inlandPressures.length
-      ? formatPressureDisplay(Math.min(...inlandPressures))
-      : 'Unknown',
+      ? formatPressureDisplay(Math.min(...inlandPressures), lang)
+      : t(lang, 'unknown'),
     cost: ((storm.cost_usd || 0) / 1_000_000).toFixed(1),
     casualties: (storm.casualties || 0).toString(),
     textColor: getStormTextColor(data, maxWindValue),
@@ -131,6 +132,7 @@ const buildStormMetrics = (storm: Storm) => {
 
 const SeasonMetrics = () => {
   const { season, maxWinds, basin, year } = useAppContext();
+  const translate = useT();
   const revealRef = useRef<HTMLDivElement>(null);
 
   const metrics = useMemo(() => {
@@ -174,42 +176,42 @@ const SeasonMetrics = () => {
       <div ref={revealRef} className='w-full flex flex-col items-center'>
         <ul className='data-table'>
           <li className='data-row border-y'>
-            <h2 className='label'>Tropical Cyclones</h2>
+            <h2 className='label'>{translate('tropicalCyclones')}</h2>
             <h2 className='value'>{season.length}</h2>
           </li>
 
           <li className='data-row border-b'>
-            <h2 className='label'>Hurricanes or Equivalent (≥ 64 kt)</h2>
+            <h2 className='label'>{translate('hurricanesOrEquivalent')}</h2>
             <h2 className='value'>{metrics.hurricanes}</h2>
           </li>
 
           <li className='data-row border-b'>
-            <h2 className='label'>Major Hurricanes or Equivalent (≥ 96 kt)</h2>
+            <h2 className='label'>{translate('majorHurricanesOrEquivalent')}</h2>
             <h2 className='value'>{metrics.majorHurricanes}</h2>
           </li>
 
           <li className='data-row border-b'>
-            <h2 className='label'>Category 5 Hurricanes or Equivalent (≥ 137 kt)</h2>
+            <h2 className='label'>{translate('category5HurricanesOrEquivalent')}</h2>
             <h2 className='value'>{metrics.category5Hurricanes}</h2>
           </li>
           <li className='data-row border-b'>
-            <h2 className='label'>Total Accumulated Cyclone Energy</h2>
+            <h2 className='label'>{translate('totalAce')}</h2>
             <h2 className='value'>
               {isAceYearAvailable(basin, year)
                 ? calculateSeasonTotalACE(season).toFixed(1)
-                : 'Unknown'}
+                : translate('unknown')}
             </h2>
           </li>
           <li className='data-row border-b'>
-            <h2 className='label'>Total Landfalls</h2>
+            <h2 className='label'>{translate('totalLandfalls')}</h2>
             <h2 className='value'>{metrics.landfalls}</h2>
           </li>
           <li className='data-row border-b'>
-            <h2 className='label'>Total Casualties</h2>
+            <h2 className='label'>{translate('totalCasualties')}</h2>
             <h2 className='value'>{metrics.casualties}</h2>
           </li>
           <li className='data-row border-b'>
-            <h2 className='label'>Total Cost (Million {year} USD)</h2>
+            <h2 className='label'>{translate('totalCost', { year })}</h2>
             <h2 className='value cost-value'>${metrics.cost}</h2>
           </li>
         </ul>
@@ -219,14 +221,15 @@ const SeasonMetrics = () => {
 };
 
 const StormMetrics = () => {
-  const { year, storm, stormId, basin } = useAppContext();
+  const { year, storm, stormId, basin, lang } = useAppContext();
+  const translate = useT();
   const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>('loading');
   const revealRef = useRef<HTMLDivElement>(null);
   const retiredBadgeRef = useRef<HTMLSpanElement>(null);
 
   const metrics = useMemo(
-    () => (storm ? buildStormMetrics(storm) : null),
-    [storm],
+    () => (storm ? buildStormMetrics(storm, lang) : null),
+    [storm, lang],
   );
 
   useEffect(() => {
@@ -309,7 +312,7 @@ const StormMetrics = () => {
                 <div className='absolute inset-0 z-[1] flex flex-col items-center justify-center gap-2'>
                   <ImageNotSupportedOutlinedIcon className='!text-6xl' />
                   <span className='text-xl font-bold'>
-                    Image Unavailable
+                    {translate('imageUnavailable')}
                   </span>
                 </div>
               )}
@@ -318,7 +321,7 @@ const StormMetrics = () => {
                   <Image
                     className='retired-badge'
                     src='/retired.png'
-                    alt='Retired'
+                    alt={translate('retired')}
                     width={120}
                     height={120}
                     quality={100}
@@ -329,50 +332,50 @@ const StormMetrics = () => {
               )}
             </a>
             <h1 className='title my-1' style={{ color: metrics.textColor }}>
-              {metrics.stormName}
+              {displayStormName(metrics.stormName, lang)}
             </h1>
             <h1 className='font-bold'>
               {metrics.duration}
             </h1>
           </li>
           <li data-storm-reveal className='data-row border-b'>
-            <h2 className='label'>Maximum Wind</h2>
+            <h2 className='label'>{translate('maximumWind')}</h2>
             <h2 className='value'>{metrics.maxWind}</h2>
           </li>
 
           {metrics.landfalls.length > 0 && (
             <li data-storm-reveal className='data-row border-b'>
-              <h2 className='label'>Maximum Inland Wind</h2>
+              <h2 className='label'>{translate('maximumInlandWind')}</h2>
               <h2 className='value'>{metrics.inlandMaxWind}</h2>
             </li>
           )}
 
           <li data-storm-reveal className='data-row border-b'>
-            <h2 className='label'>Minimum Pressure</h2>
+            <h2 className='label'>{translate('minimumPressure')}</h2>
             <h2 className='value'>{metrics.minPressure}</h2>
           </li>
 
           {metrics.landfalls.length > 0 && (
             <li data-storm-reveal className='data-row border-b'>
-              <h2 className='label'>Minimum Inland Pressure</h2>
+              <h2 className='label'>{translate('minimumInlandPressure')}</h2>
               <h2 className='value'>{metrics.inlandMinPressure}</h2>
             </li>
           )}
           <li data-storm-reveal className='data-row border-b'>
-            <h2 className='label'>Accumulated Cyclone Energy</h2>
+            <h2 className='label'>{translate('ace')}</h2>
             <h2 className='value'>{metrics.ace.toFixed(1)}</h2>
           </li>
           <li data-storm-reveal className='data-row border-b'>
-            <h2 className='label'>Landfalls</h2>
+            <h2 className='label'>{translate('landfalls')}</h2>
             <h2 className='value'>{metrics.landfalls.length}</h2>
           </li>
           <li data-storm-reveal className='data-row border-b'>
-            <h2 className='label'>Casualties</h2>
+            <h2 className='label'>{translate('casualties')}</h2>
             <h2 className='value'>{metrics.casualties}</h2>
           </li>
 
           <li data-storm-reveal className='data-row border-b'>
-            <h2 className='label'>Cost (Million {year} USD)</h2>
+            <h2 className='label'>{translate('cost', { year })}</h2>
             <h2 className='value cost-value'>${metrics.cost}</h2>
           </li>
         </ul>
