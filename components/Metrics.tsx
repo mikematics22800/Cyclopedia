@@ -63,7 +63,7 @@ const StormSelector = () => {
   return (
     <Select
       size='small'
-      className='selector w-32 min-w-32 max-w-32'
+      className='selector w-fit min-w-32'
       value={stormIds?.length ? stormId : ''}
       onChange={(e: SelectChangeEvent) => setStormId(e.target.value)}
       disabled={!stormIds?.length}

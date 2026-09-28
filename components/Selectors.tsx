@@ -5,9 +5,9 @@ import gsap from "gsap";
 import { useAppContext, useT } from "../contexts/AppContext";
 import { basinLabel } from "../libs/i18n";
 import {
-  clampGlobalYear,
+  clampBasinYear,
   getAvailableBasinsForYear,
-  getGlobalYears,
+  getBasinYears,
 } from "../libs/basins";
 import { Menu, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
@@ -42,10 +42,12 @@ function SelectorTrigger({
 }
 
 function YearSelector({
+  basin,
   year,
   years,
   onSelect,
 }: {
+  basin: string;
   year: number;
   years: number[];
   onSelect: (year: number) => void;
@@ -59,10 +61,10 @@ function YearSelector({
   const commitYear = useCallback(
     (raw: string) => {
       if (!/^\d{4}$/.test(raw)) return;
-      onSelect(clampGlobalYear(Number(raw)));
+      onSelect(clampBasinYear(basin, Number(raw)));
       setDraft(null);
     },
-    [onSelect],
+    [basin, onSelect],
   );
 
   return (
@@ -173,7 +175,7 @@ const Selectors = () => {
   } = useAppContext();
   const translate = useT();
 
-  const years = useMemo(() => [...getGlobalYears()].reverse(), []);
+  const years = useMemo(() => [...getBasinYears(basin)].reverse(), [basin]);
 
   const availableBasins = useMemo(
     () => getAvailableBasinsForYear(year),
@@ -247,7 +249,7 @@ const Selectors = () => {
         onPointerEnter={chipPointerEnter}
         onPointerLeave={chipPointerLeave}
       >
-        <YearSelector year={year} years={years} onSelect={selectYear} />
+        <YearSelector basin={basin} year={year} years={years} onSelect={selectYear} />
       </div>
       <div
         data-selector-chip
