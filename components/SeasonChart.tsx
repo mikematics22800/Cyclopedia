@@ -6,7 +6,9 @@ import type { ChartEvent, LegendElement, LegendItem, TooltipItem } from "chart.j
 import { Bar } from 'react-chartjs-2';
 import { useAppContext } from '../contexts/AppContext';
 import { chartMetricOf } from '../libs/chartMetric';
+import type { Storm } from '../libs/hurdat';
 import { displayStormName, t } from '../libs/i18n';
+import { earliestTrackTimestamp } from '../libs/playback';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
@@ -65,19 +67,36 @@ function categoryAxisTicksForSelectedLabel(selectedIndex: number) {
   };
 }
 
-  type SeasonChartProps = {
+type SeasonChartProps = {
   onLegendVisibilityChange?: (datasetIndex: number, isVisible: boolean) => void;
 };
 
+/** Lowest pressure above 0. Null and 0 are missing and must not draw a bar. */
+function minimumPressureMb(storm: Storm): number | null {
+  let minimum = Infinity;
+  for (const point of storm.data) {
+    const pressure = Number(point.min_pressure_mb);
+    if (!Number.isFinite(pressure) || pressure === 0) continue;
+    if (pressure < minimum) minimum = pressure;
+  }
+  return minimum === Infinity ? null : minimum;
+}
+
 const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
   const { names, maxWinds, season, seasonACE, stormId, lang } = useAppContext();
-  const [minPressures, setMinPressures] = useState<(number | null)[]>([]);
   const [mobile, setMobile] = useState(false);
 
+  const chartOrder = useMemo(() => {
+    if (!season) return [];
+    return season
+      .map((storm, index) => ({ storm, index }))
+      .sort((a, b) => earliestTrackTimestamp(a.storm) - earliestTrackTimestamp(b.storm));
+  }, [season]);
+
   const selectedStormIndex = useMemo(() => {
-    if (!season?.length || !stormId) return -1;
-    return season.findIndex((s) => s.id === stormId);
-  }, [season, stormId]);
+    if (!stormId) return -1;
+    return chartOrder.findIndex(({ storm }) => storm.id === stormId);
+  }, [chartOrder, stormId]);
 
   const categoryTickHighlight = useMemo(
     () => categoryAxisTicksForSelectedLabel(selectedStormIndex),
@@ -88,22 +107,15 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
     setMobile(window.innerWidth < 480);
   }, []);
 
-  useEffect(() => {
-    if (!season) return;
-
-    const minPressures = season.map((storm) => {
-      const pressures = storm.data
-        .map((point) => point.min_pressure_mb)
-        .filter((pressure): pressure is number => pressure != null);
-      return pressures.length > 0 ? Math.min(...pressures) : null;
-    });
-    setMinPressures(minPressures);
-  }, [season]);
-
-  const aceRounded = useMemo(
-    () => seasonACE?.map((ACE) => parseFloat(ACE.toFixed(1))) ?? [],
-    [seasonACE]
-  );
+  const chartSeries = useMemo(() => ({
+    labels: chartOrder.map(({ index }) => displayStormName(names[index] ?? '', lang)),
+    winds: chartOrder.map(({ index }) => maxWinds[index] ?? 0),
+    pressures: chartOrder.map(({ storm }) => minimumPressureMb(storm)),
+    ace: chartOrder.map(({ index }) => {
+      const value = seasonACE[index];
+      return value == null ? null : parseFloat(value.toFixed(1));
+    }),
+  }), [chartOrder, names, maxWinds, seasonACE, lang]);
 
   if (!season) return null;
 
@@ -118,7 +130,7 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
     {
       label: t(lang, 'maximumWindKt'),
       metric: 'wind' as const,
-      data: maxWinds,
+      data: chartSeries.winds,
       borderColor: 'red',
       backgroundColor: 'red',
       ...primaryAxes,
@@ -126,7 +138,7 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
     {
       label: t(lang, 'minimumPressureMb'),
       metric: 'pressure' as const,
-      data: minPressures,
+      data: chartSeries.pressures,
       borderColor: 'blue',
       backgroundColor: 'blue',
       base: 1050,
@@ -135,7 +147,7 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
     {
       label: t(lang, 'ace'),
       metric: 'ace' as const,
-      data: aceRounded,
+      data: chartSeries.ace,
       borderColor: 'violet',
       backgroundColor: 'purple',
       ...primaryAxes,
@@ -143,7 +155,7 @@ const SeasonChart = ({ onLegendVisibilityChange }: SeasonChartProps) => {
   ];
 
   const data = {
-    labels: names.map((name) => displayStormName(name, lang)),
+    labels: chartSeries.labels,
     datasets,
   };
 

@@ -13,6 +13,16 @@ export function pointToTimestamp(point: Pick<StormDataPoint, 'date' | 'time_utc'
   return pointTimestamp(point.date, point.time_utc);
 }
 
+/** Earliest finite track time. Empty or invalid tracks sort last. */
+export function earliestTrackTimestamp(storm: Storm): number {
+  let earliest = Infinity;
+  for (const point of storm.data) {
+    const timestamp = pointToTimestamp(point);
+    if (Number.isFinite(timestamp) && timestamp < earliest) earliest = timestamp;
+  }
+  return earliest;
+}
+
 /** Unique sorted timestamps across all storms in a season archive. */
 export function buildSeasonTimestamps(storms: Storm[]): number[] {
   const unique = new Set<number>();

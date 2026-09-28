@@ -4,8 +4,7 @@ import { useMemo, useRef, useLayoutEffect, useCallback, useState } from "react";
 import gsap from "gsap";
 import { useAppContext, useT } from "../contexts/AppContext";
 import { basinLabel, displayStormName } from "../libs/i18n";
-import type { Storm } from "../libs/hurdat";
-import { pointToTimestamp } from "../libs/playback";
+import { earliestTrackTimestamp } from "../libs/playback";
 import {
   clampGlobalYear,
   getAvailableBasinsForYear,
@@ -14,15 +13,6 @@ import {
 import { Menu, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import Image from "next/image";
-
-function earliestTrackTimestamp(storm: Storm): number {
-  let earliest = Infinity;
-  for (const point of storm.data) {
-    const timestamp = pointToTimestamp(point);
-    if (timestamp < earliest) earliest = timestamp;
-  }
-  return earliest;
-}
 
 const SELECTOR_MENU_MAX_HEIGHT = 280;
 
