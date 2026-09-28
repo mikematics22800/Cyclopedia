@@ -462,10 +462,10 @@ const StormMetrics = () => {
 };
 
 const Metrics = () => (
-  <>
+  <div className='mb-4 w-full max-w-80'>
     <SeasonMetrics />
     <StormMetrics />
-  </>
+  </div>
 );
 
 export default Metrics;
