@@ -45,7 +45,7 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
           className="w-full flex flex-col items-center gap-2 lg:gap-4"
         >
           <div className="metrics">
-          <div className="flex items-center w-full justify-between my-4">
+          <div className="flex items-center w-full justify-between mb-4">
               <Image
                 src="/NOAA.svg"
                 alt="NOAA"

@@ -4,6 +4,8 @@ import { useMemo, useRef, useLayoutEffect, useCallback, useState } from "react";
 import gsap from "gsap";
 import { useAppContext, useT } from "../contexts/AppContext";
 import { basinLabel, displayStormName } from "../libs/i18n";
+import type { Storm } from "../libs/hurdat";
+import { pointToTimestamp } from "../libs/playback";
 import {
   clampGlobalYear,
   getAvailableBasinsForYear,
@@ -12,6 +14,15 @@ import {
 import { Menu, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import Image from "next/image";
+
+function earliestTrackTimestamp(storm: Storm): number {
+  let earliest = Infinity;
+  for (const point of storm.data) {
+    const timestamp = pointToTimestamp(point);
+    if (timestamp < earliest) earliest = timestamp;
+  }
+  return earliest;
+}
 
 const SELECTOR_MENU_MAX_HEIGHT = 280;
 
@@ -183,10 +194,12 @@ const Selectors = () => {
     [year],
   );
 
-  const stormIds = useMemo(
-    () => season?.map((storm) => storm.id) ?? null,
-    [season],
-  );
+  const stormIds = useMemo(() => {
+    if (!season) return null;
+    return [...season]
+      .sort((a, b) => earliestTrackTimestamp(a) - earliestTrackTimestamp(b))
+      .map((storm) => storm.id);
+  }, [season]);
 
   const stormLabel = useMemo(() => {
     if (!stormIds?.length) return translate("loading");
