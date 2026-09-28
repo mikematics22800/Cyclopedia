@@ -21,8 +21,8 @@ const statusItems = [
   { colorClass: 'bg-[pink]', labelKey: 'category5Hurricane', windKey: 'windGte137' },
   { colorClass: 'bg-[aqua]', labelKey: 'subtropicalDepression', windKey: 'windLt34' },
   { colorClass: 'bg-[#D0F0C0]', labelKey: 'subtropicalStorm', windKey: 'wind34to63' },
-  { colorClass: 'bg-[#7F00FF]', labelKey: 'extratropicalCyclone' },
-  { colorClass: 'bg-[lightgray]', labelKey: 'tropicalLow' },
+  { colorClass: 'bg-[#7F00FF]', labelKey: 'extratropicalCyclone', windKey: 'windVaried' },
+  { colorClass: 'bg-[lightgray]', labelKey: 'tropicalLow', windKey: 'windVaried' },
 ] as const;
 
 const windFieldItems = [
