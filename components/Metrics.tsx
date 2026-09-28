@@ -3,14 +3,88 @@
 import { useMemo, useState, useEffect, useLayoutEffect, useRef, useId } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
+import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 import { useAppContext, useT } from '../contexts/AppContext';
 import { sum } from '../libs/sum';
 import { calculateSeasonTotalACE, calculateStormACE } from '../libs/calculateACE';
 import { isAceYearAvailable } from '../libs/basins';
 import { formatPressureDisplay, formatWindDisplay, isUnknownMetric } from '../libs/mapUtils';
 import { displayStormName, t, type Lang } from '../libs/i18n';
+import { earliestTrackTimestamp } from '../libs/playback';
 import { Storm, StormDataPoint } from '../libs/hurdat';
-import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
+
+const SELECTOR_MENU_MAX_HEIGHT = 280;
+
+const SELECTOR_MENU_PROPS = {
+  PaperProps: { elevation: 0 as const, className: 'selector-menu-paper' },
+  MenuListProps: {
+    sx: {
+      maxHeight: SELECTOR_MENU_MAX_HEIGHT,
+      overflowY: 'auto',
+    },
+  },
+  transitionDuration: 220,
+} as const;
+
+function SelectorTrigger({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <span className='selector-trigger'>
+      <span className='selector-trigger__label'>{label}</span>
+      <span className='selector-trigger__value'>{children}</span>
+    </span>
+  );
+}
+
+const StormSelector = () => {
+  const { stormId, setStormId, season, lang } = useAppContext();
+  const translate = useT();
+
+  const stormIds = useMemo(() => {
+    if (!season) return null;
+    return [...season]
+      .sort((a, b) => earliestTrackTimestamp(a) - earliestTrackTimestamp(b))
+      .map((item) => item.id);
+  }, [season]);
+
+  const stormLabel = useMemo(() => {
+    if (!stormIds?.length) return translate('loading');
+    if (!stormId) return '—';
+    return displayStormName(stormId.split('_')[1] ?? stormId, lang);
+  }, [stormIds, stormId, lang, translate]);
+
+  return (
+    <Select
+      size='small'
+      className='selector w-32 min-w-32 max-w-32'
+      value={stormIds?.length ? stormId : ''}
+      onChange={(e: SelectChangeEvent) => setStormId(e.target.value)}
+      disabled={!stormIds?.length}
+      IconComponent={KeyboardArrowDown}
+      displayEmpty
+      MenuProps={SELECTOR_MENU_PROPS}
+      renderValue={() => (
+        <SelectorTrigger label={translate('storm')}>{stormLabel}</SelectorTrigger>
+      )}
+    >
+      {stormIds?.map((id) => {
+        const name = displayStormName(id.split('_')[1], lang);
+        return (
+          <MenuItem key={id} value={id}>
+            {name}
+          </MenuItem>
+        );
+      })}
+    </Select>
+  );
+};
 
 /** Vector spinner: crisp at any DPI, gradient arc + soft glow */
 const StormImageLoader = () => {
@@ -278,6 +352,9 @@ const StormMetrics = () => {
         className='flex flex-col gap-5 w-full items-center'
       >
         <ul className='data-table'>
+          <li className='w-full !justify-center mb-4'>
+            <StormSelector />
+          </li>
           <li data-storm-reveal className='header'>
             <a
               target='_blank'

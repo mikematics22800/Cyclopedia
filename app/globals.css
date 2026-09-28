@@ -125,6 +125,7 @@ nav {
   box-shadow: none;
   transition: border-color 0.25s ease;
   border-radius: 12px !important;
+  overflow: hidden;
 }
 
 .selector .MuiOutlinedInput-notchedOutline,
@@ -138,10 +139,12 @@ nav {
   box-shadow: none;
 }
 
+.selector .MuiSelect-select,
 .selector .MuiSelect-select:focus,
 .selector .MuiSelect-select:focus-visible {
   outline: none;
   background-color: transparent;
+  overflow: hidden;
 }
 
 
@@ -212,6 +215,8 @@ nav {
   align-items: flex-start;
   text-align: left;
   line-height: 1.25;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .selector-trigger__label {
@@ -223,6 +228,11 @@ nav {
 }
 
 .selector-trigger__value {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 0.875rem;
   font-weight: 700;
   color: rgb(248 250 252);
@@ -320,7 +330,7 @@ nav {
 }
 
 .selectors {
-  @apply flex w-full gap-4 justify-center flex-wrap mb-2 sm:mb-4;
+  @apply flex w-full max-w-80 gap-4 justify-between flex-wrap mb-2 sm:mb-4;
 }
 
 .selector-chip {

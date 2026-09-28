@@ -3,8 +3,7 @@
 import { useMemo, useRef, useLayoutEffect, useCallback, useState } from "react";
 import gsap from "gsap";
 import { useAppContext, useT } from "../contexts/AppContext";
-import { basinLabel, displayStormName } from "../libs/i18n";
-import { earliestTrackTimestamp } from "../libs/playback";
+import { basinLabel } from "../libs/i18n";
 import {
   clampGlobalYear,
   getAvailableBasinsForYear,
@@ -67,7 +66,7 @@ function YearSelector({
   );
 
   return (
-    <div ref={anchorRef} className="selector year-selector">
+    <div ref={anchorRef} className="selector year-selector w-24 min-w-24 max-w-24">
       <span className="selector-trigger">
         <button
           type="button"
@@ -170,9 +169,6 @@ const Selectors = () => {
     selectBasin,
     year,
     selectYear,
-    stormId,
-    setStormId,
-    season,
     lang,
   } = useAppContext();
   const translate = useT();
@@ -183,19 +179,6 @@ const Selectors = () => {
     () => getAvailableBasinsForYear(year),
     [year],
   );
-
-  const stormIds = useMemo(() => {
-    if (!season) return null;
-    return [...season]
-      .sort((a, b) => earliestTrackTimestamp(a) - earliestTrackTimestamp(b))
-      .map((storm) => storm.id);
-  }, [season]);
-
-  const stormLabel = useMemo(() => {
-    if (!stormIds?.length) return translate("loading");
-    if (!stormId) return "—";
-    return displayStormName(stormId.split("_")[1] ?? stormId, lang);
-  }, [stormIds, stormId, lang, translate]);
 
   useLayoutEffect(() => {
     const root = selectorsRef.current;
@@ -240,7 +223,7 @@ const Selectors = () => {
     }, root);
 
     return () => ctx.revert();
-  }, [basin, year, stormIds]);
+  }, [basin, year]);
 
   const chipPointerEnter = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === "touch") return;
@@ -274,7 +257,7 @@ const Selectors = () => {
       >
         <Select
           size="small"
-          className="selector"
+          className="selector w-32 min-w-32 max-w-32"
           value={basin}
           onChange={(e: SelectChangeEvent) => selectBasin(e.target.value)}
           IconComponent={KeyboardArrowDown}
@@ -291,35 +274,6 @@ const Selectors = () => {
               {basinLabel(lang, id)}
             </MenuItem>
           ))}
-        </Select>
-      </div>
-      <div
-        data-selector-chip
-        className="selector-chip"
-        onPointerEnter={chipPointerEnter}
-        onPointerLeave={chipPointerLeave}
-      >
-        <Select
-          size="small"
-          className="selector"
-          value={stormIds?.length ? stormId : ""}
-          onChange={(e: SelectChangeEvent) => setStormId(e.target.value)}
-          disabled={!stormIds?.length}
-          IconComponent={KeyboardArrowDown}
-          displayEmpty
-          MenuProps={SELECTOR_MENU_PROPS}
-          renderValue={() => (
-            <SelectorTrigger label={translate("storm")}>{stormLabel}</SelectorTrigger>
-          )}
-        >
-          {stormIds?.map((id) => {
-            const name = displayStormName(id.split("_")[1], lang);
-            return (
-              <MenuItem key={id} value={id}>
-                {name}
-              </MenuItem>
-            );
-          })}
         </Select>
       </div>
     </div>
