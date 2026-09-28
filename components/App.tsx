@@ -250,8 +250,8 @@ export default function App() {
         />
         {globalSeason && storm ? (
           <>
-            <nav aria-label={t(lang, 'siteHeader')}>
-              <div className="flex items-center gap-2">
+            <nav className="items-center justify-between hidden lg:!flex" aria-label={t(lang, 'siteHeader')}>
+              <div className="flex items-center gap-1">
                 <img
                   src="/cyclone.png"
                   alt="Cyclopedia"
@@ -262,7 +262,7 @@ export default function App() {
                   CYCLOPEDIA
                 </h1>
               </div>
-              <div className="nav-buttons justify-self-center">
+              <div className="nav-buttons !hidden lg:!flex">
                 <button
                   type="button"
                   className={`font-bold nav-button${!charts ? ' nav-button--selected' : ''}`}
@@ -278,24 +278,6 @@ export default function App() {
                   aria-pressed={charts}
                 >
                   {t(lang, 'metricCharts')}
-                </button>
-              </div>
-              <div className="nav-buttons justify-self-end">
-                <button
-                  type="button"
-                  className={`font-bold nav-button${lang === 'en' ? ' nav-button--selected' : ''}`}
-                  onClick={() => setLang('en')}
-                  aria-pressed={lang === 'en'}
-                >
-                  {t(lang, 'english')}
-                </button>
-                <button
-                  type="button"
-                  className={`font-bold nav-button${lang === 'ja' ? ' nav-button--selected' : ''}`}
-                  onClick={() => setLang('ja')}
-                  aria-pressed={lang === 'ja'}
-                >
-                  {t(lang, 'japanese')}
                 </button>
               </div>
             </nav>

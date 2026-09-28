@@ -45,7 +45,15 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
           className="w-full flex flex-col items-center gap-2 lg:gap-4"
         >
           <div className="metrics">
-          <div className="flex w-full justify-center mb-5 lg:hidden">
+          <div className="flex items-center w-full justify-between my-4">
+              <Image
+                src="/NOAA.svg"
+                alt="NOAA"
+                width={50}
+                height={50}
+                priority
+                unoptimized
+              />
               <div className="nav-buttons">
                 <button
                   type="button"
@@ -64,6 +72,14 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
                   {t(lang, 'japanese')}
                 </button>
               </div>
+              <Image
+                src="/JTWC.svg"
+                alt="JTWC"
+                width={50}
+                height={50}
+                priority
+                unoptimized
+              />
             </div>
             <Selectors />
             <Metrics />
@@ -75,24 +91,6 @@ const Interface = ({ mobileSheet = false }: InterfaceProps) => {
                   <StormChart hiddenByDatasetIndex={hiddenByDatasetIndex} />
                 </>
               )}
-            </div>
-            <div className="flex items-center w-full justify-between">
-              <Image
-                src="/NOAA.svg"
-                alt="NOAA"
-                width={50}
-                height={50}
-                priority
-                unoptimized
-              />
-              <Image
-                src="/JTWC.svg"
-                alt="JTWC"
-                width={50}
-                height={50}
-                priority
-                unoptimized
-              />
             </div>
           </div>
         </div>
