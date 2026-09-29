@@ -9,20 +9,15 @@ import {
 } from '@mui/material';
 import { Close, FormatListBulleted } from '@mui/icons-material';
 import { useAppContext, useT } from '../contexts/AppContext';
+import { WIND_CATEGORY_ITEMS } from '../libs/stormCategory';
 import { useSettingsPanelAnimation } from './hooks/useSettingsPanelAnimation';
 
 const statusItems = [
-  { colorClass: 'bg-[dodgerblue]', labelKey: 'tropicalDepression', windKey: 'windLt34' },
-  { colorClass: 'bg-[lime]', labelKey: 'tropicalStorm', windKey: 'wind34to63' },
-  { colorClass: 'bg-[yellow]', labelKey: 'category1Hurricane', windKey: 'wind64to82' },
-  { colorClass: 'bg-[orange]', labelKey: 'category2Hurricane', windKey: 'wind83to95' },
-  { colorClass: 'bg-[red]', labelKey: 'category3Hurricane', windKey: 'wind96to112' },
-  { colorClass: 'bg-[hotpink]', labelKey: 'category4Hurricane', windKey: 'wind113to136' },
-  { colorClass: 'bg-[pink]', labelKey: 'category5Hurricane', windKey: 'windGte137' },
-  { colorClass: 'bg-[aqua]', labelKey: 'subtropicalDepression', windKey: 'windLt34' },
-  { colorClass: 'bg-[#D0F0C0]', labelKey: 'subtropicalStorm', windKey: 'wind34to63' },
-  { colorClass: 'bg-[#7F00FF]', labelKey: 'extratropicalCyclone', windKey: 'windVaried' },
-  { colorClass: 'bg-[lightgray]', labelKey: 'tropicalLow', windKey: 'windVaried' },
+  ...WIND_CATEGORY_ITEMS,
+  { color: 'aqua', labelKey: 'subtropicalDepression', windKey: 'windLt34' },
+  { color: '#D0F0C0', labelKey: 'subtropicalStorm', windKey: 'wind34to63' },
+  { color: '#7F00FF', labelKey: 'extratropicalCyclone', windKey: 'windVaried' },
+  { color: 'lightgray', labelKey: 'tropicalLow', windKey: 'windVaried' },
 ] as const;
 
 const windFieldItems = [
@@ -134,7 +129,8 @@ const Legend = ({
             className="settings-row flex items-center gap-1.5 lg:gap-2 rounded-md px-0.5 lg:px-1 py-0.5"
           >
             <span
-              className={`w-2 h-2 lg:w-3 lg:h-3 shrink-0 rounded-full border border-black ${item.colorClass}`}
+              className="w-2 h-2 lg:w-3 lg:h-3 shrink-0 rounded-full border border-black"
+              style={{ backgroundColor: item.color }}
             />
             <div className="flex min-w-0 flex-1 items-center justify-between gap-2 lg:gap-6">
               <h1 className="text-xs lg:text-sm text-white">{translate(item.labelKey)}</h1>

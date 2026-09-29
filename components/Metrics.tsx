@@ -11,6 +11,7 @@ import { sum } from '../libs/sum';
 import { calculateSeasonTotalACE, calculateStormACE } from '../libs/calculateACE';
 import { isAceYearAvailable } from '../libs/basins';
 import { formatPressureDisplay, formatWindDisplay, isUnknownMetric } from '../libs/mapUtils';
+import { colorForMaxWindKt } from '../libs/stormCategory';
 import { displayStormName, t, type Lang } from '../libs/i18n';
 import { earliestTrackTimestamp } from '../libs/playback';
 import { Storm, StormDataPoint } from '../libs/hurdat';
@@ -153,21 +154,6 @@ const formatStormDuration = (data: StormDataPoint[]) => {
   return `${startDate}-${endDate}`;
 };
 
-const getStormTextColor = (data: StormDataPoint[], maxWind: number) => {
-  const statuses = data.map((point) => point.status);
-  if (statuses.includes('HU')) {
-    if (maxWind <= 82) return 'yellow';
-    if (maxWind <= 95) return 'orange';
-    if (maxWind <= 112) return 'red';
-    if (maxWind <= 136) return 'hotpink';
-    return 'pink';
-  }
-  if (statuses.includes('TS')) return 'lime';
-  if (statuses.includes('SS')) return '#D0F0C0';
-  if (statuses.includes('TD')) return 'dodgerblue';
-  return 'aqua';
-};
-
 const buildStormMetrics = (storm: Storm, lang: Lang) => {
   const data = storm.data;
   const validWinds = data
@@ -199,7 +185,7 @@ const buildStormMetrics = (storm: Storm, lang: Lang) => {
       : t(lang, 'unknown'),
     cost: ((storm.cost_usd || 0) / 1_000_000).toFixed(1),
     casualties: (storm.casualties || 0).toString(),
-    textColor: getStormTextColor(data, maxWindValue),
+    textColor: colorForMaxWindKt(validWinds.length ? maxWindValue : null),
     ace: calculateStormACE(data),
   };
 };
