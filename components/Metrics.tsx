@@ -11,7 +11,7 @@ import { sum } from '../libs/sum';
 import { calculateSeasonTotalACE, calculateStormACE } from '../libs/calculateACE';
 import { isAceYearAvailable } from '../libs/basins';
 import { formatPressureDisplay, formatWindDisplay, isUnknownMetric } from '../libs/mapUtils';
-import { colorForMaxWindKt } from '../libs/stormCategory';
+import { colorForMaxWindKt, WIND_CATEGORY_ITEMS } from '../libs/stormCategory';
 import { displayStormName, t, type Lang } from '../libs/i18n';
 import { earliestTrackTimestamp } from '../libs/playback';
 import { Storm, StormDataPoint } from '../libs/hurdat';
@@ -159,7 +159,7 @@ const buildStormMetrics = (storm: Storm, lang: Lang) => {
   const validWinds = data
     .map((point) => point.max_wind_kt)
     .filter((wind) => !isUnknownMetric(wind));
-  const maxWindValue = validWinds.length ? Math.max(...validWinds) : 0;
+  const maxWindValue = validWinds.length ? Math.max(...validWinds) : null;
   const validPressures = data
     .map((point) => point.min_pressure_mb)
     .filter((pressure): pressure is number => !isUnknownMetric(pressure));
@@ -185,7 +185,10 @@ const buildStormMetrics = (storm: Storm, lang: Lang) => {
       : t(lang, 'unknown'),
     cost: ((storm.cost_usd || 0) / 1_000_000).toFixed(1),
     casualties: (storm.casualties || 0).toString(),
-    textColor: colorForMaxWindKt(validWinds.length ? maxWindValue : null),
+    textColor:
+      maxWindValue == null && minPressure == null
+        ? WIND_CATEGORY_ITEMS[0].color
+        : colorForMaxWindKt(maxWindValue),
     ace: calculateStormACE(data),
   };
 };
