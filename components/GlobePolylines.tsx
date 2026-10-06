@@ -3,7 +3,6 @@
 import { useEffect, useRef, type RefObject } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
-import { getStormYear } from '../libs/hurdat';
 import {
   type CesiumModule,
   type CesiumWithOccluder,
@@ -38,8 +37,7 @@ export const useGlobePolylines = ({
 
     displaySeason.forEach((stormTrack) => {
       const id = stormTrack.id;
-      const stormYear = getStormYear(id);
-      const { width, alpha, color } = trackAppearance(id, stormYear, stormId, year);
+      const { width, alpha, color } = trackAppearance(id, year, stormId, year);
       const fullPositions = stormTrack.data.map((point) =>
         Cesium.Cartesian3.fromDegrees(point.lng, point.lat),
       );
@@ -81,7 +79,7 @@ export const useGlobePolylines = ({
     viewer.entities.values.forEach((entity) => {
       if (typeof entity.id !== 'string' || !entity.id.startsWith('track-')) return;
       const id = entity.id.slice('track-'.length);
-      const { width, alpha, color } = trackAppearance(id, getStormYear(id), stormId, year);
+      const { width, alpha, color } = trackAppearance(id, year, stormId, year);
       if (entity.polyline) {
         entity.polyline.width = new Cesium.ConstantProperty(width);
         entity.polyline.material = new Cesium.ColorMaterialProperty(

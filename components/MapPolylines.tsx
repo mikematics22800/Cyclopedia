@@ -5,7 +5,6 @@ import { polyline, type Polyline as LeafletPolyline } from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useAppContext } from '../contexts/AppContext';
 import { usePlaybackContext } from '../contexts/PlaybackContext';
-import { getStormYear } from '../libs/hurdat';
 import { projectPathForMapView } from '../libs/mapUtils';
 import { shiftMap } from '../libs/shiftMap';
 
@@ -59,13 +58,12 @@ const MapPolylines = () => {
       const raw = storm.data.map(
         (point) => [point.lat, point.lng] as [number, number],
       );
-      const stormYear = getStormYear(storm.id);
-      const line = polyline([], trackStyle(storm.id, stormYear, stormId, year));
+      const line = polyline([], trackStyle(storm.id, year, stormId, year));
       line.on('click', () => {
         selectStormRef.current(storm.id);
       });
       line.addTo(map);
-      layersRef.current.push({ polyline: line, raw, id: storm.id, stormYear });
+      layersRef.current.push({ polyline: line, raw, id: storm.id, stormYear: year });
     });
 
     applyPlaybackToLayers(map.getCenter().lng);
