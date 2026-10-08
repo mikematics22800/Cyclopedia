@@ -92,8 +92,8 @@ export function decodeTimestamp(timestamp: number): { date: number; time_utc: nu
 
 export function formatPlaybackTimestamp(timestamp: number, lang: Lang = 'en'): string {
   const { date, time_utc } = decodeTimestamp(timestamp);
-  const { formattedDate, formattedTime } = formatDateTime(date, time_utc, lang);
-  return `${formattedDate} ${formattedTime} ${t(lang, 'est')}`;
+  const { formattedDate, formattedTime } = formatDateTime(date, time_utc);
+  return `${formattedDate} ${formattedTime} ${t(lang, 'utc')}`;
 }
 
 export function isPointActiveAtTimestamp(

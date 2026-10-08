@@ -8,6 +8,7 @@ import {
   type YearArchives,
 } from "../libs/hurdat";
 import { calculateSeasonACE } from "../libs/calculateACE";
+import { formatDateTime } from "../libs/mapUtils";
 import {
   clampGlobalYear,
   getAvailableBasinsForYear,
@@ -90,13 +91,13 @@ export default function App() {
 
   const dates = useMemo(() => {
     if (!storm) return [];
+    const zone = t(lang, 'utc');
     return storm.data.map((point) => {
-      const dateArray = point.date.toString().split("");
-      const month = dateArray.slice(4, 6).join("");
-      const day = dateArray.slice(-2).join("");
-      return `${month}/${day}`;
+      const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc);
+      const [month, day] = formattedDate.split('/');
+      return `${month}/${day} ${formattedTime} ${zone}`;
     });
-  }, [storm]);
+  }, [storm, lang]);
 
   const names = useMemo(() => {
     if (!season) return [];

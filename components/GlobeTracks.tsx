@@ -76,7 +76,7 @@ export const useGlobeTracks = ({
       const points: PointLayer['points'] = [];
 
       stormTrack.data.forEach((point, index) => {
-        const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc, lang);
+        const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc);
         const { color } = getStormStatus(point);
         const fullName = formatStormFullName(name, getPopupStormStatus(point, id, lang), lang);
         const isLandfall = point.record === 'L';

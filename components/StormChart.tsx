@@ -22,6 +22,14 @@ import { Line } from 'react-chartjs-2';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
+function axisDateLabel(
+  this: { getLabelForValue(value: number): string },
+  value: string | number,
+) {
+  const label = this.getLabelForValue(Number(value));
+  return label.split(' ')[0] || label;
+}
+
 const aceThresholdLinePlugin: Plugin<'line'> = {
   id: 'ace-threshold-line',
   beforeDatasetsDraw: (chart) => {
@@ -167,6 +175,7 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
     x: {
         ticks: {
         color: 'white',
+        callback: axisDateLabel,
       },
       grid: {
         color: 'rgba(255, 255, 255, 0.22)',
@@ -195,6 +204,7 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
       position: 'left' as const,
         ticks: {
         color: 'white',
+        callback: axisDateLabel,
       },
       grid: {
         color: 'rgba(255, 255, 255, 0.22)',
@@ -237,6 +247,9 @@ const StormChart = ({ hiddenByDatasetIndex = {} }: StormChartProps) => {
         bodyColor: 'white',
         titleColor: 'white',
         callbacks: {
+          title(items: TooltipItem<'line'>[]) {
+            return items[0]?.label ?? '';
+          },
           label: function (context: TooltipItem<'line'>) {
             const label = context.dataset.label || '';
             const metric = chartMetricOf(context.dataset);

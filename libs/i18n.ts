@@ -86,9 +86,7 @@ const en = {
   unnamed: 'Unnamed',
   kt: 'kt',
   mb: 'mb',
-  am: 'AM',
-  pm: 'PM',
-  est: 'EST',
+  utc: 'UTC',
   wind: 'Wind',
 } as const;
 
@@ -178,9 +176,7 @@ const ja: { [K in MessageKey]: string } = {
   unnamed: '無名',
   kt: '節',
   mb: '毫巴',
-  am: '午前',
-  pm: '午後',
-  est: '東部標準時',
+  utc: '協定世界時',
   wind: '風速',
 };
 

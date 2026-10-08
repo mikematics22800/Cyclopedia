@@ -87,38 +87,20 @@ export const getPopupStormStatus = (
   lang: Lang = 'en',
 ) => t(lang, classificationKey(point, stormId));
 
-export const formatDateTime = (date: number, time: number, lang: Lang = 'en') => {
+export const formatDateTime = (date: number, time: number) => {
   const dateStr = String(date).padStart(8, '0');
   const year = dateStr.slice(0, 4);
-  const month = dateStr.slice(4, 6);
-  const day = dateStr.slice(6, 8);
+  const month = String(Number(dateStr.slice(4, 6)));
+  const day = String(Number(dateStr.slice(6, 8)));
 
   const timeStr = String(time).padStart(4, '0');
   const hour = timeStr.slice(0, 2);
   const minute = timeStr.slice(2, 4);
 
-  let estHour = parseInt(hour, 10) - 5;
-  let estDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:00Z`);
-
-  if (estHour < 0) {
-    estHour += 24;
-    estDate.setDate(estDate.getDate() - 1);
-  }
-
-  let hour12 = estHour;
-  const ampm = hour12 >= 12 ? t(lang, 'pm') : t(lang, 'am');
-  if (hour12 === 0) hour12 = 12;
-  if (hour12 > 12) hour12 -= 12;
-
-  const estHourStr = hour12.toString();
-  const formattedTime = `${estHourStr}:${minute} ${ampm}`;
-
-  const estMonth = (estDate.getMonth() + 1).toString();
-  const estDay = estDate.getDate().toString();
-  const estYear = estDate.getFullYear();
-  const formattedDateEST = `${estMonth}/${estDay}/${estYear}`;
-
-  return { formattedDate: formattedDateEST, formattedTime };
+  return {
+    formattedDate: `${month}/${day}/${year}`,
+    formattedTime: `${hour}:${minute}`,
+  };
 };
 
 export const formatStormFullName = (name: string, status: string, lang: Lang = 'en') => {
@@ -182,7 +164,7 @@ export const buildPopupHtml = (
   <div class="popup-panel">
     <h1>${fullName}</h1>
     <ul>
-      <li>${formattedDate} ${formattedTime} ${t(lang, 'est')}</li>
+      <li>${formattedDate} ${formattedTime} ${t(lang, 'utc')}</li>
       <li>${t(lang, 'maximumWind')}: ${formatWindDisplay(point.max_wind_kt, lang)}</li>
       <li>${t(lang, 'minimumPressure')}: ${formatPressureDisplay(point.min_pressure_mb, lang)}</li>
     </ul>

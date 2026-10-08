@@ -57,7 +57,7 @@ const MapTracks = () => {
       const markers: LeafletMarker[] = [];
 
       storm.data.forEach((point) => {
-        const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc, lang);
+        const { formattedDate, formattedTime } = formatDateTime(point.date, point.time_utc);
         const { color } = getStormStatus(point);
         const isLandfall = point.record === 'L';
         const fullName = formatStormFullName(name, getPopupStormStatus(point, id, lang), lang);
