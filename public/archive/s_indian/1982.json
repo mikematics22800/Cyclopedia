@@ -1,8 +1,8 @@
 [
   {
-    "id": "SI071982_Unnamed",
+    "id": "SI071982_Chris",
     "casualties": 0,
-    "cost_usd": 0,
+    "cost_usd": 650000,
     "retired": false,
     "data": [
       {
@@ -618,7 +618,7 @@
     ]
   },
   {
-    "id": "SI081982_Unnamed",
+    "id": "SI081982_Daphne",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -812,11 +812,101 @@
         "lng": 99.3,
         "max_wind_kt": 25,
         "min_pressure_mb": null
+      },
+      {
+        "date": "19820118",
+        "time_utc": "1800",
+        "record": null,
+        "status": "TS",
+        "lat": -11.9,
+        "lng": 106.7,
+        "max_wind_kt": 50,
+        "min_pressure_mb": null
+      },
+      {
+        "date": "19820119",
+        "time_utc": "0000",
+        "record": null,
+        "status": "TS",
+        "lat": -11.4,
+        "lng": 107.3,
+        "max_wind_kt": 50,
+        "min_pressure_mb": null
+      },
+      {
+        "date": "19820119",
+        "time_utc": "0600",
+        "record": null,
+        "status": "TS",
+        "lat": -11.9,
+        "lng": 108,
+        "max_wind_kt": 50,
+        "min_pressure_mb": null
+      },
+      {
+        "date": "19820119",
+        "time_utc": "1200",
+        "record": null,
+        "status": "TS",
+        "lat": -13.4,
+        "lng": 108.9,
+        "max_wind_kt": 50,
+        "min_pressure_mb": null
+      },
+      {
+        "date": "19820119",
+        "time_utc": "1800",
+        "record": null,
+        "status": "TS",
+        "lat": -14.4,
+        "lng": 110.1,
+        "max_wind_kt": 50,
+        "min_pressure_mb": null
+      },
+      {
+        "date": "19820120",
+        "time_utc": "0000",
+        "record": null,
+        "status": "TS",
+        "lat": -14.2,
+        "lng": 112.1,
+        "max_wind_kt": 45,
+        "min_pressure_mb": null
+      },
+      {
+        "date": "19820120",
+        "time_utc": "0600",
+        "record": null,
+        "status": "TS",
+        "lat": -14.9,
+        "lng": 114.4,
+        "max_wind_kt": 40,
+        "min_pressure_mb": null
+      },
+      {
+        "date": "19820120",
+        "time_utc": "1200",
+        "record": null,
+        "status": "TS",
+        "lat": -17.3,
+        "lng": 117,
+        "max_wind_kt": 40,
+        "min_pressure_mb": null
+      },
+      {
+        "date": "19820120",
+        "time_utc": "1800",
+        "record": null,
+        "status": "TS",
+        "lat": -18.8,
+        "lng": 119.2,
+        "max_wind_kt": 40,
+        "min_pressure_mb": null
       }
     ]
   },
   {
-    "id": "SI091982_Unnamed",
+    "id": "SI091982_Errol",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -1034,7 +1124,7 @@
     ]
   },
   {
-    "id": "SI101982_Unnamed",
+    "id": "SI101982_Bruno",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -1188,113 +1278,7 @@
         "lng": 120.5,
         "max_wind_kt": 30,
         "min_pressure_mb": null
-      }
-    ]
-  },
-  {
-    "id": "SI111982_Unnamed",
-    "casualties": 0,
-    "cost_usd": 0,
-    "retired": false,
-    "data": [
-      {
-        "date": "19820118",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -11.9,
-        "lng": 106.7,
-        "max_wind_kt": 50,
-        "min_pressure_mb": null
       },
-      {
-        "date": "19820119",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -11.4,
-        "lng": 107.3,
-        "max_wind_kt": 50,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19820119",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -11.9,
-        "lng": 108,
-        "max_wind_kt": 50,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19820119",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -13.4,
-        "lng": 108.9,
-        "max_wind_kt": 50,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19820119",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -14.4,
-        "lng": 110.1,
-        "max_wind_kt": 50,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19820120",
-        "time_utc": "0000",
-        "record": null,
-        "status": "TS",
-        "lat": -14.2,
-        "lng": 112.1,
-        "max_wind_kt": 45,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19820120",
-        "time_utc": "0600",
-        "record": null,
-        "status": "TS",
-        "lat": -14.9,
-        "lng": 114.4,
-        "max_wind_kt": 40,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19820120",
-        "time_utc": "1200",
-        "record": null,
-        "status": "TS",
-        "lat": -17.3,
-        "lng": 117,
-        "max_wind_kt": 40,
-        "min_pressure_mb": null
-      },
-      {
-        "date": "19820120",
-        "time_utc": "1800",
-        "record": null,
-        "status": "TS",
-        "lat": -18.8,
-        "lng": 119.2,
-        "max_wind_kt": 40,
-        "min_pressure_mb": null
-      }
-    ]
-  },
-  {
-    "id": "SI121982_Unnamed",
-    "casualties": 0,
-    "cost_usd": 0,
-    "retired": false,
-    "data": [
       {
         "date": "19820118",
         "time_utc": "1800",
@@ -1428,8 +1412,8 @@
     ]
   },
   {
-    "id": "SI131982_Unnamed",
-    "casualties": 0,
+    "id": "SI131982_Electre",
+    "casualties": 13,
     "cost_usd": 0,
     "retired": false,
     "data": [
@@ -1746,7 +1730,7 @@
     ]
   },
   {
-    "id": "SI141982_Unnamed",
+    "id": "SI141982_Graham",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -1864,7 +1848,7 @@
     ]
   },
   {
-    "id": "SI151982_Unnamed",
+    "id": "SI151982_Harriet",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -2180,7 +2164,7 @@
     ]
   },
   {
-    "id": "SI171982_Unnamed",
+    "id": "SI171982_Ian",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -2538,7 +2522,7 @@
     ]
   },
   {
-    "id": "SI181982_Unnamed",
+    "id": "SI181982_Twenty-three-S",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -2736,7 +2720,7 @@
     ]
   },
   {
-    "id": "SI191982_Unnamed",
+    "id": "SI191982_Justine",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -3134,7 +3118,7 @@
     ]
   },
   {
-    "id": "SI201982_Unnamed",
+    "id": "SI201982_Karla",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -3610,7 +3594,7 @@
     ]
   },
   {
-    "id": "SI021983_Unnamed",
+    "id": "SI021983_Bemamy",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
@@ -3888,7 +3872,7 @@
     ]
   },
   {
-    "id": "SI031983_Unnamed",
+    "id": "SI031983_Dadafy",
     "casualties": 0,
     "cost_usd": 0,
     "retired": false,
